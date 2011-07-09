@@ -1,5 +1,5 @@
 Source: wingpanel
-Section: unknown
+Section: x11
 Priority: extra
 Maintainer: Sergey "Shnatsel" Davidoff <shnatsel@gmail.com>
 Build-Depends: debhelper (>= 7.0.50~), cmake (>= 2.6), valac (>= 0.12),
