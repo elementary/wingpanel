@@ -2,7 +2,8 @@ Source: wingpanel
 Section: x11
 Priority: extra
 Maintainer: Sergey "Shnatsel" Davidoff <shnatsel@gmail.com>
-Build-Depends: debhelper (>= 7.0.50~), cmake (>= 2.6), valac (>= 0.12),
+Build-Depends: debhelper (>= 7.0.50~), cmake (>= 2.6),
+               valac-0.16 | valac (>= 0.16),
                libglib2.0-dev (>= 2.28), libgtk-3-dev, libgee-dev,
                libindicator3-dev (>= 0.3.90), libgranite-dev
 Standards-Version: 3.9.1
