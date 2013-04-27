@@ -1,10 +1,10 @@
-wingpanel (1:0.2.2) precise; urgency=low
+wingpanel (0.2.2) precise; urgency=low
 
   * New upstream release.
 
  -- Cody Garver <cody@elementaryos.org>  Wed, 17 Apr 2013 14:58:56 -0500
 
-wingpanel (1:0.1) oneiric; urgency=low
+wingpanel (0.1) oneiric; urgency=low
 
   * Initial Release.
 
