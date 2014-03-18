@@ -10,6 +10,7 @@ Build-Depends: cmake (>= 2.8),
                libgtk-3-dev,
                libido3-0.1-dev,
                libindicator3-dev (>= 0.3.90),
+               libwnck-3-dev,
                valac (>= 0.16)
 Standards-Version: 3.9.3
 Homepage: https://launchpad.net/wingpanel
