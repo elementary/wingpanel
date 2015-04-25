@@ -18,6 +18,9 @@
 public class Wingpanel.Widgets.Panel : Gtk.Box {
 	public Panel () {
 		this.hexpand = true;
+		this.margin_top = 5;
+		this.margin_bottom = 5;
+		this.get_style_context ().add_class ("panel");
 
 		load_indicators ();
 	}

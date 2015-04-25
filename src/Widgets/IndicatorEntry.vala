@@ -23,6 +23,9 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Revealer {
 
 	public IndicatorEntry (Indicator base_indicator) {
 		this.halign = Gtk.Align.START;
+		this.margin_start = 6;
+		this.margin_end = 6;
+		this.get_style_context ().add_class ("composited-indicator");
 
 		display_widget = base_indicator.get_display_widget ();
 		indicator_widget = base_indicator.get_widget ();
