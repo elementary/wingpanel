@@ -29,7 +29,7 @@ public abstract class Wingpanel.Indicator : GLib.Object {
 
 	public bool visible { get; set; default=false; }
 
-	public abstract Gtk.Widget get_icon ();
+	public abstract Gtk.Widget get_display_widget ();
 
 	public abstract Gtk.Widget get_widget ();
 

@@ -50,7 +50,9 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		}
 
 		void* function;
-		module.symbol ("get_indicator", out function);
+		if (!module.symbol ("get_indicator", out function))
+			return;
+
 		if (function == null) {
 			critical ("get_indicator () not found in %s", path);
 			return;
@@ -85,7 +87,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	}
 
 	private void register_indicator (Wingpanel.Indicator indicator) {
-		debug("%s registered", indicator.code_name);
+		debug ("%s registered", indicator.code_name);
 
 		if (indicators.contains (indicator))
 			return;

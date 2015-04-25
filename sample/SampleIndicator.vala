@@ -26,7 +26,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 				description:_("Does nothing, but it is cool!"));
 	}
 
-	public override Gtk.Widget get_icon () {
+	public override Gtk.Widget get_display_widget () {
 		if (icon == null) {
 			icon = new Gtk.Image.from_icon_name ("dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 		}
