@@ -48,15 +48,23 @@ public class Sample.Indicator : Wingpanel.Indicator {
 		// I do have something to display!
 		this.visible = true;
 
+// Zum Testen der Animation
+Timeout.add (3000, () => {
+	this.visible = !this.visible;
+	return true;
+});
+
 		return main_grid;
 	}
 
 	public override void opened () {
 		// Use this method to get some extra information while displaying the indicator
+print ("opened\n");
 	}
 
 	public override void closed () {
 		// Your stuff isn't shown anymore, now you can free some RAM, stop timers or anything else...
+print ("closed\n");
 	}
 }
 

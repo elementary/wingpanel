@@ -19,7 +19,37 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 	public Panel () {
 		this.hexpand = true;
 
-this.pack_start (new Gtk.Label ("Anwendungen"));
-this.pack_end (new Gtk.Label ("Indikatoren"));
+		load_indicators ();
+	}
+
+	private void load_indicators () {
+		foreach (var indicator in IndicatorManager.get_default ().get_indicators ()) {
+			show_indicator (indicator);
+		}
+	}
+
+	private void show_indicator (Indicator indicator) {
+		var indicator_entry = new IndicatorEntry (indicator);
+
+		switch (indicator.code_name) {
+			case Indicator.APP_LAUNCHER:
+				indicator_entry.transition_type = Gtk.RevealerTransitionType.SLIDE_RIGHT;
+
+				this.pack_start (indicator_entry, false, false);
+
+				break;
+			case Indicator.DATETIME:
+				indicator_entry.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
+
+				this.set_center_widget (indicator_entry);
+
+				break;
+			default:
+				indicator_entry.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
+
+				this.pack_end (indicator_entry, false, false);
+
+				break;
+		}
 	}
 }
