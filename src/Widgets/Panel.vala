@@ -18,9 +18,9 @@
 public class Wingpanel.Widgets.Panel : Gtk.Box {
 	public Panel () {
 		this.hexpand = true;
-		this.margin_top = 3;
-		this.margin_bottom = 3;
 		this.get_style_context ().add_class ("panel");
+
+		update_background_color ();
 
 		load_indicators ();
 	}
@@ -54,5 +54,9 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 
 				break;
 		}
+	}
+
+	private void update_background_color () {
+		this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, 1});
 	}
 }

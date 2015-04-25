@@ -41,6 +41,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Revealer {
 
 		display_widget.margin_start = 6;
 		display_widget.margin_end = 6;
+		display_widget.margin_top = 3;
+		display_widget.margin_bottom = 3;
 
 		this.add (display_widget);
 
