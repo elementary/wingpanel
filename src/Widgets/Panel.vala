@@ -16,11 +16,13 @@
  */
 
 public class Wingpanel.Widgets.Panel : Gtk.Box {
+	private int background_alpha = 0; // 0 - 100
+
 	public Panel () {
 		this.hexpand = true;
 		this.get_style_context ().add_class ("panel");
 
-		update_background_color ();
+		animate_color (false);
 
 		load_indicators ();
 	}
@@ -56,7 +58,18 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 		}
 	}
 
-	private void update_background_color () {
-		this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, 1});
+	private void animate_color (bool make_dark) {
+		Timeout.add (300 / 100, () => {
+			double new_alpha;
+
+			if (make_dark)
+				new_alpha = (double)(++background_alpha) / 100;
+			else
+				new_alpha = (double)(--background_alpha) / 100;
+
+			this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, new_alpha});
+
+			return (background_alpha < 100 && make_dark) || (background_alpha > 0 && !make_dark);
+		});
 	}
 }

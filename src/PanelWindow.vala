@@ -30,6 +30,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		this.type_hint = Gdk.WindowTypeHint.DOCK;
 		this.get_style_context ().add_class ("panel-window");
 
+		set_css ();
+
 		this.screen.size_changed.connect (update_panel_size);
 		this.screen.monitors_changed.connect (update_panel_size);
 
@@ -70,7 +72,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		update_struts ();
 	}
 
-	public void update_struts () {
+	private void update_struts () {
 		if (!this.get_realized () || panel == null)
 			return;
 
@@ -100,5 +102,24 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
 		Gdk.property_change (this.get_window (), atom, Gdk.Atom.intern ("CARDINAL", false),
 				32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
+	}
+
+	// TODO: Move that to egtk
+	private void set_css () {
+		var css = """
+			.panel-window {
+				background: transparent;
+			}
+		""";
+
+		var css_provider = new Gtk.CssProvider ();
+
+		try {
+			css_provider.load_from_data (css, css.length);
+		} catch (Error e) {
+			error ("Can't apply custom css: %s", e.message);
+		}
+
+		this.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 	}
 }
