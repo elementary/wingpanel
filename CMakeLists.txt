@@ -82,6 +82,7 @@ set (LIB_PACKAGES
   gdk-x11-3.0
   x11
   granite
+  libwnck-3.0
 )
 
 set (LIB_PKG
@@ -96,6 +97,7 @@ set (LIB_PKG
   gdk-x11-3.0
   x11
   granite
+  libwnck-3.0
 )
 find_package(PkgConfig)
 

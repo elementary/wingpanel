@@ -8,3 +8,4 @@ gobject-2.0
 gdk-x11-3.0
 x11
 granite
+libwnck-3.0

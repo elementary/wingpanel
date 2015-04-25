@@ -1,5 +1,6 @@
 set(CLIENT_SOURCE
   Wingpanel.vala
+  PanelWindow.vala
   Widgets/Panel.vala
 )
 

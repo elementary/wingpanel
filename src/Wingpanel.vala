@@ -25,7 +25,7 @@ namespace Wingpanel {
 	}
 
 	public class WingpanelApp : Granite.Application {
-private Gtk.Window main_window;
+		private Gtk.Window panel_window;
 
 		construct {
 			application_id = "org.elementary.wingpanel";
@@ -64,8 +64,8 @@ private Gtk.Window main_window;
 		}
 
 		private void setup_ui () {
-main_window = new Gtk.Window ();
-main_window.show_all ();
+			panel_window = new PanelWindow ();
+			panel_window.show_all ();
 		}
 	}
 }

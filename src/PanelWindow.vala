@@ -15,11 +15,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Wingpanel.Widgets.Panel : Gtk.Box {
-	public Panel () {
-		this.hexpand = true;
+public class Wingpanel.PanelWindow : Gtk.Window {
+	private Widgets.Panel panel;
 
-this.pack_start (new Gtk.Label ("Anwendungen"));
-this.pack_end (new Gtk.Label ("Indikatoren"));
+	public PanelWindow () {
+		this.decorated = false;
+		this.resizable = false;
+		this.skip_taskbar_hint = true;
+		this.type_hint = Gdk.WindowTypeHint.DOCK;
+		this.get_style_context ().add_class ("panel-window");
+
+		this.screen.size_changed.connect (update_panel_size);
+		this.screen.monitors_changed.connect (update_panel_size);
+
+		update_panel_size ();
+
+		panel = new Widgets.Panel ();
+
+		this.add (panel);
+	}
+
+	private void update_panel_size () {
+		Gdk.Rectangle monitor_dimensions;
+		this.screen.get_monitor_geometry (this.screen.get_primary_monitor (), out monitor_dimensions);
+
+		this.set_size_request (monitor_dimensions.width, -1);
 	}
 }
