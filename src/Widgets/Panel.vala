@@ -16,11 +16,40 @@
  */
 
 public class Wingpanel.Widgets.Panel : Gtk.Box {
+	private Services.PopoverManager popover_manager;
+
+	private int intended_size;
+
+	private MenuBar right_menubar;
+	private MenuBar left_menubar;
+	private MenuBar center_menubar;
+
 	private int background_alpha = 0; // 0 - 100
 
-	public Panel () {
+	public Panel (Services.PopoverManager popover_manager, int intended_size) {
+		Object (orientation: Gtk.Orientation.HORIZONTAL);
+
+		this.popover_manager = popover_manager;
+		this.intended_size = intended_size;
+
 		this.hexpand = true;
+		this.vexpand = false;
+		this.valign = Gtk.Align.START;
 		this.get_style_context ().add_class ("panel");
+
+		left_menubar = new MenuBar ();
+		left_menubar.halign = Gtk.Align.START;
+
+		this.pack_start (left_menubar);
+
+		center_menubar = new MenuBar ();
+
+		this.set_center_widget (center_menubar);
+
+		right_menubar = new MenuBar ();
+		right_menubar.halign = Gtk.Align.END;
+
+		this.pack_end (right_menubar);
 
 		animate_color (false);
 
@@ -34,28 +63,38 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 	}
 
 	private void show_indicator (Indicator indicator) {
-		var indicator_entry = new IndicatorEntry (indicator);
+		var indicator_entry = new IndicatorEntry (indicator, popover_manager);
 
 		switch (indicator.code_name) {
 			case Indicator.APP_LAUNCHER:
-				indicator_entry.transition_type = Gtk.RevealerTransitionType.SLIDE_RIGHT;
+				indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_RIGHT);
 
-				this.pack_start (indicator_entry, false, false);
+				left_menubar.add (indicator_entry);
 
 				break;
 			case Indicator.DATETIME:
-				indicator_entry.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
+				indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_DOWN);
 
-				this.set_center_widget (indicator_entry);
+				center_menubar.add (indicator_entry);
 
 				break;
 			default:
-				indicator_entry.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
+				indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_LEFT);
 
-				this.pack_end (indicator_entry, false, false);
+				right_menubar.add (indicator_entry);
 
 				break;
 		}
+	}
+
+	public override void get_preferred_height(out int m, out int n) {
+		m = intended_size;
+		n = intended_size;
+	}
+
+	public override void get_preferred_height_for_width (int w, out int m, out int n) {
+		m = intended_size;
+		n = intended_size;
 	}
 
 	private void animate_color (bool make_dark) {

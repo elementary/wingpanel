@@ -15,38 +15,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Wingpanel.Widgets.IndicatorEntry : Gtk.Revealer {
+public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 	private Gtk.Widget display_widget;
 	private Gtk.Widget indicator_widget;
 
+	private Gtk.Revealer revealer;
+
 	private IndicatorPopover popover;
 
-	public IndicatorEntry (Indicator base_indicator) {
+	public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
 		this.halign = Gtk.Align.START;
 		this.get_style_context ().add_class ("composited-indicator");
 
 		display_widget = base_indicator.get_display_widget ();
 		indicator_widget = base_indicator.get_widget ();
 
+		revealer = new Gtk.Revealer ();
+
 		set_reveal (base_indicator.visible);
 
-		base_indicator.notify.connect ((param) => {
-			switch (param.get_name ()) {
-				case "visible":
-					set_reveal (base_indicator.visible);
-
-					break;
-			}
-		});
+		base_indicator.notify["visible"].connect (() => set_reveal (base_indicator.visible));
 
 		display_widget.margin_start = 6;
 		display_widget.margin_end = 6;
 		display_widget.margin_top = 3;
 		display_widget.margin_bottom = 3;
 
-		this.add (display_widget);
+		revealer.add (display_widget);
 
 		popover = new IndicatorPopover (indicator_widget);
+		popover.relative_to = this;
+
+		popover_manager.register_popover (this, popover);
 
 		this.set_events (Gdk.EventMask.BUTTON_PRESS_MASK);
 		this.button_press_event.connect ((e) => {
@@ -61,14 +61,20 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Revealer {
 			} else {
 				// Show the popover when it's ready
 				base_indicator.opened ();
-				popover.show ();
+				popover.show_all ();
 			}
 
 			return Gdk.EVENT_STOP;
 		});
+
+		this.add (revealer);
+	}
+
+	public void set_transition_type (Gtk.RevealerTransitionType transition_type) {
+		revealer.set_transition_type (transition_type);
 	}
 
 	private void set_reveal (bool reveal) {
-		this.set_reveal_child (reveal);
+		revealer.set_reveal_child (reveal);
 	}
 }

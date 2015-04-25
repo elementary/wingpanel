@@ -16,7 +16,17 @@
  */
 
 public class Wingpanel.PanelWindow : Gtk.Window {
+	private const int INTENDED_SIZE = 30;
+
 	private Widgets.Panel panel;
+
+	private Services.PopoverManager popover_manager;
+
+	private Gdk.Rectangle scr;
+	private Gdk.Rectangle small_scr;
+	private Gdk.Rectangle orig_scr;
+
+	private bool expanded = true;
 
 	private int position_x;
 	private int position_y;
@@ -27,19 +37,26 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		this.decorated = false;
 		this.resizable = false;
 		this.skip_taskbar_hint = true;
+		this.app_paintable = true;
 		this.type_hint = Gdk.WindowTypeHint.DOCK;
-		this.get_style_context ().add_class ("panel-window");
+		this.vexpand = false;
 
-		set_css ();
+		var style_context = get_style_context ();
+		style_context.add_class ("panel");
+		style_context.add_class (Gtk.STYLE_CLASS_MENUBAR);
 
 		this.screen.size_changed.connect (update_panel_size);
 		this.screen.monitors_changed.connect (update_panel_size);
+		this.screen_changed.connect (update_visual);
 
 		this.get_position (out position_x, out position_y);
 
 		update_panel_size ();
+		update_visual ();
 
-		panel = new Widgets.Panel ();
+		popover_manager = new Services.PopoverManager (this);
+
+		panel = new Widgets.Panel (popover_manager, INTENDED_SIZE);
 		panel.realize.connect (() => { 
 			panel.get_preferred_height (out panel_displacement, null);
 			panel_displacement *= -1;
@@ -48,6 +65,16 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		});
 
 		this.add (panel);
+
+		var monitor = screen.get_primary_monitor ();
+		screen.get_monitor_geometry (monitor, out orig_scr);
+
+		small_scr = orig_scr;
+		small_scr.height = INTENDED_SIZE;
+
+		scr = small_scr;
+
+		set_expanded (false);
 	}
 
 	private bool animation_step () {
@@ -70,6 +97,15 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		this.set_size_request (monitor_dimensions.width, -1);
 
 		update_struts ();
+	}
+
+	private void update_visual () {
+		var visual = this.screen.get_rgba_visual ();
+
+		if (visual == null)
+			warning ("Compositing not available, things will Look Bad (TM)");
+		else
+			this.set_visual (visual);
 	}
 
 	private void update_struts () {
@@ -104,22 +140,40 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 				32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
 	}
 
-	// TODO: Move that to egtk
-	private void set_css () {
-		var css = """
-			.panel-window {
-				background: transparent;
-			}
-		""";
+	public void set_expanded (bool expanded) {
+		if (this.expanded == expanded)
+			return;
 
-		var css_provider = new Gtk.CssProvider ();
+		this.expanded = expanded;
 
-		try {
-			css_provider.load_from_data (css, css.length);
-		} catch (Error e) {
-			error ("Can't apply custom css: %s", e.message);
-		}
+		if (!expanded)
+			scr = small_scr;
+		else
+			scr = orig_scr;
 
-		this.get_style_context ().add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+		queue_resize ();
+
+		if (expanded)
+			present ();
+	}
+
+	public override void get_preferred_width (out int m, out int n) {
+		m = scr.width;
+		n = scr.width;
+	}
+
+	public override void get_preferred_width_for_height (int h, out int m, out int n) {
+		m = scr.width;
+		n = scr.width;
+	}
+
+	public override void get_preferred_height (out int m, out int n) {
+		m = scr.height;
+		n = scr.height;
+	}
+
+	public override void get_preferred_height_for_width (int w, out int m, out int n) {
+		m = scr.height;
+		n = scr.height;
 	}
 }

@@ -15,12 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Wingpanel.Widgets.IndicatorPopover : Gtk.Popover {
-	private Gtk.Widget content;
-
-	public IndicatorPopover (Gtk.Widget indicator_widget) {
-		content = indicator_widget;
-
-		this.add (content);
+public class Wingpanel.Widgets.MenuBar : Gtk.MenuBar {
+	public MenuBar () {
+		this.can_focus = true;
+		this.border_width = 0;
+		this.get_style_context ().add_class ("composited-indicator");
+		this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, 0});
 	}
 }
