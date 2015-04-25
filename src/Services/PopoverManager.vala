@@ -9,6 +9,7 @@
 
 public class Wingpanel.Services.PopoverManager : Object {
 	HashTable<Gtk.Widget?, Gtk.Popover?> widgets;
+	HashTable<Gtk.Popover?, Wingpanel.Widgets.IndicatorEntry?> popovers;
 
 	unowned Wingpanel.PanelWindow? owner;
 	unowned Gtk.Popover? visible_popover = null;
@@ -20,6 +21,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 		this.owner = owner;
 
 		widgets = new HashTable<Gtk.Widget?, Gtk.Popover?> (direct_hash, direct_equal);
+		popovers = new HashTable<Gtk.Popover?, Wingpanel.Widgets.IndicatorEntry?> (direct_hash, direct_equal);
 
 		owner.focus_out_event.connect (() => {
 			if (mousing)
@@ -82,15 +84,14 @@ public class Wingpanel.Services.PopoverManager : Object {
 		widgets.remove (widg);
 	}
 
-	public void register_popover (Gtk.Widget? widg, Gtk.Popover? popover)
-	{
+	public void register_popover (Wingpanel.Widgets.IndicatorEntry? widg, Gtk.Popover? popover) {
 		if (widgets.contains (widg))
 			return;
 
-		if (widg is Gtk.MenuItem)
-			(widg as Gtk.MenuItem).can_focus = false;
+		widg.can_focus = false;
 
-		popover.map.connect ((p) => {
+		popover.show.connect ((p) => {
+			widg.base_indicator.opened ();
 			owner.set_expanded (true);
 			this.visible_popover = p as Gtk.Popover;
 			make_modal (this.visible_popover);
@@ -99,6 +100,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 		popover.closed.connect ((p) => {
 			if (!mousing && grabbed) {
 				make_modal (p, false);
+				popovers[visible_popover].base_indicator.closed ();
 				visible_popover = null;
 			}
 		});
@@ -114,6 +116,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 						mousing = true;
 
 						visible_popover.hide ();
+						popovers[visible_popover].base_indicator.closed ();
 
 						visible_popover = widgets[w];
 
@@ -147,6 +150,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 		});
 
 		popover.modal = false;
-		widgets.insert (widg, popover);
+		widgets.insert (widg, popover);	
+		popovers.insert (popover, widg);
 	}
 }

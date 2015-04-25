@@ -22,8 +22,10 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 	private Gtk.Revealer revealer;
 
 	private IndicatorPopover popover;
+	public Indicator base_indicator;
 
 	public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
+		this.base_indicator = base_indicator;
 		this.halign = Gtk.Align.START;
 		this.get_style_context ().add_class ("composited-indicator");
 
@@ -53,15 +55,10 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 				return Gdk.EVENT_PROPAGATE;
 			}
 
-			if (popover.get_visible ()) {
-				// Hide the popover before telling the indicator about it to prevent indication errors
+			if (popover.get_visible ())
 				popover.hide ();
-				base_indicator.closed ();
-			} else {
-				// Show the popover when it's ready
-				base_indicator.opened ();
+			else
 				popover.show_all ();
-			}
 
 			return Gdk.EVENT_STOP;
 		});

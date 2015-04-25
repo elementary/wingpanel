@@ -43,8 +43,6 @@ public class Sample.Indicator : Wingpanel.Indicator {
 			main_grid.attach (hello_label, 0, 0, 1, 1);
 		}
 
-		main_grid.show_all ();
-
 		// I do have something to display!
 		this.visible = true;
 
