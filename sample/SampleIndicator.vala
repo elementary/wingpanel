@@ -49,10 +49,10 @@ public class Sample.Indicator : Wingpanel.Indicator {
 		this.visible = true;
 
 // Zum Testen der Animation
-Timeout.add (3000, () => {
+/*Timeout.add (3000, () => {
 	this.visible = !this.visible;
 	return true;
-});
+});*/
 
 		return main_grid;
 	}

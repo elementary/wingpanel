@@ -48,7 +48,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
 		popover_manager.register_popover (this, popover);
 
-		this.set_events (Gdk.EventMask.BUTTON_PRESS_MASK);
 		this.button_press_event.connect ((e) => {
 			if (e.button != 1) {
 				return Gdk.EVENT_PROPAGATE;

@@ -18,19 +18,16 @@
 public class Wingpanel.Widgets.Panel : Gtk.Box {
 	private Services.PopoverManager popover_manager;
 
-	private int intended_size;
-
 	private MenuBar right_menubar;
 	private MenuBar left_menubar;
 	private MenuBar center_menubar;
 
 	private int background_alpha = 0; // 0 - 100
 
-	public Panel (Services.PopoverManager popover_manager, int intended_size) {
+	public Panel (Services.PopoverManager popover_manager) {
 		Object (orientation: Gtk.Orientation.HORIZONTAL);
 
 		this.popover_manager = popover_manager;
-		this.intended_size = intended_size;
 
 		this.hexpand = true;
 		this.vexpand = false;
@@ -51,7 +48,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 
 		this.pack_end (right_menubar);
 
-		animate_color (false);
+		animate_color (true);
 
 		load_indicators ();
 	}
@@ -85,16 +82,6 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 
 				break;
 		}
-	}
-
-	public override void get_preferred_height(out int m, out int n) {
-		m = intended_size;
-		n = intended_size;
-	}
-
-	public override void get_preferred_height_for_width (int w, out int m, out int n) {
-		m = intended_size;
-		n = intended_size;
 	}
 
 	private void animate_color (bool make_dark) {

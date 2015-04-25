@@ -16,17 +16,14 @@
  */
 
 public class Wingpanel.PanelWindow : Gtk.Window {
-	private const int INTENDED_SIZE = 30;
-
 	private Widgets.Panel panel;
 
 	private Services.PopoverManager popover_manager;
 
-	private Gdk.Rectangle scr;
-	private Gdk.Rectangle small_scr;
-	private Gdk.Rectangle orig_scr;
+	private int screen_width;
+	private int screen_height;
 
-	private bool expanded = true;
+	private bool expanded;
 
 	private int position_x;
 	private int position_y;
@@ -56,7 +53,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
 		popover_manager = new Services.PopoverManager (this);
 
-		panel = new Widgets.Panel (popover_manager, INTENDED_SIZE);
+		panel = new Widgets.Panel (popover_manager);
 		panel.realize.connect (() => { 
 			panel.get_preferred_height (out panel_displacement, null);
 			panel_displacement *= -1;
@@ -65,14 +62,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		});
 
 		this.add (panel);
-
-		var monitor = screen.get_primary_monitor ();
-		screen.get_monitor_geometry (monitor, out orig_scr);
-
-		small_scr = orig_scr;
-		small_scr.height = INTENDED_SIZE;
-
-		scr = small_scr;
 
 		set_expanded (false);
 	}
@@ -94,7 +83,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		Gdk.Rectangle monitor_dimensions;
 		this.screen.get_monitor_geometry (this.screen.get_primary_monitor (), out monitor_dimensions);
 
-		this.set_size_request (monitor_dimensions.width, -1);
+		screen_width = monitor_dimensions.width;
+		screen_height = monitor_dimensions.height;
+
+		this.set_size_request (screen_width, -1);
 
 		update_struts ();
 	}
@@ -146,34 +138,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
 		this.expanded = expanded;
 
-		if (!expanded)
-			scr = small_scr;
-		else
-			scr = orig_scr;
-
-		queue_resize ();
-
-		if (expanded)
-			present ();
-	}
-
-	public override void get_preferred_width (out int m, out int n) {
-		m = scr.width;
-		n = scr.width;
-	}
-
-	public override void get_preferred_width_for_height (int h, out int m, out int n) {
-		m = scr.width;
-		n = scr.width;
-	}
-
-	public override void get_preferred_height (out int m, out int n) {
-		m = scr.height;
-		n = scr.height;
-	}
-
-	public override void get_preferred_height_for_width (int w, out int m, out int n) {
-		m = scr.height;
-		n = scr.height;
+		this.set_size_request (screen_width, expanded ? screen_height : -1);
 	}
 }
