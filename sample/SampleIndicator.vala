@@ -28,7 +28,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 	public override Gtk.Widget get_display_widget () {
 		if (icon == null) {
-			icon = new Gtk.Image.from_icon_name ("dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			icon = new Gtk.Image.from_icon_name ("system-devices-panel", Gtk.IconSize.LARGE_TOOLBAR);
 		}
 
 		return icon;
