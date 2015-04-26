@@ -83,6 +83,9 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 	}
 
 	private void animate_color (bool make_dark) {
+		if ((make_dark && background_alpha >= 100) || (!make_dark && background_alpha <= 0))
+			return;
+
 		Timeout.add (300 / 100, () => {
 			double new_alpha;
 
