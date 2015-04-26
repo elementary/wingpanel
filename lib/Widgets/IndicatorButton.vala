@@ -38,6 +38,6 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 	}
 
 	public void set_caption (string caption) {
-		this.set_label ("<span weight='normal'>%s</span>".printf (caption));
+		button_label.set_markup ("<span weight='normal'>%s</span>".printf (caption));
 	}
 }
