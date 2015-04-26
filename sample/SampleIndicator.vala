@@ -16,9 +16,19 @@
  */
 
 public class Sample.Indicator : Wingpanel.Indicator {
-	private Gtk.Image icon;
+	private Wingpanel.Widgets.DynamicIcon dynamic_icon;
 
 	private Gtk.Grid main_grid;
+
+	private Wingpanel.Widgets.IndicatorButton start_button;
+	private Wingpanel.Widgets.IndicatorButton stop_button;
+
+	private Wingpanel.Widgets.IndicatorSwitch test_switch;
+
+	private Wingpanel.Widgets.IndicatorButton next_icon_button;
+
+	private int current_icon = 0;
+	private string[] icon_names = {"system-devices-panel", "audio-volume-medium-panel", "audio-volume-muted-panel", "gsm-3g-full", "gpm-keyboard-000"};
 
 	public Indicator () {
 		Object (code_name: "sample-indicator",
@@ -27,34 +37,54 @@ public class Sample.Indicator : Wingpanel.Indicator {
 	}
 
 	public override Gtk.Widget get_display_widget () {
-		if (icon == null) {
-			icon = new Gtk.Image.from_icon_name ("system-devices-panel", Gtk.IconSize.LARGE_TOOLBAR);
+		if (dynamic_icon == null) {
+			dynamic_icon = new Wingpanel.Widgets.DynamicIcon (icon_names[current_icon]);
 		}
 
-		return icon;
+		return dynamic_icon;
 	}
 
 	public override Gtk.Widget get_widget () {
 		if (main_grid == null) {
 			main_grid = new Gtk.Grid ();
 
-			var hello_label = new Gtk.Label ("Hello World!");
+			start_button = new Wingpanel.Widgets.IndicatorButton ("Im doing something...");
+			start_button.clicked.connect (() => {
+				dynamic_icon.start_loading ();
+			});
 
-			main_grid.attach (hello_label, 0, 0, 1, 1);
+			main_grid.attach (start_button, 0, 0, 1, 1);
 
-			var button = new Gtk.Button.with_label ("yeah");
+			stop_button = new Wingpanel.Widgets.IndicatorButton ("Stop");
+			stop_button.clicked.connect (() => {
+				dynamic_icon.stop_loading ();
+			});
 
-			main_grid.attach (button, 0, 1, 1, 1);
+			main_grid.attach (stop_button, 0, 1, 1, 1);
+
+			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, 2, 1, 1);
+
+			test_switch = new Wingpanel.Widgets.IndicatorSwitch ("Test", true);
+
+			main_grid.attach (test_switch, 0, 3, 1, 1);
+
+			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, 4, 1, 1);
+
+			next_icon_button = new Wingpanel.Widgets.IndicatorButton ("Next Icon");
+			next_icon_button.clicked.connect (() => {
+				current_icon++;
+
+				if (current_icon >= icon_names.length)
+					current_icon = 0;
+
+				dynamic_icon.set_icon_name (icon_names[current_icon]);
+			});
+
+			main_grid.attach (next_icon_button, 0, 5, 1, 1);
 		}
 
 		// I do have something to display!
 		this.visible = true;
-
-// Zum Testen der Animation
-Timeout.add (5000, () => {
-	this.visible = !this.visible;
-	return true;
-});
 
 		return main_grid;
 	}

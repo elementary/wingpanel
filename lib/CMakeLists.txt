@@ -19,6 +19,10 @@ set (LIB_SOURCE
   ${CONFIG_FILE}
   Indicator.vala
   IndicatorManager.vala
+  Widgets/IndicatorButton.vala
+  Widgets/IndicatorSeparator.vala
+  Widgets/IndicatorSwitch.vala
+  Widgets/DynamicIcon.vala
 )
 
 if (BUILD_SHARED_LIBS)

@@ -15,15 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Wingpanel.Widgets.IndicatorPopover : Gtk.Popover {
-	private Gtk.Widget content;
+public class Wingpanel.Widgets.IndicatorSeparator : Gtk.Separator {
+	public IndicatorSeparator () {
+		this.orientation = Gtk.Orientation.HORIZONTAL;
+		this.margin_top = 3;
+		this.margin_bottom = 3;
+		this.margin_start = 4;
+		this.margin_end = 4;
 
-	public IndicatorPopover (Gtk.Widget indicator_widget) {
-		content = indicator_widget;
-
-		content.margin_top = 5;
-		content.margin_bottom = 3;
-
-		this.add (content);
+		this.get_style_context ().add_class ("indicator-separator");
 	}
 }
