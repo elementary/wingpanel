@@ -82,7 +82,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 				}
 			}
 		} catch (Error err) {
-			warning("Unable to scan indicators folder %s: %s\n", base_folder.get_path (), err.message);
+			warning ("Unable to scan indicators folder %s: %s\n", base_folder.get_path (), err.message);
 		}
 	}
 
