@@ -41,16 +41,20 @@ public class Sample.Indicator : Wingpanel.Indicator {
 			var hello_label = new Gtk.Label ("Hello World!");
 
 			main_grid.attach (hello_label, 0, 0, 1, 1);
+
+			var button = new Gtk.Button.with_label ("yeah");
+
+			main_grid.attach (button, 0, 1, 1, 1);
 		}
 
 		// I do have something to display!
 		this.visible = true;
 
 // Zum Testen der Animation
-/*Timeout.add (3000, () => {
+Timeout.add (5000, () => {
 	this.visible = !this.visible;
 	return true;
-});*/
+});
 
 		return main_grid;
 	}

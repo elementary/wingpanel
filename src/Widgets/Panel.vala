@@ -48,8 +48,6 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 
 		this.pack_end (right_menubar);
 
-		animate_color (true);
-
 		load_indicators ();
 	}
 

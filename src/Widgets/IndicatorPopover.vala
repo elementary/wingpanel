@@ -20,6 +20,7 @@ public class Wingpanel.Widgets.IndicatorPopover : Gtk.Popover {
 
 	public IndicatorPopover (Gtk.Widget indicator_widget) {
 		content = indicator_widget;
+		content.margin = 12;
 
 		this.add (content);
 	}

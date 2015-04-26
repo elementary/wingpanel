@@ -40,8 +40,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
 		display_widget.margin_start = 6;
 		display_widget.margin_end = 6;
-		display_widget.margin_top = 3;
-		display_widget.margin_bottom = 3;
 
 		revealer.add (display_widget);
 
@@ -71,6 +69,9 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 	}
 
 	private void set_reveal (bool reveal) {
+		if (!reveal && popover.get_visible ())
+			popover.hide ();
+
 		revealer.set_reveal_child (reveal);
 	}
 }
