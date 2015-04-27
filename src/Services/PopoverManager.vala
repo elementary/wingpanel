@@ -80,7 +80,8 @@ public class Wingpanel.Services.PopoverManager : Object {
 	public void unregister_popover (Gtk.Widget? widg) {
 		if (!widgets.contains (widg))
 			return;
-
+		var popover = widgets[widg];
+		popovers.remove (popover);
 		widgets.remove (widg);
 	}
 

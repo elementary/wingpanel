@@ -27,7 +27,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 	public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
 		this.base_indicator = base_indicator;
 		this.halign = Gtk.Align.START;
-		this.get_style_context ().add_class ("composited-indicator");
+		this.get_style_context ().add_class (StyleClass.COMPOSITED_INDICATOR);
 
 		display_widget = base_indicator.get_display_widget ();
 		indicator_widget = base_indicator.get_widget ();
@@ -49,7 +49,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 		popover_manager.register_popover (this, popover);
 
 		this.button_press_event.connect ((e) => {
-			if (e.button != 1) {
+			if (e.button != 1 || e.type == Gdk.EventType.@2BUTTON_PRESS 
+				|| e.type == Gdk.EventType.@3BUTTON_PRESS) {
 				return Gdk.EVENT_PROPAGATE;
 			}
 

@@ -39,7 +39,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		this.vexpand = false;
 
 		var style_context = get_style_context ();
-		style_context.add_class ("panel");
+		style_context.add_class (Widgets.StyleClass.PANEL);
 		style_context.add_class (Gtk.STYLE_CLASS_MENUBAR);
 
 		this.screen.size_changed.connect (update_panel_size);
@@ -54,12 +54,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		popover_manager = new Services.PopoverManager (this);
 
 		panel = new Widgets.Panel (popover_manager);
-		panel.realize.connect (() => { 
-			panel.get_preferred_height (out panel_displacement, null);
-			panel_displacement *= -1;
-
-			Timeout.add (300 / panel_displacement * (-1), animation_step);
-		});
+		panel.realize.connect (on_realize);
 
 		this.add (panel);
 
@@ -77,6 +72,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		update_struts ();
 
 		return true;
+	}
+
+	private void on_realize () {
+		panel.get_preferred_height (out panel_displacement, null);
+		panel_displacement *= -1;
+
+		Timeout.add (300 / panel_displacement * (-1), animation_step);				
 	}
 
 	private void update_panel_size () {

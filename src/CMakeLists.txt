@@ -1,10 +1,11 @@
 set(CLIENT_SOURCE
   Wingpanel.vala
   PanelWindow.vala
-  Widgets/Panel.vala
-  Widgets/MenuBar.vala
   Widgets/IndicatorEntry.vala
-  Widgets/IndicatorPopover.vala
+  Widgets/IndicatorPopover.vala  
+  Widgets/MenuBar.vala  
+  Widgets/Panel.vala
+  Widgets/StyleClass.vala
   Services/PopoverManager.vala
 )
 

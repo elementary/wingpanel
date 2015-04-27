@@ -32,7 +32,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 		this.hexpand = true;
 		this.vexpand = false;
 		this.valign = Gtk.Align.START;
-		this.get_style_context ().add_class ("panel");
+		this.get_style_context ().add_class (StyleClass.PANEL);
 
 		left_menubar = new MenuBar ();
 		left_menubar.halign = Gtk.Align.START;
