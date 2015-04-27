@@ -106,6 +106,13 @@ public class Wingpanel.Services.PopoverManager : Object {
 			}
 		});
 
+		popover.leave_notify_event.connect ((e) => {
+			if (e.mode != Gdk.CrossingMode.NORMAL) {
+				hide_popover ();
+			}
+			return Gdk.EVENT_PROPAGATE;
+		});
+
 		widg.enter_notify_event.connect ((w,e) => {
 			if (mousing)
 				return Gdk.EVENT_PROPAGATE;
