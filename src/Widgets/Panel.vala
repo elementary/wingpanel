@@ -49,6 +49,10 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 		this.pack_end (right_menubar);
 
 		load_indicators ();
+
+		IndicatorManager.get_default ().indicator_added.connect ((indicator) => {
+			show_indicator (indicator);
+		});
 	}
 
 	private void load_indicators () {

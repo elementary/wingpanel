@@ -86,7 +86,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		}
 	}
 
-	private void register_indicator (Wingpanel.Indicator indicator) {
+	public void register_indicator (Wingpanel.Indicator indicator) {
 		debug ("%s registered", indicator.code_name);
 
 		if (indicators.contains (indicator))
