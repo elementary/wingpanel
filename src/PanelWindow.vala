@@ -78,7 +78,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		panel.get_preferred_height (out panel_displacement, null);
 		panel_displacement *= -1;
 
-		Timeout.add (300 / panel_displacement * (-1), animation_step);				
+		Timeout.add (300 / panel_displacement * (-1), animation_step);
 	}
 
 	private void update_panel_size () {

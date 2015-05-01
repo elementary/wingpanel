@@ -84,6 +84,8 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 
 				break;
 		}
+
+		indicator_entry.show_all ();
 	}
 
 	private void animate_color (bool make_dark) {
