@@ -50,7 +50,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
 		add_events (Gdk.EventMask.SCROLL_MASK);
 		this.scroll_event.connect ((e) => {
-			display_widget.scroll_event (e);			
+			display_widget.scroll_event (e);
+
 			return Gdk.EVENT_PROPAGATE;
 		});
 		this.button_press_event.connect ((e) => {
@@ -62,8 +63,10 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
 				return Gdk.EVENT_STOP;
 			}
-			// call button press on the indicator display widget
+
+			// Call button press on the indicator display widget
 			display_widget.button_press_event (e);
+
 			return Gdk.EVENT_PROPAGATE;
 		});
 
