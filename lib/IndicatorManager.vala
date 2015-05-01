@@ -30,12 +30,27 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
 	private Gee.LinkedList<Wingpanel.Indicator> indicators;
 
+	private FileMonitor monitor;
+
 	public signal void indicator_added (Wingpanel.Indicator indicator);
 
 	private IndicatorManager () {
 		indicators = new Gee.LinkedList<Wingpanel.Indicator> ();
+
 		var base_folder = File.new_for_path (Build.INDICATORS_DIR);
+
 		find_plugins (base_folder);
+
+		try {
+			monitor = base_folder.monitor_directory (FileMonitorFlags.NONE, null);
+			monitor.changed.connect ((file, trash, event) => {
+				if (event == FileMonitorEvent.CREATED) {
+					load (file.get_path ());
+				}
+			});
+		} catch (Error error) {
+			warning ("Creating monitor for %s failed: %s\n", base_folder.get_path (), error.message);
+		}
 	}
 
 	private void load (string path) {
@@ -81,8 +96,8 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 					find_plugins (file);
 				}
 			}
-		} catch (Error err) {
-			warning ("Unable to scan indicators folder %s: %s\n", base_folder.get_path (), err.message);
+		} catch (Error error) {
+			warning ("Unable to scan indicators folder %s: %s\n", base_folder.get_path (), error.message);
 		}
 	}
 
