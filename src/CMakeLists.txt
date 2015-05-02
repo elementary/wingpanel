@@ -1,12 +1,15 @@
 set(CLIENT_SOURCE
   Wingpanel.vala
   PanelWindow.vala
-  Widgets/IndicatorEntry.vala
+  Widgets/IndicatorEntry.vala  
+  Widgets/IndicatorMenuBar.vala
   Widgets/IndicatorPopover.vala  
   Widgets/MenuBar.vala  
   Widgets/Panel.vala
   Widgets/StyleClass.vala
+  Services/IndicatorSorter.vala  
   Services/PopoverManager.vala
+  Services/Settings.vala
 )
 
 vala_precompile (CLIENT_VALA_C ${CMAKE_PROJECT_NAME}

@@ -18,7 +18,7 @@
 public class Wingpanel.Widgets.Panel : Gtk.Box {
 	private Services.PopoverManager popover_manager;
 
-	private MenuBar right_menubar;
+	private IndicatorMenuBar right_menubar;
 	private MenuBar left_menubar;
 	private MenuBar center_menubar;
 
@@ -43,7 +43,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 
 		this.set_center_widget (center_menubar);
 
-		right_menubar = new MenuBar ();
+		right_menubar = new IndicatorMenuBar ();
 		right_menubar.halign = Gtk.Align.END;
 
 		this.pack_end (right_menubar);
@@ -52,6 +52,10 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 
 		IndicatorManager.get_default ().indicator_added.connect ((indicator) => {
 			show_indicator (indicator);
+		});
+
+		IndicatorManager.get_default ().indicator_removed.connect ((indicator) => {
+			remove_indicator (indicator);
 		});
 	}
 
@@ -80,13 +84,31 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 			default:
 				indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_LEFT);
 
-				right_menubar.add (indicator_entry);
+				right_menubar.insert_sorted (indicator_entry);
 
 				break;
 		}
 
 		indicator_entry.show_all ();
 	}
+
+	private void remove_indicator (Indicator indicator) {
+		remove_indicator_from_container (left_menubar, indicator);
+		remove_indicator_from_container (center_menubar, indicator);
+		remove_indicator_from_container (right_menubar, indicator);
+	}
+
+	private void remove_indicator_from_container (Gtk.Container container, Indicator indicator) {
+		foreach (var child in container.get_children ()) {
+			if (child is IndicatorEntry){
+				if ((child as IndicatorEntry).base_indicator == indicator) {
+					container.remove (child);
+					return;
+				}
+			}		
+		}
+	}
+
 
 	private void animate_color (bool make_dark) {
 		if ((make_dark && background_alpha >= 100) || (!make_dark && background_alpha <= 0))

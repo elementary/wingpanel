@@ -34,6 +34,9 @@ public class Sample.Indicator : Wingpanel.Indicator {
 		Object (code_name: "sample-indicator",
 				display_name: _("Sample Indicator"),
 				description:_("Does nothing, but it is cool!"));
+
+		// Indicator should be visible at startup
+		this.visible = true;
 	}
 
 	public override Gtk.Widget get_display_widget () {
@@ -64,7 +67,19 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, 2, 1, 1);
 
-			test_switch = new Wingpanel.Widgets.IndicatorSwitch ("Test", true);
+			test_switch = new Wingpanel.Widgets.IndicatorSwitch ("Visible", true);
+
+			test_switch.get_switch ().notify["active"].connect (() => {
+				if (!test_switch.get_switch ().active) {
+					visible = false;
+
+					Timeout.add (2000, () => {
+						test_switch.get_switch ().set_active (true);
+						visible = true;
+						return false;
+					});
+				}
+			});
 
 			main_grid.attach (test_switch, 0, 3, 1, 1);
 
@@ -83,20 +98,17 @@ public class Sample.Indicator : Wingpanel.Indicator {
 			main_grid.attach (next_icon_button, 0, 5, 1, 1);
 		}
 
-		// I do have something to display!
-		this.visible = true;
-
 		return main_grid;
 	}
 
 	public override void opened () {
 		// Use this method to get some extra information while displaying the indicator
-print ("opened\n");
+		print ("opened\n");
 	}
 
 	public override void closed () {
 		// Your stuff isn't shown anymore, now you can free some RAM, stop timers or anything else...
-print ("closed\n");
+		print ("closed\n");
 	}
 }
 

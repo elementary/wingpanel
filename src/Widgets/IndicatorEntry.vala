@@ -22,7 +22,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 	private Gtk.Revealer revealer;
 
 	private IndicatorPopover popover;
-	public Indicator base_indicator;
+	public Indicator base_indicator;	
+	public IndicatorMenuBar? menu_bar;
 
 	public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
 		this.base_indicator = base_indicator;
@@ -36,8 +37,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
 		set_reveal (base_indicator.visible);
 
-		base_indicator.notify["visible"].connect (() => set_reveal (base_indicator.visible));
-
 		display_widget.margin_start = 6;
 		display_widget.margin_end = 6;
 
@@ -46,10 +45,33 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 		popover = new IndicatorPopover (indicator_widget);
 		popover.relative_to = this;
 
-		popover_manager.register_popover (this, popover);
+		if (base_indicator.visible)
+			popover_manager.register_popover (this, popover);
 
 		base_indicator.close.connect (() => {
 			popover.hide ();
+		});
+
+		base_indicator.notify["visible"].connect (() => {
+			if (menu_bar != null) {
+				// order will be changed so close all open popovers
+				popover_manager.close ();
+				if (base_indicator.visible) {
+					popover_manager.register_popover (this, popover);					
+					menu_bar.apply_new_order ();					
+					set_reveal (base_indicator.visible);
+				} else {					
+					set_reveal (base_indicator.visible);
+					popover_manager.unregister_popover (this);
+					Timeout.add (revealer.get_transition_duration () , () => {						
+						menu_bar.apply_new_order ();
+						return false;
+					});
+				}
+			} else {				
+				set_reveal (base_indicator.visible);
+			}
+			
 		});
 
 		add_events (Gdk.EventMask.SCROLL_MASK);

@@ -33,6 +33,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	private FileMonitor monitor;
 
 	public signal void indicator_added (Wingpanel.Indicator indicator);
+	public signal void indicator_removed (Wingpanel.Indicator indicator);
 
 	private IndicatorManager () {
 		indicators = new Gee.LinkedList<Wingpanel.Indicator> ();
@@ -109,6 +110,16 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
 		indicators.add (indicator);
 		indicator_added (indicator);
+	}
+
+	public void deregister_indicator (Wingpanel.Indicator indicator) {
+		debug ("%s deregistered", indicator.code_name);
+
+		if (!indicators.contains (indicator))
+			return;
+
+		indicators.remove (indicator);
+		indicator_removed (indicator);
 	}
 
 	public bool has_indicators () {

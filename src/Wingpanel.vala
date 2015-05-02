@@ -16,6 +16,8 @@
  */
 
 namespace Wingpanel {
+	public static Services.Settings settings;
+
 	public static int main (string[] args) {
 		Gtk.init (ref args);
 
@@ -50,8 +52,10 @@ namespace Wingpanel {
 
 		public static WingpanelApp instance {
 			get {
-				if (_instance == null)
+				if (_instance == null) {
+					settings = new Services.Settings ();
 					_instance = new WingpanelApp ();
+				}
 
 				return _instance;
 			}
