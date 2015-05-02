@@ -37,4 +37,6 @@ public abstract class Wingpanel.Indicator : GLib.Object {
 	public abstract void opened ();
 
 	public abstract void closed ();
+
+	public signal void close ();
 }

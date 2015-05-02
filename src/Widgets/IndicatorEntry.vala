@@ -48,12 +48,18 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
 		popover_manager.register_popover (this, popover);
 
+		base_indicator.close.connect (() => {
+			popover.hide ();
+		});
+
 		add_events (Gdk.EventMask.SCROLL_MASK);
+
 		this.scroll_event.connect ((e) => {
 			display_widget.scroll_event (e);
 
 			return Gdk.EVENT_PROPAGATE;
 		});
+
 		this.button_press_event.connect ((e) => {
 			if (e.button == Gdk.BUTTON_PRIMARY && e.type == Gdk.EventType.BUTTON_PRESS) {
 				if (popover.get_visible ())
