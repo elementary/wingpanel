@@ -37,8 +37,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
 		set_reveal (base_indicator.visible);
 
-		display_widget.margin_start = 6;
-		display_widget.margin_end = 6;
+		display_widget.margin_start = 4;
+		display_widget.margin_end = 4;
 
 		revealer.add (display_widget);
 
