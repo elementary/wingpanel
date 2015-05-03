@@ -57,8 +57,6 @@ add_custom_target (distcheck
     && make check
     )
 add_dependencies(distcheck dist)
-add_custom_target (uninstall "${CMAKE_COMMAND}" -P
-  "${CMAKE_SOURCE_DIR}/cmake/uninstall.cmake")
 
 #
 # Data
@@ -130,4 +128,12 @@ if (BUILD_SAMPLE)
 endif ()
 
 add_subdirectory (schemas)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/schemas/org.pantheon.desktop.wingpanel.gschema.xml DESTINATION ${GSETTINGSDIR})
+
+# uninstall target
+configure_file(
+    "${CMAKE_SOURCE_DIR}/cmake/Uninstall.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/Uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/Uninstall.cmake)
