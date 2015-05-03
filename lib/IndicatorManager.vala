@@ -30,7 +30,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
 	private Gee.LinkedList<Wingpanel.Indicator> indicators;
 
-	private FileMonitor monitor;
+	private FileMonitor? monitor = null;
 
 	public signal void indicator_added (Wingpanel.Indicator indicator);
 	public signal void indicator_removed (Wingpanel.Indicator indicator);
@@ -45,9 +45,8 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		try {
 			monitor = base_folder.monitor_directory (FileMonitorFlags.NONE, null);
 			monitor.changed.connect ((file, trash, event) => {
-				if (event == FileMonitorEvent.CREATED) {
+				if (event == FileMonitorEvent.CREATED)
 					load (file.get_path ());
-				}
 			});
 		} catch (Error error) {
 			warning ("Creating monitor for %s failed: %s\n", base_folder.get_path (), error.message);
@@ -55,47 +54,60 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	}
 
 	private void load (string path) {
-		if (!Module.supported ()) {
+		if (!Module.supported ())
 			error ("Wingpanel is not supported by this system!");
-		}
 
 		Module module = Module.open (path, ModuleFlags.BIND_LAZY);
 		if (module == null) {
 			critical (Module.error ());
+
 			return;
 		}
 
 		void* function;
+
 		if (!module.symbol ("get_indicator", out function))
 			return;
 
 		if (function == null) {
 			critical ("get_indicator () not found in %s", path);
+
 			return;
 		}
 
 		RegisterPluginFunction register_plugin = (RegisterPluginFunction) function;
 		Wingpanel.Indicator indicator = register_plugin (module);
+
 		if (indicator == null) {
 			critical ("Unknown plugin type for %s !", path);
+
 			return;
 		}
+
 		module.make_resident ();
 		register_indicator (indicator);
+
+		if (monitor != null) {
+			monitor.changed.connect ((file, trash, event) => {
+				if (event == FileMonitorEvent.CHANGED || event == FileMonitorEvent.DELETED)
+					deregister_indicator (indicator);
+			});
+		}
 	}
 
 	private void find_plugins (File base_folder) {
 		FileInfo file_info = null;
+
 		try {
 			var enumerator = base_folder.enumerate_children (FileAttribute.STANDARD_NAME + "," + FileAttribute.STANDARD_TYPE + "," + FileAttribute.STANDARD_CONTENT_TYPE, 0);
+
 			while ((file_info = enumerator.next_file ()) != null) {
 				var file = base_folder.get_child (file_info.get_name ());
 
-				if (file_info.get_file_type () == FileType.REGULAR && GLib.ContentType.equals (file_info.get_content_type (), "application/x-sharedlib")) {
+				if (file_info.get_file_type () == FileType.REGULAR && GLib.ContentType.equals (file_info.get_content_type (), "application/x-sharedlib"))
 					load (file.get_path ());
-				} else if (file_info.get_file_type () == FileType.DIRECTORY) {
+				else if (file_info.get_file_type () == FileType.DIRECTORY)
 					find_plugins (file);
-				}
 			}
 		} catch (Error error) {
 			warning ("Unable to scan indicators folder %s: %s\n", base_folder.get_path (), error.message);
