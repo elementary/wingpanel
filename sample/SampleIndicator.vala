@@ -76,6 +76,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 					Timeout.add (2000, () => {
 						test_switch.get_switch ().set_active (true);
 						visible = true;
+
 						return false;
 					});
 				}

@@ -103,12 +103,12 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 			if (child is IndicatorEntry){
 				if ((child as IndicatorEntry).base_indicator == indicator) {
 					container.remove (child);
+
 					return;
 				}
-			}		
+			}
 		}
 	}
-
 
 	private void animate_color (bool make_dark) {
 		if ((make_dark && background_alpha >= 100) || (!make_dark && background_alpha <= 0))

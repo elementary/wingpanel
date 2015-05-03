@@ -22,7 +22,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 	private Gtk.Revealer revealer;
 
 	private IndicatorPopover popover;
-	public Indicator base_indicator;	
+	public Indicator base_indicator;
 	public IndicatorMenuBar? menu_bar;
 
 	public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
@@ -56,22 +56,24 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 			if (menu_bar != null) {
 				// order will be changed so close all open popovers
 				popover_manager.close ();
+
 				if (base_indicator.visible) {
-					popover_manager.register_popover (this, popover);					
-					menu_bar.apply_new_order ();					
+					popover_manager.register_popover (this, popover);
+					menu_bar.apply_new_order ();
 					set_reveal (base_indicator.visible);
-				} else {					
+				} else {
 					set_reveal (base_indicator.visible);
 					popover_manager.unregister_popover (this);
-					Timeout.add (revealer.get_transition_duration () , () => {						
+
+					Timeout.add (revealer.get_transition_duration () , () => {
 						menu_bar.apply_new_order ();
+
 						return false;
 					});
 				}
-			} else {				
+			} else {
 				set_reveal (base_indicator.visible);
 			}
-			
 		});
 
 		add_events (Gdk.EventMask.SCROLL_MASK);

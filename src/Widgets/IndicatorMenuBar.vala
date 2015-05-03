@@ -14,48 +14,51 @@
  * You should have received a copy of the GNU Library General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 public class Wingpanel.Widgets.IndicatorMenuBar : MenuBar {
-    private Gee.List<IndicatorEntry> sorted_items;
-    private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
+	private Gee.List<IndicatorEntry> sorted_items;
+	private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
 
-    public IndicatorMenuBar () {
-        sorted_items = new Gee.ArrayList<IndicatorEntry> ();
-    }
+	public IndicatorMenuBar () {
+		sorted_items = new Gee.ArrayList<IndicatorEntry> ();
+	}
 
-    public void insert_sorted (IndicatorEntry item) {
-        if (item in sorted_items)
-            return; // item already added
+	public void insert_sorted (IndicatorEntry item) {
+		if (item in sorted_items)
+			return; // item already added
 
-        item.menu_bar = this;
-        sorted_items.add (item);
-        sorted_items.sort (sorter.compare_func);
-        apply_new_order ();
-    }
+		item.menu_bar = this;
 
-    public override void remove (Gtk.Widget widget) {
-        var indicator_widget = widget as IndicatorEntry;
-        if (indicator_widget != null)
-            sorted_items.remove (indicator_widget);
+		sorted_items.add (item);
+		sorted_items.sort (sorter.compare_func);
 
-        base.remove (widget);
-    }
+		apply_new_order ();
+	}
 
-    public void apply_new_order () {
-        clear ();
-        append_all_items ();
-    }
+	public override void remove (Gtk.Widget widget) {
+		var indicator_widget = widget as IndicatorEntry;
 
-    private void clear () {
-        var children = get_children ();
+		if (indicator_widget != null)
+			sorted_items.remove (indicator_widget);
 
-        foreach (var child in children)
-            base.remove (child);
-    }
+		base.remove (widget);
+	}
 
-    private void append_all_items () {
-        foreach (var widget in sorted_items)            
-            if (widget.base_indicator.visible)
-                append (widget);
-    }
+	public void apply_new_order () {
+		clear ();
+		append_all_items ();
+	}
+
+	private void clear () {
+		var children = this.get_children ();
+
+		foreach (var child in children)
+			base.remove (child);
+	}
+
+	private void append_all_items () {
+		foreach (var widget in sorted_items)
+			if (widget.base_indicator.visible)
+				this.append (widget);
+	}
 }

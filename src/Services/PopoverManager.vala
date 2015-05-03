@@ -1,6 +1,6 @@
-/* 
+/*
  * Copyright 2015 Ikey Doherty <ikey@solus-project.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -163,7 +163,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 		});
 
 		popover.modal = false;
-		widgets.insert (widg, popover);	
+		widgets.insert (widg, popover);
 		popovers.insert (popover, widg);
 	}
 }

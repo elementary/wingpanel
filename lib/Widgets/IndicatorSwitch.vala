@@ -28,7 +28,7 @@ public class Wingpanel.Widgets.IndicatorSwitch : Gtk.Grid {
 
 		// FIXME: Replace this with some css-rules
 		label_widget = new Gtk.Label ("<span weight='normal'>%s</span>".
-			printf (Markup.escape_text (caption)));
+				printf (Markup.escape_text (caption)));
 		label_widget.use_markup = true;
 		label_widget.hexpand = true;
 		label_widget.halign = Gtk.Align.START;
@@ -48,7 +48,7 @@ public class Wingpanel.Widgets.IndicatorSwitch : Gtk.Grid {
 
 	public void set_caption (string caption) {
 		label_widget.set_label ("<span weight='normal'>%s</span>".
-			printf (Markup.escape_text (caption)));
+				printf (Markup.escape_text (caption)));
 	}
 
 	// TODO: Add get_caption () method when that markup-stuff is away

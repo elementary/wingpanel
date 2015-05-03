@@ -23,50 +23,46 @@
  * be passed as CompareFuncs.
  */
 public class Wingpanel.Services.IndicatorSorter {
+	public int compare_func (Wingpanel.Widgets.IndicatorEntry? a, Wingpanel.Widgets.IndicatorEntry? b) {
+		if (a == null)
+			return (b == null) ? 0 : -1;
 
-    public int compare_func (Wingpanel.Widgets.IndicatorEntry? a, Wingpanel.Widgets.IndicatorEntry? b) {
-        if (a == null)
-            return (b == null) ? 0 : -1;
+		if (b == null)
+			return 1;
 
-        if (b == null)
-            return 1;
+		int order = get_order (a) - get_order (b);
 
-        int order = get_order (a) - get_order (b);
-        
-        if (order == 0) {
-            order = compare_entries_by_name (a, b);
-        }
+		if (order == 0)
+			order = compare_entries_by_name (a, b);
 
-        return order.clamp (-1, 1);
-    }
+		return order.clamp (-1, 1);
+	}
 
-    /**
-     * Whenever two different entries  are not part of the default order list, 
-     * we sort them using their individual name hints.
-     */
-    private static int compare_entries_by_name (Wingpanel.Widgets.IndicatorEntry a, Wingpanel.Widgets.IndicatorEntry b) {
-        return strcmp (a.base_indicator.code_name.down (), b.base_indicator.code_name.down ());
-    }
+	// Whenever two different entries  are not part of the default order list,
+	// we sort them using their individual name hints.
+	private static int compare_entries_by_name (Wingpanel.Widgets.IndicatorEntry a, Wingpanel.Widgets.IndicatorEntry b) {
+		return strcmp (a.base_indicator.code_name.down (), b.base_indicator.code_name.down ());
+	}
 
+	private static int get_order (Wingpanel.Widgets.IndicatorEntry node) {
+		int best_match = 0;
 
-    private static int get_order (Wingpanel.Widgets.IndicatorEntry node) {
-        int best_match = 0;
-        // ayanata application indicators on the left of the native indicators
-        if (node.base_indicator.code_name.has_prefix ("ayanata-"))
-            return best_match;
+		// ayatana application indicators on the left of the native indicators
+		if (node.base_indicator.code_name.has_prefix ("ayatana-"))
+			return best_match;
 
-        var order = Wingpanel.settings.order;
+		var order = Wingpanel.Services.Settings.get_default ().order;
 
-        for (int i = 0; i < order.length; i++) {
-            var order_name = order[i];
+		for (int i = 0; i < order.length; i++) {
+			var order_name = order[i];
 
-            if (order_name == node.base_indicator.code_name) {
-                best_match = i;
-                break;
-                
-            }
-        }
+			if (order_name == node.base_indicator.code_name) {
+				best_match = i;
 
-        return best_match;
-    }
+				break;
+			}
+		}
+
+		return best_match;
+	}
 }

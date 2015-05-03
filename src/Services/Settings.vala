@@ -15,14 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Wingpanel.Services {
-    public class Settings : Granite.Services.Settings {
-        public string[] order { get; set; }
-        public double background_alpha { get; set; }
-        public bool auto_adjust_alpha { get; set; }
+public class Wingpanel.Services.Settings : Granite.Services.Settings {
+	// Use the namespace to avoid possible GLib conflicts
+	private static Wingpanel.Services.Settings? instance = null;
 
-        public Settings () {
-            base ("org.pantheon.desktop.wingpanel");
-        }
-    }
+	public string[] order { get; set; }
+	public double min_alpha { get; set; }
+	public double max_alpha { get; set; }
+
+	public Settings () {
+		base ("org.pantheon.desktop.wingpanel");
+	}
+
+	public static Wingpanel.Services.Settings get_default () {
+		if (instance == null)
+			instance = new Wingpanel.Services.Settings ();
+
+		return instance;
+	}
 }

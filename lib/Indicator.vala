@@ -19,12 +19,12 @@ public abstract class Wingpanel.Indicator : GLib.Object {
 	public static const string APP_LAUNCHER = "app-launcher";
 	public static const string SESSION = "session";
 	public static const string DATETIME = "datetime";
-	public static const string NETWORK = "network";	
+	public static const string NETWORK = "network";
 	public static const string MESSAGES = "messages";
-	public static const string POWER = "power";	
+	public static const string POWER = "power";
 	public static const string SYNC = "sync";
 	public static const string PRINTER = "printer";
-	public static const string BLUETOOTH = "bluetoth";	
+	public static const string BLUETOOTH = "bluetooth";
 	public static const string KEYBOARD = "keyboard";
 
 	public string code_name { get; construct; }
