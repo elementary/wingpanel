@@ -81,8 +81,10 @@ public class Wingpanel.Services.PopoverManager : Object {
 	}
 
 	public void close () {
-		if (visible_popover != null)
+		if (visible_popover != null) {
 			hide_popover ();
+			owner.set_expanded (false);
+		}
 	}
 
 	public void unregister_popover (Gtk.Widget? widg) {

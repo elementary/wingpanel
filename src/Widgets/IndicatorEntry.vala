@@ -49,7 +49,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 			popover_manager.register_popover (this, popover);
 
 		base_indicator.close.connect (() => {
-			popover.hide ();
+			popover_manager.close ();
 		});
 
 		base_indicator.notify["visible"].connect (() => {
