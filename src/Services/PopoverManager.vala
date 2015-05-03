@@ -1,5 +1,6 @@
 /*
  * Copyright 2015 Ikey Doherty <ikey@solus-project.com>
+ * 2015 Wingpanel Developers (http://launchpad.net/wingpanel)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,8 +41,10 @@ public class Wingpanel.Services.PopoverManager : Object {
 			Gtk.Allocation allocation;
 			visible_popover.get_allocation (out allocation);
 
-			if ((e.x < allocation.x || e.x > allocation.x + allocation.width) || (e.y < allocation.y || e.y > allocation.y + allocation.height))
+			if ((e.x < allocation.x || e.x > allocation.x + allocation.width) || (e.y < allocation.y || e.y > allocation.y + allocation.height)) {
 				hide_popover ();
+				owner.set_expanded (false);
+			}
 
 			return Gdk.EVENT_STOP;
 		});
@@ -119,6 +122,8 @@ public class Wingpanel.Services.PopoverManager : Object {
 		});
 
 		widg.enter_notify_event.connect ((w,e) => {
+			owner.set_expanded (true);
+
 			if (mousing)
 				return Gdk.EVENT_PROPAGATE;
 
@@ -147,6 +152,13 @@ public class Wingpanel.Services.PopoverManager : Object {
 			return Gdk.EVENT_PROPAGATE;
 		});
 
+		widg.leave_notify_event.connect (() => {
+			if (visible_popover == null)
+				owner.set_expanded (false);
+
+			return Gdk.EVENT_PROPAGATE;
+		});
+
 		popover.notify["visible"].connect (() => {
 			if (mousing || grabbed)
 				return;
@@ -154,7 +166,6 @@ public class Wingpanel.Services.PopoverManager : Object {
 			if (!popover.get_visible ()) {
 				make_modal (visible_popover, false);
 				visible_popover = null;
-				owner.set_expanded (false);
 			}
 		});
 
