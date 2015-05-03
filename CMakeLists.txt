@@ -92,6 +92,7 @@ pkg_check_modules (LIB REQUIRED ${LIB_PKG})
 
 set (GLOBAL_VALAC_OPTIONS
   --vapidir=${CMAKE_BINARY_DIR}/lib
+  --vapidir=vapi
   --target-glib=2.32
   --thread
 )
@@ -111,6 +112,7 @@ set (DEPS_PACKAGES
 
 set (DEPS_PKG
   granite
+  gala
 )
 
 pkg_check_modules (DEPS REQUIRED ${DEPS_PKG} ${LIB_PKG})
@@ -121,6 +123,7 @@ include_directories (${CMAKE_BINARY_DIR}/lib)
 set (DEPS_LIBRARIES ${DEPS_LIBRARIES} ${LIB_NAME})
 add_subdirectory (src)
 
+add_subdirectory (wingpanel-interface)
 
 if (BUILD_SAMPLE)
   add_subdirectory (sample)
