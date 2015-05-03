@@ -9,14 +9,14 @@
  */
 
 public class Wingpanel.Services.PopoverManager : Object {
-	HashTable<Gtk.Widget?, Gtk.Popover?> widgets;
-	HashTable<Gtk.Popover?, Wingpanel.Widgets.IndicatorEntry?> popovers;
+	private HashTable<Gtk.Widget?, Gtk.Popover?> widgets;
+	private HashTable<Gtk.Popover?, Wingpanel.Widgets.IndicatorEntry?> popovers;
 
-	unowned Wingpanel.PanelWindow? owner;
-	unowned Gtk.Popover? visible_popover = null;
+	private unowned Wingpanel.PanelWindow? owner;
+	private unowned Gtk.Popover? visible_popover = null;
 
-	bool grabbed = false;
-	bool mousing = false;
+	private bool grabbed = false;
+	private bool mousing = false;
 
 	public PopoverManager (Wingpanel.PanelWindow? owner) {
 		this.owner = owner;
@@ -58,7 +58,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 		visible_popover = null;
 	}
 
-	void make_modal (Gtk.Popover? pop, bool modal = true) {
+	private void make_modal (Gtk.Popover? pop, bool modal = true) {
 		if (pop == null || pop.get_window () == null || mousing)
 			return;
 
