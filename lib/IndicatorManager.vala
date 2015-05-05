@@ -40,17 +40,17 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
 		var base_folder = File.new_for_path (Build.INDICATORS_DIR);
 
-		find_plugins (base_folder);
-
 		try {
 			monitor = base_folder.monitor_directory (FileMonitorFlags.NONE, null);
 			monitor.changed.connect ((file, trash, event) => {
-				if (event == FileMonitorEvent.CREATED)
+				if (event == FileMonitorEvent.CHANGES_DONE_HINT)
 					load (file.get_path ());
 			});
 		} catch (Error error) {
 			warning ("Creating monitor for %s failed: %s\n", base_folder.get_path (), error.message);
 		}
+
+		find_plugins (base_folder);
 	}
 
 	private void load (string path) {
@@ -89,7 +89,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
 		if (monitor != null) {
 			monitor.changed.connect ((file, trash, event) => {
-				if (event == FileMonitorEvent.CHANGED || event == FileMonitorEvent.DELETED)
+				if (event == FileMonitorEvent.DELETED && file.get_path () == path)
 					deregister_indicator (indicator);
 			});
 		}
@@ -117,11 +117,15 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	public void register_indicator (Wingpanel.Indicator indicator) {
 		debug ("%s registered", indicator.code_name);
 
-		if (indicators.contains (indicator))
-			return;
+		indicators.@foreach ((ind) => {
+			if (ind.code_name == indicator.code_name)
+				deregister_indicator (ind);
 
-		indicators.add (indicator);
-		indicator_added (indicator);
+			return false;
+		});
+
+		if (indicators.add (indicator))
+			indicator_added (indicator);
 	}
 
 	public void deregister_indicator (Wingpanel.Indicator indicator) {
@@ -130,8 +134,8 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		if (!indicators.contains (indicator))
 			return;
 
-		indicators.remove (indicator);
-		indicator_removed (indicator);
+		if (indicators.remove (indicator))
+			indicator_removed (indicator);
 	}
 
 	public bool has_indicators () {
