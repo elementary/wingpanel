@@ -28,7 +28,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	[CCode (has_target = false)]
 	private delegate Wingpanel.Indicator RegisterPluginFunction (Module module);
 
-	private Gee.LinkedList<Wingpanel.Indicator> indicators;
+	private Gee.HashMap<string, Wingpanel.Indicator> indicators;
 
 	private FileMonitor? monitor = null;
 
@@ -36,15 +36,22 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	public signal void indicator_removed (Wingpanel.Indicator indicator);
 
 	private IndicatorManager () {
-		indicators = new Gee.LinkedList<Wingpanel.Indicator> ();
+		indicators = new Gee.HashMap<string, Wingpanel.Indicator> ();
 
 		var base_folder = File.new_for_path (Build.INDICATORS_DIR);
 
 		try {
 			monitor = base_folder.monitor_directory (FileMonitorFlags.NONE, null);
 			monitor.changed.connect ((file, trash, event) => {
-				if (event == FileMonitorEvent.CHANGES_DONE_HINT)
-					load (file.get_path ());
+				var plugin_path = file.get_path ();
+
+				if (event == FileMonitorEvent.CHANGES_DONE_HINT) {
+					// FIXME: Reloading the plugin does not update the indicator and only registers it again.
+					// See module.make_resident ()
+					load (plugin_path);
+				} else if (event == FileMonitorEvent.DELETED) {
+					deregister_indicator (plugin_path, indicators.@get (plugin_path));
+				}
 			});
 		} catch (Error error) {
 			warning ("Creating monitor for %s failed: %s\n", base_folder.get_path (), error.message);
@@ -85,14 +92,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		}
 
 		module.make_resident ();
-		register_indicator (indicator);
-
-		if (monitor != null) {
-			monitor.changed.connect ((file, trash, event) => {
-				if (event == FileMonitorEvent.DELETED && file.get_path () == path)
-					deregister_indicator (indicator);
-			});
-		}
+		register_indicator (path, indicator);
 	}
 
 	private void find_plugins (File base_folder) {
@@ -114,27 +114,28 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		}
 	}
 
-	public void register_indicator (Wingpanel.Indicator indicator) {
+	public void register_indicator (string path, Wingpanel.Indicator indicator) {
 		debug ("%s registered", indicator.code_name);
 
-		indicators.@foreach ((ind) => {
-			if (ind.code_name == indicator.code_name)
-				deregister_indicator (ind);
+		indicators.@foreach ((entry) => {
+			if (entry.value.code_name == indicator.code_name)
+				deregister_indicator (entry.key, entry.value);
 
-			return false;
+			return true;
 		});
 
-		if (indicators.add (indicator))
-			indicator_added (indicator);
+		indicators.@set (path, indicator);
+
+		indicator_added (indicator);
 	}
 
-	public void deregister_indicator (Wingpanel.Indicator indicator) {
+	public void deregister_indicator (string path, Wingpanel.Indicator indicator) {
 		debug ("%s deregistered", indicator.code_name);
 
-		if (!indicators.contains (indicator))
+		if (!indicators.has_key (path))
 			return;
 
-		if (indicators.remove (indicator))
+		if (indicators.unset (path))
 			indicator_removed (indicator);
 	}
 
@@ -142,7 +143,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		return !indicators.is_empty;
 	}
 
-	public Gee.Collection<Wingpanel.Indicator> get_indicators () {
+	public Gee.Map<string, Wingpanel.Indicator> get_indicators () {
 		return indicators.read_only_view;
 	}
 }
