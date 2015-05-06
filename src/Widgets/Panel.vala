@@ -60,8 +60,8 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 	}
 
 	private void load_indicators () {
-		IndicatorManager.get_default ().get_indicators ().@foreach ((entry) => {
-			show_indicator (entry.value);
+		IndicatorManager.get_default ().get_indicators ().@foreach ((indicator) => {
+			show_indicator (indicator);
 
 			return true;
 		});

@@ -143,7 +143,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		return !indicators.is_empty;
 	}
 
-	public Gee.Map<string, Wingpanel.Indicator> get_indicators () {
-		return indicators.read_only_view;
+	public Gee.Collection<Wingpanel.Indicator> get_indicators () {
+		return indicators.values.read_only_view;
 	}
 }
