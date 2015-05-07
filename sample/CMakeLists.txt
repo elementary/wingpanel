@@ -18,6 +18,8 @@ vala_precompile (VALA_C ${SAMPLEINDICATOR}
 PACKAGES
   gtk+-3.0
   wingpanel-2.0
+  granite
+  libnotify
 OPTIONS
   --thread
 )
