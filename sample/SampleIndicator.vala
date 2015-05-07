@@ -28,7 +28,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 	private Wingpanel.Widgets.IndicatorButton next_icon_button;
 
 	private int current_icon = 0;
-	private string[] icon_names = {"system-devices-panel", "audio-volume-medium-panel", "audio-volume-muted-panel", "gsm-3g-full", "gpm-keyboard-000"};
+	private string[] icon_names = {"system-shutdown-symbolic", "audio-volume-medium-symbolic", "audio-volume-muted-symbolic", "network-cellular-signal-excellent-symbolic", "battery-empty-symbolic"};
 
 	public Indicator () {
 		Object (code_name: "sample-indicator",
