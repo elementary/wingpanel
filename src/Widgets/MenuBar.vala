@@ -19,7 +19,6 @@ public class Wingpanel.Widgets.MenuBar : Gtk.MenuBar {
 	public MenuBar () {
 		this.can_focus = true;
 		this.border_width = 0;
-		this.get_style_context ().add_class (StyleClass.COMPOSITED_INDICATOR);
 		this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, 0});
 	}
 }

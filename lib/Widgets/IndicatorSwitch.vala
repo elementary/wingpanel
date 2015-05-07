@@ -27,9 +27,7 @@ public class Wingpanel.Widgets.IndicatorSwitch : Gtk.Grid {
 		this.margin_end = 6;
 
 		// FIXME: Replace this with some css-rules
-		label_widget = new Gtk.Label ("<span weight='normal'>%s</span>".
-				printf (Markup.escape_text (caption)));
-		label_widget.use_markup = true;
+		label_widget = new Gtk.Label (caption);
 		label_widget.hexpand = true;
 		label_widget.halign = Gtk.Align.START;
 		label_widget.margin_start = 6;
@@ -47,11 +45,12 @@ public class Wingpanel.Widgets.IndicatorSwitch : Gtk.Grid {
 	}
 
 	public void set_caption (string caption) {
-		label_widget.set_label ("<span weight='normal'>%s</span>".
-				printf (Markup.escape_text (caption)));
+		label_widget.set_label (caption);
 	}
 
-	// TODO: Add get_caption () method when that markup-stuff is away
+	public string get_caption () {
+		return label_widget.get_label ();
+	}
 
 	public void set_active (bool active) {
 		switch_widget.set_active (active);

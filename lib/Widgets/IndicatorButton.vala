@@ -22,8 +22,7 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 
 	public IndicatorButton (string caption) {
 		// FIXME: Use the "indicator-button" class in the stylesheet to configure how the button is rendered.
-		this.label = "<span weight='normal'>%s</span>".
-				printf (Markup.escape_text (caption));
+		this.label = caption;
 		this.hexpand = true;
 		this.margin_top = 3;
 		this.margin_bottom = 3;
@@ -37,7 +36,6 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 		button_label.margin_end = 10;
 
 		this.get_style_context ().add_class ("indicator-button");
-		this.get_style_context ().add_class (Gtk.STYLE_CLASS_LIST_ROW);
 	}
 
 	public IndicatorButton.with_image (string caption, Gdk.Pixbuf pixbuf) {
@@ -47,8 +45,7 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 
 		var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
 
-		button_label = new Gtk.Label ("<span weight='normal'>%s</span>".
-				printf (Markup.escape_text (caption)));
+		button_label = new Gtk.Label (caption);
 
 		button_label.use_markup = true;
 		button_label.halign = Gtk.Align.START;
@@ -70,7 +67,10 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 	}
 
 	public void set_caption (string caption) {
-		button_label.set_markup ("<span weight='normal'>%s</span>".
-				printf (Markup.escape_text (caption)));
+		button_label.set_label (caption);
+	}
+
+	public string get_caption () {
+		return button_label.get_label ();
 	}
 }

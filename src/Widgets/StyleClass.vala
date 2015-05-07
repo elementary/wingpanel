@@ -17,7 +17,5 @@
 
 namespace Wingpanel.Widgets.StyleClass {
 	public const string PANEL = "panel";
-	public const string SHADOW = "panel-shadow";
-	public const string APP_BUTTON = "panel-app-button";
 	public const string COMPOSITED_INDICATOR = "composited-indicator";
 }
