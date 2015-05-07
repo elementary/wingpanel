@@ -20,11 +20,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
 	private Services.PopoverManager popover_manager;
 
-	private int screen_width;
-	private int screen_height;
+	private int monitor_number;
 
-	private int screen_x;
-	private int screen_y;
+	private int monitor_width;
+	private int monitor_height;
+
+	private int monitor_x;
+	private int monitor_y;
 
 	private int panel_height;
 
@@ -32,7 +34,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
 	private int panel_displacement;
 
-	public PanelWindow () {
+	public PanelWindow (int monitor_number = -1) {
+		this.monitor_number = monitor_number;
+
 		this.decorated = false;
 		this.resizable = false;
 		this.skip_taskbar_hint = true;
@@ -48,7 +52,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		this.screen.monitors_changed.connect (update_panel_dimensions);
 		this.screen_changed.connect (update_visual);
 
-		update_panel_dimensions ();
 		update_visual ();
 
 		popover_manager = new Services.PopoverManager (this);
@@ -79,20 +82,22 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 	}
 
 	private void update_panel_dimensions () {
+		var monitor = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
+
 		panel.get_preferred_height (out panel_height, null);
 
 		Gdk.Rectangle monitor_dimensions;
-		this.screen.get_monitor_geometry (this.screen.get_primary_monitor (), out monitor_dimensions);
+		this.screen.get_monitor_geometry (monitor, out monitor_dimensions);
 
-		screen_width = monitor_dimensions.width;
-		screen_height = monitor_dimensions.height;
+		monitor_width = monitor_dimensions.width;
+		monitor_height = monitor_dimensions.height;
 
-		this.set_size_request (screen_width, -1);
+		this.set_size_request (monitor_width, -1);
 
-		screen_x = monitor_dimensions.x;
-		screen_y = monitor_dimensions.y;
+		monitor_x = monitor_dimensions.x;
+		monitor_y = monitor_dimensions.y;
 
-		this.move (screen_x, screen_y - (panel_height + panel_displacement));
+		this.move (monitor_x, monitor_y - (panel_height + panel_displacement));
 
 		update_struts ();
 	}
@@ -110,22 +115,21 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		if (!this.get_realized () || panel == null)
 			return;
 
-		var position_top = screen_y - panel_displacement;
+		var monitor = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
+
+		var position_top = monitor_y - panel_displacement;
 
 		Gdk.Atom atom;
 		Gdk.Rectangle primary_monitor_rect;
 
 		long struts[12];
 
-		var screen = this.screen;
-		var monitor = screen.get_primary_monitor ();
-
-		screen.get_monitor_geometry (monitor, out primary_monitor_rect);
+		this.screen.get_monitor_geometry (monitor, out primary_monitor_rect);
 
 		struts = {0, 0, position_top, 0, // strut-left, strut-right, strut-top, strut-bottom
 				0, 0, // strut-left-start-y, strut-left-end-y
 				0, 0, // strut-right-start-y, strut-right-end-y
-				screen_x, screen_x + screen_width -1, // strut-top-start-x, strut-top-end-x
+				monitor_x, monitor_x + monitor_width -1, // strut-top-start-x, strut-top-end-x
 				0, 0}; // strut-bottom-start-x, strut-bottom-end-x
 
 		atom = Gdk.Atom.intern ("_NET_WM_STRUT_PARTIAL", false);
@@ -140,6 +144,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
 		this.expanded = expanded;
 
-		this.set_size_request (screen_width, expanded ? screen_height : -1);
+		this.set_size_request (monitor_width, expanded ? monitor_height : -1);
 	}
 }
