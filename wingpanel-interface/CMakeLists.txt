@@ -13,6 +13,8 @@ ensure_vala_version ("0.12.0" MINIMUM)
 include (ValaPrecompile)
 vala_precompile (VALA_C ${WINGPANELINTERFACE}
   Main.vala
+  DBusServer.vala
+  AlphaManager.vala
 PACKAGES
   gala
 OPTIONS

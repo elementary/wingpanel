@@ -21,8 +21,13 @@
 */
 
 public class WingpanelInterface.Main : Gala.Plugin {
+	private const string DBUS_NAME = "org.pantheon.gala.WingpanelInterface";
+	private const string DBUS_PATH = "/org/pantheon/gala/WingpanelInterface";
+
 	private Gala.WindowManager? wm = null;
 	private Meta.Screen screen;
+
+	private DBusConnection? dbus_connection = null;
 
 	public override void initialize (Gala.WindowManager wm) {
 		if (wm == null)
@@ -30,10 +35,34 @@ public class WingpanelInterface.Main : Gala.Plugin {
 
 		this.wm = wm;
 		screen = wm.get_screen ();
+
+		Bus.own_name (BusType.SESSION,
+				DBUS_NAME,
+				BusNameOwnerFlags.NONE,
+				on_bus_aquired,
+				null,
+				() => warning ("Aquirering \"%s\" failed.", DBUS_NAME));
 	}
 
 	public override void destroy () {
+		try {
+			if (dbus_connection != null)
+				dbus_connection.close ();
+		} catch (Error e) {
+			warning ("Closing DBus service failed: %s", e.message);
+		}
+	}
 
+	private void on_bus_aquired (DBusConnection connection) {
+		dbus_connection = connection;
+
+		try {
+			dbus_connection.register_object (DBUS_PATH, new DBusServer ());
+
+			debug ("DBus service registered.");
+		} catch (Error e) {
+			warning ("Registering DBus service failed: %s", e.message);
+		}
 	}
 }
 
