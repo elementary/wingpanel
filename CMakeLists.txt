@@ -83,6 +83,7 @@ set (LIB_PKG
   gee-0.8
   gmodule-2.0
   gtk+-3.0>=3.14
+  libnotify
 )
 find_package(PkgConfig)
 
