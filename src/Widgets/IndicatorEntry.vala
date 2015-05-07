@@ -85,7 +85,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 		});
 
 		this.button_press_event.connect ((e) => {
-			if (e.button == Gdk.BUTTON_PRIMARY && e.type == Gdk.EventType.BUTTON_PRESS) {
+			if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
+				&& e.type == Gdk.EventType.BUTTON_PRESS) {
 				if (popover.get_visible ())
 					popover.hide ();
 				else
