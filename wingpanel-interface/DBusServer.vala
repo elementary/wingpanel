@@ -16,6 +16,14 @@
  */
 
 [DBus (name = "org.pantheon.gala.WingpanelInterface")]
-public class WingpanelInterface.DBusServer : GLib.Object {
-	public signal void aplha_changed (uint alpha);
+public class WingpanelInterface.DBusServer : Object {
+	public signal void alpha_changed (uint animation_duration);
+
+	public BackgroundAlpha get_alpha () {
+		return AlphaManager.get_default ().get_alpha_mode ();
+	}
+
+	public double get_background_alpha () {
+		return AlphaManager.get_default ().calculate_alpha_for_background ();
+	}
 }

@@ -15,6 +15,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class WingpanelInterface.AlphaManager : GLib.Object {
-	
+public enum BackgroundAlpha {
+	DARKEST,
+	LIGHTEST
+}
+
+public class WingpanelInterface.AlphaManager : Object {
+	private static AlphaManager? instance = null;
+
+	public signal void alpha_updated (uint animation_duration);
+
+	public AlphaManager () {
+		Main.screen.workspace_switched.connect (() => alpha_updated (300)); // TODO: Duration
+	}
+
+	public double calculate_alpha_for_background () {
+		return 0.3; // TODO: Calculate alpha using wallpaper
+	}
+
+	public BackgroundAlpha get_alpha_mode () {
+		return Random.boolean () ? BackgroundAlpha.DARKEST : BackgroundAlpha.LIGHTEST;
+	}
+
+	public static AlphaManager get_default () {
+		if (instance == null)
+			instance = new AlphaManager ();
+
+		return instance;
+	}
 }

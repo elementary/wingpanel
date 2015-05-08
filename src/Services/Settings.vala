@@ -20,8 +20,7 @@ public class Wingpanel.Services.Settings : Granite.Services.Settings {
 	private static Wingpanel.Services.Settings? instance = null;
 
 	public string[] order { get; set; }
-	public double min_alpha { get; set; }
-	public double max_alpha { get; set; }
+	public bool use_transparency { get; set; }
 
 	public Settings () {
 		base ("org.pantheon.desktop.wingpanel");

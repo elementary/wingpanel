@@ -10,6 +10,7 @@ set(CLIENT_SOURCE
   Services/IndicatorSorter.vala
   Services/PopoverManager.vala
   Services/Settings.vala
+  Services/BackgroundManager.vala
 )
 
 vala_precompile (CLIENT_VALA_C ${CMAKE_PROJECT_NAME}

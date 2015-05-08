@@ -24,16 +24,16 @@ public class WingpanelInterface.Main : Gala.Plugin {
 	private const string DBUS_NAME = "org.pantheon.gala.WingpanelInterface";
 	private const string DBUS_PATH = "/org/pantheon/gala/WingpanelInterface";
 
-	private Gala.WindowManager? wm = null;
-	private Meta.Screen screen;
+	public static Gala.WindowManager wm;
+	public static Meta.Screen screen;
 
 	private DBusConnection? dbus_connection = null;
 
-	public override void initialize (Gala.WindowManager wm) {
-		if (wm == null)
+	public override void initialize (Gala.WindowManager _wm) {
+		if (_wm == null)
 			return;
 
-		this.wm = wm;
+		wm = _wm;
 		screen = wm.get_screen ();
 
 		Bus.own_name (BusType.SESSION,
@@ -47,7 +47,7 @@ public class WingpanelInterface.Main : Gala.Plugin {
 	public override void destroy () {
 		try {
 			if (dbus_connection != null)
-				dbus_connection.close ();
+				dbus_connection.close_sync ();
 		} catch (Error e) {
 			warning ("Closing DBus service failed: %s", e.message);
 		}
@@ -57,7 +57,11 @@ public class WingpanelInterface.Main : Gala.Plugin {
 		dbus_connection = connection;
 
 		try {
-			dbus_connection.register_object (DBUS_PATH, new DBusServer ());
+			var server = new DBusServer ();
+
+			AlphaManager.get_default ().alpha_updated.connect ((animation_duration) => server.alpha_changed (animation_duration));
+
+			dbus_connection.register_object (DBUS_PATH, server);
 
 			debug ("DBus service registered.");
 		} catch (Error e) {

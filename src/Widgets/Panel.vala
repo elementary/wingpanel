@@ -22,8 +22,6 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 	private MenuBar left_menubar;
 	private MenuBar center_menubar;
 
-	private int background_alpha = 0; // 0 - 100
-
 	public Panel (Services.PopoverManager popover_manager) {
 		Object (orientation: Gtk.Orientation.HORIZONTAL);
 
@@ -57,6 +55,8 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 		IndicatorManager.get_default ().indicator_removed.connect ((indicator) => {
 			remove_indicator (indicator);
 		});
+
+		Services.BackgroundManager.get_default ().alpha_updated.connect (animate_background);
 	}
 
 	private void load_indicators () {
@@ -112,21 +112,8 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 		}
 	}
 
-	private void animate_color (bool make_dark) {
-		if ((make_dark && background_alpha >= 100) || (!make_dark && background_alpha <= 0))
-			return;
-
-		Timeout.add (300 / 100, () => {
-			double new_alpha;
-
-			if (make_dark)
-				new_alpha = (double)(++background_alpha) / 100;
-			else
-				new_alpha = (double)(--background_alpha) / 100;
-
-			this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, new_alpha});
-
-			return (background_alpha < 100 && make_dark) || (background_alpha > 0 && !make_dark);
-		});
+	private void animate_background (double alpha, uint animation_duration) {
+		// TODO: Animation
+		this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, alpha});
 	}
 }

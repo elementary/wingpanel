@@ -6,15 +6,10 @@
 			<summary>Order of indicators.</summary>
 			<description>The order in which the indicators are shown from left to right.</description>
 		</key>
-		<key type="d" name="min-alpha">
-			<default>0</default>
-			<summary>Min. background opacity.</summary>
-			<description>Background opacity value (must be between zero and one).</description>
-		</key>
-		<key type="d" name="max-alpha">
-			<default>1</default>
-			<summary>Max. background opacity.</summary>
-			<description>Background opacity value (must be between zero and one). If min-alpha is equal to max-alhpa the auto-adjustment is disabled.</description>
+		<key type="b" name="use-transparency">
+			<default>true</default>
+			<summary>Sets if the panel uses transparency.</summary>
+			<description>Disable this to provide higher contrasts and make indicators better readable.</description>
 		</key>
 	</schema>
 </schemalist>

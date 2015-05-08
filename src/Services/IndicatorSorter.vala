@@ -22,7 +22,7 @@
  * to be static in order to work properly, since instance methods cannot
  * be passed as CompareFuncs.
  */
-public class Wingpanel.Services.IndicatorSorter {
+public class Wingpanel.Services.IndicatorSorter : Object {
 	public int compare_func (Wingpanel.Widgets.IndicatorEntry? a, Wingpanel.Widgets.IndicatorEntry? b) {
 		if (a == null)
 			return (b == null) ? 0 : -1;
