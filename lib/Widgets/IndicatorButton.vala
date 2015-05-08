@@ -35,7 +35,10 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 		button_label.margin_start = 6;
 		button_label.margin_end = 10;
 
-		this.get_style_context ().add_class ("indicator-button");
+		var style_context = this.get_style_context ();
+		style_context.add_class (Gtk.STYLE_CLASS_MENUITEM);
+		style_context.remove_class (Gtk.STYLE_CLASS_BUTTON);
+		style_context.remove_class ("text-button");
 	}
 
 	public IndicatorButton.with_image (string caption, Gdk.Pixbuf pixbuf) {

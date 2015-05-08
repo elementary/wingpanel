@@ -40,8 +40,6 @@ public class Wingpanel.Widgets.IndicatorSwitch : Gtk.Grid {
 		switch_widget.margin_start = 12;
 
 		this.attach (switch_widget, 1, 0, 1, 1);
-
-		this.get_style_context ().add_class ("indicator-switch");
 	}
 
 	public void set_caption (string caption) {
