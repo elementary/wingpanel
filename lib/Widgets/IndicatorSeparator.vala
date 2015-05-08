@@ -20,8 +20,6 @@ public class Wingpanel.Widgets.IndicatorSeparator : Gtk.Separator {
 		this.orientation = Gtk.Orientation.HORIZONTAL;
 		this.margin_top = 3;
 		this.margin_bottom = 3;
-		this.margin_start = 4;
-		this.margin_end = 4;
 
 		this.get_style_context ().add_class ("indicator-separator");
 	}
