@@ -1,6 +1,6 @@
 find_package (PkgConfig)
 
-pkg_check_modules (DEPS REQUIRED gala)
+pkg_check_modules (DEPS REQUIRED gala granite)
 
 add_definitions (${DEPS_CFLAGS})
 link_directories (${DEPS_LIBRARY_DIRS})
@@ -15,8 +15,10 @@ vala_precompile (VALA_C ${WINGPANELINTERFACE}
   Main.vala
   DBusServer.vala
   AlphaManager.vala
+  Settings.vala
 PACKAGES
   gala
+  granite
 OPTIONS
   --thread
   --vapidir=${CMAKE_SOURCE_DIR}/vapi

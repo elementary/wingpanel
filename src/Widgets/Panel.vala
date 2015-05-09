@@ -16,11 +16,16 @@
  */
 
 public class Wingpanel.Widgets.Panel : Gtk.Box {
+	private static const double ALPHA_ANIMATION_STEP = 0.05;
+
 	private Services.PopoverManager popover_manager;
 
 	private IndicatorMenuBar right_menubar;
 	private MenuBar left_menubar;
 	private MenuBar center_menubar;
+
+	private double current_alpha;
+	private double alpha_animation_target = 0;
 
 	public Panel (Services.PopoverManager popover_manager) {
 		Object (orientation: Gtk.Orientation.HORIZONTAL);
@@ -113,7 +118,41 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 	}
 
 	private void animate_background (double alpha, uint animation_duration) {
-		// TODO: Animation
-		this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, alpha});
+		if (animation_duration == 0) {
+			current_alpha = alpha;
+
+			this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, current_alpha});
+
+			return;
+		}
+
+		alpha_animation_target = alpha;
+
+		assert (ALPHA_ANIMATION_STEP > 0);
+
+		if (current_alpha - alpha == 0)
+			return;
+
+		int step_count = ((int)((current_alpha - alpha) / ALPHA_ANIMATION_STEP)).abs ();
+
+		if (step_count <= 0)
+			return;
+
+		Timeout.add (animation_duration / step_count, () => {
+			if (alpha_animation_target != alpha)
+				return false;
+
+			this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, current_alpha});
+
+			if (current_alpha < alpha_animation_target) {
+				current_alpha += ALPHA_ANIMATION_STEP;
+
+				return current_alpha < alpha_animation_target;
+			} else {
+				current_alpha -= ALPHA_ANIMATION_STEP;
+
+				return current_alpha > alpha_animation_target;
+			}
+		});
 	}
 }

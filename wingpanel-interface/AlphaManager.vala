@@ -37,7 +37,7 @@ public class WingpanelInterface.AlphaManager : Object {
 		Main.screen.workspace_switched.connect (() => {
 			update_current_workspace ();
 
-			alpha_updated (300); // TODO: Duration
+			alpha_updated (AnimationSettings.get_default ().workspace_switch_duration);
 		});
 	}
 
@@ -84,11 +84,11 @@ public class WingpanelInterface.AlphaManager : Object {
 	}
 
 	private void register_window (Meta.Window window) {
-		window.notify["maximized-vertically"].connect ((param) => {
-			alpha_updated (300); // TODO: Duration
+		window.notify["maximized-vertically"].connect (() => {
+			alpha_updated (AnimationSettings.get_default ().open_duration); // TODO: Correct value?
 		});
 
-		alpha_updated (300); // TODO: Duration
+		alpha_updated (AnimationSettings.get_default ().open_duration); // TODO: Correct value?
 	}
 
 	public static AlphaManager get_default () {
