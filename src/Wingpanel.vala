@@ -65,7 +65,7 @@ namespace Wingpanel {
 		public override int command_line (ApplicationCommandLine command_line) {
 			// FIXME: This part could be improved using OptionContexts
 
-			panel_window = new PanelWindow ();
+			panel_window = new PanelWindow (this);
 			panel_window.show_all ();
 
 			if ("--inspector-workaround" in command_line.get_arguments ())

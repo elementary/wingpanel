@@ -34,8 +34,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
 	private int panel_displacement;
 
-	public PanelWindow (int monitor_number = -1) {
+	public PanelWindow (Gtk.Application app, int monitor_number = -1) {
 		this.monitor_number = monitor_number;
+
+		this.set_application (app);
 
 		this.decorated = false;
 		this.resizable = false;
