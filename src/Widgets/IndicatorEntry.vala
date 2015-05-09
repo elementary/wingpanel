@@ -35,12 +35,24 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
 		revealer = new Gtk.Revealer ();
 
-		set_reveal (base_indicator.visible);
+		if (display_widget == null)
+			return;
 
 		display_widget.margin_start = 4;
 		display_widget.margin_end = 4;
 
 		revealer.add (display_widget);
+
+		set_reveal (base_indicator.visible);
+
+		if (indicator_widget == null) {
+			this.button_press_event.connect ((e) => {
+				display_widget.button_press_event (e);
+				return Gdk.EVENT_PROPAGATE;
+			});
+			this.add (revealer);
+			return;
+		}
 
 		popover = new IndicatorPopover (indicator_widget);
 		popover.relative_to = this;
