@@ -52,6 +52,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 	public override Gtk.Widget get_display_widget () {
 		if (display_widget == null) {
 			display_widget = new Gtk.Stack ();
+
 			dynamic_icon = new Wingpanel.Widgets.DynamicIcon (icon_names[current_icon]);
 			display_widget.add_named (dynamic_icon, "dynamic_icon");
 			dynamic_icon.button_press_event.connect ((e) => {
@@ -67,6 +68,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 				return Gdk.EVENT_PROPAGATE;
 			});
+
 			// change volume on scroll
 			dynamic_icon.scroll_event.connect ((e) => {
 				int dir = 0;
@@ -107,8 +109,6 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			var label = new Gtk.Label ("Lbl");
 			display_widget.add_named (label, "label");
-
-
 		}
 
 		return display_widget;
@@ -167,13 +167,11 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, 4, 1, 1);
 
-			string[] abc_big = new string[] {"A","B","C","D","E","F","G","H","I","J"};
-			string[] abc_small = new string[] {"a","b","c","d","e","f","g","h","i","j"};
+			string[] abc = new string[] {"A","B","C","D","E","F","G","H","I","J"};
 			keyboard_button = new Wingpanel.Widgets.IndicatorButton ("Keyboard Input Widget");
 			keyboard_button.clicked.connect (() => {
 				display_widget.set_visible_child (keyboard_input);
-				keyboard_input.set_lang ("%s%s".printf (abc_big[Random.int_range (0,9)],
-					abc_small[Random.int_range (0,9)]));
+				keyboard_input.set_lang (abc[Random.int_range (0,9)] +abc[Random.int_range (0,9)].down ());
 			});
 
 			main_grid.attach (keyboard_button, 0, 5, 1, 1);
@@ -185,7 +183,6 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (label_button, 0, 6, 1, 1);
 
-
 			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, 7, 1, 1);
 
 			close_button = new Wingpanel.Widgets.IndicatorButton ("Show Settings");
@@ -196,8 +193,6 @@ public class Sample.Indicator : Wingpanel.Indicator {
 			});
 
 			main_grid.attach (close_button, 0, 8, 1, 1);
-
-
 		}
 
 		return main_grid;
