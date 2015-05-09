@@ -25,8 +25,20 @@ public class WingpanelInterface.AlphaManager : Object {
 
 	public signal void alpha_updated (uint animation_duration);
 
+	private Meta.Workspace? current_workspace = null;
+
 	public AlphaManager () {
-		Main.screen.workspace_switched.connect (() => alpha_updated (300)); // TODO: Duration
+		connect_signals ();
+
+		update_current_workspace ();
+	}
+
+	private void connect_signals () {
+		Main.screen.workspace_switched.connect (() => {
+			update_current_workspace ();
+
+			alpha_updated (300); // TODO: Duration
+		});
 	}
 
 	public double calculate_alpha_for_background () {
@@ -34,7 +46,49 @@ public class WingpanelInterface.AlphaManager : Object {
 	}
 
 	public BackgroundAlpha get_alpha_mode () {
-		return Random.boolean () ? BackgroundAlpha.DARKEST : BackgroundAlpha.LIGHTEST;
+		if (current_workspace == null)
+			return BackgroundAlpha.LIGHTEST;
+
+		var windows = current_workspace.list_windows ();
+
+		foreach (Meta.Window window in windows) {
+			if (window.is_on_primary_monitor ()) {
+				if (window.maximized_vertically)
+					return BackgroundAlpha.DARKEST;
+			}
+		}
+
+		return BackgroundAlpha.LIGHTEST;
+	}
+
+	private void update_current_workspace () {
+		var workspace = Main.screen.get_workspace_by_index (Main.screen.get_active_workspace_index ());
+
+		if (workspace == null) {
+			warning ("Cannot get active workspace");
+
+			return;
+		}
+
+		if (current_workspace != null)
+			current_workspace.window_added.disconnect (register_window);
+
+		current_workspace = workspace;
+
+		current_workspace.window_added.connect (register_window);
+
+		foreach (Meta.Window window in current_workspace.list_windows ()) {
+			if (window.is_on_primary_monitor ())
+				register_window (window);
+		}
+	}
+
+	private void register_window (Meta.Window window) {
+		window.notify["maximized-vertically"].connect ((param) => {
+			alpha_updated (300); // TODO: Duration
+		});
+
+		alpha_updated (300); // TODO: Duration
 	}
 
 	public static AlphaManager get_default () {
