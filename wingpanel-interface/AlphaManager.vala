@@ -85,10 +85,10 @@ public class WingpanelInterface.AlphaManager : Object {
 
 	private void register_window (Meta.Window window) {
 		window.notify["maximized-vertically"].connect (() => {
-			alpha_updated (AnimationSettings.get_default ().open_duration); // TODO: Correct value?
+			alpha_updated (AnimationSettings.get_default ().snap_duration);
 		});
 
-		alpha_updated (AnimationSettings.get_default ().open_duration); // TODO: Correct value?
+		alpha_updated (AnimationSettings.get_default ().snap_duration);
 	}
 
 	public static AlphaManager get_default () {

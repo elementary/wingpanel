@@ -126,6 +126,9 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 			return;
 		}
 
+		if (alpha_animation_target == alpha)
+			return;
+
 		alpha_animation_target = alpha;
 
 		assert (ALPHA_ANIMATION_STEP > 0);
