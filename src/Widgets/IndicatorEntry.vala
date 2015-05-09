@@ -48,6 +48,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 		if (indicator_widget == null) {
 			this.button_press_event.connect ((e) => {
 				display_widget.button_press_event (e);
+
 				return Gdk.EVENT_PROPAGATE;
 			});
 			this.add (revealer);

@@ -16,13 +16,17 @@
  */
 
 public class Sample.Indicator : Wingpanel.Indicator {
+	private Gtk.Stack display_widget;
 	private Wingpanel.Widgets.DynamicIcon dynamic_icon;
+
+	private KeyboardInput keyboard_input;
 
 	private Gtk.Grid main_grid;
 
 	private Wingpanel.Widgets.IndicatorButton loading_button;
 	private Wingpanel.Widgets.IndicatorButton close_button;
-
+	private Wingpanel.Widgets.IndicatorButton keyboard_button;
+	private Wingpanel.Widgets.IndicatorButton label_button;
 	private Wingpanel.Widgets.IndicatorSwitch test_switch;
 
 	private Wingpanel.Widgets.IndicatorButton next_icon_button;
@@ -46,8 +50,10 @@ public class Sample.Indicator : Wingpanel.Indicator {
 	}
 
 	public override Gtk.Widget get_display_widget () {
-		if (dynamic_icon == null) {
+		if (display_widget == null) {
+			display_widget = new Gtk.Stack ();
 			dynamic_icon = new Wingpanel.Widgets.DynamicIcon (icon_names[current_icon]);
+			display_widget.add_named (dynamic_icon, "dynamic_icon");
 			dynamic_icon.button_press_event.connect ((e) => {
 				if (e.button == Gdk.BUTTON_MIDDLE) {
 					current_icon++;
@@ -95,9 +101,17 @@ public class Sample.Indicator : Wingpanel.Indicator {
 				}
 				return Gdk.EVENT_STOP;
 			});
+
+			keyboard_input = new KeyboardInput ();
+			display_widget.add_named (keyboard_input, "keyboard_input");
+
+			var label = new Gtk.Label ("Lbl");
+			display_widget.add_named (label, "label");
+
+
 		}
 
-		return dynamic_icon;
+		return display_widget;
 	}
 
 	public override Gtk.Widget get_widget () {
@@ -153,6 +167,27 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, 4, 1, 1);
 
+			string[] abc_big = new string[] {"A","B","C","D","E","F","G","H","I","J"};
+			string[] abc_small = new string[] {"a","b","c","d","e","f","g","h","i","j"};
+			keyboard_button = new Wingpanel.Widgets.IndicatorButton ("Keyboard Input Widget");
+			keyboard_button.clicked.connect (() => {
+				display_widget.set_visible_child (keyboard_input);
+				keyboard_input.set_lang ("%s%s".printf (abc_big[Random.int_range (0,9)],
+					abc_small[Random.int_range (0,9)]));
+			});
+
+			main_grid.attach (keyboard_button, 0, 5, 1, 1);
+
+			label_button = new Wingpanel.Widgets.IndicatorButton ("Show Label");
+			label_button.clicked.connect (() => {
+				display_widget.set_visible_child_name ("label");
+			});
+
+			main_grid.attach (label_button, 0, 6, 1, 1);
+
+
+			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, 7, 1, 1);
+
 			close_button = new Wingpanel.Widgets.IndicatorButton ("Show Settings");
 			close_button.clicked.connect (() => {
 				var cmd = new Granite.Services.SimpleCommand ("/usr/bin", "/usr/bin/switchboard");
@@ -160,7 +195,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 				close ();
 			});
 
-			main_grid.attach (close_button, 0, 5, 1, 1);
+			main_grid.attach (close_button, 0, 8, 1, 1);
 
 
 		}
