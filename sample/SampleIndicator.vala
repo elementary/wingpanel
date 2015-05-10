@@ -55,7 +55,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			dynamic_icon = new Wingpanel.Widgets.DynamicIcon (icon_names[current_icon]);
 			display_widget.add_named (dynamic_icon, "dynamic_icon");
-			dynamic_icon.button_press_event.connect ((e) => {
+			display_widget.button_press_event.connect ((e) => {
 				if (e.button == Gdk.BUTTON_MIDDLE) {
 					current_icon++;
 
@@ -70,7 +70,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 			});
 
 			// change volume on scroll
-			dynamic_icon.scroll_event.connect ((e) => {
+			display_widget.scroll_event.connect ((e) => {
 				int dir = 0;
 				if (e.direction == Gdk.ScrollDirection.UP) {
 					dir = 1;
