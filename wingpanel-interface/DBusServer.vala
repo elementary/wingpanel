@@ -19,11 +19,11 @@
 public class WingpanelInterface.DBusServer : Object {
 	public signal void alpha_changed (uint animation_duration);
 
-	public BackgroundAlpha get_alpha () {
-		return AlphaManager.get_default ().get_alpha_mode ();
+	public BackgroundAlpha get_alpha (int monitor) {
+		return AlphaManager.get_default ().get_alpha_mode (monitor);
 	}
 
-	public double get_background_alpha () {
-		return AlphaManager.get_default ().calculate_alpha_for_background ();
+	public async double get_background_alpha (int monitor, int panel_height) {
+		return yield AlphaManager.get_default ().calculate_alpha_for_background (monitor, panel_height);
 	}
 }

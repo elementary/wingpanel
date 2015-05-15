@@ -16,9 +16,11 @@ vala_precompile (VALA_C ${WINGPANELINTERFACE}
   DBusServer.vala
   AlphaManager.vala
   Settings.vala
+  Utils.vala
 PACKAGES
   gala
   granite
+  cogl-fixes
 OPTIONS
   --thread
   --vapidir=${CMAKE_SOURCE_DIR}/vapi

@@ -142,20 +142,25 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 			return;
 
 		Timeout.add (animation_duration / step_count, () => {
+			// Has another animation started?
 			if (alpha_animation_target != alpha)
 				return false;
 
-			this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, current_alpha});
+			var cont = false;
 
 			if (current_alpha < alpha_animation_target) {
 				current_alpha += ALPHA_ANIMATION_STEP;
 
-				return current_alpha < alpha_animation_target;
+				cont = current_alpha < alpha_animation_target;
 			} else {
 				current_alpha -= ALPHA_ANIMATION_STEP;
 
-				return current_alpha > alpha_animation_target;
+				cont = current_alpha > alpha_animation_target;
 			}
+
+			this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, current_alpha});
+
+			return cont;
 		});
 	}
 }

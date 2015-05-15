@@ -35,7 +35,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 	private int panel_displacement;
 
 	public PanelWindow (Gtk.Application app, int monitor_number = -1) {
-		this.monitor_number = monitor_number;
+		this.monitor_number = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
+
+		Services.BackgroundManager.get_default ().init (this.monitor_number);
 
 		this.set_application (app);
 
@@ -80,16 +82,16 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 	private void on_realize () {
 		update_panel_dimensions ();
 
+		Services.BackgroundManager.get_default ().update_panel_alpha ();
+
 		Timeout.add (300 / panel_height, animation_step);
 	}
 
 	private void update_panel_dimensions () {
-		var monitor = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
-
 		panel.get_preferred_height (out panel_height, null);
 
 		Gdk.Rectangle monitor_dimensions;
-		this.screen.get_monitor_geometry (monitor, out monitor_dimensions);
+		this.screen.get_monitor_geometry (monitor_number, out monitor_dimensions);
 
 		monitor_width = monitor_dimensions.width;
 		monitor_height = monitor_dimensions.height;
@@ -100,6 +102,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		monitor_y = monitor_dimensions.y;
 
 		this.move (monitor_x, monitor_y - (panel_height + panel_displacement));
+
+		Services.BackgroundManager.get_default ().update_panel_height (panel_height);
 
 		update_struts ();
 	}

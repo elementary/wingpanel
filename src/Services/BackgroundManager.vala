@@ -25,8 +25,8 @@ namespace Wingpanel.Services {
 	public interface InterfaceBus : Object {
 		public signal void alpha_changed (uint animation_duration);
 
-		public abstract BackgroundAlpha get_alpha () throws IOError;
-		public abstract double get_background_alpha () throws IOError;
+		public abstract BackgroundAlpha get_alpha (int screen) throws IOError;
+		public abstract async double get_background_alpha (int screen, int panel_height) throws IOError;
 	}
 
 	public class BackgroundManager : Object {
@@ -36,6 +36,11 @@ namespace Wingpanel.Services {
 		private static BackgroundManager? instance = null;
 
 		private InterfaceBus bus;
+
+		private int screen = 0;
+		private int panel_height = 0;
+
+		private double suggested_alpha = 0;
 
 		public signal void alpha_updated (double alpha, uint animation_duration);
 
@@ -50,6 +55,17 @@ namespace Wingpanel.Services {
 			update_panel_alpha ();
 		}
 
+		public void init (int screen) {
+			this.screen = screen;
+		}
+
+		public void update_panel_height (int panel_height) {
+			if (this.panel_height != panel_height) {
+				this.panel_height = panel_height;
+				update_suggested_alpha ();
+			}
+		}
+
 		private bool connect_dbus () {
 			try {
 				bus = Bus.get_proxy_sync (BusType.SESSION, DBUS_NAME, DBUS_PATH);
@@ -62,23 +78,25 @@ namespace Wingpanel.Services {
 			return true;
 		}
 
-		private void update_panel_alpha (uint animation_duration = 0) {
-			try {
-				double alpha_value = 0;
+		private void update_suggested_alpha () {
+			bus.get_background_alpha.begin (screen, panel_height, (obj, res) => {
+				suggested_alpha = bus.get_background_alpha.end (res);
+			});
+		}
 
+		public void update_panel_alpha (uint animation_duration = 0) {
+			try {
 				if (Settings.get_default ().use_transparency) {
-					var alpha = bus.get_alpha ();
+					var alpha = bus.get_alpha (screen);
 
 					if (alpha == BackgroundAlpha.DARKEST) {
-						alpha_value = 1;
+						alpha_updated (1, animation_duration);
 					} else if (alpha == BackgroundAlpha.LIGHTEST) {
-						alpha_value = bus.get_background_alpha ();
+						alpha_updated (suggested_alpha, animation_duration);
 					}
 				} else {
-					alpha_value = 1;
+					alpha_updated (1, animation_duration);
 				}
-
-				alpha_updated (alpha_value, animation_duration);
 			} catch (Error e) {
 				warning ("Cannot get alpha: %s", e.message);
 			}

@@ -21,6 +21,8 @@ public enum BackgroundAlpha {
 }
 
 public class WingpanelInterface.AlphaManager : Object {
+	private const double MIN_ALPHA = 0.3;
+
 	private static AlphaManager? instance = null;
 
 	public signal void alpha_updated (uint animation_duration);
@@ -41,18 +43,20 @@ public class WingpanelInterface.AlphaManager : Object {
 		});
 	}
 
-	public double calculate_alpha_for_background () {
-		return 0.3; // TODO: Calculate alpha using wallpaper
+	public async double calculate_alpha_for_background (int monitor, int panel_height) {
+		var needs_background = yield Utils.background_needed (Main.wm, monitor, panel_height);
+
+		return needs_background ? MIN_ALPHA : 0;
 	}
 
-	public BackgroundAlpha get_alpha_mode () {
+	public BackgroundAlpha get_alpha_mode (int monitor) {
 		if (current_workspace == null)
 			return BackgroundAlpha.LIGHTEST;
 
 		var windows = current_workspace.list_windows ();
 
 		foreach (Meta.Window window in windows) {
-			if (window.is_on_primary_monitor ()) {
+			if (window.get_monitor () == monitor) {
 				if (window.maximized_vertically)
 					return BackgroundAlpha.DARKEST;
 			}
