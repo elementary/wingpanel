@@ -38,7 +38,7 @@ public abstract class Wingpanel.Indicator : GLib.Object {
 
 	public abstract Gtk.Widget get_display_widget ();
 
-	public abstract Gtk.Widget get_widget ();
+	public abstract Gtk.Widget? get_widget ();
 
 	public abstract void opened ();
 

@@ -19,6 +19,7 @@ set (LIB_SOURCE
   ${CONFIG_FILE}
   Indicator.vala
   IndicatorManager.vala
+  Utils.vala
   Widgets/IndicatorButton.vala
   Widgets/IndicatorSeparator.vala
   Widgets/IndicatorSwitch.vala

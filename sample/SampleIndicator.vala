@@ -27,6 +27,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 	private Wingpanel.Widgets.IndicatorButton close_button;
 	private Wingpanel.Widgets.IndicatorButton keyboard_button;
 	private Wingpanel.Widgets.IndicatorButton label_button;
+	private Wingpanel.Widgets.IndicatorButton composite_button;
 	private Wingpanel.Widgets.IndicatorSwitch test_switch;
 
 	private Wingpanel.Widgets.IndicatorButton next_icon_button;
@@ -114,13 +115,15 @@ public class Sample.Indicator : Wingpanel.Indicator {
 		return display_widget;
 	}
 
-	public override Gtk.Widget get_widget () {
+	public override Gtk.Widget? get_widget () {
 		if (main_grid == null) {
 			main_grid = new Gtk.Grid ();
+			int position = 0;
 
 			var loading = false;
 			loading_button = new Wingpanel.Widgets.IndicatorButton ("Im doing something...");
 			loading_button.clicked.connect (() => {
+				display_widget.set_visible_child_name ("dynamic_icon");
 				if (!loading) {
 					dynamic_icon.start_loading ();
 					loading_button.set_caption ("Stop");
@@ -132,10 +135,11 @@ public class Sample.Indicator : Wingpanel.Indicator {
 				}
 			});
 
-			main_grid.attach (loading_button, 0, 0, 1, 1);
+			main_grid.attach (loading_button, 0, position++, 1, 1);
 
 			next_icon_button = new Wingpanel.Widgets.IndicatorButton ("Next Icon");
 			next_icon_button.clicked.connect (() => {
+				display_widget.set_visible_child_name ("dynamic_icon");
 				current_icon++;
 
 				if (current_icon >= icon_names.length)
@@ -144,9 +148,9 @@ public class Sample.Indicator : Wingpanel.Indicator {
 				dynamic_icon.set_icon_name (icon_names[current_icon]);
 			});
 
-			main_grid.attach (next_icon_button, 0, 1, 1, 1);
+			main_grid.attach (next_icon_button, 0, position++, 1, 1);
 
-			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, 2, 1, 1);
+			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, position++, 1, 1);
 
 			test_switch = new Wingpanel.Widgets.IndicatorSwitch ("Visible", true);
 
@@ -163,9 +167,9 @@ public class Sample.Indicator : Wingpanel.Indicator {
 				}
 			});
 
-			main_grid.attach (test_switch, 0, 3, 1, 1);
+			main_grid.attach (test_switch, 0, position++, 1, 1);
 
-			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, 4, 1, 1);
+			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, position++, 1, 1);
 
 			string[] abc = new string[] {"A","B","C","D","E","F","G","H","I","J"};
 			keyboard_button = new Wingpanel.Widgets.IndicatorButton ("Keyboard Input Widget");
@@ -174,16 +178,33 @@ public class Sample.Indicator : Wingpanel.Indicator {
 				keyboard_input.set_lang (abc[Random.int_range (0,9)] +abc[Random.int_range (0,9)].down ());
 			});
 
-			main_grid.attach (keyboard_button, 0, 5, 1, 1);
+			main_grid.attach (keyboard_button, 0, position++, 1, 1);
+
+			composite_button = new Wingpanel.Widgets.IndicatorButton ("Composited icon");
+			composite_button.clicked.connect (() => {
+				display_widget.set_visible_child_name ("dynamic_icon");
+
+				Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default ();
+				try {
+					Gdk.Pixbuf icon1 = icon_theme.load_icon ("nm-vpn-active-lock", 24, 0);
+					Gdk.Pixbuf icon2 = icon_theme.load_icon (icon_names[current_icon], 24, 0);
+					var comp = Wingpanel.Utils.composite (icon1, icon2);
+					dynamic_icon.get_icon ().set_from_pixbuf (comp);
+				} catch (Error e) {
+					warning (e.message);
+				}
+			});
+
+			main_grid.attach (composite_button, 0, position++, 1, 1);
 
 			label_button = new Wingpanel.Widgets.IndicatorButton ("Show Label");
 			label_button.clicked.connect (() => {
 				display_widget.set_visible_child_name ("label");
 			});
 
-			main_grid.attach (label_button, 0, 6, 1, 1);
+			main_grid.attach (label_button, 0, position++, 1, 1);
 
-			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, 7, 1, 1);
+			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, position++, 1, 1);
 
 			close_button = new Wingpanel.Widgets.IndicatorButton ("Show Settings");
 			close_button.clicked.connect (() => {
@@ -192,7 +213,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 				close ();
 			});
 
-			main_grid.attach (close_button, 0, 8, 1, 1);
+			main_grid.attach (close_button, 0, position++, 1, 1);
 		}
 
 		return main_grid;
