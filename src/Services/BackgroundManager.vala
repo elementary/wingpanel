@@ -24,6 +24,7 @@ namespace Wingpanel.Services {
 	[DBus (name = "org.pantheon.gala.WingpanelInterface")]
 	public interface InterfaceBus : Object {
 		public signal void alpha_changed (uint animation_duration);
+		public signal void wallpaper_changed ();
 
 		public abstract BackgroundAlpha get_alpha (int screen) throws IOError;
 		public abstract async double get_background_alpha (int screen, int panel_height) throws IOError;
@@ -32,6 +33,8 @@ namespace Wingpanel.Services {
 	public class BackgroundManager : Object {
 		private const string DBUS_NAME = "org.pantheon.gala.WingpanelInterface";
 		private const string DBUS_PATH = "/org/pantheon/gala/WingpanelInterface";
+
+		private const int WALLPAPER_TRANSITION_DURATION = 150;
 
 		private static BackgroundManager? instance = null;
 
@@ -49,6 +52,7 @@ namespace Wingpanel.Services {
 				return;
 
 			bus.alpha_changed.connect (update_panel_alpha);
+			bus.wallpaper_changed.connect (() => update_suggested_alpha (WALLPAPER_TRANSITION_DURATION));
 
 			Settings.get_default ().changed.connect (() => update_panel_alpha ());
 
@@ -78,9 +82,11 @@ namespace Wingpanel.Services {
 			return true;
 		}
 
-		private void update_suggested_alpha () {
+		private void update_suggested_alpha (uint animation_duration = 0) {
 			bus.get_background_alpha.begin (screen, panel_height, (obj, res) => {
 				suggested_alpha = bus.get_background_alpha.end (res);
+
+				update_panel_alpha (animation_duration);
 			});
 		}
 

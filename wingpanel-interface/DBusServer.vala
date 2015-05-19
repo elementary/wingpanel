@@ -18,6 +18,7 @@
 [DBus (name = "org.pantheon.gala.WingpanelInterface")]
 public class WingpanelInterface.DBusServer : Object {
 	public signal void alpha_changed (uint animation_duration);
+	public signal void wallpaper_changed ();
 
 	public BackgroundAlpha get_alpha (int monitor) {
 		return AlphaManager.get_default ().get_alpha_mode (monitor);

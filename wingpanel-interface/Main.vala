@@ -63,6 +63,10 @@ public class WingpanelInterface.Main : Gala.Plugin {
 				server.alpha_changed (AnimationSettings.get_default ().enable_animations ? animation_duration : 0);
 			});
 
+			AlphaManager.get_default ().wallpaper_updated.connect ((animation_duration) => {
+				server.wallpaper_changed ();
+			});
+
 			dbus_connection.register_object (DBUS_PATH, server);
 
 			debug ("DBus service registered.");

@@ -26,6 +26,7 @@ public class WingpanelInterface.AlphaManager : Object {
 	private static AlphaManager? instance = null;
 
 	public signal void alpha_updated (uint animation_duration);
+	public signal void wallpaper_updated ();
 
 	private Meta.Workspace? current_workspace = null;
 
@@ -41,6 +42,14 @@ public class WingpanelInterface.AlphaManager : Object {
 
 			alpha_updated (AnimationSettings.get_default ().workspace_switch_duration);
 		});
+
+		var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ()); 
+
+		GLib.Signal.add_emission_hook (signal_id, 0, (ihint, param_values) => {
+			wallpaper_updated ();
+
+			return true;
+		}, null);
 	}
 
 	public async double calculate_alpha_for_background (int monitor, int panel_height) {
