@@ -54,7 +54,8 @@ namespace Wingpanel.Services {
 			bus.alpha_changed.connect (update_panel_alpha);
 			bus.wallpaper_changed.connect (() => update_suggested_alpha (WALLPAPER_TRANSITION_DURATION));
 
-			Settings.get_default ().changed.connect (() => update_panel_alpha ());
+			PanelSettings.get_default ().notify["use-transparency"].connect (() => update_panel_alpha ());
+			InterfaceSettings.get_default ().notify["gtk-theme"].connect (() => update_panel_alpha ());
 
 			update_panel_alpha ();
 		}
@@ -82,6 +83,11 @@ namespace Wingpanel.Services {
 			return true;
 		}
 
+		private bool check_use_transparency () {
+			return PanelSettings.get_default ().use_transparency &&
+					InterfaceSettings.get_default ().gtk_theme != "HighContrast";
+		}
+
 		private void update_suggested_alpha (uint animation_duration = 0) {
 			bus.get_background_alpha.begin (screen, panel_height, (obj, res) => {
 				try {
@@ -96,7 +102,7 @@ namespace Wingpanel.Services {
 
 		public void update_panel_alpha (uint animation_duration = 0) {
 			try {
-				if (Settings.get_default ().use_transparency) {
+				if (check_use_transparency ()) {
 					var alpha = bus.get_alpha (screen);
 
 					if (alpha == BackgroundAlpha.DARKEST) {

@@ -51,7 +51,7 @@ public class Wingpanel.Services.IndicatorSorter : Object {
 		if (node.base_indicator.code_name.has_prefix ("ayatana-"))
 			return best_match;
 
-		var order = Wingpanel.Services.Settings.get_default ().order;
+		var order = PanelSettings.get_default ().order;
 
 		for (int i = 0; i < order.length; i++) {
 			var order_name = order[i];

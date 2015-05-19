@@ -15,21 +15,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Wingpanel.Services.Settings : Granite.Services.Settings {
-	// Use the namespace to avoid possible GLib conflicts
-	private static Wingpanel.Services.Settings? instance = null;
+namespace Wingpanel.Services {
+	public class PanelSettings : Granite.Services.Settings {
+		private static PanelSettings? instance = null;
 
-	public string[] order { get; set; }
-	public bool use_transparency { get; set; }
+		public string[] order { get; set; }
+		public bool use_transparency { get; set; }
 
-	public Settings () {
-		base ("org.pantheon.desktop.wingpanel");
+		public PanelSettings () {
+			base ("org.pantheon.desktop.wingpanel");
+		}
+
+		public static PanelSettings get_default () {
+			if (instance == null)
+				instance = new PanelSettings ();
+
+			return instance;
+		}
 	}
 
-	public static Wingpanel.Services.Settings get_default () {
-		if (instance == null)
-			instance = new Wingpanel.Services.Settings ();
+	public class InterfaceSettings : Granite.Services.Settings {
+		private static InterfaceSettings? instance = null;
 
-		return instance;
+		public string gtk_theme { get; set; }
+
+		public InterfaceSettings () {
+			base ("org.gnome.desktop.interface");
+		}
+
+		public static InterfaceSettings get_default () {
+			if (instance == null)
+				instance = new InterfaceSettings ();
+
+			return instance;
+		}
 	}
 }
