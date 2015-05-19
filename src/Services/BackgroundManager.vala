@@ -84,9 +84,13 @@ namespace Wingpanel.Services {
 
 		private void update_suggested_alpha (uint animation_duration = 0) {
 			bus.get_background_alpha.begin (screen, panel_height, (obj, res) => {
-				suggested_alpha = bus.get_background_alpha.end (res);
+				try {
+					suggested_alpha = bus.get_background_alpha.end (res);
 
-				update_panel_alpha (animation_duration);
+					update_panel_alpha (animation_duration);
+				} catch (Error e) {
+					warning ("Updating suggested alpha failed: %s", e.message);
+				}
 			});
 		}
 
