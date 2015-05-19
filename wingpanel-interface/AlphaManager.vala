@@ -66,7 +66,7 @@ public class WingpanelInterface.AlphaManager : Object {
 
 		foreach (Meta.Window window in windows) {
 			if (window.get_monitor () == monitor) {
-				if (window.maximized_vertically)
+				if (!window.minimized && window.maximized_vertically)
 					return BackgroundAlpha.DARKEST;
 			}
 		}
@@ -99,6 +99,10 @@ public class WingpanelInterface.AlphaManager : Object {
 	private void register_window (Meta.Window window) {
 		window.notify["maximized-vertically"].connect (() => {
 			alpha_updated (AnimationSettings.get_default ().snap_duration);
+		});
+
+		window.notify["minimized"].connect (() => {
+			alpha_updated (AnimationSettings.get_default ().minimize_duration);
 		});
 
 		alpha_updated (AnimationSettings.get_default ().snap_duration);
