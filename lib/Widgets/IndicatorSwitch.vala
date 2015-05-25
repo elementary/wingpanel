@@ -21,16 +21,15 @@ public class Wingpanel.Widgets.IndicatorSwitch : Gtk.Grid {
 
 	public IndicatorSwitch (string caption, bool active = false) {
 		this.hexpand = true;
-		this.margin_top = 6;
+		this.margin_top = 3;
 		this.margin_bottom = 3;
 		this.margin_start = 6;
-		this.margin_end = 6;
 
 		// FIXME: Replace this with some css-rules
 		label_widget = new Gtk.Label (caption);
 		label_widget.hexpand = true;
 		label_widget.halign = Gtk.Align.START;
-		label_widget.margin_start = 6;
+		label_widget.margin_start = 21;
 
 		this.attach (label_widget, 0, 0, 1, 1);
 
