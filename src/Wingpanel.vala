@@ -33,7 +33,6 @@ namespace Wingpanel {
 			app_years = "2015";
 			exec_name = "wingpanel";
 			app_launcher = exec_name + ".desktop";
-			flags |= ApplicationFlags.HANDLES_COMMAND_LINE;
 
 			build_version = "2.0";
 			app_icon = "wingpanel";
@@ -62,18 +61,15 @@ namespace Wingpanel {
 			// TODO: Setup translations and stuff like that
 		}
 
-		public override int command_line (ApplicationCommandLine command_line) {
-			// FIXME: This part could be improved using OptionContexts
+		protected override void startup () {
+			base.startup ();
 
 			panel_window = new PanelWindow (this);
 			panel_window.show_all ();
+		}
 
-			if ("--inspector-workaround" in command_line.get_arguments ())
-				new Gtk.Dialog ().show ();
-
-			Gtk.main ();
-
-			return 0;
+		protected override void activate () {
+		 	panel_window.present ();
 		}
 	}
 }
