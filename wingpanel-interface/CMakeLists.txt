@@ -15,6 +15,7 @@ vala_precompile (VALA_C ${WINGPANELINTERFACE}
   Main.vala
   DBusServer.vala
   AlphaManager.vala
+  FocusManager.vala
   Settings.vala
   Utils.vala
 PACKAGES

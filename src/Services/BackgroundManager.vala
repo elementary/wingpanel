@@ -28,6 +28,9 @@ namespace Wingpanel.Services {
 
 		public abstract BackgroundAlpha get_alpha (int screen) throws IOError;
 		public abstract async double get_background_alpha (int screen, int panel_height) throws IOError;
+
+		public abstract void remeber_focused_window () throws IOError;
+		public abstract void restore_focused_window () throws IOError;
 	}
 
 	public class BackgroundManager : Object {
@@ -62,6 +65,22 @@ namespace Wingpanel.Services {
 
 		public void init (int screen) {
 			this.screen = screen;
+		}
+
+		public void remember_window () {
+			try {
+				bus.remeber_focused_window ();
+			} catch (Error e) {
+				warning ("Remembering focused window failed: %s", e.message);
+			}
+		}
+
+		public void restore_window () {
+			try {
+				bus.restore_focused_window ();
+			} catch (Error e) {
+				warning ("Restoring last focused window failed: %s", e.message);
+			}
 		}
 
 		public void update_panel_height (int panel_height) {

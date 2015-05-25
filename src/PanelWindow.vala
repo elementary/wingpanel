@@ -148,6 +148,11 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		if (this.expanded == expanded)
 			return;
 
+		if (expanded)
+			Services.BackgroundManager.get_default ().remember_window ();
+		else
+			Services.BackgroundManager.get_default ().restore_window ();
+
 		this.expanded = expanded;
 
 		this.set_size_request (monitor_width, expanded ? monitor_height : -1);
