@@ -104,6 +104,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 		popover.show.connect ((p) => {
 			widg.base_indicator.opened ();
 			owner.set_expanded (true);
+			owner.present ();
 			this.visible_popover = p as Gtk.Popover;
 			make_modal (this.visible_popover);
 		});
