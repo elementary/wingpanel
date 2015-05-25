@@ -28,7 +28,7 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 		button_label = this.get_child () as Gtk.Label;
 		button_label.use_markup = true;
 		button_label.halign = Gtk.Align.START;
-		button_label.margin_start = 21;
+		button_label.margin_start = 6;
 		button_label.margin_end = 10;
 
 		var style_context = this.get_style_context ();

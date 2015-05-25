@@ -29,7 +29,7 @@ public class Wingpanel.Widgets.IndicatorSwitch : Gtk.Grid {
 		label_widget = new Gtk.Label (caption);
 		label_widget.hexpand = true;
 		label_widget.halign = Gtk.Align.START;
-		label_widget.margin_start = 21;
+		label_widget.margin_start = 6;
 
 		this.attach (label_widget, 0, 0, 1, 1);
 
