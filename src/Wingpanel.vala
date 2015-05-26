@@ -69,7 +69,7 @@ namespace Wingpanel {
 		}
 
 		protected override void activate () {
-		 	panel_window.present ();
+			// Do nothing
 		}
 	}
 }

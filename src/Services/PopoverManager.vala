@@ -114,6 +114,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 				make_modal (p, false);
 				popovers[visible_popover].base_indicator.closed ();
 				visible_popover = null;
+				owner.set_expanded (false);
 			}
 		});
 
