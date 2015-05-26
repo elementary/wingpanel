@@ -31,6 +31,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 		Object (orientation: Gtk.Orientation.HORIZONTAL);
 
 		this.popover_manager = popover_manager;
+		this.set_size_request (-1, 24);
 
 		this.hexpand = true;
 		this.vexpand = false;
