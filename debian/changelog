@@ -1,3 +1,9 @@
+wingpanel (0.3.0.1) trusty; urgency=medium
+
+  * New upstream release.
+
+ -- Cody Garver <cody@elementaryos.org>  Sat, 30 May 2015 09:42:46 -0500
+
 wingpanel (0.3) saucy; urgency=low
 
   * New upstream release.
