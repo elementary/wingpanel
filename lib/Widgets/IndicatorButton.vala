@@ -24,14 +24,10 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 		// FIXME: Use the "indicator-button" class in the stylesheet to configure how the button is rendered.
 		this.label = caption;
 		this.hexpand = true;
-		this.margin_top = 3;
-		this.margin_bottom = 3;
 
 		button_label = this.get_child () as Gtk.Label;
 		button_label.use_markup = true;
 		button_label.halign = Gtk.Align.START;
-		button_label.margin_top = 2;
-		button_label.margin_bottom = 2;
 		button_label.margin_start = 6;
 		button_label.margin_end = 10;
 
@@ -43,8 +39,6 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 
 	public IndicatorButton.with_image (string caption, Gdk.Pixbuf pixbuf) {
 		this.hexpand = true;
-		this.margin_top = 3;
-		this.margin_bottom = 3;
 
 		var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
 
@@ -52,8 +46,6 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 
 		button_label.use_markup = true;
 		button_label.halign = Gtk.Align.START;
-		button_label.margin_top = 2;
-		button_label.margin_bottom = 2;
 		button_label.margin_start = 6;
 		button_label.margin_end = 10;
 
