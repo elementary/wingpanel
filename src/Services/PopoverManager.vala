@@ -113,6 +113,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 			if (!mousing && grabbed) {
 				make_modal (p, false);
 				popovers[visible_popover].base_indicator.closed ();
+				visible_popover.hide ();
 				visible_popover = null;
 				owner.set_expanded (false);
 			}
