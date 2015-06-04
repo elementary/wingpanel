@@ -22,7 +22,7 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 
 	public IndicatorButton (string caption) {
 		// FIXME: Use the "indicator-button" class in the stylesheet to configure how the button is rendered.
-		this.label = caption;
+		this.label = Markup.escape_text (caption);
 		this.hexpand = true;
 
 		button_label = this.get_child () as Gtk.Label;
@@ -40,29 +40,31 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 	public IndicatorButton.with_image (string caption, Gdk.Pixbuf pixbuf) {
 		this.hexpand = true;
 
-		var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+		var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 
-		button_label = new Gtk.Label (caption);
+		button_label = new Gtk.Label (Markup.escape_text (caption));
 
 		button_label.use_markup = true;
-		button_label.halign = Gtk.Align.START;
-		button_label.margin_start = 6;
+		button_label.margin_start = 3;
 		button_label.margin_end = 10;
 
 		image = new Gtk.Image ();
 		image.pixbuf = pixbuf;
+		image.margin_start = 6;
 
 		box.add (image);
 		box.add (button_label);
 
 		this.add (box);
 
-		this.get_style_context ().add_class ("indicator-button");
-		this.get_style_context ().add_class (Gtk.STYLE_CLASS_LIST_ROW);
+		var style_context = this.get_style_context ();
+		style_context.add_class (Gtk.STYLE_CLASS_MENUITEM);
+		style_context.remove_class (Gtk.STYLE_CLASS_BUTTON);
+		style_context.remove_class ("text-button");
 	}
 
 	public void set_caption (string caption) {
-		button_label.set_label (caption);
+		button_label.set_label (Markup.escape_text (caption));
 	}
 
 	public string get_caption () {

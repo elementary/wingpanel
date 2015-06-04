@@ -15,11 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Wingpanel.Widgets.IndicatorSwitch : Gtk.Grid {
+public class Wingpanel.Widgets.IndicatorSwitch : Gtk.EventBox {
 	private Gtk.Label label_widget;
 	private Gtk.Switch switch_widget;
 
 	public IndicatorSwitch (string caption, bool active = false) {
+		var grid = new Gtk.Grid ();
+		this.add (grid);
 		this.hexpand = true;
 		this.margin_top = 3;
 		this.margin_bottom = 3;
@@ -31,14 +33,19 @@ public class Wingpanel.Widgets.IndicatorSwitch : Gtk.Grid {
 		label_widget.halign = Gtk.Align.START;
 		label_widget.margin_start = 6;
 
-		this.attach (label_widget, 0, 0, 1, 1);
+		grid.attach (label_widget, 0, 0, 1, 1);
 
 		switch_widget = new Gtk.Switch ();
 		switch_widget.active = active;
 		switch_widget.halign = Gtk.Align.END;
 		switch_widget.margin_start = 12;
 
-		this.attach (switch_widget, 1, 0, 1, 1);
+		grid.attach (switch_widget, 1, 0, 1, 1);
+
+		this.button_press_event.connect ((e) => {
+			set_active (!get_active ());
+			return false;
+		});
 	}
 
 	public void set_caption (string caption) {

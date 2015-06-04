@@ -43,7 +43,7 @@ public class WingpanelInterface.AlphaManager : Object {
 			alpha_updated (AnimationSettings.get_default ().workspace_switch_duration);
 		});
 
-		var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ()); 
+		var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
 
 		GLib.Signal.add_emission_hook (signal_id, 0, (ihint, param_values) => {
 			wallpaper_updated ();
@@ -83,17 +83,24 @@ public class WingpanelInterface.AlphaManager : Object {
 			return;
 		}
 
-		if (current_workspace != null)
+		if (current_workspace != null) {
 			current_workspace.window_added.disconnect (register_window);
+			current_workspace.window_removed.disconnect (deregister_window);
+		}
 
 		current_workspace = workspace;
 
 		current_workspace.window_added.connect (register_window);
+		current_workspace.window_removed.connect (deregister_window);
 
 		foreach (Meta.Window window in current_workspace.list_windows ()) {
 			if (window.is_on_primary_monitor ())
 				register_window (window);
 		}
+	}
+
+	private void deregister_window (Meta.Window window) {
+		alpha_updated (AnimationSettings.get_default ().snap_duration);
 	}
 
 	private void register_window (Meta.Window window) {
