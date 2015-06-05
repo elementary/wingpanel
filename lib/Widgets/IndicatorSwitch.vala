@@ -15,37 +15,74 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Wingpanel.Widgets.IndicatorSwitch : Gtk.EventBox {
+public class Wingpanel.Widgets.IndicatorSwitch : Gtk.Button {
 	private Gtk.Label label_widget;
 	private Gtk.Switch switch_widget;
 
 	public IndicatorSwitch (string caption, bool active = false) {
-		var grid = new Gtk.Grid ();
-		this.add (grid);
 		this.hexpand = true;
-		this.margin_top = 3;
-		this.margin_bottom = 3;
-		this.margin_start = 6;
 
-		// FIXME: Replace this with some css-rules
-		label_widget = new Gtk.Label (caption);
-		label_widget.hexpand = true;
-		label_widget.halign = Gtk.Align.START;
+		var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+
+		label_widget = new Gtk.Label (Markup.escape_text (caption));
+
+		label_widget.use_markup = true;
 		label_widget.margin_start = 6;
-
-		grid.attach (label_widget, 0, 0, 1, 1);
+		label_widget.margin_end = 10;
 
 		switch_widget = new Gtk.Switch ();
 		switch_widget.active = active;
 		switch_widget.halign = Gtk.Align.END;
-		switch_widget.margin_start = 12;
 
-		grid.attach (switch_widget, 1, 0, 1, 1);
+		box.add (label_widget);
+		box.pack_end (switch_widget);
+
+		this.add (box);
 
 		this.button_press_event.connect ((e) => {
 			set_active (!get_active ());
+
 			return false;
 		});
+
+		var style_context = this.get_style_context ();
+		style_context.add_class (Gtk.STYLE_CLASS_MENUITEM);
+		style_context.remove_class (Gtk.STYLE_CLASS_BUTTON);
+		style_context.remove_class ("text-button");
+	}
+
+
+	public IndicatorSwitch.with_mnemonic (string caption, bool active = false) {
+		this.hexpand = true;
+
+		var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+
+		label_widget = new Gtk.Label.with_mnemonic (caption);
+		label_widget.set_mnemonic_widget (this);
+
+		label_widget.use_markup = true;
+		label_widget.margin_start = 6;
+		label_widget.margin_end = 10;
+
+		switch_widget = new Gtk.Switch ();
+		switch_widget.active = active;
+		switch_widget.halign = Gtk.Align.END;
+
+		box.add (label_widget);
+		box.pack_end (switch_widget);
+
+		this.add (box);
+
+		this.button_press_event.connect ((e) => {
+			set_active (!get_active ());
+
+			return false;
+		});
+
+		var style_context = this.get_style_context ();
+		style_context.add_class (Gtk.STYLE_CLASS_MENUITEM);
+		style_context.remove_class (Gtk.STYLE_CLASS_BUTTON);
+		style_context.remove_class ("text-button");
 	}
 
 	public void set_caption (string caption) {
@@ -64,7 +101,7 @@ public class Wingpanel.Widgets.IndicatorSwitch : Gtk.EventBox {
 		return switch_widget.get_active ();
 	}
 
-	public Gtk.Label get_label () {
+	public new Gtk.Label get_label () {
 		return label_widget;
 	}
 

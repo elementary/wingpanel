@@ -21,7 +21,6 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 	private new Gtk.Image image;
 
 	public IndicatorButton (string caption) {
-		// FIXME: Use the "indicator-button" class in the stylesheet to configure how the button is rendered.
 		this.label = Markup.escape_text (caption);
 		this.hexpand = true;
 
@@ -30,6 +29,24 @@ public class Wingpanel.Widgets.IndicatorButton : Gtk.Button {
 		button_label.halign = Gtk.Align.START;
 		button_label.margin_start = 6;
 		button_label.margin_end = 10;
+
+		var style_context = this.get_style_context ();
+		style_context.add_class (Gtk.STYLE_CLASS_MENUITEM);
+		style_context.remove_class (Gtk.STYLE_CLASS_BUTTON);
+		style_context.remove_class ("text-button");
+	}
+
+	public IndicatorButton.with_mnemonic (string caption) {
+		this.hexpand = true;
+
+		button_label = new Gtk.Label.with_mnemonic (caption);
+		button_label.set_mnemonic_widget (this);
+		button_label.use_markup = true;
+		button_label.halign = Gtk.Align.START;
+		button_label.margin_start = 6;
+		button_label.margin_end = 10;
+
+		this.add (button_label);
 
 		var style_context = this.get_style_context ();
 		style_context.add_class (Gtk.STYLE_CLASS_MENUITEM);

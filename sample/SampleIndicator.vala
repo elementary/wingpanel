@@ -204,6 +204,14 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (label_button, 0, position++, 1, 1);
 
+			var mn_but = new Wingpanel.Widgets.IndicatorButton.with_mnemonic ("_Mnemonic Test");
+			mn_but.clicked.connect (() => {
+				display_widget.set_visible_child (keyboard_input);
+				keyboard_input.set_lang ("MN");
+			});
+
+			main_grid.attach (mn_but, 0, position++, 1, 1);
+
 			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, position++, 1, 1);
 
 			close_button = new Wingpanel.Widgets.IndicatorButton ("Show Settings");
