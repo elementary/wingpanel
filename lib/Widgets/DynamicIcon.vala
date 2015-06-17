@@ -15,44 +15,51 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Wingpanel.Widgets.DynamicIcon: Gtk.Stack {
-	private Gtk.Image icon;
-	private Gtk.Spinner spinner;
+public class Wingpanel.Widgets.DynamicIcon : Gtk.Stack {
+	private Gtk.Image display_icon;
+	private Gtk.Spinner display_spinner;
 
 	public DynamicIcon (string icon_name) {
-		icon = new Gtk.Image.from_icon_name (icon_name, Gtk.IconSize.LARGE_TOOLBAR);
-		icon.icon_size = 24;
-		icon.pixel_size = 24;
+		display_icon = new Gtk.Image.from_icon_name (icon_name, Gtk.IconSize.LARGE_TOOLBAR);
+		display_icon.icon_size = 24;
+		display_icon.pixel_size = 24;
 
-		spinner = new Gtk.Spinner ();
+		display_spinner = new Gtk.Spinner ();
 
-		this.add (icon);
-		this.add (spinner);
+		this.add (display_icon);
+		this.add (display_spinner);
 	}
 
 	public void set_icon_name (string icon_name) {
-		icon.icon_name = icon_name;
+		display_icon.set_from_icon_name (icon_name, Gtk.IconSize.LARGE_TOOLBAR);
 	}
 
 	public string get_icon_name () {
-		return icon.icon_name;
+		string icon_name;
+		Gtk.IconSize icon_size;
+
+		display_icon.get_icon_name (out icon_name, out icon_size);
+
+		return icon_name;
 	}
 
 	public Gtk.Image get_icon () {
-		return icon;
+		return display_icon;
 	}
 
 	public Gtk.Spinner get_spinner () {
-		return spinner;
+		return display_spinner;
 	}
 
 	public void start_loading () {
-		spinner.start ();
-		this.set_visible_child (spinner);
+		display_spinner.start ();
+
+		this.set_visible_child (display_spinner);
 	}
 
 	public void stop_loading () {
-		spinner.stop ();
-		this.set_visible_child (icon);
+		display_spinner.stop ();
+
+		this.set_visible_child (display_icon);
 	}
 }

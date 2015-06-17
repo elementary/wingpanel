@@ -23,14 +23,14 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 	private Gtk.Grid main_grid;
 
-	private Wingpanel.Widgets.IndicatorButton loading_button;
-	private Wingpanel.Widgets.IndicatorButton close_button;
-	private Wingpanel.Widgets.IndicatorButton keyboard_button;
-	private Wingpanel.Widgets.IndicatorButton label_button;
-	private Wingpanel.Widgets.IndicatorButton composite_button;
-	private Wingpanel.Widgets.IndicatorSwitch test_switch;
+	private Wingpanel.Widgets.Button loading_button;
+	private Wingpanel.Widgets.Button close_button;
+	private Wingpanel.Widgets.Button keyboard_button;
+	private Wingpanel.Widgets.Button label_button;
+	private Wingpanel.Widgets.Button composite_button;
+	private Wingpanel.Widgets.Switch test_switch;
 
-	private Wingpanel.Widgets.IndicatorButton next_icon_button;
+	private Wingpanel.Widgets.Button next_icon_button;
 
 	private Notify.Notification notification;
 
@@ -115,13 +115,13 @@ public class Sample.Indicator : Wingpanel.Indicator {
 		return display_widget;
 	}
 
-	public override Gtk.Widget? get_widget () {
+	public override Gtk.Widget? get_widget (Wingpanel.Indicator.ServerType server) {
 		if (main_grid == null) {
 			main_grid = new Gtk.Grid ();
 			int position = 0;
 
 			var loading = false;
-			loading_button = new Wingpanel.Widgets.IndicatorButton ("Im doing something...");
+			loading_button = new Wingpanel.Widgets.Button ("Im doing something...");
 			loading_button.clicked.connect (() => {
 				display_widget.set_visible_child_name ("dynamic_icon");
 				if (!loading) {
@@ -137,7 +137,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (loading_button, 0, position++, 1, 1);
 
-			next_icon_button = new Wingpanel.Widgets.IndicatorButton ("Next Icon");
+			next_icon_button = new Wingpanel.Widgets.Button ("Next Icon");
 			next_icon_button.clicked.connect (() => {
 				display_widget.set_visible_child_name ("dynamic_icon");
 				current_icon++;
@@ -150,9 +150,9 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (next_icon_button, 0, position++, 1, 1);
 
-			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, position++, 1, 1);
+			main_grid.attach (new Wingpanel.Widgets.Separator (), 0, position++, 1, 1);
 
-			test_switch = new Wingpanel.Widgets.IndicatorSwitch ("Visible", true);
+			test_switch = new Wingpanel.Widgets.Switch ("Visible", true);
 
 			test_switch.get_switch ().notify["active"].connect (() => {
 				if (!test_switch.get_switch ().active) {
@@ -169,10 +169,10 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (test_switch, 0, position++, 1, 1);
 
-			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, position++, 1, 1);
+			main_grid.attach (new Wingpanel.Widgets.Separator (), 0, position++, 1, 1);
 
 			string[] abc = new string[] {"A","B","C","D","E","F","G","H","I","J"};
-			keyboard_button = new Wingpanel.Widgets.IndicatorButton ("Keyboard Input Widget");
+			keyboard_button = new Wingpanel.Widgets.Button ("Keyboard Input Widget");
 			keyboard_button.clicked.connect (() => {
 				display_widget.set_visible_child (keyboard_input);
 				keyboard_input.set_lang (abc[Random.int_range (0,9)] +abc[Random.int_range (0,9)].down ());
@@ -180,7 +180,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (keyboard_button, 0, position++, 1, 1);
 
-			composite_button = new Wingpanel.Widgets.IndicatorButton ("Composited icon");
+			composite_button = new Wingpanel.Widgets.Button ("Composited icon");
 			composite_button.clicked.connect (() => {
 				display_widget.set_visible_child_name ("dynamic_icon");
 
@@ -197,14 +197,14 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (composite_button, 0, position++, 1, 1);
 
-			label_button = new Wingpanel.Widgets.IndicatorButton ("Show Label");
+			label_button = new Wingpanel.Widgets.Button ("Show Label");
 			label_button.clicked.connect (() => {
 				display_widget.set_visible_child_name ("label");
 			});
 
 			main_grid.attach (label_button, 0, position++, 1, 1);
 
-			var mn_but = new Wingpanel.Widgets.IndicatorButton.with_mnemonic ("_Mnemonic Test");
+			var mn_but = new Wingpanel.Widgets.Button.with_mnemonic ("_Mnemonic Test");
 			mn_but.clicked.connect (() => {
 				display_widget.set_visible_child (keyboard_input);
 				keyboard_input.set_lang ("MN");
@@ -212,9 +212,9 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 			main_grid.attach (mn_but, 0, position++, 1, 1);
 
-			main_grid.attach (new Wingpanel.Widgets.IndicatorSeparator (), 0, position++, 1, 1);
+			main_grid.attach (new Wingpanel.Widgets.Separator (), 0, position++, 1, 1);
 
-			close_button = new Wingpanel.Widgets.IndicatorButton ("Show Settings");
+			close_button = new Wingpanel.Widgets.Button ("Show Settings");
 			close_button.clicked.connect (() => {
 				var cmd = new Granite.Services.SimpleCommand ("/usr/bin", "/usr/bin/switchboard");
 				cmd.run ();

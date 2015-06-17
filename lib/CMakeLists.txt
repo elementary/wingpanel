@@ -20,9 +20,10 @@ set (LIB_SOURCE
   Indicator.vala
   IndicatorManager.vala
   Utils.vala
-  Widgets/IndicatorButton.vala
-  Widgets/IndicatorSeparator.vala
-  Widgets/IndicatorSwitch.vala
+  Widgets/Container.vala
+  Widgets/Button.vala
+  Widgets/Switch.vala
+  Widgets/Separator.vala
   Widgets/DynamicIcon.vala
 )
 
