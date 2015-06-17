@@ -18,6 +18,8 @@
 public class Wingpanel.Widgets.Button : Container {
 	private Gtk.Label button_label;
 
+	private Gtk.Image? button_image = null;
+
 	public Button (string caption) {
 		button_label = create_label_for_caption (caption);
 
@@ -33,13 +35,10 @@ public class Wingpanel.Widgets.Button : Container {
 	public Button.with_image (string caption, Gdk.Pixbuf pixbuf) {
 		var content_widget = this.get_content_widget ();
 
+		button_image = create_image_for_pixbuf (pixbuf);
 		button_label = create_label_for_caption (caption);
 
-		var image = new Gtk.Image ();
-		image.pixbuf = pixbuf;
-		image.margin_start = 6;
-
-		content_widget.attach (image, 0, 0, 1, 1);
+		content_widget.attach (button_image, 0, 0, 1, 1);
 		content_widget.attach (button_label, 1, 0, 1, 1);
 	}
 
@@ -51,6 +50,20 @@ public class Wingpanel.Widgets.Button : Container {
 		return button_label.get_label ();
 	}
 
+	public void set_pixbuf (Gdk.Pixbuf pixbuf) {
+		if (button_image == null)
+			return;
+
+		button_image.set_from_pixbuf (pixbuf);
+	}
+
+	public Gdk.Pixbuf? get_pixbuf () {
+		if (button_image == null)
+			return null;
+
+		return button_image.get_pixbuf ();
+	}
+
 	public new Gtk.Label get_label () {
 		return button_label;
 	}
@@ -60,7 +73,7 @@ public class Wingpanel.Widgets.Button : Container {
 
 		if (use_mnemonic) {
 			label_widget = new Gtk.Label.with_mnemonic (Markup.escape_text (caption));
-			label_widget.set_mnemonic_widget (this.get_content_widget ());
+			label_widget.set_mnemonic_widget (this);
 		} else {
 			label_widget = new Gtk.Label (Markup.escape_text (caption));
 		}
@@ -71,5 +84,13 @@ public class Wingpanel.Widgets.Button : Container {
 		label_widget.margin_end = 10;
 
 		return label_widget;
+	}
+
+	private Gtk.Image create_image_for_pixbuf (Gdk.Pixbuf pixbuf) {
+		var image = new Gtk.Image ();
+		image.pixbuf = pixbuf;
+		image.margin_start = 6;
+
+		return image;
 	}
 }

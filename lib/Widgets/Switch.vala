@@ -74,7 +74,7 @@ public class Wingpanel.Widgets.Switch : Container {
 
 		if (use_mnemonic) {
 			label_widget = new Gtk.Label.with_mnemonic (Markup.escape_text (caption));
-			label_widget.set_mnemonic_widget (this.get_content_widget ());
+			label_widget.set_mnemonic_widget (this);
 		} else {
 			label_widget = new Gtk.Label (Markup.escape_text (caption));
 		}
