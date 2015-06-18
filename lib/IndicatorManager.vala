@@ -30,7 +30,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	*/
 	public enum ServerType {
 		SESSION,
-		GREETER,
+		GREETER
 	}
 
 	/**
@@ -147,8 +147,6 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	* @param indicator The indicator.
 	*/
 	public void register_indicator (string path, Wingpanel.Indicator indicator) {
-		assert (indicators != null);
-
 		debug ("%s registered", indicator.code_name);
 
 		indicators.@foreach ((entry) => {
@@ -170,8 +168,6 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	* @param indicator The indicator.
 	*/
 	public void deregister_indicator (string path, Wingpanel.Indicator indicator) {
-		assert (indicators != null);
-
 		debug ("%s deregistered", indicator.code_name);
 
 		if (!indicators.has_key (path))
@@ -187,8 +183,6 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	* @return True if there are any indicators loaded.
 	*/
 	public bool has_indicators () {
-		assert (indicators != null);
-
 		return !indicators.is_empty;
 	}
 
@@ -198,8 +192,6 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	* @return a {@link Gee.Collection} containing the indicators.
 	*/
 	public Gee.Collection<Wingpanel.Indicator> get_indicators () {
-		assert (indicators != null);
-
 		return indicators.values.read_only_view;
 	}
 }

@@ -18,25 +18,23 @@
 public class Wingpanel.Widgets.Button : Container {
 	private Gtk.Label button_label;
 
-	private Gtk.Image? button_image = null;
+	private Gtk.Image button_image;
 
-	public Button (string caption) {
-		button_label = create_label_for_caption (caption);
-
-		this.get_content_widget ().attach (button_label, 0, 0, 1, 1);
-	}
-
-	public Button.with_mnemonic (string caption) {
-		button_label = create_label_for_caption (caption, true);
-
-		this.get_content_widget ().attach (button_label, 0, 0, 1, 1);
-	}
-
-	public Button.with_image (string caption, Gdk.Pixbuf pixbuf) {
+	public Button (string caption, Gdk.Pixbuf? pixbuf = null) {
 		var content_widget = this.get_content_widget ();
 
 		button_image = create_image_for_pixbuf (pixbuf);
 		button_label = create_label_for_caption (caption);
+
+		content_widget.attach (button_image, 0, 0, 1, 1);
+		content_widget.attach (button_label, 1, 0, 1, 1);
+	}
+
+	public Button.with_mnemonic (string caption, Gdk.Pixbuf? pixbuf = null) {
+		var content_widget = this.get_content_widget ();
+
+		button_image = create_image_for_pixbuf (pixbuf);
+		button_label = create_label_for_caption (caption, true);
 
 		content_widget.attach (button_image, 0, 0, 1, 1);
 		content_widget.attach (button_label, 1, 0, 1, 1);
@@ -50,17 +48,11 @@ public class Wingpanel.Widgets.Button : Container {
 		return button_label.get_label ();
 	}
 
-	public void set_pixbuf (Gdk.Pixbuf pixbuf) {
-		if (button_image == null)
-			return;
-
+	public void set_pixbuf (Gdk.Pixbuf? pixbuf) {
 		button_image.set_from_pixbuf (pixbuf);
 	}
 
 	public Gdk.Pixbuf? get_pixbuf () {
-		if (button_image == null)
-			return null;
-
 		return button_image.get_pixbuf ();
 	}
 
@@ -86,7 +78,7 @@ public class Wingpanel.Widgets.Button : Container {
 		return label_widget;
 	}
 
-	private Gtk.Image create_image_for_pixbuf (Gdk.Pixbuf pixbuf) {
+	private Gtk.Image create_image_for_pixbuf (Gdk.Pixbuf? pixbuf) {
 		var image = new Gtk.Image ();
 		image.pixbuf = pixbuf;
 		image.margin_start = 6;
