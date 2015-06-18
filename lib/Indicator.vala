@@ -29,15 +29,6 @@ public abstract class Wingpanel.Indicator : GLib.Object {
 	public static const string KEYBOARD = "keyboard";
 
 	/**
-	* The type of the server displaying the indicator.
-	*/
-	public enum ServerType {
-		SESSION,
-		GREETER,
-		OTHER
-	}
-
-	/**
 	* The unique name representing the indicator.
 	* It is also used for the indicator ordering.
 	*/
@@ -71,11 +62,9 @@ public abstract class Wingpanel.Indicator : GLib.Object {
 	* Returns the widget that will be displayed in the popover.
 	* Return null if no popover should be shown.
 	*
-	* @param server The server the indicator is displayed on.
-	*
 	* @return a {@link Gtk.Widget} containing the popover interface.
 	*/
-	public abstract Gtk.Widget? get_widget (ServerType server);
+	public abstract Gtk.Widget? get_widget ();
 
 	/**
 	* Called when the indicator popover opened.

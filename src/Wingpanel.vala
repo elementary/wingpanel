@@ -59,6 +59,8 @@ namespace Wingpanel {
 
 		public WingpanelApp () {
 			// TODO: Setup translations and stuff like that
+
+			IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
 		}
 
 		protected override void startup () {

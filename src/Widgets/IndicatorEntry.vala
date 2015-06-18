@@ -31,7 +31,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 		this.get_style_context ().add_class (StyleClass.COMPOSITED_INDICATOR);
 
 		display_widget = base_indicator.get_display_widget ();
-		indicator_widget = base_indicator.get_widget (Indicator.ServerType.SESSION);
+		indicator_widget = base_indicator.get_widget ();
 
 		revealer = new Gtk.Revealer ();
 

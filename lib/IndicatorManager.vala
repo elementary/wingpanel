@@ -25,18 +25,45 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		return indicator_manager;
 	}
 
-	[CCode (has_target = false)]
-	private delegate Wingpanel.Indicator RegisterPluginFunction (Module module);
+	/**
+	* The type of the server displaying the indicator.
+	*/
+	public enum ServerType {
+		SESSION,
+		GREETER,
+		OTHER
+	}
 
-	private Gee.HashMap<string, Wingpanel.Indicator> indicators;
+	/**
+	* Called when a new indicator was added.
+	*/
+	public signal void indicator_added (Wingpanel.Indicator indicator);
+
+	/**
+	* Called when an indicator was removed.
+	*/
+	public signal void indicator_removed (Wingpanel.Indicator indicator);
+
+	[CCode (has_target = false)]
+	private delegate Wingpanel.Indicator? RegisterPluginFunction (Module module, ServerType server_type);
+
+	private Gee.HashMap<string, Wingpanel.Indicator>? indicators = null;
 
 	private FileMonitor? monitor = null;
 
-	public signal void indicator_added (Wingpanel.Indicator indicator);
-	public signal void indicator_removed (Wingpanel.Indicator indicator);
+	private ServerType server_type;
 
 	private IndicatorManager () {
 		indicators = new Gee.HashMap<string, Wingpanel.Indicator> ();
+	}
+
+	/**
+	* Run this method to initialize the indicator manager.
+	*
+	* @param server_type The server the indicators will be displayed on.
+	*/
+	public void initialize (ServerType server_type) {
+		this.server_type = server_type;
 
 		var base_folder = File.new_for_path (Build.INDICATORS_DIR);
 
@@ -83,10 +110,10 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		}
 
 		RegisterPluginFunction register_plugin = (RegisterPluginFunction) function;
-		Wingpanel.Indicator indicator = register_plugin (module);
+		Wingpanel.Indicator? indicator = register_plugin (module, server_type);
 
 		if (indicator == null) {
-			critical ("Unknown plugin type for %s !", path);
+			debug ("Unknown plugin type for %s or indicator is hidden on this server!", path);
 
 			return;
 		}
@@ -114,7 +141,15 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		}
 	}
 
+	/**
+	* Register a new indicator.
+	*
+	* @param path The path to the plugin file. (Used to identify the indicator)
+	* @param indicator The indicator.
+	*/
 	public void register_indicator (string path, Wingpanel.Indicator indicator) {
+		assert (indicators != null);
+
 		debug ("%s registered", indicator.code_name);
 
 		indicators.@foreach ((entry) => {
@@ -129,7 +164,15 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		indicator_added (indicator);
 	}
 
+	/**
+	* Deregisters an indicator.
+	*
+	* @param path The path to the plugin file. (Used to identify the indicator)
+	* @param indicator The indicator.
+	*/
 	public void deregister_indicator (string path, Wingpanel.Indicator indicator) {
+		assert (indicators != null);
+
 		debug ("%s deregistered", indicator.code_name);
 
 		if (!indicators.has_key (path))
@@ -139,11 +182,25 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 			indicator_removed (indicator);
 	}
 
+	/**
+	* Checks if indicators are loaded.
+	*
+	* @return True if there are any indicators loaded.
+	*/
 	public bool has_indicators () {
+		assert (indicators != null);
+
 		return !indicators.is_empty;
 	}
 
+	/**
+	* Gets the list of loaded indicators.
+	*
+	* @return a {@link Gee.Collection} containing the indicators.
+	*/
 	public Gee.Collection<Wingpanel.Indicator> get_indicators () {
+		assert (indicators != null);
+
 		return indicators.values.read_only_view;
 	}
 }

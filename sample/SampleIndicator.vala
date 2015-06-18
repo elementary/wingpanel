@@ -115,7 +115,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 		return display_widget;
 	}
 
-	public override Gtk.Widget? get_widget (Wingpanel.Indicator.ServerType server) {
+	public override Gtk.Widget? get_widget () {
 		if (main_grid == null) {
 			main_grid = new Gtk.Grid ();
 			int position = 0;
@@ -238,8 +238,14 @@ public class Sample.Indicator : Wingpanel.Indicator {
 	}
 }
 
-public Wingpanel.Indicator get_indicator (Module module) {
+public Wingpanel.Indicator? get_indicator (Module module, Wingpanel.IndicatorManager.ServerType server_type) {
 	debug ("Activating Sample Indicator");
+
+	// Only show the indicator in the session
+	if (server_type != Wingpanel.IndicatorManager.ServerType.SESSION)
+		return null;
+
 	var indicator = new Sample.Indicator ();
+
 	return indicator;
 }

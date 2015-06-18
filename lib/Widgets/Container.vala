@@ -20,6 +20,7 @@ public class Wingpanel.Widgets.Container : Gtk.Button {
 
 	public Container () {
 		content_widget = new Gtk.Grid ();
+		content_widget.hexpand = true;
 
 		this.add (content_widget);
 
