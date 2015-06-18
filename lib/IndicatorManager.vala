@@ -31,7 +31,6 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	public enum ServerType {
 		SESSION,
 		GREETER,
-		OTHER
 	}
 
 	/**
