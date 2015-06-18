@@ -24,7 +24,7 @@ set (LIB_SOURCE
   Widgets/Button.vala
   Widgets/Switch.vala
   Widgets/Separator.vala
-  Widgets/DynamicIcon.vala
+  Widgets/OverlayIcon.vala
 )
 
 if (BUILD_SHARED_LIBS)
