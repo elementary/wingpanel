@@ -28,6 +28,8 @@ public class Wingpanel.Widgets.Button : Container {
 
 		content_widget.attach (button_image, 0, 0, 1, 1);
 		content_widget.attach (button_label, 1, 0, 1, 1);
+
+		connect_signals ();
 	}
 
 	public Button.with_mnemonic (string caption, Gdk.Pixbuf? pixbuf = null) {
@@ -38,6 +40,8 @@ public class Wingpanel.Widgets.Button : Container {
 
 		content_widget.attach (button_image, 0, 0, 1, 1);
 		content_widget.attach (button_label, 1, 0, 1, 1);
+
+		connect_signals ();
 	}
 
 	public void set_caption (string caption) {
@@ -82,7 +86,15 @@ public class Wingpanel.Widgets.Button : Container {
 		var image = new Gtk.Image ();
 		image.pixbuf = pixbuf;
 		image.margin_start = 6;
+		image.no_show_all = true;
+		image.visible = pixbuf != null;
 
 		return image;
+	}
+
+	private void connect_signals () {
+		button_image.notify["pixbuf"].connect (() => {
+			button_image.visible = button_image.get_pixbuf () != null;
+		});
 	}
 }

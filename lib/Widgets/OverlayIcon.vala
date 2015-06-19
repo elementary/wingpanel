@@ -20,12 +20,16 @@ public class Wingpanel.Widgets.OverlayIcon : Gtk.Overlay {
 
 	private Gtk.Image overlay_image;
 
-	public OverlayIcon (Gdk.Pixbuf main_pixbuf, Gdk.Pixbuf overlay_pixbuf) {
-		main_image = new Gtk.Image.from_pixbuf (main_pixbuf);
-		overlay_image = new Gtk.Image.from_pixbuf (overlay_pixbuf);
+	public OverlayIcon (string icon_name) {
+		add_images ();
 
-		this.add_overlay (main_image);
-		this.add_overlay (overlay_image);
+		set_main_icon_name (icon_name);
+	}
+
+	public OverlayIcon.from_pixbuf (Gdk.Pixbuf pixbuf) {
+		add_images ();
+
+		set_main_pixbuf (pixbuf);
 	}
 
 	public void set_main_pixbuf (Gdk.Pixbuf? pixbuf) {
@@ -44,11 +48,49 @@ public class Wingpanel.Widgets.OverlayIcon : Gtk.Overlay {
 		return overlay_image.get_pixbuf ();
 	}
 
+	public void set_main_icon_name (string icon_name) {
+		main_image.set_from_icon_name (icon_name, Gtk.IconSize.LARGE_TOOLBAR);
+		main_image.icon_size = 24;
+		main_image.pixel_size = 24;
+	}
+
+	public string get_main_icon_name () {
+		string icon_name;
+		Gtk.IconSize size;
+
+		main_image.get_icon_name (out icon_name, out size);
+
+		return icon_name;
+	}
+
+	public void set_overlay_icon_name (string icon_name) {
+		overlay_image.set_from_icon_name (icon_name, Gtk.IconSize.LARGE_TOOLBAR);
+		overlay_image.icon_size = 24;
+		overlay_image.pixel_size = 24;
+	}
+
+	public string get_overlay_icon_name () {
+		string icon_name;
+		Gtk.IconSize size;
+
+		overlay_image.get_icon_name (out icon_name, out size);
+
+		return icon_name;
+	}
+
 	public Gtk.Image get_main_image () {
 		return main_image;
 	}
 
 	public Gtk.Image get_overlay_image () {
 		return overlay_image;
+	}
+
+	private void add_images () {
+		main_image = new Gtk.Image ();
+		overlay_image = new Gtk.Image ();
+
+		this.add (main_image);
+		this.add_overlay (overlay_image);
 	}
 }

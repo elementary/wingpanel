@@ -20,6 +20,8 @@ public class Wingpanel.Widgets.Switch : Container {
 
 	private Gtk.Switch button_switch;
 
+	public new signal void switched ();
+
 	public Switch (string caption, bool active = false) {
 		var content_widget = this.get_content_widget ();
 
@@ -99,6 +101,10 @@ public class Wingpanel.Widgets.Switch : Container {
 	private void connect_signals () {
 		this.clicked.connect (() => {
 			set_active (!get_active ());
+		});
+
+		button_switch.notify["active"].connect (() => {
+			switched ();
 		});
 	}
 }
