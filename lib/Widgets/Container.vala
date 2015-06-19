@@ -15,10 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class Wingpanel.Widgets.IndicatorSeparator : Gtk.Separator {
-	public IndicatorSeparator () {
-		this.orientation = Gtk.Orientation.HORIZONTAL;
-		this.margin_top = 3;
-		this.margin_bottom = 3;
+public class Wingpanel.Widgets.Container : Gtk.Button {
+	private Gtk.Grid content_widget;
+
+	public Container () {
+		content_widget = new Gtk.Grid ();
+		content_widget.hexpand = true;
+
+		this.add (content_widget);
+
+		set_style_classes ();
+	}
+
+	public Gtk.Grid get_content_widget () {
+		return content_widget;
+	}
+
+	private void set_style_classes () {
+		var style_context = this.get_style_context ();
+		style_context.add_class (Gtk.STYLE_CLASS_MENUITEM);
+		style_context.remove_class (Gtk.STYLE_CLASS_BUTTON);
+		style_context.remove_class ("text-button");
 	}
 }
