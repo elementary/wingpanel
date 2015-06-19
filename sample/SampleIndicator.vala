@@ -93,7 +93,8 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
 		// Add the widgets
 		grid.attach (hide_button, 0, 0, 1, 1);
-		grid.attach (compositing_switch, 0, 1, 1, 1);
+		grid.attach (new Wingpanel.Widgets.Separator (), 0, 1, 1, 1);
+		grid.attach (compositing_switch, 0, 2, 1, 1);
 
 		// Return the grid
 		return grid;
@@ -126,7 +127,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 	// Method to check the status of the compositing switch and update the indicator
 	private void update_compositing () {
 		// If the switch is enabled set the icon name of the icon that should be drawn on top of the other one, if not hide the top icon.
-		display_widget.set_overlay_icon_name (compositing_switch.get_active () ? "changes-prevent-symbolic" : "");
+		display_widget.set_overlay_icon_name (compositing_switch.get_active () ? "nm-vpn-active-lock" : "");
 	}
 }
 
