@@ -138,7 +138,7 @@ public Wingpanel.Indicator? get_indicator (Module module, Wingpanel.IndicatorMan
 
 	// Check which server has loaded the plugin
 	if (server_type != Wingpanel.IndicatorManager.ServerType.SESSION)
-		// We want to display our sample indicator only in the "normal" session, not on the log screen, so stop here!
+		// We want to display our sample indicator only in the "normal" session, not on the login screen, so stop here!
 		return null;
 
 	// Create the indicator
