@@ -143,18 +143,35 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		Gdk.property_change (this.get_window (), atom, Gdk.Atom.intern ("CARDINAL", false),
 				32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
 	}
+	
+	uint shrink_timeout = 0;
 
 	public void set_expanded (bool expanded) {
 		if (this.expanded == expanded)
 			return;
-
-		if (expanded)
+		if (expanded) {
 			Services.BackgroundManager.get_default ().remember_window ();
-		else
+
+			this.expanded = expanded;
+			
+			if (shrink_timeout > 0) {
+				Source.remove (shrink_timeout);
+				shrink_timeout = 0;
+			}
+			this.set_size_request (monitor_width, expanded ? monitor_height : -1);
+		} else {
 			Services.BackgroundManager.get_default ().restore_window ();
 
-		this.expanded = expanded;
+			this.expanded = expanded;
 
-		this.set_size_request (monitor_width, expanded ? monitor_height : -1);
+			if (shrink_timeout > 0)
+				Source.remove (shrink_timeout);
+
+			shrink_timeout = Timeout.add (300, () => {
+				shrink_timeout = 0;
+				this.set_size_request (monitor_width, expanded ? monitor_height : -1);
+				return false;
+			});
+		}
 	}
 }
