@@ -143,7 +143,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 		Gdk.property_change (this.get_window (), atom, Gdk.Atom.intern ("CARDINAL", false),
 				32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
 	}
-	
+
 	uint shrink_timeout = 0;
 
 	public void set_expanded (bool expanded) {
@@ -158,6 +158,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 				Source.remove (shrink_timeout);
 				shrink_timeout = 0;
 			}
+
 			this.set_size_request (monitor_width, expanded ? monitor_height : -1);
 		} else {
 			Services.BackgroundManager.get_default ().restore_window ();
