@@ -34,6 +34,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
 	private int panel_displacement;
 
+	private	uint shrink_timeout = 0;
+
 	public PanelWindow (Gtk.Application app, int monitor_number = -1) {
 		this.monitor_number = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
 
@@ -144,8 +146,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 				32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
 	}
 
-	uint shrink_timeout = 0;
-
 	public void set_expanded (bool expanded) {
 		if (this.expanded == expanded)
 			return;
@@ -153,7 +153,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 			Services.BackgroundManager.get_default ().remember_window ();
 
 			this.expanded = expanded;
-			
+
 			if (shrink_timeout > 0) {
 				Source.remove (shrink_timeout);
 				shrink_timeout = 0;
