@@ -71,6 +71,10 @@ public class Wingpanel.Widgets.Switch : Container {
 		return button_switch;
 	}
 
+	public void do_switch () {
+		button_switch.activate ();
+	}
+
 	private Gtk.Label create_label_for_caption (string caption, bool use_mnemonic = false) {
 		Gtk.Label label_widget;
 
@@ -100,7 +104,7 @@ public class Wingpanel.Widgets.Switch : Container {
 
 	private void connect_signals () {
 		this.clicked.connect (() => {
-			set_active (!get_active ());
+			do_switch ();
 		});
 
 		button_switch.notify["active"].connect (() => {
