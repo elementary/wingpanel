@@ -19,7 +19,7 @@ public class Wingpanel.Widgets.IndicatorPopover : Gtk.Popover {
 	private Gtk.Widget content;
 
 	public IndicatorPopover (Gtk.Widget indicator_widget) {
-		this.set_size_request (220, -1);
+		this.set_size_request (256, -1);
 
 		content = indicator_widget;
 
