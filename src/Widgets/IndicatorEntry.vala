@@ -98,6 +98,20 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 			return Gdk.EVENT_PROPAGATE;
 		});
 
+		this.touch_event.connect ((e) => {
+			if (e.type == Gdk.EventType.TOUCH_BEGIN) {
+				if (popover.get_visible ()) {
+					popover.hide ();
+				} else {
+					popover.show_all ();
+				}
+
+				return Gdk.EVENT_STOP;
+			}
+
+			return Gdk.EVENT_PROPAGATE;
+		});
+
 		this.button_press_event.connect ((e) => {
 			if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
 				&& e.type == Gdk.EventType.BUTTON_PRESS) {
