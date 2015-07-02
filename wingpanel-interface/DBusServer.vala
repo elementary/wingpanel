@@ -28,8 +28,8 @@ public class WingpanelInterface.DBusServer : Object {
 		return yield AlphaManager.get_default ().calculate_alpha_for_background (monitor, panel_height);
 	}
 
-	public void remeber_focused_window () {
-		FocusManager.get_default ().remeber_focused_window ();
+	public void remember_focused_window () {
+		FocusManager.get_default ().remember_focused_window ();
 	}
 
 	public void restore_focused_window () {

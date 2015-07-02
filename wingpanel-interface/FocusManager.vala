@@ -29,7 +29,7 @@ public class WingpanelInterface.FocusManager : Object {
 		update_current_workspace ();
 	}
 
-	public void remeber_focused_window () {
+	public void remember_focused_window () {
 		var windows = current_workspace.list_windows ();
 
 		foreach (Meta.Window window in windows) {

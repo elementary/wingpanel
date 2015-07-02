@@ -29,7 +29,7 @@ namespace Wingpanel.Services {
 		public abstract BackgroundAlpha get_alpha (int screen) throws IOError;
 		public abstract async double get_background_alpha (int screen, int panel_height) throws IOError;
 
-		public abstract void remeber_focused_window () throws IOError;
+		public abstract void remember_focused_window () throws IOError;
 		public abstract void restore_focused_window () throws IOError;
 	}
 
@@ -69,7 +69,7 @@ namespace Wingpanel.Services {
 
 		public void remember_window () {
 			try {
-				bus.remeber_focused_window ();
+				bus.remember_focused_window ();
 			} catch (Error e) {
 				warning ("Remembering focused window failed: %s", e.message);
 			}
