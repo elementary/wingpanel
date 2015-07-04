@@ -20,8 +20,7 @@ Vcs-Browser: http://bazaar.launchpad.net/~wingpanel-devs/wingpanel/trunk/files
 Package: wingpanel
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Recommends: wingpanel-indicator-ayatana,
-            wingpanel-indicator-datetime,
+Recommends: wingpanel-indicator-datetime,
             wingpanel-indicator-launcher,
             wingpanel-indicator-network,
             wingpanel-indicator-notifications,
