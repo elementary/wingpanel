@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
 	<schema path="/org/pantheon/desktop/wingpanel/" id="org.pantheon.desktop.wingpanel" gettext-domain="wingpanel">
-		<key type="as" name="order">
-			<default>['keyboard', 'sound', 'network', 'bluetooth', 'printer', 'sync', 'power', 'messages', 'session']</default>
-			<summary>Order of indicators.</summary>
-			<description>The order in which the indicators are shown from left to right.</description>
-		</key>
 		<key type="b" name="use-transparency">
 			<default>true</default>
 			<summary>Sets if the panel uses transparency.</summary>

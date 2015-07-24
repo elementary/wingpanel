@@ -23,17 +23,33 @@
  * be passed as CompareFuncs.
  */
 public class Wingpanel.Services.IndicatorSorter : Object {
-	public int compare_func (Wingpanel.Widgets.IndicatorEntry? a, Wingpanel.Widgets.IndicatorEntry? b) {
-		if (a == null)
-			return (b == null) ? 0 : -1;
+	// The order in which the indicators are shown from left to right.
+	private const string[] INDICATOR_ORDER = {
+		Indicator.KEYBOARD,
+		Indicator.SOUND,
+		Indicator.NETWORK,
+		Indicator.BLUETOOTH,
+		Indicator.PRINTER,
+		Indicator.SYNC,
+		Indicator.POWER,
+		Indicator.MESSAGES,
+		Indicator.SESSION
+	};
 
-		if (b == null)
+	public int compare_func (Wingpanel.Widgets.IndicatorEntry? a, Wingpanel.Widgets.IndicatorEntry? b) {
+		if (a == null) {
+			return (b == null) ? 0 : -1;
+		}
+
+		if (b == null) {
 			return 1;
+		}
 
 		int order = get_order (a) - get_order (b);
 
-		if (order == 0)
+		if (order == 0) {
 			order = compare_entries_by_name (a, b);
+		}
 
 		return order.clamp (-1, 1);
 	}
@@ -48,17 +64,15 @@ public class Wingpanel.Services.IndicatorSorter : Object {
 		int best_match = 0;
 
 		// ayatana application indicators on the left of the native indicators
-		if (node.base_indicator.code_name.has_prefix ("ayatana-"))
+		if (node.base_indicator.code_name.has_prefix ("ayatana-")) {
 			return best_match;
+		}
 
-		var order = PanelSettings.get_default ().order;
-
-		for (int i = 0; i < order.length; i++) {
-			var order_name = order[i];
+		for (int i = 0; i < INDICATOR_ORDER.length; i++) {
+			var order_name = INDICATOR_ORDER[i];
 
 			if (order_name == node.base_indicator.code_name) {
 				best_match = i;
-
 				break;
 			}
 		}

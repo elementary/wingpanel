@@ -18,7 +18,6 @@
 namespace Wingpanel {
 	public static int main (string[] args) {
 		Gtk.init (ref args);
-
 		var app = WingpanelApp.instance;
 
 		return app.run (args);
@@ -58,8 +57,6 @@ namespace Wingpanel {
 		}
 
 		public WingpanelApp () {
-			// TODO: Setup translations and stuff like that
-
 			IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
 		}
 
