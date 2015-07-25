@@ -245,6 +245,10 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	}
 
 	private void load_restrictions (File restrictions_folder) {
+		if (!restrictions_folder.query_exists ()) {
+			return;
+		}
+
 		FileInfo file_info = null;
 
 		try {
