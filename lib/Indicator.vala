@@ -47,7 +47,7 @@ public abstract class Wingpanel.Indicator : GLib.Object {
 	/**
 	* Defines if the indicator display widget should be shown or not.
 	*/
-	public bool visible { get; set; default=false; }
+	public bool visible { get; set; default = false; }
 
 	/**
 	* Returns the display widget that will be displayed in the panel.

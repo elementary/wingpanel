@@ -18,9 +18,10 @@
 public class Wingpanel.IndicatorManager : GLib.Object {
 	private static Wingpanel.IndicatorManager? indicator_manager = null;
 
-	public static IndicatorManager get_default () {
-		if (indicator_manager == null)
+	public static unowned IndicatorManager get_default () {
+		if (indicator_manager == null) {
 			indicator_manager = new IndicatorManager ();
+		}
 
 		return indicator_manager;
 	}
@@ -30,7 +31,20 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	*/
 	public enum ServerType {
 		SESSION,
-		GREETER
+		GREETER;
+
+		public string restrictions_file_name () {
+			switch (this) {
+				case SESSION:
+					return "default";
+
+				case GREETER:
+					return "greeter";
+
+				default:
+					assert_not_reached();
+			}
+		}
 	}
 
 	/**
@@ -43,6 +57,14 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	*/
 	public signal void indicator_removed (Wingpanel.Indicator indicator);
 
+	/**
+	* Place the files in /etc/wingpanel.d/ or ~/.config/wingpanel.d/
+	* default.blacklist, greeter.whitelist or combinations of it.
+	*/
+	private Gee.HashSet<string> indicator_blacklist;
+	private Gee.HashSet<string> indicator_whitelist;
+
+
 	[CCode (has_target = false)]
 	private delegate Wingpanel.Indicator? RegisterPluginFunction (Module module, ServerType server_type);
 
@@ -50,10 +72,15 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
 	private FileMonitor? monitor = null;
 
+	private FileMonitor? root_restrictions_monitor = null;
+	private FileMonitor? user_restrictions_monitor = null;
+
 	private ServerType server_type;
 
 	private IndicatorManager () {
 		indicators = new Gee.HashMap<string, Wingpanel.Indicator> ();
+		indicator_blacklist = new Gee.HashSet<string> ();
+		indicator_whitelist = new Gee.HashSet<string> ();
 	}
 
 	/**
@@ -64,6 +91,27 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	public void initialize (ServerType server_type) {
 		this.server_type = server_type;
 
+		// load black- and whitelists
+		var root_restrictions_folder = File.new_for_path ("/etc/wingpanel.d/");
+		var user_restrictions_folder = File.new_for_path ("/home/%s/.config/wingpanel.d/".printf (Environment.get_real_name ()));
+
+		try {
+			root_restrictions_monitor = root_restrictions_folder.monitor_directory (FileMonitorFlags.NONE, null);
+			root_restrictions_monitor.changed.connect ((file, trash, event) => {
+				reload_restrictions (root_restrictions_folder, user_restrictions_folder);
+			});
+			user_restrictions_monitor = user_restrictions_folder.monitor_directory (FileMonitorFlags.NONE, null);
+			user_restrictions_monitor.changed.connect ((file, trash, event) => {
+				reload_restrictions (root_restrictions_folder, user_restrictions_folder);
+			});
+
+			load_restrictions (root_restrictions_folder);
+			load_restrictions (user_restrictions_folder);
+		} catch (Error error) {
+			warning ("Error while reading restrictions files: %s\n", error.message);
+		}
+
+		// load indicators
 		var base_folder = File.new_for_path (Build.INDICATORS_DIR);
 
 		try {
@@ -87,8 +135,21 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	}
 
 	private void load (string path) {
-		if (!Module.supported ())
+		if (!Module.supported ()) {
 			error ("Wingpanel is not supported by this system!");
+		}
+
+		if (indicators.has_key (path)) {
+			return;
+		} else if (check_indicator_blacklist (path)) {
+			debug ("Indicator %s will not be loaded since it is blacklisted", path);
+
+			return;
+		} else if (!check_indicator_whitelist (path)) {
+			debug ("Indicator %s will not be loaded since it is not enabled", path);
+
+			return;
+		}
 
 		Module module = Module.open (path, ModuleFlags.BIND_LAZY);
 		if (module == null) {
@@ -99,8 +160,9 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
 		void* function;
 
-		if (!module.symbol ("get_indicator", out function))
+		if (!module.symbol ("get_indicator", out function)) {
 			return;
+		}
 
 		if (function == null) {
 			critical ("get_indicator () not found in %s", path);
@@ -130,14 +192,107 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 			while ((file_info = enumerator.next_file ()) != null) {
 				var file = base_folder.get_child (file_info.get_name ());
 
-				if (file_info.get_file_type () == FileType.REGULAR && GLib.ContentType.equals (file_info.get_content_type (), "application/x-sharedlib"))
+				if (file_info.get_file_type () == FileType.REGULAR && GLib.ContentType.equals (file_info.get_content_type (), "application/x-sharedlib")) {
 					load (file.get_path ());
-				else if (file_info.get_file_type () == FileType.DIRECTORY)
+				} else if (file_info.get_file_type () == FileType.DIRECTORY) {
 					find_plugins (file);
+				}
 			}
 		} catch (Error error) {
 			warning ("Unable to scan indicators folder %s: %s\n", base_folder.get_path (), error.message);
 		}
+	}
+
+	private bool check_indicator_blacklist (string path) {
+		foreach (var indicator_file_name in indicator_blacklist) {
+			if (path.has_suffix (indicator_file_name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private bool check_indicator_whitelist (string path) {
+		if (indicator_whitelist.size == 0) {
+			return true;
+		}
+
+		foreach (var indicator_file_name in indicator_whitelist) {
+			if (path.has_suffix (indicator_file_name)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private void reload_restrictions (File root_restrictions_folder, File user_restrictions_folder) {
+		indicator_blacklist.clear ();
+		indicator_whitelist.clear ();
+		load_restrictions (root_restrictions_folder);
+		load_restrictions (user_restrictions_folder);
+
+		indicators.@foreach ((entry) => {
+			if (check_indicator_blacklist (entry.key)) {
+				deregister_indicator (entry.key, entry.value);
+			} else if (!check_indicator_whitelist (entry.key)) {
+				deregister_indicator (entry.key, entry.value);
+			}
+			return true;
+		});
+		find_plugins (File.new_for_path (Build.INDICATORS_DIR));
+	}
+
+	private void load_restrictions (File restrictions_folder) {
+		if (!restrictions_folder.query_exists ()) {
+			return;
+		}
+
+		FileInfo file_info = null;
+
+		try {
+			var enumerator = restrictions_folder.enumerate_children (FileAttribute.STANDARD_NAME, 0);
+
+			while ((file_info = enumerator.next_file ()) != null) {
+				if (!file_info.get_name ().contains (server_type.restrictions_file_name ())) {
+					continue;
+				}
+				var file = restrictions_folder.get_child (file_info.get_name ());
+				if (file_info.get_name ().has_suffix (".whitelist")) {
+					foreach (var entry in get_restrictions_from_file (file)) {
+						indicator_whitelist.add (entry);
+					}
+				} else if (file_info.get_name ().has_suffix (".blacklist")) {
+					foreach (var entry in get_restrictions_from_file (file)) {
+						indicator_blacklist.add (entry);
+					}
+				}
+			}
+		} catch (Error error) {
+			warning ("Unable to scan restrictions folder %s: %s\n", restrictions_folder.get_path (), error.message);
+		}
+	}
+
+	private string[] get_restrictions_from_file (File file) {
+		var restrictions = new string[] {};
+
+		if (file.query_exists ()) {
+			try {
+				var dis = new DataInputStream (file.read ());
+				string line = null;
+
+				while ((line = dis.read_line ()) != null) {
+					if (line.strip () != "") {
+						restrictions += line;
+					}
+				}
+			} catch (Error error) {
+				warning ("Unable to load restrictions file %s: %s\n", file.get_basename (), error.message);
+			}
+		}
+
+		return restrictions;
 	}
 
 	/**
@@ -150,9 +305,9 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 		debug ("%s registered", indicator.code_name);
 
 		indicators.@foreach ((entry) => {
-			if (entry.value.code_name == indicator.code_name)
+			if (entry.value.code_name == indicator.code_name) {
 				deregister_indicator (entry.key, entry.value);
-
+			}
 			return true;
 		});
 
@@ -170,11 +325,13 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 	public void deregister_indicator (string path, Wingpanel.Indicator indicator) {
 		debug ("%s deregistered", indicator.code_name);
 
-		if (!indicators.has_key (path))
+		if (!indicators.has_key (path)) {
 			return;
+		}
 
-		if (indicators.unset (path))
+		if (indicators.unset (path)) {
 			indicator_removed (indicator);
+		}
 	}
 
 	/**

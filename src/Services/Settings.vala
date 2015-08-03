@@ -19,7 +19,6 @@ namespace Wingpanel.Services {
 	public class PanelSettings : Granite.Services.Settings {
 		private static PanelSettings? instance = null;
 
-		public string[] order { get; set; }
 		public bool use_transparency { get; set; }
 
 		public PanelSettings () {

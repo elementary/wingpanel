@@ -18,7 +18,7 @@
 public class Wingpanel.Widgets.Panel : Gtk.Box {
 	private static const double ALPHA_ANIMATION_STEP = 0.05;
 
-	private Services.PopoverManager popover_manager;
+	public Services.PopoverManager popover_manager { get; construct; }
 
 	private IndicatorMenuBar right_menubar;
 	private MenuBar left_menubar;
@@ -28,9 +28,8 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 	private double alpha_animation_target = 0;
 
 	public Panel (Services.PopoverManager popover_manager) {
-		Object (orientation: Gtk.Orientation.HORIZONTAL);
+		Object (popover_manager: popover_manager, orientation: Gtk.Orientation.HORIZONTAL);
 
-		this.popover_manager = popover_manager;
 		this.set_size_request (-1, 24);
 
 		this.hexpand = true;
@@ -40,60 +39,42 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 
 		left_menubar = new MenuBar ();
 		left_menubar.halign = Gtk.Align.START;
-
 		this.pack_start (left_menubar);
 
 		center_menubar = new MenuBar ();
-
 		this.set_center_widget (center_menubar);
 
 		right_menubar = new IndicatorMenuBar ();
 		right_menubar.halign = Gtk.Align.END;
-
 		this.pack_end (right_menubar);
 
-		load_indicators ();
+		unowned IndicatorManager indicator_manager = IndicatorManager.get_default ();
+		indicator_manager.get_indicators ().@foreach ((indicator) => {
+			add_indicator (indicator);
 
-		IndicatorManager.get_default ().indicator_added.connect ((indicator) => {
-			show_indicator (indicator);
+			return true;
 		});
-
-		IndicatorManager.get_default ().indicator_removed.connect ((indicator) => {
-			remove_indicator (indicator);
-		});
+		indicator_manager.indicator_added.connect (add_indicator);
+		indicator_manager.indicator_removed.connect (remove_indicator);
 
 		Services.BackgroundManager.get_default ().alpha_updated.connect (animate_background);
 	}
 
-	private void load_indicators () {
-		IndicatorManager.get_default ().get_indicators ().@foreach ((indicator) => {
-			show_indicator (indicator);
-
-			return true;
-		});
-	}
-
-	private void show_indicator (Indicator indicator) {
+	private void add_indicator (Indicator indicator) {
 		var indicator_entry = new IndicatorEntry (indicator, popover_manager);
 
 		switch (indicator.code_name) {
 			case Indicator.APP_LAUNCHER:
 				indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_RIGHT);
-
 				left_menubar.add (indicator_entry);
-
 				break;
 			case Indicator.DATETIME:
 				indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_DOWN);
-
 				center_menubar.add (indicator_entry);
-
 				break;
 			default:
 				indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_LEFT);
-
 				right_menubar.insert_sorted (indicator_entry);
-
 				break;
 		}
 
@@ -107,13 +88,12 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 	}
 
 	private void remove_indicator_from_container (Gtk.Container container, Indicator indicator) {
-		foreach (var child in container.get_children ()) {
-			if (child is IndicatorEntry){
-				if ((child as IndicatorEntry).base_indicator == indicator) {
+		foreach (unowned Gtk.Widget child in container.get_children ()) {
+			unowned IndicatorEntry? entry = (child as IndicatorEntry);
+			if (entry != null && entry.base_indicator == indicator) {
 					container.remove (child);
 
 					return;
-				}
 			}
 		}
 	}
@@ -121,7 +101,6 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 	private void animate_background (double alpha, uint animation_duration) {
 		if (animation_duration == 0) {
 			current_alpha = alpha;
-
 			this.override_background_color (Gtk.StateFlags.NORMAL, {0, 0, 0, current_alpha});
 
 			return;
