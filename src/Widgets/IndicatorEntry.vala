@@ -43,8 +43,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
 		revealer.add (display_widget);
 
-		set_reveal (base_indicator.visible);
-
 		if (indicator_widget == null) {
 			this.button_press_event.connect ((e) => {
 				popover_manager.close ();
@@ -53,6 +51,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 				return Gdk.EVENT_PROPAGATE;
 			});
 			this.add (revealer);
+			set_reveal (base_indicator.visible);
 			return;
 		}
 
@@ -130,6 +129,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 		});
 
 		this.add (revealer);
+		set_reveal (base_indicator.visible);
 	}
 
 	public void set_transition_type (Gtk.RevealerTransitionType transition_type) {
