@@ -24,6 +24,7 @@ set (LIB_SOURCE
   Widgets/Switch.vala
   Widgets/Separator.vala
   Widgets/OverlayIcon.vala
+  Widgets/AutomaticScrollBox.vala
 )
 
 if (BUILD_SHARED_LIBS)
