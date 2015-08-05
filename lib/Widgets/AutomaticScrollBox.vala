@@ -21,37 +21,39 @@
  **/
 public class Wingpanel.Widgets.AutomaticScrollBox : Gtk.ScrolledWindow {
 
+    /** The maximal height of the scroll box before it starts scrolling. **/
     public int max_height { default = 512; get; set; }
 
     /** The adjustments are here to ensure the compatibility with Gtk.ScrolledWindow,
      * but you should probably not use them, as the height of this widget is dynamic.
      **/
     public AutomaticScrollBox (Gtk.Adjustment? hadj = null, Gtk.Adjustment? vadj = null) {
-        set_hadjustment (hadj);
-        set_vadjustment (vadj);
+        Object (hadjustment:hadj, vadjustment:vadj);
 
-        notify["max-height"].connect( () => {
-            queue_resize ();
-        });
+        notify["max-height"].connect(queue_resize);
     }
 
     public override void get_preferred_height_for_width (int width, out int minimum_height, out int natural_height) {
-        minimum_height = natural_height = 0;
-        if (get_child () != null) {
-            get_child ().get_preferred_height_for_width(width, out minimum_height, out natural_height);
+        Gtk.Widget child = get_child ();
+        if (child != null) {
+            child.get_preferred_height_for_width(width, out minimum_height, out natural_height);
 
             minimum_height = int.min (max_height, minimum_height);
             natural_height = int.min (max_height, natural_height);
+        } else {
+            minimum_height = natural_height = 0;
         }
     }
 
     public override void get_preferred_height (out int minimum_height, out int natural_height) {
-        minimum_height = natural_height = 0;
-        if (get_child () != null) {
-            get_child ().get_preferred_height(out minimum_height, out natural_height);
+        Gtk.Widget child = get_child ();
+        if (child != null) {
+            child.get_preferred_height(out minimum_height, out natural_height);
 
             minimum_height = int.min (max_height, minimum_height);
             natural_height = int.min (max_height, natural_height);
+        } else {
+            minimum_height = natural_height = 0;
         }
     }
 }
