@@ -15,19 +15,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** A scroll box that takes its child's height, unless that height is more than max_height.
+/**
+ * A scroll box that takes its child's height, unless that height is more than max_height.
  * If it is actually higher than max_height, then it will stick to max_height.
- **/
+ */
 public class Wingpanel.Widgets.AutomaticScrollBox : Gtk.ScrolledWindow {
-    /** The maximal height of the scroll box before it starts scrolling. **/
+    /**
+     * The maximal height of the scroll box before it starts scrolling.
+     */
     public int max_height { default = 512; get; set; }
 
-    /** The adjustments are here to ensure the compatibility with Gtk.ScrolledWindow,
+    /**
+     *The adjustments are here to ensure the compatibility with Gtk.ScrolledWindow,
      * but you should probably not use them, as the height of this widget is dynamic.
-     **/
+     */
     public AutomaticScrollBox (Gtk.Adjustment? hadj = null, Gtk.Adjustment? vadj = null) {
         Object (hadjustment:hadj, vadjustment:vadj);
+    }
 
+    construct {
         notify["max-height"].connect(queue_resize);
     }
 
