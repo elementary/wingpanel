@@ -38,7 +38,7 @@ public class Wingpanel.Widgets.AutomaticScrollBox : Gtk.ScrolledWindow {
     }
 
     public override void get_preferred_height_for_width (int width, out int minimum_height, out int natural_height) {
-        Gtk.Widget child = get_child ();
+        unowned Gtk.Widget child = get_child ();
         if (child != null) {
             child.get_preferred_height_for_width(width, out minimum_height, out natural_height);
 
@@ -50,7 +50,7 @@ public class Wingpanel.Widgets.AutomaticScrollBox : Gtk.ScrolledWindow {
     }
 
     public override void get_preferred_height (out int minimum_height, out int natural_height) {
-        Gtk.Widget child = get_child ();
+        unowned Gtk.Widget child = get_child ();
         if (child != null) {
             child.get_preferred_height(out minimum_height, out natural_height);
 
