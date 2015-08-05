@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** A scroll box that will takes it child height unless it is higher than 512
+/** A scroll box that will take its child height unless it is higher than 512
  * (i.e. the value of max_height).
  * If it is actually higher than max_height, then it will stick to max_height.
  **/
