@@ -31,9 +31,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 		this.get_style_context ().add_class (StyleClass.COMPOSITED_INDICATOR);
 
 		display_widget = base_indicator.get_display_widget ();
-		indicator_widget = base_indicator.get_widget ();
-
-		revealer = new Gtk.Revealer ();
 
 		if (display_widget == null)
 			return;
@@ -41,7 +38,11 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 		display_widget.margin_start = 4;
 		display_widget.margin_end = 4;
 
+		revealer = new Gtk.Revealer ();
+		this.add (revealer);
 		revealer.add (display_widget);
+
+		indicator_widget = base_indicator.get_widget ();
 
 		if (indicator_widget == null) {
 			this.button_press_event.connect ((e) => {
@@ -50,7 +51,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
 				return Gdk.EVENT_PROPAGATE;
 			});
-			this.add (revealer);
 			set_reveal (base_indicator.visible);
 			return;
 		}
@@ -114,10 +114,11 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 		this.button_press_event.connect ((e) => {
 			if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
 				&& e.type == Gdk.EventType.BUTTON_PRESS) {
-				if (popover.get_visible ())
+				if (popover.get_visible ()) {
 					popover.hide ();
-				else
+				} else {
 					popover.show_all ();
+				}
 
 				return Gdk.EVENT_STOP;
 			}
@@ -128,7 +129,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 			return Gdk.EVENT_PROPAGATE;
 		});
 
-		this.add (revealer);
 		set_reveal (base_indicator.visible);
 	}
 
