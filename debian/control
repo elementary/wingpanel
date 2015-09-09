@@ -75,7 +75,7 @@ Description: Library to build plugins for WingPanel (development files)
 
 Package: libwingpanel-dev
 Architecture: all
-Section: oldlib
+Section: oldlibs
 Depends: libwingpanel-2.0-dev
 Description: Library to build plugins for WingPanel (development files)
  A replacement for the traditional GNOME Panel, designed to be a lightweight
