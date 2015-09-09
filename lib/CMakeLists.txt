@@ -5,7 +5,7 @@
 set (CONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/config.vala)
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
 set (DOLLAR "$") # You hear that? It's kittens being killed by the gods of cmake
-set (LIB_VERSION 0.2.0)
+set (LIB_VERSION 2.0)
 set (LIB_VERSION ${LIB_VERSION} PARENT_SCOPE)
 set (LIB_SOVERSION 0)
 set (LIB_SOVERSION ${LIB_SOVERSION} PARENT_SCOPE)
@@ -60,7 +60,7 @@ add_library (${LIB_NAME} ${LINK_MODE} ${LIB_VALA_C})
 
 set_target_properties (${LIB_NAME} PROPERTIES
   OUTPUT_NAME ${LIB_NAME}
-  VERSION ${LIB_VERSION}
+  VERSION ${LIB_SOVERSION}.${LIB_VERSION}
   SOVERSION ${LIB_SOVERSION}
 )
 
