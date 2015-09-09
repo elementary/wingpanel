@@ -70,11 +70,11 @@ add_subdirectory(po)
 #
 
 set (LIB_PACKAGES
-  glib-2.0>=2.32
+  glib-2.0
   gio-2.0
   gee-0.8
   gmodule-2.0
-  gtk+-3.0>=3.14
+  gtk+-3.0
 )
 
 set (LIB_PKG
