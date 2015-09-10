@@ -53,6 +53,8 @@ Package: libwingpanel-2.0-0
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Multi-Arch: same
+Conflicts: libwingpanel0
+Replaces: libwingpanel0
 Description: A super sexy space-saving top panel
  A replacement for the traditional GNOME Panel, designed to be a lightweight
  container for system/application indicators and notification icons.
@@ -72,14 +74,3 @@ Description: Library to build plugins for WingPanel (development files)
  Designed by elementary Project.
  .
  This package contains the development files used for wingpanel.
-
-Package: libwingpanel-dev
-Architecture: all
-Section: oldlibs
-Depends: libwingpanel-2.0-dev
-Description: Library to build plugins for WingPanel (development files)
- A replacement for the traditional GNOME Panel, designed to be a lightweight
- container for system/application indicators and notification icons.
- Designed by elementary Project.
- .
- This is a transitional package and can be removed safely.
