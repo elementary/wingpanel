@@ -97,6 +97,7 @@ public class Wingpanel.Widgets.Switch : Container {
 		var switch_widget = new Gtk.Switch ();
 		switch_widget.active = active;
 		switch_widget.halign = Gtk.Align.END;
+		switch_widget.margin_end = 6;
 		switch_widget.hexpand = true;
 
 		return switch_widget;
