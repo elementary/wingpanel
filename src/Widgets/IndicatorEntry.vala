@@ -1,145 +1,151 @@
-/*-
- * Copyright (c) 2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+/*
+ * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Library General Public License as published by
- * the Free Software Foundation, either version 2.1 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Library General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
  */
 
 public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
-	private Gtk.Widget display_widget;
-	private Gtk.Widget indicator_widget;
+    private Gtk.Widget display_widget;
+    private Gtk.Widget indicator_widget;
 
-	private Gtk.Revealer revealer;
+    private Gtk.Revealer revealer;
 
-	private IndicatorPopover popover;
-	public Indicator base_indicator;
-	public IndicatorMenuBar? menu_bar;
+    private IndicatorPopover popover;
+    public Indicator base_indicator;
+    public IndicatorMenuBar? menu_bar;
 
-	public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
-		this.base_indicator = base_indicator;
-		this.halign = Gtk.Align.START;
-		this.get_style_context ().add_class (StyleClass.COMPOSITED_INDICATOR);
+    public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
+        this.base_indicator = base_indicator;
+        this.halign = Gtk.Align.START;
+        this.get_style_context ().add_class (StyleClass.COMPOSITED_INDICATOR);
 
-		display_widget = base_indicator.get_display_widget ();
+        display_widget = base_indicator.get_display_widget ();
 
-		if (display_widget == null)
-			return;
+        if (display_widget == null) {
+            return;
+        }
 
-		display_widget.margin_start = 4;
-		display_widget.margin_end = 4;
+        display_widget.margin_start = 4;
+        display_widget.margin_end = 4;
 
-		revealer = new Gtk.Revealer ();
-		this.add (revealer);
-		revealer.add (display_widget);
+        revealer = new Gtk.Revealer ();
+        this.add (revealer);
+        revealer.add (display_widget);
 
-		indicator_widget = base_indicator.get_widget ();
+        indicator_widget = base_indicator.get_widget ();
 
-		if (indicator_widget == null) {
-			this.button_press_event.connect ((e) => {
-				popover_manager.close ();
-				display_widget.button_press_event (e);
+        if (indicator_widget == null) {
+            this.button_press_event.connect ((e) => {
+                popover_manager.close ();
+                display_widget.button_press_event (e);
 
-				return Gdk.EVENT_PROPAGATE;
-			});
-			set_reveal (base_indicator.visible);
-			return;
-		}
+                return Gdk.EVENT_PROPAGATE;
+            });
+            set_reveal (base_indicator.visible);
 
-		popover = new IndicatorPopover (indicator_widget);
-		popover.relative_to = this;
+            return;
+        }
 
-		if (base_indicator.visible)
-			popover_manager.register_popover (this, popover);
+        popover = new IndicatorPopover (indicator_widget);
+        popover.relative_to = this;
 
-		base_indicator.close.connect (() => {
-			popover_manager.close ();
-		});
+        if (base_indicator.visible) {
+            popover_manager.register_popover (this, popover);
+        }
 
-		base_indicator.notify["visible"].connect (() => {
-			if (menu_bar != null) {
-				// order will be changed so close all open popovers
-				popover_manager.close ();
+        base_indicator.close.connect (() => {
+            popover_manager.close ();
+        });
 
-				if (base_indicator.visible) {
-					popover_manager.register_popover (this, popover);
-					menu_bar.apply_new_order ();
-					set_reveal (base_indicator.visible);
-				} else {
-					set_reveal (base_indicator.visible);
-					popover_manager.unregister_popover (this);
+        base_indicator.notify["visible"].connect (() => {
+            if (menu_bar != null) {
+                /* order will be changed so close all open popovers */
+                popover_manager.close ();
 
-					Timeout.add (revealer.get_transition_duration () , () => {
-						menu_bar.apply_new_order ();
+                if (base_indicator.visible) {
+                    popover_manager.register_popover (this, popover);
+                    menu_bar.apply_new_order ();
+                    set_reveal (base_indicator.visible);
+                } else {
+                    set_reveal (base_indicator.visible);
+                    popover_manager.unregister_popover (this);
 
-						return false;
-					});
-				}
-			} else {
-				set_reveal (base_indicator.visible);
-			}
-		});
+                    Timeout.add (revealer.get_transition_duration (), () => {
+                        menu_bar.apply_new_order ();
 
-		add_events (Gdk.EventMask.SCROLL_MASK);
+                        return false;
+                    });
+                }
+            } else {
+                set_reveal (base_indicator.visible);
+            }
+        });
 
-		this.scroll_event.connect ((e) => {
-			display_widget.scroll_event (e);
+        add_events (Gdk.EventMask.SCROLL_MASK);
 
-			return Gdk.EVENT_PROPAGATE;
-		});
+        this.scroll_event.connect ((e) => {
+            display_widget.scroll_event (e);
 
-		this.touch_event.connect ((e) => {
-			if (e.type == Gdk.EventType.TOUCH_BEGIN) {
-				if (popover.get_visible ()) {
-					popover.hide ();
-				} else {
-					popover.show_all ();
-				}
+            return Gdk.EVENT_PROPAGATE;
+        });
 
-				return Gdk.EVENT_STOP;
-			}
+        this.touch_event.connect ((e) => {
+            if (e.type == Gdk.EventType.TOUCH_BEGIN) {
+                if (popover.get_visible ()) {
+                    popover.hide ();
+                } else {
+                    popover.show_all ();
+                }
 
-			return Gdk.EVENT_PROPAGATE;
-		});
+                return Gdk.EVENT_STOP;
+            }
 
-		this.button_press_event.connect ((e) => {
-			if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
-				&& e.type == Gdk.EventType.BUTTON_PRESS) {
-				if (popover.get_visible ()) {
-					popover.hide ();
-				} else {
-					popover.show_all ();
-				}
+            return Gdk.EVENT_PROPAGATE;
+        });
 
-				return Gdk.EVENT_STOP;
-			}
+        this.button_press_event.connect ((e) => {
+            if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
+                && e.type == Gdk.EventType.BUTTON_PRESS) {
+                if (popover.get_visible ()) {
+                    popover.hide ();
+                } else {
+                    popover.show_all ();
+                }
 
-			// Call button press on the indicator display widget
-			display_widget.button_press_event (e);
+                return Gdk.EVENT_STOP;
+            }
 
-			return Gdk.EVENT_PROPAGATE;
-		});
+            /* Call button press on the indicator display widget */
+            display_widget.button_press_event (e);
 
-		set_reveal (base_indicator.visible);
-	}
+            return Gdk.EVENT_PROPAGATE;
+        });
 
-	public void set_transition_type (Gtk.RevealerTransitionType transition_type) {
-		revealer.set_transition_type (transition_type);
-	}
+        set_reveal (base_indicator.visible);
+    }
 
-	private void set_reveal (bool reveal) {
-		if (!reveal && popover.get_visible ())
-			popover.hide ();
+    public void set_transition_type (Gtk.RevealerTransitionType transition_type) {
+        revealer.set_transition_type (transition_type);
+    }
 
-		revealer.set_reveal_child (reveal);
-	}
+    private void set_reveal (bool reveal) {
+        if (!reveal && popover.get_visible ()) {
+            popover.hide ();
+        }
+
+        revealer.set_reveal_child (reveal);
+    }
 }
