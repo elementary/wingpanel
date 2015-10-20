@@ -1,185 +1,207 @@
 /*
- * Copyright 2015 Ikey Doherty <ikey@solus-project.com>
- * 2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ * Copyright (c) 2011-2015 Ikey Doherty <ikey@solus-project.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
  */
 
 public class Wingpanel.Services.PopoverManager : Object {
-	private HashTable<Gtk.Widget?, Gtk.Popover?> widgets;
-	private HashTable<Gtk.Popover?, Wingpanel.Widgets.IndicatorEntry?> popovers;
+    private HashTable<Gtk.Widget? , Gtk.Popover? > widgets;
+    private HashTable<Gtk.Popover? , Wingpanel.Widgets.IndicatorEntry? > popovers;
 
-	private unowned Wingpanel.PanelWindow? owner;
-	private unowned Gtk.Popover? visible_popover = null;
+    private unowned Wingpanel.PanelWindow? owner;
+    private unowned Gtk.Popover? visible_popover = null;
 
-	private bool grabbed = false;
-	private bool mousing = false;
+    private bool grabbed = false;
+    private bool mousing = false;
 
-	public PopoverManager (Wingpanel.PanelWindow? owner) {
-		this.owner = owner;
+    public PopoverManager (Wingpanel.PanelWindow? owner) {
+        this.owner = owner;
 
-		widgets = new HashTable<Gtk.Widget?, Gtk.Popover?> (direct_hash, direct_equal);
-		popovers = new HashTable<Gtk.Popover?, Wingpanel.Widgets.IndicatorEntry?> (direct_hash, direct_equal);
+        widgets = new HashTable<Gtk.Widget? , Gtk.Popover? > (direct_hash, direct_equal);
+        popovers = new HashTable<Gtk.Popover? , Wingpanel.Widgets.IndicatorEntry? > (direct_hash, direct_equal);
 
-		owner.focus_out_event.connect (() => {
-			if (mousing)
-				return Gdk.EVENT_PROPAGATE;
+        owner.focus_out_event.connect (() => {
+            if (mousing) {
+                return Gdk.EVENT_PROPAGATE;
+            }
 
-			if (visible_popover != null)
-				hide_popover ();
+            if (visible_popover != null) {
+                hide_popover ();
+            }
 
-			return Gdk.EVENT_PROPAGATE;
-		});
+            return Gdk.EVENT_PROPAGATE;
+        });
 
-		owner.button_press_event.connect ((w,e) => {
-			if (!grabbed)
-				return Gdk.EVENT_PROPAGATE;
+        owner.button_press_event.connect ((w, e) => {
+            if (!grabbed) {
+                return Gdk.EVENT_PROPAGATE;
+            }
 
-			Gtk.Allocation allocation;
-			visible_popover.get_allocation (out allocation);
+            Gtk.Allocation allocation;
+            visible_popover.get_allocation (out allocation);
 
-			if ((e.x < allocation.x || e.x > allocation.x + allocation.width) || (e.y < allocation.y || e.y > allocation.y + allocation.height)) {
-				hide_popover ();
-				owner.set_expanded (false);
-			}
+            if ((e.x < allocation.x || e.x > allocation.x + allocation.width) || (e.y < allocation.y || e.y > allocation.y + allocation.height)) {
+                hide_popover ();
+                owner.set_expanded (false);
+            }
 
-			return Gdk.EVENT_STOP;
-		});
+            return Gdk.EVENT_STOP;
+        });
 
-		owner.add_events (Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.BUTTON_PRESS_MASK);
-	}
+        owner.add_events (Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.BUTTON_PRESS_MASK);
+    }
 
-	private void hide_popover () {
-		visible_popover.hide ();
-		make_modal (visible_popover, false);
-		visible_popover = null;
-	}
+    private void hide_popover () {
+        visible_popover.hide ();
+        make_modal (visible_popover, false);
+        visible_popover = null;
+    }
 
-	private void make_modal (Gtk.Popover? pop, bool modal = true) {
-		if (pop == null || pop.get_window () == null || mousing)
-			return;
+    private void make_modal (Gtk.Popover? pop, bool modal = true) {
+        if (pop == null || pop.get_window () == null || mousing) {
+            return;
+        }
 
-		if (modal) {
-			if (grabbed)
-				return;
+        if (modal) {
+            if (grabbed) {
+                return;
+            }
 
-			Gtk.grab_add (owner);
-			owner.set_focus (null);
-			pop.grab_focus ();
-			grabbed = true;
-		} else {
-			if (!grabbed)
-				return;
+            Gtk.grab_add (owner);
+            owner.set_focus (null);
+            pop.grab_focus ();
+            grabbed = true;
+        } else {
+            if (!grabbed) {
+                return;
+            }
 
-			Gtk.grab_remove (owner);
-			owner.grab_focus ();
-			grabbed = false;
-		}
-	}
+            Gtk.grab_remove (owner);
+            owner.grab_focus ();
+            grabbed = false;
+        }
+    }
 
-	public void close () {
-		if (visible_popover != null) {
-			hide_popover ();
-			owner.set_expanded (false);
-		}
-	}
+    public void close () {
+        if (visible_popover != null) {
+            hide_popover ();
+            owner.set_expanded (false);
+        }
+    }
 
-	public void unregister_popover (Gtk.Widget? widg) {
-		if (!widgets.contains (widg))
-			return;
-		var popover = widgets[widg];
-		popovers.remove (popover);
-		widgets.remove (widg);
-	}
+    public void unregister_popover (Gtk.Widget? widg) {
+        if (!widgets.contains (widg)) {
+            return;
+        }
 
-	public void register_popover (Wingpanel.Widgets.IndicatorEntry? widg, Gtk.Popover? popover) {
-		if (widgets.contains (widg))
-			return;
+        var popover = widgets[widg];
+        popovers.remove (popover);
+        widgets.remove (widg);
+    }
 
-		widg.can_focus = false;
+    public void register_popover (Wingpanel.Widgets.IndicatorEntry? widg, Gtk.Popover? popover) {
+        if (widgets.contains (widg)) {
+            return;
+        }
 
-		popover.show.connect ((p) => {
-			widg.base_indicator.opened ();
-			owner.set_expanded (true);
-			owner.present ();
-			this.visible_popover = p as Gtk.Popover;
-			make_modal (this.visible_popover);
-		});
+        widg.can_focus = false;
 
-		popover.closed.connect ((p) => {
-			if (!mousing && grabbed) {
-				make_modal (p, false);
-				popovers[visible_popover].base_indicator.closed ();
-				visible_popover.hide ();
-				visible_popover = null;
-				owner.set_expanded (false);
-			}
-		});
+        popover.show.connect ((p) => {
+            widg.base_indicator.opened ();
+            owner.set_expanded (true);
+            owner.present ();
+            this.visible_popover = p as Gtk.Popover;
+            make_modal (this.visible_popover);
+        });
 
-		popover.leave_notify_event.connect ((e) => {
-			if (e.mode != Gdk.CrossingMode.NORMAL) {
-				hide_popover ();
-			}
-			return Gdk.EVENT_PROPAGATE;
-		});
+        popover.closed.connect ((p) => {
+            if (!mousing && grabbed) {
+                make_modal (p, false);
+                popovers[visible_popover].base_indicator.closed ();
+                visible_popover.hide ();
+                visible_popover = null;
+                owner.set_expanded (false);
+            }
+        });
 
-		widg.enter_notify_event.connect ((w,e) => {
-			owner.set_expanded (true);
+        popover.leave_notify_event.connect ((e) => {
+            if (e.mode != Gdk.CrossingMode.NORMAL) {
+                hide_popover ();
+            }
 
-			if (mousing)
-				return Gdk.EVENT_PROPAGATE;
+            return Gdk.EVENT_PROPAGATE;
+        });
 
-			if (grabbed) {
-				if (widgets.contains (w)) {
-					if (visible_popover != widgets[w] && visible_popover != null) {
-						// Hide current popover, re-open next
-						mousing = true;
+        widg.enter_notify_event.connect ((w, e) => {
+            owner.set_expanded (true);
 
-						visible_popover.hide ();
-						popovers[visible_popover].base_indicator.closed ();
+            if (mousing) {
+                return Gdk.EVENT_PROPAGATE;
+            }
 
-						visible_popover = widgets[w];
+            if (grabbed) {
+                if (widgets.contains (w)) {
+                    if (visible_popover != widgets[w] && visible_popover != null) {
+                        /* Hide current popover, re-open next */
+                        mousing = true;
 
-						visible_popover.show_all ();
-						owner.set_focus (null);
-						visible_popover.grab_focus ();
+                        visible_popover.hide ();
+                        popovers[visible_popover].base_indicator.closed ();
 
-						mousing = false;
-					}
-				}
+                        visible_popover = widgets[w];
 
-				return Gdk.EVENT_STOP;
-			}
+                        visible_popover.show_all ();
+                        owner.set_focus (null);
+                        visible_popover.grab_focus ();
 
-			return Gdk.EVENT_PROPAGATE;
-		});
+                        mousing = false;
+                    }
+                }
 
-		widg.leave_notify_event.connect (() => {
-			if (visible_popover == null)
-				owner.set_expanded (false);
+                return Gdk.EVENT_STOP;
+            }
 
-			return Gdk.EVENT_PROPAGATE;
-		});
+            return Gdk.EVENT_PROPAGATE;
+        });
 
-		popover.notify["visible"].connect (() => {
-			if (mousing || grabbed)
-				return;
+        widg.leave_notify_event.connect (() => {
+            if (visible_popover == null) {
+                owner.set_expanded (false);
+            }
 
-			if (!popover.get_visible ()) {
-				make_modal (visible_popover, false);
-				visible_popover = null;
-			}
-		});
+            return Gdk.EVENT_PROPAGATE;
+        });
 
-		popover.destroy.connect ((w) => {
-			widgets.remove (w);
-		});
+        popover.notify["visible"].connect (() => {
+            if (mousing || grabbed) {
+                return;
+            }
 
-		popover.modal = false;
-		widgets.insert (widg, popover);
-		popovers.insert (popover, widg);
-	}
+            if (!popover.get_visible ()) {
+                make_modal (visible_popover, false);
+                visible_popover = null;
+            }
+        });
+
+        popover.destroy.connect ((w) => {
+            widgets.remove (w);
+        });
+
+        popover.modal = false;
+        widgets.insert (widg, popover);
+        popovers.insert (popover, widg);
+    }
 }
