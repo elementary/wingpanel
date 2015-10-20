@@ -19,15 +19,15 @@
 
 [DBus (name = "org.pantheon.gala.WingpanelInterface")]
 public class WingpanelInterface.DBusServer : Object {
-    public signal void alpha_changed (uint animation_duration);
-    public signal void wallpaper_changed ();
+    private AlphaManager alpha_manager;
 
-    public BackgroundAlpha get_alpha (int monitor) {
-        return AlphaManager.get_default ().get_alpha_mode (monitor);
-    }
+    public signal void state_changed (BackgroundState state, uint animation_duration);
 
-    public async double get_background_alpha (int monitor, int panel_height) {
-        return yield AlphaManager.get_default ().calculate_alpha_for_background (monitor, panel_height);
+    public void initialize (int monitor, int panel_height) {
+        alpha_manager = new AlphaManager (monitor, panel_height);
+        alpha_manager.state_changed.connect ((state, animation_duration) => {
+            state_changed (state, animation_duration);
+        });
     }
 
     public void remember_focused_window () {

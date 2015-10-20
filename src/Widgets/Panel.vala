@@ -26,11 +26,11 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
     private MenuBar left_menubar;
     private MenuBar center_menubar;
 
-    private double current_alpha;
-    private double alpha_animation_target = 0;
+    private Gtk.StyleContext style_context;
+    private Gtk.CssProvider? style_provider = null;
 
     public Panel (Services.PopoverManager popover_manager) {
-        Object (popover_manager: popover_manager, orientation: Gtk.Orientation.HORIZONTAL);
+        Object (popover_manager : popover_manager, orientation: Gtk.Orientation.HORIZONTAL);
 
         this.set_size_request (-1, 24);
 
@@ -59,7 +59,9 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
         indicator_manager.indicator_added.connect (add_indicator);
         indicator_manager.indicator_removed.connect (remove_indicator);
 
-        Services.BackgroundManager.get_default ().alpha_updated.connect (animate_background);
+        style_context = this.get_style_context ();
+
+        Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
     }
 
     private void add_indicator (Indicator indicator) {
@@ -101,53 +103,40 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
         }
     }
 
-    private void animate_background (double alpha, uint animation_duration) {
-        if (animation_duration == 0) {
-            current_alpha = alpha;
-            this.override_background_color (Gtk.StateFlags.NORMAL, { 0, 0, 0, current_alpha });
-
-            return;
+    private void update_background (Services.BackgroundState state, uint animation_duration) {
+        if (style_provider == null) {
+            style_provider = new Gtk.CssProvider ();
+            style_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         }
 
-        if (alpha_animation_target == alpha) {
-            return;
-        }
-
-        alpha_animation_target = alpha;
-
-        assert (ALPHA_ANIMATION_STEP > 0);
-
-        if (current_alpha - alpha == 0) {
-            return;
-        }
-
-        int step_count = ((int)((current_alpha - alpha) / ALPHA_ANIMATION_STEP)).abs ();
-
-        if (step_count <= 0) {
-            return;
-        }
-
-        Timeout.add (animation_duration / step_count, () => {
-            /* Has another animation started? */
-            if (alpha_animation_target != alpha) {
-                return false;
+        string css = """
+            .panel {
+                transition: all %ums ease-in-out;
             }
+        """.printf (animation_duration);
 
-            var cont = false;
+        try {
+            style_provider.load_from_data (css, css.length);
+        } catch (Error e) {
+            warning ("Parsing own style configuration failed: %s", e.message);
+        }
 
-            if (current_alpha < alpha_animation_target) {
-                current_alpha += ALPHA_ANIMATION_STEP;
-
-                cont = current_alpha < alpha_animation_target;
-            } else {
-                current_alpha -= ALPHA_ANIMATION_STEP;
-
-                cont = current_alpha > alpha_animation_target;
-            }
-
-            this.override_background_color (Gtk.StateFlags.NORMAL, { 0, 0, 0, current_alpha });
-
-            return cont;
-        });
+        switch (state) {
+            case Services.BackgroundState.LIGHT :
+                style_context.add_class ("color-light");
+                style_context.remove_class ("color-dark");
+                style_context.remove_class ("maximized");
+                break;
+            case Services.BackgroundState.DARK:
+                style_context.add_class ("color-dark");
+                style_context.remove_class ("color-light");
+                style_context.remove_class ("maximized");
+                break;
+            case Services.BackgroundState.MAXIMIZED:
+                style_context.add_class ("maximized");
+                style_context.remove_class ("color-light");
+                style_context.remove_class ("color-dark");
+                break;
+        }
     }
 }
