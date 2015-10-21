@@ -122,12 +122,12 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
         }
 
         switch (state) {
-            case Services.BackgroundState.LIGHT :
+            case Services.BackgroundState.DARK :
                 style_context.add_class ("color-light");
                 style_context.remove_class ("color-dark");
                 style_context.remove_class ("maximized");
                 break;
-            case Services.BackgroundState.DARK:
+            case Services.BackgroundState.LIGHT:
                 style_context.add_class ("color-dark");
                 style_context.remove_class ("color-light");
                 style_context.remove_class ("maximized");
