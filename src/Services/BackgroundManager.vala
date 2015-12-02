@@ -102,7 +102,7 @@ namespace Wingpanel.Services {
         }
 
         private void state_updated (uint animation_duration = 0) {
-            background_state_changed (use_transparency ? current_state : BackgroundState.DARK, animation_duration);
+            background_state_changed (use_transparency ? current_state : BackgroundState.MAXIMIZED, animation_duration);
         }
 
         public static BackgroundManager get_default () {
