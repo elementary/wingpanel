@@ -18,19 +18,17 @@
  */
 
 namespace Wingpanel.Services {
-    public enum BackgroundAlpha {
-        DARKEST,
-        LIGHTEST
+    public enum BackgroundState {
+        LIGHT,
+        DARK,
+        MAXIMIZED
     }
 
     [DBus (name = "org.pantheon.gala.WingpanelInterface")]
     public interface InterfaceBus : Object {
-        public signal void alpha_changed (uint animation_duration);
-        public signal void wallpaper_changed ();
+        public signal void state_changed (BackgroundState state, uint animation_duration);
 
-        public abstract BackgroundAlpha get_alpha (int screen) throws IOError;
-        public abstract async double get_background_alpha (int screen, int panel_height) throws IOError;
-
+        public abstract void initialize (int monitor, int panel_height) throws IOError;
         public abstract void remember_focused_window () throws IOError;
         public abstract void restore_focused_window () throws IOError;
     }
@@ -39,35 +37,40 @@ namespace Wingpanel.Services {
         private const string DBUS_NAME = "org.pantheon.gala.WingpanelInterface";
         private const string DBUS_PATH = "/org/pantheon/gala/WingpanelInterface";
 
-        private const int WALLPAPER_TRANSITION_DURATION = 150;
-
         private static BackgroundManager? instance = null;
 
         private InterfaceBus bus;
 
-        private int screen = 0;
-        private int panel_height = 0;
+        private BackgroundState current_state = BackgroundState.LIGHT;
+        private bool use_transparency = true;
 
-        private double suggested_alpha = 0;
-
-        public signal void alpha_updated (double alpha, uint animation_duration);
+        public signal void background_state_changed (BackgroundState state, uint animation_duration);
 
         public BackgroundManager () {
             if (!connect_dbus ()) {
                 return;
             }
 
-            bus.alpha_changed.connect (update_panel_alpha);
-            bus.wallpaper_changed.connect (() => update_suggested_alpha (WALLPAPER_TRANSITION_DURATION));
+            PanelSettings.get_default ().notify["use-transparency"].connect (() => {
+                use_transparency = PanelSettings.get_default ().use_transparency;
+                state_updated ();
+            });
 
-            PanelSettings.get_default ().notify["use-transparency"].connect (() => update_panel_alpha ());
-            InterfaceSettings.get_default ().notify["gtk-theme"].connect (() => update_panel_alpha ());
-
-            update_panel_alpha ();
+            use_transparency = PanelSettings.get_default ().use_transparency;
+            state_updated ();
         }
 
-        public void init (int screen) {
-            this.screen = screen;
+        public void initialize (int monitor, int panel_height) {
+            try {
+                bus.initialize (monitor, panel_height);
+            } catch (Error e) {
+                warning ("Initializing background manager failed: %s", e.message);
+            }
+
+            bus.state_changed.connect ((state, animation_duration) => {
+                current_state = state;
+                state_updated (animation_duration);
+            });
         }
 
         public void remember_window () {
@@ -86,13 +89,6 @@ namespace Wingpanel.Services {
             }
         }
 
-        public void update_panel_height (int panel_height) {
-            if (this.panel_height != panel_height) {
-                this.panel_height = panel_height;
-                update_suggested_alpha ();
-            }
-        }
-
         private bool connect_dbus () {
             try {
                 bus = Bus.get_proxy_sync (BusType.SESSION, DBUS_NAME, DBUS_PATH);
@@ -105,39 +101,8 @@ namespace Wingpanel.Services {
             return true;
         }
 
-        private bool check_use_transparency () {
-            return PanelSettings.get_default ().use_transparency &&
-                   InterfaceSettings.get_default ().gtk_theme != "HighContrast";
-        }
-
-        private void update_suggested_alpha (uint animation_duration = 0) {
-            bus.get_background_alpha.begin (screen, panel_height, (obj, res) => {
-                try {
-                    suggested_alpha = bus.get_background_alpha.end (res);
-
-                    update_panel_alpha (animation_duration);
-                } catch (Error e) {
-                    warning ("Updating suggested alpha failed: %s", e.message);
-                }
-            });
-        }
-
-        public void update_panel_alpha (uint animation_duration = 0) {
-            try {
-                if (check_use_transparency ()) {
-                    var alpha = bus.get_alpha (screen);
-
-                    if (alpha == BackgroundAlpha.DARKEST) {
-                        alpha_updated (1, animation_duration);
-                    } else if (alpha == BackgroundAlpha.LIGHTEST) {
-                        alpha_updated (suggested_alpha, animation_duration);
-                    }
-                } else {
-                    alpha_updated (1, animation_duration);
-                }
-            } catch (Error e) {
-                warning ("Cannot get alpha: %s", e.message);
-            }
+        private void state_updated (uint animation_duration = 0) {
+            background_state_changed (use_transparency ? current_state : BackgroundState.MAXIMIZED, animation_duration);
         }
 
         public static BackgroundManager get_default () {

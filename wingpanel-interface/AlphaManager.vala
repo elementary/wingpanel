@@ -17,65 +17,51 @@
  * Boston, MA 02111-1307, USA.
  */
 
-public enum BackgroundAlpha {
-    DARKEST,
-    LIGHTEST
+public enum BackgroundState {
+    LIGHT,
+    DARK,
+    MAXIMIZED
 }
 
 public class WingpanelInterface.AlphaManager : Object {
-    private const double MIN_ALPHA = 0.3;
+    private const int WALLPAPER_TRANSITION_DURATION = 150;
 
-    private static AlphaManager? instance = null;
+    public signal void state_changed (BackgroundState state, uint animation_duration);
 
-    public signal void alpha_updated (uint animation_duration);
-    public signal void wallpaper_updated ();
+    public int monitor { private get; construct; }
+    public int panel_height{ private get; construct; }
+
+    private ulong wallpaper_hook_id;
 
     private Meta.Workspace? current_workspace = null;
 
-    public AlphaManager () {
-        connect_signals ();
+    private BackgroundState current_state = BackgroundState.LIGHT;
+    private bool needs_dark_background = false;
 
+    public AlphaManager (int monitor, int panel_height) {
+        Object (monitor : monitor, panel_height: panel_height);
+
+        connect_signals ();
         update_current_workspace ();
+    }
+
+    ~AlphaManager () {
+        var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
+        GLib.Signal.remove_emission_hook (signal_id, wallpaper_hook_id);
     }
 
     private void connect_signals () {
         Main.screen.workspace_switched.connect (() => {
             update_current_workspace ();
-
-            alpha_updated (AnimationSettings.get_default ().workspace_switch_duration);
         });
 
         var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
 
-        GLib.Signal.add_emission_hook (signal_id, 0, (ihint, param_values) => {
-            wallpaper_updated ();
+        wallpaper_hook_id = GLib.Signal.add_emission_hook (signal_id, 0, (ihint, param_values) => {
+            update_alpha_state.begin ();
 
             return true;
         }, null);
-    }
-
-    public async double calculate_alpha_for_background (int monitor, int panel_height) {
-        var needs_background = yield Utils.background_needed (Main.wm, monitor, panel_height);
-
-        return needs_background ? MIN_ALPHA : 0;
-    }
-
-    public BackgroundAlpha get_alpha_mode (int monitor) {
-        if (current_workspace == null) {
-            return BackgroundAlpha.LIGHTEST;
-        }
-
-        var windows = current_workspace.list_windows ();
-
-        foreach (Meta.Window window in windows) {
-            if (window.get_monitor () == monitor) {
-                if (!window.minimized && window.maximized_vertically) {
-                    return BackgroundAlpha.DARKEST;
-                }
-            }
-        }
-
-        return BackgroundAlpha.LIGHTEST;
     }
 
     private void update_current_workspace () {
@@ -88,43 +74,74 @@ public class WingpanelInterface.AlphaManager : Object {
         }
 
         if (current_workspace != null) {
-            current_workspace.window_added.disconnect (register_window);
-            current_workspace.window_removed.disconnect (deregister_window);
+            current_workspace.window_added.disconnect (on_window_added);
+            current_workspace.window_removed.disconnect (on_window_removed);
         }
 
         current_workspace = workspace;
-
-        current_workspace.window_added.connect (register_window);
-        current_workspace.window_removed.connect (deregister_window);
 
         foreach (Meta.Window window in current_workspace.list_windows ()) {
             if (window.is_on_primary_monitor ()) {
                 register_window (window);
             }
         }
-    }
 
-    private void deregister_window (Meta.Window window) {
-        alpha_updated (AnimationSettings.get_default ().snap_duration);
+        current_workspace.window_added.connect (on_window_added);
+        current_workspace.window_removed.connect (on_window_removed);
+
+        check_for_state_change (AnimationSettings.get_default ().workspace_switch_duration);
     }
 
     private void register_window (Meta.Window window) {
         window.notify["maximized-vertically"].connect (() => {
-            alpha_updated (AnimationSettings.get_default ().snap_duration);
+            check_for_state_change (AnimationSettings.get_default ().snap_duration);
         });
 
         window.notify["minimized"].connect (() => {
-            alpha_updated (AnimationSettings.get_default ().minimize_duration);
+            check_for_state_change (AnimationSettings.get_default ().minimize_duration);
         });
-
-        alpha_updated (AnimationSettings.get_default ().snap_duration);
     }
 
-    public static AlphaManager get_default () {
-        if (instance == null) {
-            instance = new AlphaManager ();
+    private void on_window_added (Meta.Window window) {
+        register_window (window);
+
+        check_for_state_change (AnimationSettings.get_default ().snap_duration);
+    }
+
+    private void on_window_removed (Meta.Window window) {
+        check_for_state_change (AnimationSettings.get_default ().snap_duration);
+    }
+
+    public async void update_alpha_state () {
+        Utils.background_needed.begin (Main.wm, monitor, panel_height, (obj, res) => {
+            needs_dark_background = Utils.background_needed.end (res);
+
+            check_for_state_change (WALLPAPER_TRANSITION_DURATION);
+        });
+    }
+
+    private void check_for_state_change (uint animation_duration) {
+        bool has_maximized_window = false;
+
+        foreach (Meta.Window window in current_workspace.list_windows ()) {
+            if (window.get_monitor () == monitor) {
+                if (!window.minimized && window.maximized_vertically) {
+                    has_maximized_window = true;
+                    break;
+                }
+            }
         }
 
-        return instance;
+        BackgroundState new_state;
+
+        if (has_maximized_window) {
+            new_state = BackgroundState.MAXIMIZED;
+        } else {
+            new_state = needs_dark_background ? BackgroundState.DARK : BackgroundState.LIGHT;
+        }
+
+        if (new_state != current_state) {
+            state_changed (current_state = new_state, animation_duration);
+        }
     }
 }
