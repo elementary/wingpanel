@@ -113,7 +113,7 @@ public class WingpanelInterface.AlphaManager : Object {
     }
 
     public async void update_alpha_state () {
-        Utils.background_needed (Main.wm, monitor, panel_height, (obj, res) => {
+        Utils.background_needed.begin (Main.wm, monitor, panel_height, (obj, res) => {
             needs_dark_background = Utils.background_needed.end (res);
 
             check_for_state_change (WALLPAPER_TRANSITION_DURATION);
@@ -122,7 +122,6 @@ public class WingpanelInterface.AlphaManager : Object {
 
     private void check_for_state_change (uint animation_duration) {
         bool has_maximized_window = false;
-        print (needs_dark_background.to_string ());
 
         foreach (Meta.Window window in current_workspace.list_windows ()) {
             if (window.get_monitor () == monitor) {
