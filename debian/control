@@ -24,7 +24,6 @@ Depends: libwingpanel-2.0-0 (= ${binary:Version}),
          ${shlibs:Depends}
 Recommends: wingpanel-indicator-bluetooth,
             wingpanel-indicator-datetime,
-            wingpanel-indicator-launcher,
             wingpanel-indicator-network,
             wingpanel-indicator-notifications,
             wingpanel-indicator-power,
