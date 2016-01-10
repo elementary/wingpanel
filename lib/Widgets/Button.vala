@@ -22,28 +22,24 @@ public class Wingpanel.Widgets.Button : Container {
 
     private Gtk.Image button_image;
 
-    public Button (string caption, Gdk.Pixbuf? pixbuf = null) {
+    public Button (string caption, string? icon = null) {
         var content_widget = this.get_content_widget ();
 
-        button_image = create_image_for_pixbuf (pixbuf);
+        button_image = create_image_for_icon_name (icon);
         button_label = create_label_for_caption (caption);
 
         content_widget.attach (button_image, 0, 0, 1, 1);
         content_widget.attach (button_label, 1, 0, 1, 1);
-
-        connect_signals ();
     }
 
-    public Button.with_mnemonic (string caption, Gdk.Pixbuf? pixbuf = null) {
+    public Button.with_mnemonic (string caption, string? icon = null) {
         var content_widget = this.get_content_widget ();
 
-        button_image = create_image_for_pixbuf (pixbuf);
+        button_image = create_image_for_icon_name (icon);
         button_label = create_label_for_caption (caption, true);
 
         content_widget.attach (button_image, 0, 0, 1, 1);
         content_widget.attach (button_label, 1, 0, 1, 1);
-
-        connect_signals ();
     }
 
     public void set_caption (string caption) {
@@ -54,8 +50,22 @@ public class Wingpanel.Widgets.Button : Container {
         return button_label.get_label ();
     }
 
+    public void set_icon (string? icon_name) {
+        if (icon_name == null) {
+            button_image.visible = false;
+        } else {
+            button_image.set_from_icon_name (icon_name, Gtk.IconSize.BUTTON);
+            button_image.visible = true;
+        }
+    }
+
     public void set_pixbuf (Gdk.Pixbuf? pixbuf) {
         button_image.set_from_pixbuf (pixbuf);
+        if (pixbuf != null) {
+            button_image.visible = true;
+        } else {
+            button_image.visible = false;
+        }
     }
 
     public Gdk.Pixbuf? get_pixbuf () {
@@ -84,19 +94,17 @@ public class Wingpanel.Widgets.Button : Container {
         return label_widget;
     }
 
-    private Gtk.Image create_image_for_pixbuf (Gdk.Pixbuf? pixbuf) {
+    private Gtk.Image create_image_for_icon_name (string? icon_name) {
         var image = new Gtk.Image ();
-        image.pixbuf = pixbuf;
         image.margin_start = 6;
         image.no_show_all = true;
-        image.visible = pixbuf != null;
+        if (icon_name != null) {
+            image.set_from_icon_name (icon_name, Gtk.IconSize.BUTTON);
+            image.visible = true;
+        } else {
+            image.visible = false;
+        }
 
         return image;
-    }
-
-    private void connect_signals () {
-        button_image.notify["pixbuf"].connect (() => {
-            button_image.visible = button_image.get_pixbuf () != null;
-        });
     }
 }
