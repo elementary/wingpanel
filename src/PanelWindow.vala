@@ -18,9 +18,9 @@
  */
 
 public class Wingpanel.PanelWindow : Gtk.Window {
-    private Widgets.Panel panel;
+    public Services.PopoverManager popover_manager;
 
-    private Services.PopoverManager popover_manager;
+    private Widgets.Panel panel;
 
     private int monitor_number;
 
