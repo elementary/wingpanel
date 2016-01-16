@@ -22,20 +22,20 @@ public class Wingpanel.Widgets.Button : Container {
 
     private Gtk.Image button_image;
 
-    public Button (string caption, string? icon = null) {
+    public Button (string caption, string? icon_name = null) {
         var content_widget = this.get_content_widget ();
 
-        button_image = create_image_for_icon_name (icon);
+        button_image = create_image_for_icon_name (icon_name);
         button_label = create_label_for_caption (caption);
 
         content_widget.attach (button_image, 0, 0, 1, 1);
         content_widget.attach (button_label, 1, 0, 1, 1);
     }
 
-    public Button.with_mnemonic (string caption, string? icon = null) {
+    public Button.with_mnemonic (string caption, string? icon_name = null) {
         var content_widget = this.get_content_widget ();
 
-        button_image = create_image_for_icon_name (icon);
+        button_image = create_image_for_icon_name (icon_name);
         button_label = create_label_for_caption (caption, true);
 
         content_widget.attach (button_image, 0, 0, 1, 1);
@@ -61,11 +61,7 @@ public class Wingpanel.Widgets.Button : Container {
 
     public void set_pixbuf (Gdk.Pixbuf? pixbuf) {
         button_image.set_from_pixbuf (pixbuf);
-        if (pixbuf != null) {
-            button_image.visible = true;
-        } else {
-            button_image.visible = false;
-        }
+        button_image.visible = pixbuf != null;
     }
 
     public Gdk.Pixbuf? get_pixbuf () {
