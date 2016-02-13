@@ -22,7 +22,7 @@ public class Wingpanel.Widgets.IndicatorPopover : Gtk.Popover {
 
     public IndicatorPopover (string name, Gtk.Widget indicator_widget) {
         this.set_size_request (256, -1);
-        this.name = name;
+        this.name = name + "/popover";
 
         content = indicator_widget;
 

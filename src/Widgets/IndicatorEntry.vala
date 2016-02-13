@@ -31,7 +31,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         this.base_indicator = base_indicator;
         this.halign = Gtk.Align.START;
         this.get_style_context ().add_class (StyleClass.COMPOSITED_INDICATOR);
-        this.name = base_indicator.code_name;
+        this.name = base_indicator.code_name + "/entry";
 
         display_widget = base_indicator.get_display_widget ();
 
