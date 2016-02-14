@@ -64,6 +64,34 @@ public class Wingpanel.Services.PopoverManager : Object {
         owner.add_events (Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.BUTTON_PRESS_MASK);
     }
 
+    public void set_popover_visible (string code_name, bool visible) {
+        popovers.@foreach ((popover, indicator_entry) => {
+            if (indicator_entry.base_indicator.code_name == code_name) {
+                if (visible) {
+                    popover.show_all ();
+                } else {
+                    popover.hide ();
+                }
+
+                return;
+            }
+        });
+    }
+
+    public void toggle_popover_visible (string code_name) {
+        popovers.@foreach ((popover, indicator_entry) => {
+            if (indicator_entry.base_indicator.code_name == code_name) {
+                if (popover.get_visible ()) {
+                    popover.hide ();
+                } else {
+                    popover.show_all ();
+                }
+
+                return;
+            }
+        });
+    }
+
     private void hide_popover () {
         visible_popover.hide ();
         make_modal (visible_popover, false);
