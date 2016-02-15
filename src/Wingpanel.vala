@@ -26,12 +26,12 @@ namespace Wingpanel {
     }
 
     public class WingpanelApp : Granite.Application {
-        private static const string LIST_INDICATORS_ACTION_NAME = "list-indicators";
-        private static const string OPEN_INCIATOR_ACTION_NAME = "open-indicator";
-        private static const string CLOSE_INCIATOR_ACTION_NAME = "close-indicator";
-        private static const string TOGGLE_INCIATOR_ACTION_NAME = "toggle-indicator";
+        private const string LIST_INDICATORS_ACTION_NAME = "list-indicators";
+        private const string OPEN_INCIATOR_ACTION_NAME = "open-indicator";
+        private const string CLOSE_INCIATOR_ACTION_NAME = "close-indicator";
+        private const string TOGGLE_INCIATOR_ACTION_NAME = "toggle-indicator";
 
-        private static const OptionEntry[] OPTIONS = {
+        private const OptionEntry[] OPTIONS = {
             { OPEN_INCIATOR_ACTION_NAME, 'o', 0, OptionArg.STRING, null, "Open an indicator", "code_name" },
             { CLOSE_INCIATOR_ACTION_NAME, 'c', 0, OptionArg.STRING, null, "Close an indicator", "code_name" },
             { TOGGLE_INCIATOR_ACTION_NAME, 't', 0, OptionArg.STRING, null, "Toggle an indicator", "code_name" },
