@@ -27,14 +27,14 @@ namespace Wingpanel {
 
     public class WingpanelApp : Granite.Application {
         private const string LIST_INDICATORS_ACTION_NAME = "list-indicators";
-        private const string OPEN_INCIATOR_ACTION_NAME = "open-indicator";
-        private const string CLOSE_INCIATOR_ACTION_NAME = "close-indicator";
-        private const string TOGGLE_INCIATOR_ACTION_NAME = "toggle-indicator";
+        private const string OPEN_INDICATOR_ACTION_NAME = "open-indicator";
+        private const string CLOSE_INDICATOR_ACTION_NAME = "close-indicator";
+        private const string TOGGLE_INDICATOR_ACTION_NAME = "toggle-indicator";
 
         private const OptionEntry[] OPTIONS = {
-            { OPEN_INCIATOR_ACTION_NAME, 'o', 0, OptionArg.STRING, null, "Open an indicator", "code_name" },
-            { CLOSE_INCIATOR_ACTION_NAME, 'c', 0, OptionArg.STRING, null, "Close an indicator", "code_name" },
-            { TOGGLE_INCIATOR_ACTION_NAME, 't', 0, OptionArg.STRING, null, "Toggle an indicator", "code_name" },
+            { OPEN_INDICATOR_ACTION_NAME, 'o', 0, OptionArg.STRING, null, "Open an indicator", "code_name" },
+            { CLOSE_INDICATOR_ACTION_NAME, 'c', 0, OptionArg.STRING, null, "Close an indicator", "code_name" },
+            { TOGGLE_INDICATOR_ACTION_NAME, 't', 0, OptionArg.STRING, null, "Toggle an indicator", "code_name" },
             { null }
         };
 
@@ -77,16 +77,16 @@ namespace Wingpanel {
         protected override int command_line (ApplicationCommandLine command_line) {
             VariantDict options = command_line.get_options_dict ();
 
-            if (options.contains (OPEN_INCIATOR_ACTION_NAME)) {
-                activate_action (OPEN_INCIATOR_ACTION_NAME, options.lookup_value (OPEN_INCIATOR_ACTION_NAME, VariantType.STRING));
+            if (options.contains (OPEN_INDICATOR_ACTION_NAME)) {
+                activate_action (OPEN_INDICATOR_ACTION_NAME, options.lookup_value (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING));
             }
 
-            if (options.contains (CLOSE_INCIATOR_ACTION_NAME)) {
-                activate_action (CLOSE_INCIATOR_ACTION_NAME, options.lookup_value (CLOSE_INCIATOR_ACTION_NAME, VariantType.STRING));
+            if (options.contains (CLOSE_INDICATOR_ACTION_NAME)) {
+                activate_action (CLOSE_INDICATOR_ACTION_NAME, options.lookup_value (CLOSE_INDICATOR_ACTION_NAME, VariantType.STRING));
             }
 
-            if (options.contains (TOGGLE_INCIATOR_ACTION_NAME)) {
-                activate_action (TOGGLE_INCIATOR_ACTION_NAME, options.lookup_value (TOGGLE_INCIATOR_ACTION_NAME, VariantType.STRING));
+            if (options.contains (TOGGLE_INDICATOR_ACTION_NAME)) {
+                activate_action (TOGGLE_INDICATOR_ACTION_NAME, options.lookup_value (TOGGLE_INDICATOR_ACTION_NAME, VariantType.STRING));
             }
 
             return 0;
@@ -118,7 +118,7 @@ namespace Wingpanel {
                 list_indicators_action.set_state (new Variant.strv (list_indicators ()));
             });
 
-            SimpleAction open_indicator_action = new SimpleAction (OPEN_INCIATOR_ACTION_NAME, VariantType.STRING);
+            SimpleAction open_indicator_action = new SimpleAction (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING);
             open_indicator_action.activate.connect ((parameter) => {
                 if (panel_window == null) {
                     return;
@@ -127,7 +127,7 @@ namespace Wingpanel {
                 panel_window.popover_manager.set_popover_visible (parameter.get_string (), true);
             });
 
-            SimpleAction close_indicator_action = new SimpleAction (CLOSE_INCIATOR_ACTION_NAME, VariantType.STRING);
+            SimpleAction close_indicator_action = new SimpleAction (CLOSE_INDICATOR_ACTION_NAME, VariantType.STRING);
             close_indicator_action.activate.connect ((parameter) => {
                 if (panel_window == null) {
                     return;
@@ -136,7 +136,7 @@ namespace Wingpanel {
                 panel_window.popover_manager.set_popover_visible (parameter.get_string (), false);
             });
 
-            SimpleAction toggle_indicator_action = new SimpleAction (TOGGLE_INCIATOR_ACTION_NAME, VariantType.STRING);
+            SimpleAction toggle_indicator_action = new SimpleAction (TOGGLE_INDICATOR_ACTION_NAME, VariantType.STRING);
             toggle_indicator_action.activate.connect ((parameter) => {
                 if (panel_window == null) {
                     return;
