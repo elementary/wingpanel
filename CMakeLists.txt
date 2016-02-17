@@ -78,7 +78,7 @@ set (LIB_PACKAGES
 )
 
 set (LIB_PKG
-  glib-2.0>=2.32
+  glib-2.0>=2.40
   gio-2.0
   gee-0.8
   gmodule-2.0

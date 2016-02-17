@@ -26,20 +26,23 @@ namespace Wingpanel {
     }
 
     public class WingpanelApp : Granite.Application {
-        private static const OptionEntry[] OPTIONS = {
-            { "open-indicator", 'o', 0, OptionArg.STRING, ref open_indicator, "Open an indicator", "code_name" },
-            { "close-indicator", 'c', 0, OptionArg.STRING, ref close_indicator, "Close an indicator", "code_name" },
-            { "toggle-indicator", 't', 0, OptionArg.STRING, ref toggle_indicator, "Toggle an indicator", "code_name" },
+        private const string LIST_INDICATORS_ACTION_NAME = "list-indicators";
+        private const string OPEN_INDICATOR_ACTION_NAME = "open-indicator";
+        private const string CLOSE_INDICATOR_ACTION_NAME = "close-indicator";
+        private const string TOGGLE_INDICATOR_ACTION_NAME = "toggle-indicator";
+
+        private const OptionEntry[] OPTIONS = {
+            { OPEN_INDICATOR_ACTION_NAME, 'o', 0, OptionArg.STRING, null, "Open an indicator", "code_name" },
+            { CLOSE_INDICATOR_ACTION_NAME, 'c', 0, OptionArg.STRING, null, "Close an indicator", "code_name" },
+            { TOGGLE_INDICATOR_ACTION_NAME, 't', 0, OptionArg.STRING, null, "Toggle an indicator", "code_name" },
             { null }
         };
-
-        private static string? open_indicator = null;
-        private static string? close_indicator = null;
-        private static string? toggle_indicator = null;
 
         private PanelWindow? panel_window = null;
 
         construct {
+            flags = ApplicationFlags.HANDLES_COMMAND_LINE;
+
             application_id = "org.elementary.wingpanel";
             program_name = _("System Panel");
             app_years = "2015";
@@ -55,6 +58,8 @@ namespace Wingpanel {
             about_authors = { "Wingpanel Developers", null };
 
             about_license_type = Gtk.License.GPL_3_0;
+
+            add_main_option_entries (OPTIONS);
         }
 
         public static WingpanelApp _instance = null;
@@ -69,33 +74,33 @@ namespace Wingpanel {
             }
         }
 
-        public WingpanelApp () {
-            IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
+        protected override int command_line (ApplicationCommandLine command_line) {
+            VariantDict options = command_line.get_options_dict ();
 
-            register_actions ();
-        }
-
-        public new int run (string[] args) {
-            OptionContext context = new OptionContext ("");
-            context.add_main_entries (OPTIONS, null);
-            context.add_group (Gtk.get_option_group (false));
-
-            try {
-                context.parse (ref args);
-            } catch {}
-
-            if (process_actions ()) {
-                return 0;
+            if (options.contains (OPEN_INDICATOR_ACTION_NAME)) {
+                activate_action (OPEN_INDICATOR_ACTION_NAME, options.lookup_value (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING));
             }
 
-            return base.run (args);
+            if (options.contains (CLOSE_INDICATOR_ACTION_NAME)) {
+                activate_action (CLOSE_INDICATOR_ACTION_NAME, options.lookup_value (CLOSE_INDICATOR_ACTION_NAME, VariantType.STRING));
+            }
+
+            if (options.contains (TOGGLE_INDICATOR_ACTION_NAME)) {
+                activate_action (TOGGLE_INDICATOR_ACTION_NAME, options.lookup_value (TOGGLE_INDICATOR_ACTION_NAME, VariantType.STRING));
+            }
+
+            return 0;
         }
 
         protected override void startup () {
             base.startup ();
 
+            IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
+
             panel_window = new PanelWindow (this);
             panel_window.show_all ();
+
+            register_actions ();
         }
 
         protected override void activate () {
@@ -103,7 +108,7 @@ namespace Wingpanel {
         }
 
         private void register_actions () {
-            SimpleAction list_indicators_action = new SimpleAction.stateful ("list-indicators", null, new Variant.strv (list_indicators ()));
+            SimpleAction list_indicators_action = new SimpleAction.stateful (LIST_INDICATORS_ACTION_NAME, null, new Variant.strv (list_indicators ()));
 
             IndicatorManager indicator_manager = IndicatorManager.get_default ();
             indicator_manager.indicator_added.connect (() => {
@@ -113,7 +118,7 @@ namespace Wingpanel {
                 list_indicators_action.set_state (new Variant.strv (list_indicators ()));
             });
 
-            SimpleAction open_indicator_action = new SimpleAction ("open-indicator", VariantType.STRING);
+            SimpleAction open_indicator_action = new SimpleAction (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING);
             open_indicator_action.activate.connect ((parameter) => {
                 if (panel_window == null) {
                     return;
@@ -122,7 +127,7 @@ namespace Wingpanel {
                 panel_window.popover_manager.set_popover_visible (parameter.get_string (), true);
             });
 
-            SimpleAction close_indicator_action = new SimpleAction ("close-indicator", VariantType.STRING);
+            SimpleAction close_indicator_action = new SimpleAction (CLOSE_INDICATOR_ACTION_NAME, VariantType.STRING);
             close_indicator_action.activate.connect ((parameter) => {
                 if (panel_window == null) {
                     return;
@@ -131,7 +136,7 @@ namespace Wingpanel {
                 panel_window.popover_manager.set_popover_visible (parameter.get_string (), false);
             });
 
-            SimpleAction toggle_indicator_action = new SimpleAction ("toggle-indicator", VariantType.STRING);
+            SimpleAction toggle_indicator_action = new SimpleAction (TOGGLE_INDICATOR_ACTION_NAME, VariantType.STRING);
             toggle_indicator_action.activate.connect ((parameter) => {
                 if (panel_window == null) {
                     return;
@@ -154,34 +159,6 @@ namespace Wingpanel {
             }
 
             return code_names;
-        }
-
-        private bool process_actions () {
-            try {
-                register ();
-            } catch (Error error) {
-                warning ("Couldn't register application: %s", error.message);
-            }
-
-            if (open_indicator != null) {
-                this.activate_action ("open-indicator", new Variant.string (open_indicator));
-
-                return true;
-            }
-
-            if (close_indicator != null) {
-                this.activate_action ("close-indicator", new Variant.string (close_indicator));
-
-                return true;
-            }
-
-            if (toggle_indicator != null) {
-                this.activate_action ("toggle-indicator", new Variant.string (toggle_indicator));
-
-                return true;
-            }
-
-            return false;
         }
     }
 }
