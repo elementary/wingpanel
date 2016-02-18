@@ -18,8 +18,6 @@
  */
 
 public class Wingpanel.Widgets.Panel : Gtk.Box {
-    private static const double ALPHA_ANIMATION_STEP = 0.05;
-
     public Services.PopoverManager popover_manager { get; construct; }
 
     private IndicatorMenuBar right_menubar;
@@ -126,16 +124,25 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                 style_context.add_class ("color-light");
                 style_context.remove_class ("color-dark");
                 style_context.remove_class ("maximized");
+                style_context.remove_class ("translucent");
                 break;
             case Services.BackgroundState.LIGHT:
                 style_context.add_class ("color-dark");
                 style_context.remove_class ("color-light");
                 style_context.remove_class ("maximized");
+                style_context.remove_class ("translucent");
                 break;
             case Services.BackgroundState.MAXIMIZED:
                 style_context.add_class ("maximized");
                 style_context.remove_class ("color-light");
                 style_context.remove_class ("color-dark");
+                style_context.remove_class ("translucent");
+                break;
+            case Services.BackgroundState.TRANSLUCENT:
+                style_context.add_class ("translucent");
+                style_context.remove_class ("color-light");
+                style_context.remove_class ("color-dark");
+                style_context.remove_class ("maximized");
                 break;
         }
     }

@@ -20,11 +20,15 @@
 public enum BackgroundState {
     LIGHT,
     DARK,
-    MAXIMIZED
+    MAXIMIZED,
+    TRANSLUCENT
 }
 
-public class WingpanelInterface.AlphaManager : Object {
+public class WingpanelInterface.BackgroundManager : Object {
     private const int WALLPAPER_TRANSITION_DURATION = 150;
+    private const double ACUTANCE_THRESHOLD = 8;
+    private const double STD_THRESHOLD = 45;
+    private const double LUMINANCE_THRESHOLD = 180;
 
     public signal void state_changed (BackgroundState state, uint animation_duration);
 
@@ -36,16 +40,17 @@ public class WingpanelInterface.AlphaManager : Object {
     private Meta.Workspace? current_workspace = null;
 
     private BackgroundState current_state = BackgroundState.LIGHT;
-    private bool needs_dark_background = false;
+    
+    private Utils.ColorInformation? bk_color_info = null;
 
-    public AlphaManager (int monitor, int panel_height) {
+    public BackgroundManager (int monitor, int panel_height) {
         Object (monitor : monitor, panel_height: panel_height);
 
         connect_signals ();
         update_current_workspace ();
     }
 
-    ~AlphaManager () {
+    ~BackgroundManager () {
         var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
         GLib.Signal.remove_emission_hook (signal_id, wallpaper_hook_id);
     }
@@ -113,13 +118,31 @@ public class WingpanelInterface.AlphaManager : Object {
     }
 
     public async void update_alpha_state () {
-        Utils.background_needed.begin (Main.wm, monitor, panel_height, (obj, res) => {
-            needs_dark_background = Utils.background_needed.end (res);
+        Gdk.Rectangle monitor_geometry;
+
+        Gdk.Screen.get_default ().get_monitor_geometry (monitor, out monitor_geometry);
+
+        Utils.get_background_color_information.begin (Main.wm, monitor, 0, 0, monitor_geometry.width, panel_height, (obj, res) => {
+            try {
+                bk_color_info = Utils.get_background_color_information.end (res);
+            } catch (Error e) {
+                warning (e.message);
+            }
 
             check_for_state_change (WALLPAPER_TRANSITION_DURATION);
         });
     }
 
+    /**
+     * Check if Wingpanel's background state should change.
+     *
+     * The state is defined as follows:
+     *  - If there's a maximized window, the state should be MAXIMIZED;
+     *  - If no information about the background could be gathered, it should be TRANSLUCENT;
+     *  - If there's too much contrast or sharpness, it should be TRANSLUCENT;
+     *  - If the background is too bright, it should be DARK;
+     *  - Else it should be LIGHT.
+     */
     private void check_for_state_change (uint animation_duration) {
         bool has_maximized_window = false;
 
@@ -136,8 +159,16 @@ public class WingpanelInterface.AlphaManager : Object {
 
         if (has_maximized_window) {
             new_state = BackgroundState.MAXIMIZED;
+        } else if (bk_color_info == null) {
+            new_state = BackgroundState.TRANSLUCENT;
         } else {
-            new_state = needs_dark_background ? BackgroundState.DARK : BackgroundState.LIGHT;
+            var luminance_std = Math.sqrt (bk_color_info.luminance_variance);
+            
+            new_state = luminance_std > STD_THRESHOLD ||
+                (bk_color_info.mean_luminance < LUMINANCE_THRESHOLD &&
+                    bk_color_info.mean_luminance + 1.645 * luminance_std > LUMINANCE_THRESHOLD ) || 
+                bk_color_info.mean_acutance > ACUTANCE_THRESHOLD ? BackgroundState.TRANSLUCENT :
+                    bk_color_info.mean_luminance > LUMINANCE_THRESHOLD ? BackgroundState.DARK : BackgroundState.LIGHT;
         }
 
         if (new_state != current_state) {

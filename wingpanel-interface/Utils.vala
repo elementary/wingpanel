@@ -25,8 +25,6 @@
 namespace WingpanelInterface.Utils {
     private const double SATURATION_WEIGHT = 1.5;
     private const double WEIGHT_THRESHOLD = 1.0;
-    private const double MIN_VARIANCE = 50;
-    private const double MIN_LUM = 25;
 
     private class DummyOffscreenEffect : Clutter.OffscreenEffect {
         public signal void done_painting ();
@@ -41,8 +39,9 @@ namespace WingpanelInterface.Utils {
         double average_red;
         double average_green;
         double average_blue;
-        double mean;
-        double variance;
+        double mean_luminance;
+        double luminance_variance;
+        double mean_acutance;
     }
 
     public async ColorInformation get_background_color_information (Gala.WindowManager wm, int monitor,
@@ -68,7 +67,7 @@ namespace WingpanelInterface.Utils {
             throw new DBusError.INVALID_ARGS ("Invalid rectangle specified: %i, %i, %i, %i".printf (x_start, y_start, width, height));
         }
 
-        double variance = 0, mean = 0, rTotal = 0, gTotal = 0, bTotal = 0;
+        double mean_acutance = 0, variance = 0, mean = 0, rTotal = 0, gTotal = 0, bTotal = 0;
         ulong paint_signal_handler = 0;
 
         paint_signal_handler = effect.done_painting.connect (() => {
@@ -77,6 +76,7 @@ namespace WingpanelInterface.Utils {
 
             var texture = (Cogl.Texture)effect.get_texture ();
             var pixels = new uint8[texture.get_width () * texture.get_height () * 4];
+            var pixel_lums = new double[texture.get_width () * texture.get_height ()];
 
             CoglFixes.texture_get_data (texture, Cogl.PixelFormat.BGRA_8888_PRE, 0, pixels);
 
@@ -100,7 +100,9 @@ namespace WingpanelInterface.Utils {
                     uint8 g = pixels[i + 1];
                     uint8 b = pixels[i + 2];
 
-                    pixel = (0.3 * r + 0.6 * g + 0.11 * b) - 128f;
+                    pixel = (0.3 * r + 0.59 * g + 0.11 * b) ;
+                    
+                    pixel_lums[y * width + x] = pixel;
 
                     min = uint8.min (r, uint8.min (g, b));
                     max = uint8.max (r, uint8.max (g, b));
@@ -121,6 +123,21 @@ namespace WingpanelInterface.Utils {
 
                     mean += pixel;
                     mean_squares += pixel * pixel;
+                }
+            }
+            
+            for (int y = y_start + 1; y < height - 1; y++) {
+                for (int x = x_start + 1; x < width - 1; x++) {
+                    var acutance =
+                        (pixel_lums[y * width + x] * 4) -
+                        (
+                            pixel_lums[y * width + x - 1] +
+                            pixel_lums[y * width + x + 1] +
+                            pixel_lums[(y - 1) * width + x] +
+                            pixel_lums[(y + 1) * width + x]
+                        );
+                    
+                    mean_acutance += acutance > 0 ? acutance : -acutance;
                 }
             }
 
@@ -163,9 +180,11 @@ namespace WingpanelInterface.Utils {
             }
 
             mean /= size;
-            mean_squares *= mean_squares / size;
+            mean_squares = mean_squares / size;
 
-            variance = Math.sqrt (mean_squares - mean * mean) / (double)size;
+            variance = (mean_squares - (mean * mean));
+            
+            mean_acutance /= (width - 2) * (height - 2);
 
             get_background_color_information.callback ();
         });
@@ -174,23 +193,7 @@ namespace WingpanelInterface.Utils {
 
         yield;
 
-        return { rTotal, gTotal, bTotal, mean, variance };
+        return { rTotal, gTotal, bTotal, mean, variance, mean_acutance };
     }
 
-    public async bool background_needed (Gala.WindowManager wm, int screen, int panel_height) {
-        Gdk.Rectangle monitor_geometry;
-        ColorInformation? color_info = null;
-
-        Gdk.Screen.get_default ().get_monitor_geometry (screen, out monitor_geometry);
-
-        try {
-            color_info = yield get_background_color_information (wm, screen, 0, 0, monitor_geometry.width, panel_height);
-        } catch (Error e) {
-            warning (e.message);
-
-            return false;
-        }
-
-        return color_info != null && (color_info.mean > MIN_LUM || color_info.variance > MIN_VARIANCE);
-    }
 }
