@@ -47,7 +47,10 @@ public class WingpanelInterface.BackgroundManager : Object {
         Object (monitor : monitor, panel_height: panel_height);
 
         connect_signals ();
-        update_current_workspace ();
+        update_bk_color_info.begin ((obj, res) => {
+            update_bk_color_info.end (res);
+            update_current_workspace ();
+        });
     }
 
     ~BackgroundManager () {
@@ -63,7 +66,10 @@ public class WingpanelInterface.BackgroundManager : Object {
         var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
 
         wallpaper_hook_id = GLib.Signal.add_emission_hook (signal_id, 0, (ihint, param_values) => {
-            update_alpha_state.begin ();
+            update_bk_color_info.begin ((obj, res) => {
+                update_bk_color_info.end (res);
+                check_for_state_change (WALLPAPER_TRANSITION_DURATION);
+            });
 
             return true;
         }, null);
@@ -117,7 +123,8 @@ public class WingpanelInterface.BackgroundManager : Object {
         check_for_state_change (AnimationSettings.get_default ().snap_duration);
     }
 
-    public async void update_alpha_state () {
+    public async void update_bk_color_info () {
+        SourceFunc callback = update_bk_color_info.callback;
         Gdk.Rectangle monitor_geometry;
 
         Gdk.Screen.get_default ().get_monitor_geometry (monitor, out monitor_geometry);
@@ -127,10 +134,12 @@ public class WingpanelInterface.BackgroundManager : Object {
                 bk_color_info = Utils.get_background_color_information.end (res);
             } catch (Error e) {
                 warning (e.message);
+            } finally {
+                callback ();
             }
-
-            check_for_state_change (WALLPAPER_TRANSITION_DURATION);
         });
+        
+        yield;
     }
 
     /**
