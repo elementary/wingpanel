@@ -21,7 +21,8 @@ namespace Wingpanel.Services {
     public enum BackgroundState {
         LIGHT,
         DARK,
-        MAXIMIZED
+        MAXIMIZED,
+        TRANSLUCENT
     }
 
     [DBus (name = "org.pantheon.gala.WingpanelInterface")]
