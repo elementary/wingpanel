@@ -64,7 +64,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         panel = new Widgets.Panel (popover_manager);
         panel.realize.connect (on_realize);
-		panel.size_allocate.connect (update_panel_dimensions);
 
         this.add (panel);
 
@@ -92,7 +91,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     private void update_panel_dimensions () {
-        panel_height = panel.get_allocated_height ();
+        panel.get_preferred_height (out panel_height, null);
 
         Gdk.Rectangle monitor_dimensions;
         this.screen.get_monitor_geometry (monitor_number, out monitor_dimensions);
@@ -136,8 +135,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         this.screen.get_monitor_geometry (monitor, out primary_monitor_rect);
 
-		// We need to manually include the scale factor here as GTK gives us unscaled sizes for widgets
-		struts = { 0, 0, position_top * this.get_scale_factor () , 0, /* strut-left, strut-right, strut-top, strut-bottom */
+        struts = { 0, 0, position_top, 0, /* strut-left, strut-right, strut-top, strut-bottom */
                    0, 0, /* strut-left-start-y, strut-left-end-y */
                    0, 0, /* strut-right-start-y, strut-right-end-y */
                    monitor_x, monitor_x + monitor_width - 1, /* strut-top-start-x, strut-top-end-x */
