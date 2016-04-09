@@ -64,6 +64,10 @@ public class Wingpanel.Services.PopoverManager : Object {
         owner.add_events (Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.BUTTON_PRESS_MASK);
     }
 
+    public unowned Gtk.Popover? get_visible_popover () {
+        return visible_popover;
+    }
+
     public void set_popover_visible (string code_name, bool visible) {
         popovers.@foreach ((popover, indicator_entry) => {
             if (indicator_entry.base_indicator.code_name == code_name) {
