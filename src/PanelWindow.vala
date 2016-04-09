@@ -110,10 +110,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         update_struts ();
     }
 
-    public void expand_for_popover () {
-        this.set_size_request (monitor_width, monitor_height);
-    }
-
     private void update_visual () {
         var visual = this.screen.get_rgba_visual ();
 
