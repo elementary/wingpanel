@@ -91,7 +91,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         Timeout.add (300 / panel_height, animation_step);
     }
 
-    public void update_panel_dimensions () {
+    private void update_panel_dimensions () {
         panel_height = panel.get_allocated_height ();
 
         Gdk.Rectangle monitor_dimensions;
