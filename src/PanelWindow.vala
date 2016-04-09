@@ -91,7 +91,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         Timeout.add (300 / panel_height, animation_step);
     }
 
-    private void update_panel_dimensions () {
+    public void update_panel_dimensions () {
         panel_height = panel.get_allocated_height ();
 
         Gdk.Rectangle monitor_dimensions;
@@ -100,7 +100,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         monitor_width = monitor_dimensions.width;
         monitor_height = monitor_dimensions.height;
 
-        this.set_size_request (monitor_width, -1);
+        this.set_size_request (monitor_width, (popover_manager.get_visible_popover () != null) ? monitor_height : -1);
 
         monitor_x = monitor_dimensions.x;
         monitor_y = monitor_dimensions.y;
@@ -108,6 +108,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         this.move (monitor_x, monitor_y - (panel_height + panel_displacement));
 
         update_struts ();
+    }
+
+    public void expand_for_popover () {
+        this.set_size_request (monitor_width, monitor_height);
     }
 
     private void update_visual () {
