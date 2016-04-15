@@ -33,12 +33,12 @@ public class Wingpanel.Services.PopoverManager : Object {
         widgets = new HashTable<Gtk.Widget? , Gtk.Popover? > (direct_hash, direct_equal);
         popovers = new HashTable<Gtk.Popover? , Wingpanel.Widgets.IndicatorEntry? > (direct_hash, direct_equal);
 
-        owner.focus_out_event.connect (() => {
+        owner.focus_out_event.connect ((e) => {
             if (mousing) {
                 return Gdk.EVENT_PROPAGATE;
             }
 
-            if (visible_popover != null) {
+            if (visible_popover != null && e.window == null) {
                 hide_popover ();
             }
 
@@ -170,7 +170,11 @@ public class Wingpanel.Services.PopoverManager : Object {
         });
 
         popover.leave_notify_event.connect ((e) => {
-            if (e.mode != Gdk.CrossingMode.NORMAL) {
+            Gtk.Allocation allocation;
+            popover.get_allocation (out allocation);
+
+            if (e.mode != Gdk.CrossingMode.NORMAL
+                && (e.x < allocation.x || e.x > allocation.x + allocation.width) || (e.y < allocation.y || e.y > allocation.y + allocation.height)) {
                 hide_popover ();
             }
 
