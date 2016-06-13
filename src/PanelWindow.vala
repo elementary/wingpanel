@@ -38,8 +38,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private uint shrink_timeout = 0;
 
-    public PanelWindow (Gtk.Application app, int monitor_number = -1) {
-        this.monitor_number = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
+    public PanelWindow (Gtk.Application app) {
+        monitor_number = screen.get_primary_monitor ();
 
         this.set_application (app);
 
@@ -94,6 +94,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private void update_panel_dimensions () {
         panel_height = panel.get_allocated_height ();
 
+        monitor_number = screen.get_primary_monitor ();
         Gdk.Rectangle monitor_dimensions;
         this.screen.get_monitor_geometry (monitor_number, out monitor_dimensions);
 
