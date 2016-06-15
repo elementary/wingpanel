@@ -18,17 +18,17 @@
  */
 
 public abstract class Wingpanel.Indicator : GLib.Object {
-    public static const string APP_LAUNCHER = "app-launcher";
-    public static const string SESSION = "session";
-    public static const string DATETIME = "datetime";
-    public static const string NETWORK = "network";
-    public static const string MESSAGES = "messages";
-    public static const string SOUND = "sound";
-    public static const string POWER = "power";
-    public static const string SYNC = "sync";
-    public static const string PRINTER = "printer";
-    public static const string BLUETOOTH = "bluetooth";
-    public static const string KEYBOARD = "keyboard";
+    public const string APP_LAUNCHER = "app-launcher";
+    public const string SESSION = "session";
+    public const string DATETIME = "datetime";
+    public const string NETWORK = "network";
+    public const string MESSAGES = "messages";
+    public const string SOUND = "sound";
+    public const string POWER = "power";
+    public const string SYNC = "sync";
+    public const string PRINTER = "printer";
+    public const string BLUETOOTH = "bluetooth";
+    public const string KEYBOARD = "keyboard";
 
     /**
      * The unique name representing the indicator.
