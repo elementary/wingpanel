@@ -151,10 +151,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     public void set_expanded (bool expanded) {
-        if (this.expanded == expanded) {
-            return;
-        }
-
         if (expanded) {
             Services.BackgroundManager.get_default ().remember_window ();
 
