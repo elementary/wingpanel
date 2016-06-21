@@ -72,6 +72,9 @@ public class Wingpanel.Services.PopoverManager : Object {
         popovers.@foreach ((popover, indicator_entry) => {
             if (indicator_entry.base_indicator.code_name == code_name) {
                 if (visible) {
+                    if (visible_popover != null) {
+                        hide_popover ();
+                    }
                     popover.show_all ();
                 } else {
                     popover.hide ();
@@ -88,6 +91,9 @@ public class Wingpanel.Services.PopoverManager : Object {
                 if (popover.get_visible ()) {
                     popover.hide ();
                 } else {
+                    if (visible_popover != null) {
+                        hide_popover ();
+                    }
                     popover.show_all ();
                 }
 
