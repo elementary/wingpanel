@@ -71,15 +71,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
             popover_manager.close ();
         });
 
-        // shrink extended window to offer drag targets
-        popover.leave_notify_event.connect ((event) => {
-            if (event.mode == Gdk.CrossingMode.GTK_GRAB) {
-                popover_manager.close ();
-                return true;
-            }
-            return false;
-        });
-
         base_indicator.notify["visible"].connect (() => {
             if (menu_bar != null) {
                 /* order will be changed so close all open popovers */
