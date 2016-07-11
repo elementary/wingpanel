@@ -96,7 +96,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
         /* load black- and whitelists */
         var root_restrictions_folder = File.new_for_path ("/etc/wingpanel.d/");
-        var user_restrictions_folder = File.new_for_path ("/home/%s/.config/wingpanel.d/".printf (Environment.get_real_name ()));
+        var user_restrictions_folder = File.new_for_path (Path.build_filename (Environment.get_user_config_dir (), "wingpanel.d"));
 
         try {
             root_restrictions_monitor = root_restrictions_folder.monitor_directory (FileMonitorFlags.NONE, null);
