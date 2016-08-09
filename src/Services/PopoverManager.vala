@@ -179,7 +179,7 @@ public class Wingpanel.Services.PopoverManager : Object {
             Gtk.Allocation allocation;
             popover.get_allocation (out allocation);
 
-            if (e.mode != Gdk.CrossingMode.NORMAL) {
+            if (e.mode != Gdk.CrossingMode.NORMAL && e.subwindow == null) {
                 hide_popover ();
             }
 
