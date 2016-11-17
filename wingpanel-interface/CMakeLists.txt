@@ -30,5 +30,12 @@ OPTIONS
 add_library (${WINGPANELINTERFACE} MODULE ${VALA_C})
 target_link_libraries(${WINGPANELINTERFACE} ${DEPS_LIBRARIES})
 
+# Add -rpath ldflag if libgala is using mutter >= 3.21 to pick up libmutter-*.so
+pkg_check_modules(MUTTER322 QUIET libmutter>=3.21)
+if (MUTTER322_FOUND)
+  _pkgconfig_invoke("libmutter" MUTTER TYPELIB_DIR "" "--variable=typelibdir")
+  set_target_properties(${WINGPANELINTERFACE} PROPERTIES LINK_FLAGS -Wl,-rpath,${MUTTER_TYPELIB_DIR})
+endif ()
+
 include (GNUInstallDirs)
 install (TARGETS ${WINGPANELINTERFACE} DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/gala/plugins")
