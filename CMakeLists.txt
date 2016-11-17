@@ -110,7 +110,6 @@ set (DEPS_PACKAGES
 
 set (DEPS_PKG
   granite
-  gala
 )
 
 pkg_check_modules (DEPS REQUIRED ${DEPS_PKG} ${LIB_PKG})

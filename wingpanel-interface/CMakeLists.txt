@@ -1,9 +1,9 @@
 find_package (PkgConfig)
 
-pkg_check_modules (DEPS REQUIRED gala granite)
+pkg_check_modules (PLUGIN REQUIRED gala granite)
 
-add_definitions (${DEPS_CFLAGS})
-link_directories (${DEPS_LIBRARY_DIRS})
+add_definitions (${PLUGIN_CFLAGS})
+link_directories (${PLUGIN_LIBRARY_DIRS})
 set (WINGPANELINTERFACE "wingpanel-interface")
 
 find_package (Vala REQUIRED)
@@ -28,7 +28,7 @@ OPTIONS
 )
 
 add_library (${WINGPANELINTERFACE} MODULE ${VALA_C})
-target_link_libraries(${WINGPANELINTERFACE} ${DEPS_LIBRARIES})
+target_link_libraries(${WINGPANELINTERFACE} ${PLUGIN_LIBRARIES})
 
 # Add -rpath ldflag if libgala is using mutter >= 3.21 to pick up libmutter-*.so
 pkg_check_modules(MUTTER322 QUIET libmutter>=3.21)
