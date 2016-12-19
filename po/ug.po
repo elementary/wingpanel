@@ -8,22 +8,22 @@ msgstr ""
 "Project-Id-Version: wingpanel\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-04-25 15:59+0200\n"
-"PO-Revision-Date: 2013-03-20 04:05+0000\n"
-"Last-Translator: Gheyret T.Kenji <Unknown>\n"
+"PO-Revision-Date: 2016-12-18 09:47+0000\n"
+"Last-Translator: ablimet <Unknown>\n"
 "Language-Team: Uyghur <ug@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-11-25 06:21+0000\n"
-"X-Generator: Launchpad (build 18282)\n"
+"X-Launchpad-Export-Date: 2016-12-19 05:15+0000\n"
+"X-Generator: Launchpad (build 18298)\n"
 
 #: ../src/Wingpanel.vala:32
 msgid "System Panel"
-msgstr ""
+msgstr "سىستېما تاختىسى"
 
 #: ../src/Wingpanel.vala:74
 msgid "A super sexy space-saving top panel"
-msgstr ""
+msgstr "كۆركەم ۋە بوشلۇق تىجەيدىغان ئۈستى قىسىم تاختىيى"
 
 #~ msgid "Applications"
 #~ msgstr "پروگراممىلار"
