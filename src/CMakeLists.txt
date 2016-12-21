@@ -21,7 +21,7 @@ vala_precompile (CLIENT_VALA_C ${CMAKE_PROJECT_NAME}
   ${GLOBAL_VALAC_OPTIONS}
 )
 
-set (EXEC_NAME ../${CMAKE_PROJECT_NAME})
+set (EXEC_NAME ${CMAKE_PROJECT_NAME})
 
 add_definitions (${DEPS_CFLAGS})
 link_directories (${DEPS_LIBRARY_DIRS})
