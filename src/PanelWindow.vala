@@ -32,7 +32,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private int panel_height;
 
-    private bool expanded;
+    private bool expanded = false;
 
     private int panel_displacement;
 
@@ -64,11 +64,11 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         panel = new Widgets.Panel (popover_manager);
         panel.realize.connect (on_realize);
-        panel.size_allocate.connect (update_panel_dimensions);
 
         this.add (panel);
 
-        set_expanded (false);
+        this.set_size_request (monitor_width, -1);
+        this.resize (monitor_width, 1);
     }
 
     private bool animation_step () {
@@ -101,7 +101,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         monitor_width = monitor_dimensions.width;
         monitor_height = monitor_dimensions.height;
 
-        this.set_size_request (monitor_width, (popover_manager.get_visible_popover () != null) ? monitor_height : -1);
+        this.set_size_request (monitor_width, (popover_manager.current_indicator != null ? monitor_height : -1));
 
         monitor_x = monitor_dimensions.x;
         monitor_y = monitor_dimensions.y;
@@ -150,22 +150,22 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                              32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
     }
 
-    public void set_expanded (bool expanded) {
-        if (expanded) {
+    public void set_expanded (bool expand) {
+        if (expand && !this.expanded) {
             Services.BackgroundManager.get_default ().remember_window ();
 
-            this.expanded = expanded;
+            this.expanded = true;
 
             if (shrink_timeout > 0) {
                 Source.remove (shrink_timeout);
                 shrink_timeout = 0;
             }
 
-            this.set_size_request (monitor_width, expanded ? monitor_height : -1);
-        } else {
+            this.set_size_request (monitor_width, monitor_height);
+        } else if (!expand) {
             Services.BackgroundManager.get_default ().restore_window ();
 
-            this.expanded = expanded;
+            this.expanded = false;
 
             if (shrink_timeout > 0) {
                 Source.remove (shrink_timeout);
@@ -174,7 +174,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             shrink_timeout = Timeout.add (300, () => {
                 shrink_timeout = 0;
                 this.set_size_request (monitor_width, expanded ? monitor_height : -1);
-
+                this.resize (monitor_width, expanded ? monitor_height : 1);
                 return false;
             });
         }
