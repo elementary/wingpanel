@@ -18,21 +18,34 @@
  */
 
 public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
-    private Gtk.Widget display_widget;
-    private Gtk.Widget indicator_widget;
+    public Gtk.Widget display_widget;
+
+    private Gtk.Widget _indicator_widget = null;
+    public unowned Gtk.Widget indicator_widget {
+        get {
+            if (_indicator_widget == null) {
+                _indicator_widget = base_indicator.get_widget ();
+            }
+
+            return _indicator_widget;
+        }
+    }
 
     private Gtk.Revealer revealer;
 
-    private IndicatorPopover popover;
     public Indicator base_indicator;
     public IndicatorMenuBar? menu_bar;
 
+    Services.PopoverManager popover_manager;
+
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
+        this.popover_manager = popover_manager;
         this.base_indicator = base_indicator;
         this.halign = Gtk.Align.START;
         this.get_style_context ().add_class (StyleClass.COMPOSITED_INDICATOR);
         this.name = base_indicator.code_name + "/entry";
 
+        can_focus = false;
         display_widget = base_indicator.get_display_widget ();
 
         if (display_widget == null) {
@@ -46,8 +59,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         this.add (revealer);
         revealer.add (display_widget);
 
-        indicator_widget = base_indicator.get_widget ();
-
         if (indicator_widget == null) {
             this.button_press_event.connect ((e) => {
                 popover_manager.close ();
@@ -60,11 +71,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
             return;
         }
 
-        popover = new IndicatorPopover (base_indicator.code_name, indicator_widget);
-        popover.relative_to = this;
-
         if (base_indicator.visible) {
-            popover_manager.register_popover (this, popover);
+            popover_manager.register_indicator (this);
         }
 
         base_indicator.close.connect (() => {
@@ -77,16 +85,14 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
                 popover_manager.close ();
 
                 if (base_indicator.visible) {
-                    popover_manager.register_popover (this, popover);
+                    popover_manager.register_indicator (this);
                     menu_bar.apply_new_order ();
                     set_reveal (base_indicator.visible);
                 } else {
                     set_reveal (base_indicator.visible);
-                    popover_manager.unregister_popover (this);
-
+                    popover_manager.unregister_indicator (this);
                     Timeout.add (revealer.get_transition_duration (), () => {
                         menu_bar.apply_new_order ();
-
                         return false;
                     });
                 }
@@ -105,12 +111,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
         this.touch_event.connect ((e) => {
             if (e.type == Gdk.EventType.TOUCH_BEGIN) {
-                if (popover.get_visible ()) {
-                    popover.hide ();
-                } else {
-                    popover.show_all ();
-                }
-
+                popover_manager.current_indicator = this;
                 return Gdk.EVENT_STOP;
             }
 
@@ -120,12 +121,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         this.button_press_event.connect ((e) => {
             if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
                 && e.type == Gdk.EventType.BUTTON_PRESS) {
-                if (popover.get_visible ()) {
-                    popover.hide ();
-                } else {
-                    popover.show_all ();
-                }
-
+                popover_manager.current_indicator = this;
                 return Gdk.EVENT_STOP;
             }
 
@@ -143,8 +139,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
     }
 
     private void set_reveal (bool reveal) {
-        if (!reveal && popover.get_visible ()) {
-            popover.hide ();
+        if (!reveal && popover_manager.get_visible (this)) {
+            popover_manager.current_indicator = null;
         }
 
         revealer.set_reveal_child (reveal);
