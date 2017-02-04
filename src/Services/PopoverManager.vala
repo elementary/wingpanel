@@ -178,7 +178,7 @@ public class Wingpanel.Services.PopoverManager : Object {
             }
 
             if (grabbed) {
-                if (!get_visible (widg)) {
+                if (!get_visible (widg) && e.mode != Gdk.CrossingMode.TOUCH_BEGIN) {
                     mousing = true;
                     current_indicator = widg;
                     mousing = false;
