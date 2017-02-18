@@ -31,9 +31,14 @@ add_library (${WINGPANELINTERFACE} MODULE ${VALA_C})
 target_link_libraries(${WINGPANELINTERFACE} ${PLUGIN_LIBRARIES})
 
 # Add -rpath ldflag if libgala is using mutter >= 3.21 to pick up libmutter-*.so
-pkg_check_modules(MUTTER322 QUIET libmutter>=3.21)
+pkg_check_modules(MUTTER322 QUIET libmutter>=3.21 libmutter<3.23.90)
 if (MUTTER322_FOUND)
   _pkgconfig_invoke("libmutter" MUTTER TYPELIB_DIR "" "--variable=typelibdir")
+  set_target_properties(${WINGPANELINTERFACE} PROPERTIES LINK_FLAGS -Wl,-rpath,${MUTTER_TYPELIB_DIR})
+endif ()
+pkg_check_modules(MUTTER324 QUIET libmutter-0>=3.23.90)
+if (MUTTER324_FOUND)
+  _pkgconfig_invoke("libmutter-0" MUTTER TYPELIB_DIR "" "--variable=typelibdir")
   set_target_properties(${WINGPANELINTERFACE} PROPERTIES LINK_FLAGS -Wl,-rpath,${MUTTER_TYPELIB_DIR})
 endif ()
 
