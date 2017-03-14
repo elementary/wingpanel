@@ -49,14 +49,14 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
         this.pack_end (right_menubar);
 
         unowned IndicatorManager indicator_manager = IndicatorManager.get_default ();
+        indicator_manager.indicator_added.connect (add_indicator);
+        indicator_manager.indicator_removed.connect (remove_indicator);
+
         indicator_manager.get_indicators ().@foreach ((indicator) => {
             add_indicator (indicator);
 
             return true;
         });
-
-        indicator_manager.indicator_added.connect (add_indicator);
-        indicator_manager.indicator_removed.connect (remove_indicator);
 
         style_context = this.get_style_context ();
 

@@ -26,8 +26,10 @@ public class Wingpanel.Widgets.IndicatorMenuBar : MenuBar {
     }
 
     public void insert_sorted (IndicatorEntry item) {
-        if (item in sorted_items) {
-            return; /* item already added */
+        foreach (var indicator in sorted_items) {
+            if (item.base_indicator.code_name == indicator.base_indicator.code_name) {
+                return; /* item already added */
+            }
         }
 
         item.menu_bar = this;
