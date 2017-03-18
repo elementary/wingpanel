@@ -45,11 +45,11 @@ namespace Wingpanel {
 
             application_id = "org.elementary.wingpanel";
             program_name = _("System Panel");
-            app_years = "2015-2016";
+            app_years = "2015-2017";
             exec_name = "wingpanel";
             app_launcher = exec_name + ".desktop";
 
-            build_version = "2.0.1";
+            build_version = "2.0.2";
             app_icon = "wingpanel";
             main_url = "https://launchpad.net/wingpanel";
             bug_url = "https://bugs.launchpad.net/wingpanel";
