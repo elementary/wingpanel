@@ -171,8 +171,6 @@ public class Wingpanel.Services.PopoverManager : Object {
         registered_indicators.set (widg.base_indicator.code_name, widg);
 
         widg.enter_notify_event.connect ((w, e) => {
-            owner.set_expanded (true);
-
             if (mousing) {
                 return Gdk.EVENT_PROPAGATE;
             }
@@ -185,14 +183,6 @@ public class Wingpanel.Services.PopoverManager : Object {
                 }
 
                 return Gdk.EVENT_STOP;
-            }
-
-            return Gdk.EVENT_PROPAGATE;
-        });
-
-        widg.leave_notify_event.connect (() => {
-            if (this.current_indicator == null) {
-                owner.set_expanded (false);
             }
 
             return Gdk.EVENT_PROPAGATE;

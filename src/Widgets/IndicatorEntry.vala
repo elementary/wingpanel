@@ -128,7 +128,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
             /* Call button press on the indicator display widget */
             display_widget.button_press_event (e);
 
-            return Gdk.EVENT_PROPAGATE;
+            return Gdk.EVENT_STOP;
         });
 
         set_reveal (base_indicator.visible);
