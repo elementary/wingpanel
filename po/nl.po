@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-25 15:59+0200\n"
-"PO-Revision-Date: 2017-04-08 11:43+0000\n"
-"Last-Translator: Jonathan Moerman <jonathanmoerman@gmail.com>\n"
+"PO-Revision-Date: 2017-04-09 17:12+0000\n"
+"Last-Translator: Dieter Debast <dieter_debast@hotmail.com>\n"
 "Language-Team: Dutch "
 "<http://weblate.elementary.io/projects/desktop/wingpanel/nl/>\n"
 "Language: nl\n"
@@ -17,11 +17,11 @@ msgstr ""
 
 #: ../src/Wingpanel.vala:32
 msgid "System Panel"
-msgstr "Systeem paneel"
+msgstr "Systeempaneel"
 
 #: ../src/Wingpanel.vala:74
 msgid "A super sexy space-saving top panel"
-msgstr "Een sexy, ruimte besparend bovenpaneel"
+msgstr "Een sexy, ruimtebesparend bovenpaneel"
 
 #~ msgid "Applications"
 #~ msgstr "Toepassingen"
