@@ -19,7 +19,6 @@
 
 namespace Wingpanel {
     public static int main (string[] args) {
-        Gtk.init (ref args);
         var app = WingpanelApp.instance;
 
         return app.run (args);
