@@ -66,9 +66,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         panel.realize.connect (on_realize);
 
         this.add (panel);
-
-        this.set_size_request (monitor_width, -1);
-        this.resize (monitor_width, 1);
     }
 
     private bool animation_step () {
