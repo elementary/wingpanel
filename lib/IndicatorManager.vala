@@ -180,7 +180,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
         }
 
         RegisterPluginFunction register_plugin = (RegisterPluginFunction)function;
-        Indicator? indicator = register_plugin (module, server_type);
+        Wingpanel.Indicator? indicator = register_plugin (module, server_type);
 
         if (indicator == null) {
             debug ("Unknown plugin type for %s or indicator is hidden on this server!", path);
