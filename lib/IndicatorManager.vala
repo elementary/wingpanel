@@ -71,7 +71,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
     [CCode (has_target = false)]
     private delegate Wingpanel.Indicator? RegisterPluginFunction (Module module, ServerType server_type);
 
-    private Gee.HashMap<string, Wingpanel.Indicator>? indicators = null;
+    private Gee.HashMap<string, Wingpanel.Indicator> indicators;
 
     private FileMonitor? monitor = null;
 
@@ -129,7 +129,10 @@ public class Wingpanel.IndicatorManager : GLib.Object {
                      */
                     load (plugin_path);
                 } else if (event == FileMonitorEvent.DELETED) {
-                    deregister_indicator (plugin_path, indicators.@get (plugin_path));
+                    var indicator = indicators[plugin_path];
+                    if (indicator != null) {
+                        deregister_indicator (plugin_path, indicator);
+                    }
                 }
             });
         } catch (Error error) {
@@ -177,7 +180,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
         }
 
         RegisterPluginFunction register_plugin = (RegisterPluginFunction)function;
-        Wingpanel.Indicator? indicator = register_plugin (module, server_type);
+        Indicator? indicator = register_plugin (module, server_type);
 
         if (indicator == null) {
             debug ("Unknown plugin type for %s or indicator is hidden on this server!", path);
@@ -313,11 +316,18 @@ public class Wingpanel.IndicatorManager : GLib.Object {
     public void register_indicator (string path, Wingpanel.Indicator indicator) {
         debug ("%s registered", indicator.code_name);
 
+        var deregister_map = new Gee.HashMap<string,Wingpanel.Indicator> ();
         indicators.@foreach ((entry) => {
-            if (entry.value.code_name == indicator.code_name) {
-                deregister_indicator (entry.key, entry.value);
+            var val = entry.value;
+            if (val.code_name == indicator.code_name) {
+                deregister_map[entry.key] = val;
             }
 
+            return true;
+        });
+
+        deregister_map.@foreach ((entry) => {
+            deregister_indicator (entry.key, entry.value);
             return true;
         });
 
