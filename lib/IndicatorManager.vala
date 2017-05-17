@@ -316,7 +316,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
     public void register_indicator (string path, Wingpanel.Indicator indicator) {
         debug ("%s registered", indicator.code_name);
 
-        var deregister_map = new Gee.HashMap<string,Wingpanel.Indicator> ();
+        var deregister_map = new Gee.HashMap<string, Wingpanel.Indicator> ();
         indicators.@foreach ((entry) => {
             var val = entry.value;
             if (val.code_name == indicator.code_name) {
