@@ -65,6 +65,12 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         panel = new Widgets.Panel (popover_manager);
         panel.realize.connect (on_realize);
 
+        var cycle_action = new SimpleAction ("cycle", null);
+        cycle_action.activate.connect (panel.cycle);
+
+        app.add_action (cycle_action);
+        app.add_accelerator ("<Control>Tab", "app.cycle", null);
+
         this.add (panel);
     }
 
