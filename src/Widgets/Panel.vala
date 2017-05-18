@@ -90,7 +90,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                     var center_children = center_menubar.get_children ();
                     if (center_children.length () > 0) {
                         sibling = center_children.nth_data (0) as IndicatorEntry;
-                    }                    
+                    }
                 }
 
                 break;
@@ -105,7 +105,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                     var right_children = right_menubar.get_children ();
                     if (right_children.length () > 0) {
                         sibling = right_children.nth_data (0) as IndicatorEntry;
-                    }                    
+                    }
                 }
 
                 break;
@@ -120,13 +120,13 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                     var left_children = left_menubar.get_children ();
                     if (left_children.length () > 0) {
                         sibling = left_children.nth_data (0) as IndicatorEntry;
-                    }                    
+                    }
                 }
 
                 break;
         }
 
-        return sibling;     
+        return sibling;
     }
 
     private void add_indicator (Indicator indicator) {
