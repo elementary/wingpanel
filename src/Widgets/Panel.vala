@@ -63,13 +63,19 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
     }
 
-    public void cycle () {
+    public void cycle (bool forward) {
         var current = popover_manager.current_indicator;
         if (current == null) {
             return;
         }
 
-        var sibling = get_next_sibling (current);
+        IndicatorEntry? sibling;
+        if (forward) {
+            sibling = get_next_sibling (current);
+        } else {
+            sibling = get_previous_sibling (current);
+        }
+
         if (sibling != null) {
             popover_manager.current_indicator = sibling;
         }
@@ -120,6 +126,60 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                     var left_children = left_menubar.get_children ();
                     if (left_children.length () > 0) {
                         sibling = left_children.nth_data (0) as IndicatorEntry;
+                    }
+                }
+
+                break;
+        }
+
+        return sibling;
+    }
+
+    private IndicatorEntry? get_previous_sibling (IndicatorEntry current) {
+        IndicatorEntry? sibling = null;
+
+        switch (current.base_indicator.code_name) {
+            case Indicator.APP_LAUNCHER:
+                var children = left_menubar.get_children ();
+                int index = children.index (current);
+                if (index == -1) {
+                    break;
+                } else if (index != 0) { // Has more than one indicator in the left menubar
+                    sibling = children.nth_data (index - 1) as IndicatorEntry;
+                } else { // No more indicators on the left
+                    var right_children = right_menubar.get_children ();
+                    if (right_children.length () > 0) {
+                        sibling = right_children.last ().data as IndicatorEntry;
+                    }
+                }
+
+                break;
+            case Indicator.DATETIME:
+                var children = center_menubar.get_children ();
+                int index = children.index (current);
+                if (index == -1) {
+                    break;
+                } else if (index != 0) { // Has more than one indicator in the center menubar
+                    sibling = children.nth_data (index - 1) as IndicatorEntry;
+                } else { // No more indicators on the center
+                    var left_children = left_menubar.get_children ();
+                    if (left_children.length () > 0) {
+                        sibling = left_children.last ().data as IndicatorEntry;
+                    }
+                }
+
+                break;
+            default:
+                var children = right_menubar.get_children ();
+                int index = children.index (current);
+                if (index == -1) {
+                    break;
+                } else if (index != 0) { // Has more than one indicator in the right menubar
+                    sibling = children.nth_data (index - 1) as IndicatorEntry;
+                } else { // No more indicators on the right
+                    var center_children = center_menubar.get_children ();
+                    if (center_children.length () > 0) {
+                        sibling = center_children.last ().data as IndicatorEntry;
                     }
                 }
 
