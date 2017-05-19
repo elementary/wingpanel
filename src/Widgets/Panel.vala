@@ -95,7 +95,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                 } else { // No more indicators on the left
                     var center_children = center_menubar.get_children ();
                     if (center_children.length () > 0) {
-                        sibling = center_children.nth_data (0) as IndicatorEntry;
+                        sibling = center_children.first ().data as IndicatorEntry;
                     }
                 }
 
@@ -110,7 +110,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                 } else { // No more indicators on the center
                     var right_children = right_menubar.get_children ();
                     if (right_children.length () > 0) {
-                        sibling = right_children.nth_data (0) as IndicatorEntry;
+                        sibling = right_children.first ().data as IndicatorEntry;
                     }
                 }
 
@@ -125,7 +125,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                 } else { // No more indicators on the right
                     var left_children = left_menubar.get_children ();
                     if (left_children.length () > 0) {
-                        sibling = left_children.nth_data (0) as IndicatorEntry;
+                        sibling = left_children.first ().data as IndicatorEntry;
                     }
                 }
 
@@ -144,7 +144,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                 int index = children.index (current);
                 if (index == -1) {
                     break;
-                } else if (index != 0) { // Has more than one indicator in the left menubar
+                } else if (index != 0) { // Is not the first indicator in the left menubar
                     sibling = children.nth_data (index - 1) as IndicatorEntry;
                 } else { // No more indicators on the left
                     var right_children = right_menubar.get_children ();
@@ -159,7 +159,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                 int index = children.index (current);
                 if (index == -1) {
                     break;
-                } else if (index != 0) { // Has more than one indicator in the center menubar
+                } else if (index != 0) { // Is not the first indicator in the center menubar
                     sibling = children.nth_data (index - 1) as IndicatorEntry;
                 } else { // No more indicators on the center
                     var left_children = left_menubar.get_children ();
@@ -174,7 +174,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                 int index = children.index (current);
                 if (index == -1) {
                     break;
-                } else if (index != 0) { // Has more than one indicator in the right menubar
+                } else if (index != 0) { // Is not the first indicator in the right menubar
                     sibling = children.nth_data (index - 1) as IndicatorEntry;
                 } else { // No more indicators on the right
                     var center_children = center_menubar.get_children ();

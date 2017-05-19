@@ -71,7 +71,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         app.add_action (cycle_action);
         app.add_accelerator ("<Control>Tab", "app.cycle", null);
 
-
         var cycle_back_action = new SimpleAction ("cycle-back", null);
         cycle_back_action.activate.connect (() => panel.cycle (false));
 
