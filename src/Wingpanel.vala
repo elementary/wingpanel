@@ -53,7 +53,7 @@ namespace Wingpanel {
             main_url = "https://elementary.io";
             bug_url = "https://github.com/elementary/wingpanel/issues";
             help_url = "https://elementary.io/support";
-            translate_url = "https://l10n.elementary.io/projects/wingpanel";
+            translate_url = "https://l10n.elementary.io/projects/wingpanel/wingpanel";
             about_authors = { "Wingpanel Developers", null };
 
             about_license_type = Gtk.License.GPL_3_0;
