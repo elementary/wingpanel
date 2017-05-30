@@ -1,3 +1,9 @@
+wingpanel (2.0.3) xenial; urgency=medium
+
+  * New upstream release.
+
+ -- Cody Garver <cody@elementary.io>  Tue, 30 May 2017 14:09:42 -0500
+
 wingpanel (2.0.2) xenial; urgency=medium
 
   * New upstream release.
