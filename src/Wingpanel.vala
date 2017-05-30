@@ -48,7 +48,7 @@ namespace Wingpanel {
             exec_name = "wingpanel";
             app_launcher = exec_name + ".desktop";
 
-            build_version = "2.0.2";
+            build_version = "2.0.3";
             app_icon = "wingpanel";
             main_url = "https://launchpad.net/wingpanel";
             bug_url = "https://bugs.launchpad.net/wingpanel";
