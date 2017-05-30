@@ -50,10 +50,10 @@ namespace Wingpanel {
 
             build_version = "2.0.3";
             app_icon = "wingpanel";
-            main_url = "https://launchpad.net/wingpanel";
-            bug_url = "https://bugs.launchpad.net/wingpanel";
-            help_url = "https://answers.launchpad.net/wingpanel";
-            translate_url = "https://translations.launchpad.net/wingpanel";
+            main_url = "https://elementary.io";
+            bug_url = "https://github.com/elementary/wingpanel/issues";
+            help_url = "https://elementary.io/support";
+            translate_url = "https://l10n.elementary.io/projects/wingpanel/wingpanel";
             about_authors = { "Wingpanel Developers", null };
 
             about_license_type = Gtk.License.GPL_3_0;
