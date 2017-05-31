@@ -135,7 +135,11 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         return GLib.Source.CONTINUE;
     }
 
-    private void show_panel () {
+    private void show_panel (bool force = false) {
+        if (!hidden && !force) {
+            return;
+        }
+
         if (animation_timeout_id > 0) {
             Source.remove (animation_timeout_id);
             animation_timeout_id = 0;
@@ -183,7 +187,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         bg_manager.initialize (this.monitor_number, panel_height);
         bg_manager.background_state_changed.connect (on_background_state_changed);
 
-        show_panel ();
+        show_panel (true);
     }
 
     private void on_background_state_changed (Services.BackgroundState state, uint animation_duration) {
@@ -192,9 +196,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 hide_panel ();
                 break;
             default:
-                if (hidden) {
-                    show_panel ();
-                }
+                show_panel ();
                 break;
         }
     }
