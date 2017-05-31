@@ -42,7 +42,7 @@ namespace Wingpanel.Services {
 
         private InterfaceBus bus;
 
-        private BackgroundState current_state = BackgroundState.LIGHT;
+        public BackgroundState current_state { public get; private set; default = BackgroundState.LIGHT; }
         private bool use_transparency = true;
 
         public signal void background_state_changed (BackgroundState state, uint animation_duration);

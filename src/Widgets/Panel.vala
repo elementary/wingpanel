@@ -102,7 +102,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
         }
     }
 
-    private void update_background (Services.BackgroundState state, uint animation_duration) {
+    public void update_background (Services.BackgroundState state, uint animation_duration) {
         if (style_provider == null) {
             style_provider = new Gtk.CssProvider ();
             style_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
