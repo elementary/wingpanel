@@ -23,8 +23,6 @@ public class Wingpanel.Widgets.Button : Container {
     private Gtk.Image button_image;
 
     public Button (string caption, string? icon_name = null) {
-        var content_widget = this.get_content_widget ();
-
         button_image = create_image_for_icon_name (icon_name);
         button_label = create_label_for_caption (caption);
 
@@ -33,8 +31,6 @@ public class Wingpanel.Widgets.Button : Container {
     }
 
     public Button.with_mnemonic (string caption, string? icon_name = null) {
-        var content_widget = this.get_content_widget ();
-
         button_image = create_image_for_icon_name (icon_name);
         button_label = create_label_for_caption (caption, true);
 

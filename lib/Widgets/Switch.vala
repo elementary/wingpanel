@@ -25,8 +25,6 @@ public class Wingpanel.Widgets.Switch : Container {
     public new signal void switched ();
 
     public Switch (string caption, bool active = false) {
-        var content_widget = this.get_content_widget ();
-
         button_label = create_label_for_caption (caption);
         button_switch = create_switch (active);
 
@@ -37,8 +35,6 @@ public class Wingpanel.Widgets.Switch : Container {
     }
 
     public Switch.with_mnemonic (string caption, bool active = false) {
-        var content_widget = this.get_content_widget ();
-
         button_label = create_label_for_caption (caption, true);
         button_switch = create_switch (active);
 
