@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ * Copyright (c) 2011-2017 elementary LLC (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -19,8 +19,10 @@
 
 public class Wingpanel.Widgets.Separator : Gtk.Separator {
     public Separator () {
-        this.orientation = Gtk.Orientation.HORIZONTAL;
-        this.margin_top = 3;
-        this.margin_bottom = 3;
+        Object (
+            margin_bottom: 3,
+            margin_top: 3,
+            orientation: Gtk.Orientation.HORIZONTAL
+        );
     }
 }
