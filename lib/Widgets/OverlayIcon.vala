@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ * Copyright (c) 2011-2017 elementary LLC (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -19,19 +19,27 @@
 
 public class Wingpanel.Widgets.OverlayIcon : Gtk.Overlay {
     private Gtk.Image main_image;
-
     private Gtk.Image overlay_image;
 
     public OverlayIcon (string icon_name) {
-        add_images ();
-
         set_main_icon_name (icon_name);
     }
 
     public OverlayIcon.from_pixbuf (Gdk.Pixbuf pixbuf) {
-        add_images ();
-
         set_main_pixbuf (pixbuf);
+    }
+
+    construct {
+        main_image = new Gtk.Image ();
+        main_image.icon_size = 24;
+        main_image.pixel_size = 24;
+
+        overlay_image = new Gtk.Image ();
+        overlay_image.icon_size = 24;
+        overlay_image.pixel_size = 24;
+
+        add (main_image);
+        add_overlay (overlay_image);
     }
 
     public void set_main_pixbuf (Gdk.Pixbuf? pixbuf) {
@@ -51,33 +59,19 @@ public class Wingpanel.Widgets.OverlayIcon : Gtk.Overlay {
     }
 
     public void set_main_icon_name (string icon_name) {
-        main_image.set_from_icon_name (icon_name, Gtk.IconSize.LARGE_TOOLBAR);
-        main_image.icon_size = 24;
-        main_image.pixel_size = 24;
+        main_image.icon_name = icon_name;
     }
 
     public string get_main_icon_name () {
-        string icon_name;
-        Gtk.IconSize size;
-
-        main_image.get_icon_name (out icon_name, out size);
-
-        return icon_name;
+        return main_image.icon_name;
     }
 
     public void set_overlay_icon_name (string icon_name) {
-        overlay_image.set_from_icon_name (icon_name, Gtk.IconSize.LARGE_TOOLBAR);
-        overlay_image.icon_size = 24;
-        overlay_image.pixel_size = 24;
+        overlay_image.icon_name = icon_name;
     }
 
     public string get_overlay_icon_name () {
-        string icon_name;
-        Gtk.IconSize size;
-
-        overlay_image.get_icon_name (out icon_name, out size);
-
-        return icon_name;
+        return overlay_image.icon_name;
     }
 
     public Gtk.Image get_main_image () {
@@ -86,13 +80,5 @@ public class Wingpanel.Widgets.OverlayIcon : Gtk.Overlay {
 
     public Gtk.Image get_overlay_image () {
         return overlay_image;
-    }
-
-    private void add_images () {
-        main_image = new Gtk.Image ();
-        overlay_image = new Gtk.Image ();
-
-        this.add (main_image);
-        this.add_overlay (overlay_image);
     }
 }
