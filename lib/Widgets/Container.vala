@@ -18,7 +18,9 @@
  */
 
 public class Wingpanel.Widgets.Container : Gtk.Button {
-    public Gtk.Grid content_widget { get; construct; }
+    public Gtk.Grid content_widget { owned get; construct; }
+
+    public extern Gtk.Grid get_content_widget ();
 
     public Container () {
         Object (content_widget: new Gtk.Grid ());
