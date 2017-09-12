@@ -48,7 +48,7 @@ namespace Wingpanel {
             exec_name = "wingpanel";
             app_launcher = exec_name + ".desktop";
 
-            build_version = "2.0.3";
+            build_version = "2.0.4";
             app_icon = "wingpanel";
             main_url = "https://elementary.io";
             bug_url = "https://github.com/elementary/wingpanel/issues";
