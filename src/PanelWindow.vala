@@ -21,34 +21,29 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     public Services.PopoverManager popover_manager;
 
     private Widgets.Panel panel;
-
     private int monitor_number;
-
     private int monitor_width;
     private int monitor_height;
-
     private int monitor_x;
     private int monitor_y;
-
     private int panel_height;
-
     private bool expanded = false;
-
     private int panel_displacement;
-
     private uint shrink_timeout = 0;
 
-    public PanelWindow (Gtk.Application app) {
+    public PanelWindow (Gtk.Application application) {
+        Object (
+            application: application,
+            app_paintable: true,
+            decorated: false,
+            resizable: false,
+            skip_pager_hint: true,
+            skip_taskbar_hint: true,
+            type_hint: Gdk.WindowTypeHint.DOCK,
+            vexpand: false
+        );
+
         monitor_number = screen.get_primary_monitor ();
-
-        this.set_application (app);
-
-        this.decorated = false;
-        this.resizable = false;
-        this.skip_taskbar_hint = true;
-        this.app_paintable = true;
-        this.type_hint = Gdk.WindowTypeHint.DOCK;
-        this.vexpand = false;
 
         var style_context = get_style_context ();
         style_context.add_class (Widgets.StyleClass.PANEL);
@@ -68,16 +63,15 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         var cycle_action = new SimpleAction ("cycle", null);
         cycle_action.activate.connect (() => panel.cycle (true));
 
-        app.add_action (cycle_action);
-        app.add_accelerator ("<Control>Tab", "app.cycle", null);
-
         var cycle_back_action = new SimpleAction ("cycle-back", null);
         cycle_back_action.activate.connect (() => panel.cycle (false));
 
-        app.add_action (cycle_back_action);
-        app.add_accelerator ("<Control><Shift>Tab", "app.cycle-back", null);
+        application.add_action (cycle_action);
+        application.add_action (cycle_back_action);
+        application.add_accelerator ("<Control>Tab", "app.cycle", null);
+        application.add_accelerator ("<Control><Shift>Tab", "app.cycle-back", null);
 
-        this.add (panel);
+        add (panel);
     }
 
     private bool animation_step () {
