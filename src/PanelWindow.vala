@@ -89,7 +89,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private void on_realize () {
         update_panel_dimensions ();
 
-        Services.BackgroundManager.get_default ().initialize (this.monitor_number, panel_height);
+        Services.BackgroundManager.initialize (this.monitor_number, panel_height);
 
         Timeout.add (300 / panel_height, animation_step);
     }
