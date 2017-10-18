@@ -2,6 +2,7 @@ prefix=@PREFIX@
 exec_prefix=${prefix}
 libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
 includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+indicatorsdir=${libdir}/wingpanel
  
 Name: Wingpanel
 Description: Wingpanel headers
