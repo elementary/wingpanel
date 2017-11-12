@@ -44,19 +44,10 @@ namespace Wingpanel {
 
             application_id = "org.elementary.wingpanel";
             program_name = _("System Panel");
-            app_years = "2015-2017";
             exec_name = "wingpanel";
             app_launcher = exec_name + ".desktop";
 
             build_version = "2.0.4";
-            app_icon = "wingpanel";
-            main_url = "https://elementary.io";
-            bug_url = "https://github.com/elementary/wingpanel/issues";
-            help_url = "https://elementary.io/support";
-            translate_url = "https://l10n.elementary.io/projects/wingpanel/wingpanel";
-            about_authors = { "Wingpanel Developers", null };
-
-            about_license_type = Gtk.License.GPL_3_0;
 
             add_main_option_entries (OPTIONS);
         }
