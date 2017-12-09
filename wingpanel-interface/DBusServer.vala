@@ -30,6 +30,10 @@ public class WingpanelInterface.DBusServer : Object {
         });
     }
 
+    public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
+        return FocusManager.get_default ().begin_grab_focused_window (x, y, button, time, state);
+    }
+
     public void remember_focused_window () {
         FocusManager.get_default ().remember_focused_window ();
     }

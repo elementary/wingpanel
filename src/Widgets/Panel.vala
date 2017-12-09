@@ -36,7 +36,6 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         this.vexpand = true;
         this.valign = Gtk.Align.START;
         this.get_style_context ().add_class (StyleClass.PANEL);
-        //  this.set_events (Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.TOUCH_MASK);
 
         var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 
