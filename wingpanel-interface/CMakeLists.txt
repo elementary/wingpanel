@@ -55,7 +55,6 @@ PACKAGES
   gala
   granite
   cogl-fixes
-  gdk-x11-3.0
   ${EXTRA_MUTTER_PACKAGES}
 OPTIONS
   --thread
