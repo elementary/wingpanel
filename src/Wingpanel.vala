@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA.
  */
 
 namespace Wingpanel {
@@ -44,19 +44,10 @@ namespace Wingpanel {
 
             application_id = "org.elementary.wingpanel";
             program_name = _("System Panel");
-            app_years = "2015-2017";
             exec_name = "wingpanel";
             app_launcher = exec_name + ".desktop";
 
             build_version = "2.0.4";
-            app_icon = "wingpanel";
-            main_url = "https://elementary.io";
-            bug_url = "https://github.com/elementary/wingpanel/issues";
-            help_url = "https://elementary.io/support";
-            translate_url = "https://l10n.elementary.io/projects/wingpanel/wingpanel";
-            about_authors = { "Wingpanel Developers", null };
-
-            about_license_type = Gtk.License.GPL_3_0;
 
             add_main_option_entries (OPTIONS);
         }

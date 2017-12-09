@@ -13,8 +13,8 @@
  *
  * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA.
  */
 
 namespace Wingpanel.Services {
@@ -41,41 +41,46 @@ namespace Wingpanel.Services {
 
         private static BackgroundManager? instance = null;
 
-        private InterfaceBus bus;
+        private InterfaceBus? bus = null;
 
         private BackgroundState current_state = BackgroundState.LIGHT;
         private bool use_transparency = true;
 
+        private bool bus_available {
+            get {
+                return bus != null;
+            }
+        }
+
+        private int monitor;
+        private int panel_height;
+
         public signal void background_state_changed (BackgroundState state, uint animation_duration);
 
-        public BackgroundManager () {
-            if (!connect_dbus ()) {
-                return;
-            }
+        public static void initialize (int monitor, int panel_height) {
+            var manager = BackgroundManager.get_default ();
+            manager.monitor = monitor;
+            manager.panel_height = panel_height;
+        }
 
+        private BackgroundManager () {
             PanelSettings.get_default ().notify["use-transparency"].connect (() => {
                 use_transparency = PanelSettings.get_default ().use_transparency;
                 state_updated ();
             });
 
             use_transparency = PanelSettings.get_default ().use_transparency;
-            state_updated ();
-        }
 
-        public void initialize (int monitor, int panel_height) {
-            try {
-                bus.initialize (monitor, panel_height);
-            } catch (Error e) {
-                warning ("Initializing background manager failed: %s", e.message);
-            }
-
-            bus.state_changed.connect ((state, animation_duration) => {
-                current_state = state;
-                state_updated (animation_duration);
-            });
+            Bus.watch_name (BusType.SESSION, DBUS_NAME, BusNameWatcherFlags.NONE,
+                () => connect_dbus (),
+                () => bus = null);
         }
 
         public void remember_window () {
+            if (!bus_available) {
+                return;
+            }
+
             try {
                 bus.remember_focused_window ();
             } catch (Error e) {
@@ -84,6 +89,10 @@ namespace Wingpanel.Services {
         }
 
         public void restore_window () {
+            if (!bus_available) {
+                return;
+            }
+
             try {
                 bus.restore_focused_window ();
             } catch (Error e) {
@@ -104,12 +113,18 @@ namespace Wingpanel.Services {
         private bool connect_dbus () {
             try {
                 bus = Bus.get_proxy_sync (BusType.SESSION, DBUS_NAME, DBUS_PATH);
+                bus.initialize (monitor, panel_height);
             } catch (Error e) {
                 warning ("Connecting to \"%s\" failed: %s", DBUS_NAME, e.message);
-
                 return false;
             }
 
+            bus.state_changed.connect ((state, animation_duration) => {
+                current_state = state;
+                state_updated (animation_duration);
+            });
+
+            state_updated ();
             return true;
         }
 
