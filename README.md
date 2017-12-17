@@ -1,7 +1,7 @@
 # Wingpanel
 The extensible top panel for Pantheon. Wingpanel is an empty container that accepts indicators as extensions, including the applications menu. Individual indicators are hosted in their own repositories [here](https://github.com/search?q=topic%3Awingpanel+org%3Aelementary&type=Repositories).
 
-[![l10n](https://l10n.elementary.io/widgets/desktop/wingpanel/svg-badge.svg)](https://l10n.elementary.io/projects/desktop/wingpanel)
+[![l10n](https://l10n.elementary.io/widgets/desktop/wingpanel/svg-badge.svg)](https://l10n.elementary.io/projects/wingpanel/)
 [![Bountysource](https://www.bountysource.com/badge/tracker?tracker_id=43593927)](https://www.bountysource.com/teams/elementary/issues?tracker_ids=43593927)
 
 ## Building and Installation
