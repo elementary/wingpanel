@@ -99,6 +99,10 @@ public class Wingpanel.Services.PopoverManager : Object {
         });
 
         owner.button_press_event.connect ((w, e) => {
+            if (e.window != owner.get_window ()) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+
             Gtk.Allocation allocation;
             popover.get_allocation (out allocation);
 
