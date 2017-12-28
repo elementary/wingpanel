@@ -99,6 +99,12 @@ public class Wingpanel.Services.PopoverManager : Object {
         });
 
         owner.button_press_event.connect ((w, e) => {
+            // "owner" is the invisible window that fills the screen when an indicator is open, if the event didn't hit
+            // that window directly, then it was probably in the popover, so propagate it.
+            if (e.window != owner.get_window ()) {
+                return Gdk.EVENT_PROPAGATE;
+            }
+
             Gtk.Allocation allocation;
             popover.get_allocation (out allocation);
 
