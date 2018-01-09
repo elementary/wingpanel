@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
+[Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Gtk.ModelButton")]
 public class Wingpanel.Widgets.Button : Container {
     private Gtk.Label button_label;
 
