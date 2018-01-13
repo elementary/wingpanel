@@ -53,15 +53,33 @@ public class WingpanelInterface.FocusManager : Object {
     public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
         var display = Main.screen.get_display ();
         var window = display.get_focus_window ();
-        if (window != null && window.maximized_vertically) {
-            var frame = window.get_frame_rect ();
-            if (x >= frame.x && x <= frame.x + frame.width) {
-                display.begin_grab_op (Main.screen, window, Meta.GrabOp.MOVING, false, true, button, state, time, x, y);
-                return true;
+        if (window == null || !get_can_grab_window (window, x, y)) {
+            unowned List<weak Meta.WindowActor>? windows = Meta.Compositor.get_window_actors (Main.screen);
+            if (windows == null) {
+                return false;
+            }
+
+            for (uint i = windows.length () - 1; i >= 0; i--) {
+                unowned Meta.WindowActor window_actor = windows.nth_data (i);
+                unowned Meta.Window win = window_actor.get_meta_window ();
+                if (get_can_grab_window (win, x, y)) {
+                    window = win;
+                    break;
+                }
             }
         }
 
+        if (window != null) {
+            display.begin_grab_op (Main.screen, window, Meta.GrabOp.MOVING, false, true, button, state, time, x, y);
+            return true;
+        }
+
         return false;
+    }
+
+    private static bool get_can_grab_window (Meta.Window window, int x, int y) {
+        var frame = window.get_frame_rect ();
+        return window.maximized_vertically && x >= frame.x && x <= frame.x + frame.width;
     }
 
     private void update_current_workspace () {

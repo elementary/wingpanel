@@ -77,6 +77,11 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
             return Gdk.EVENT_PROPAGATE;
         }
 
+        // Grabbing with touchscreen on X does not work unfortunately
+        if (event.device.get_source () == Gdk.InputSource.TOUCHSCREEN) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
         uint32 time = event.time;
         window.get_display ().pointer_ungrab (time);
 
