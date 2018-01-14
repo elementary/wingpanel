@@ -54,19 +54,24 @@ public class WingpanelInterface.FocusManager : Object {
         var display = Main.screen.get_display ();
         var window = display.get_focus_window ();
         if (window == null || !get_can_grab_window (window, x, y)) {
-            unowned List<weak Meta.WindowActor>? windows = Meta.Compositor.get_window_actors (Main.screen);
+            unowned List<unowned Meta.WindowActor>? windows = Meta.Compositor.get_window_actors (Main.screen);
             if (windows == null) {
                 return false;
             }
 
-            for (uint i = windows.length () - 1; i >= 0; i--) {
-                unowned Meta.WindowActor window_actor = windows.nth_data (i);
+            window = null;
+            List<unowned Meta.WindowActor> copy = windows.copy ();
+            copy.reverse ();
+            copy.@foreach ((window_actor) => {
+                if (window != null) {
+                    return;
+                }
+
                 unowned Meta.Window win = window_actor.get_meta_window ();
                 if (get_can_grab_window (win, x, y)) {
                     window = win;
-                    break;
                 }
-            }
+            });
         }
 
         if (window != null) {
