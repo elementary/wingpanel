@@ -83,7 +83,12 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         }
 
         uint32 time = event.time;
+        
+#if HAS_GTK320
+        window.get_display ().get_default_seat ().ungrab ();
+#else
         window.get_display ().pointer_ungrab (time);
+#endif
 
         Gdk.ModifierType state;
         event.get_state (out state);
