@@ -63,7 +63,7 @@ OPTIONS
 )
 
 add_library (${WINGPANELINTERFACE} MODULE ${VALA_C})
-target_link_libraries(${WINGPANELINTERFACE} ${PLUGIN_LIBRARIES} ${PLUGIN_MUTTER_LIBRARIES})
+target_link_libraries(${WINGPANELINTERFACE} ${PLUGIN_LIBRARIES} ${PLUGIN_MUTTER_LIBRARIES} m)
 
 # Add -rpath ldflag if libgala is using mutter >= 3.21 to pick up libmutter-*.so
 if (MUTTER326_FOUND)
