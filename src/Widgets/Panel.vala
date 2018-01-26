@@ -93,6 +93,8 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         Gdk.ModifierType state;
         event.get_state (out state);
 
+        popover_manager.close ();
+
         var background_manager = Services.BackgroundManager.get_default ();
         return background_manager.begin_grab_focused_window ((int)event.x_root, (int)event.y_root, (int)event.button, time, state);
     }
