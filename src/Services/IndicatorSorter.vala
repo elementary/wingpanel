@@ -25,8 +25,8 @@
  * be passed as CompareFuncs.
  */
 public class Wingpanel.Services.IndicatorSorter : Object {
-    private const string UNKNOWN_INDICATOR = "unknown";
-    private const string AYATANA_INDICATOR = "ayatana";
+    private const string UNKNOWN_INDICATOR = "xxx-unknown";
+    private const string AYATANA_INDICATOR = "xxx-ayatana";
 
     /* The order in which the indicators are shown from left to right. */
     private static Gee.HashMap<string, int> INDICATOR_ORDER = new Gee.HashMap<string,int> ();
