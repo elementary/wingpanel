@@ -25,18 +25,24 @@
  * be passed as CompareFuncs.
  */
 public class Wingpanel.Services.IndicatorSorter : Object {
+    private const string UNKNOWN_INDICATOR = "unknown";
+    private const string AYATANA_INDICATOR = "ayatana";
+
     /* The order in which the indicators are shown from left to right. */
-    private const string[] INDICATOR_ORDER = {
-        Indicator.KEYBOARD,
-        Indicator.SOUND,
-        Indicator.NETWORK,
-        Indicator.BLUETOOTH,
-        Indicator.PRINTER,
-        Indicator.SYNC,
-        Indicator.POWER,
-        Indicator.MESSAGES,
-        Indicator.SESSION
-    };
+    private static Gee.HashMap<string, int> INDICATOR_ORDER = new Gee.HashMap<string,int> ();
+    static construct {
+        INDICATOR_ORDER[AYATANA_INDICATOR] = 0;
+        INDICATOR_ORDER[UNKNOWN_INDICATOR] = 1;
+        INDICATOR_ORDER[Indicator.KEYBOARD] = 2;
+        INDICATOR_ORDER[Indicator.SOUND] = 3;
+        INDICATOR_ORDER[Indicator.NETWORK] = 4;
+        INDICATOR_ORDER[Indicator.BLUETOOTH] = 5;
+        INDICATOR_ORDER[Indicator.PRINTER] = 6;
+        INDICATOR_ORDER[Indicator.SYNC] = 7;
+        INDICATOR_ORDER[Indicator.POWER] = 8;
+        INDICATOR_ORDER[Indicator.MESSAGES] = 9;
+        INDICATOR_ORDER[Indicator.SESSION] = 10;
+    }
 
     public int compare_func (Wingpanel.Widgets.IndicatorEntry? a, Wingpanel.Widgets.IndicatorEntry? b) {
         if (a == null) {
@@ -65,22 +71,15 @@ public class Wingpanel.Services.IndicatorSorter : Object {
     }
 
     private static int get_order (Wingpanel.Widgets.IndicatorEntry node) {
-        int best_match = 0;
-
         /* ayatana application indicators on the left of the native indicators */
         if (node.base_indicator.code_name.has_prefix ("ayatana-")) {
-            return best_match;
+            return INDICATOR_ORDER[AYATANA_INDICATOR];
         }
 
-        for (int i = 0; i < INDICATOR_ORDER.length; i++) {
-            var order_name = INDICATOR_ORDER[i];
-
-            if (order_name == node.base_indicator.code_name) {
-                best_match = i;
-                break;
-            }
+        if (node.base_indicator.code_name in INDICATOR_ORDER) {
+            return INDICATOR_ORDER[node.base_indicator.code_name];
         }
 
-        return best_match;
+        return INDICATOR_ORDER[UNKNOWN_INDICATOR];
     }
 }
