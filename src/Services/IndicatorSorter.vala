@@ -29,19 +29,19 @@ public class Wingpanel.Services.IndicatorSorter : Object {
     private const string AYATANA_INDICATOR = "xxx-ayatana";
 
     /* The order in which the indicators are shown from left to right. */
-    private static Gee.HashMap<string, int> INDICATOR_ORDER = new Gee.HashMap<string,int> ();
+    private static Gee.HashMap<string, int> indicator_order = new Gee.HashMap<string,int> ();
     static construct {
-        INDICATOR_ORDER[AYATANA_INDICATOR] = 0;
-        INDICATOR_ORDER[UNKNOWN_INDICATOR] = 1;
-        INDICATOR_ORDER[Indicator.KEYBOARD] = 2;
-        INDICATOR_ORDER[Indicator.SOUND] = 3;
-        INDICATOR_ORDER[Indicator.NETWORK] = 4;
-        INDICATOR_ORDER[Indicator.BLUETOOTH] = 5;
-        INDICATOR_ORDER[Indicator.PRINTER] = 6;
-        INDICATOR_ORDER[Indicator.SYNC] = 7;
-        INDICATOR_ORDER[Indicator.POWER] = 8;
-        INDICATOR_ORDER[Indicator.MESSAGES] = 9;
-        INDICATOR_ORDER[Indicator.SESSION] = 10;
+        indicator_order[AYATANA_INDICATOR] = 0;
+        indicator_order[UNKNOWN_INDICATOR] = 1;
+        indicator_order[Indicator.KEYBOARD] = 2;
+        indicator_order[Indicator.SOUND] = 3;
+        indicator_order[Indicator.NETWORK] = 4;
+        indicator_order[Indicator.BLUETOOTH] = 5;
+        indicator_order[Indicator.PRINTER] = 6;
+        indicator_order[Indicator.SYNC] = 7;
+        indicator_order[Indicator.POWER] = 8;
+        indicator_order[Indicator.MESSAGES] = 9;
+        indicator_order[Indicator.SESSION] = 10;
     }
 
     public int compare_func (Wingpanel.Widgets.IndicatorEntry? a, Wingpanel.Widgets.IndicatorEntry? b) {
@@ -73,13 +73,13 @@ public class Wingpanel.Services.IndicatorSorter : Object {
     private static int get_order (Wingpanel.Widgets.IndicatorEntry node) {
         /* ayatana application indicators on the left of the native indicators */
         if (node.base_indicator.code_name.has_prefix ("ayatana-")) {
-            return INDICATOR_ORDER[AYATANA_INDICATOR];
+            return indicator_order[AYATANA_INDICATOR];
         }
 
-        if (node.base_indicator.code_name in INDICATOR_ORDER) {
-            return INDICATOR_ORDER[node.base_indicator.code_name];
+        if (node.base_indicator.code_name in indicator_order) {
+            return indicator_order[node.base_indicator.code_name];
         }
 
-        return INDICATOR_ORDER[UNKNOWN_INDICATOR];
+        return indicator_order[UNKNOWN_INDICATOR];
     }
 }
