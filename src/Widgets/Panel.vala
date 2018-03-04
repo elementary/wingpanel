@@ -301,10 +301,16 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
                 style_context.remove_class ("color-dark");
                 style_context.remove_class ("translucent");
                 break;
-            case Services.BackgroundState.TRANSLUCENT:
+            case Services.BackgroundState.TRANSLUCENT_DARK:
                 style_context.add_class ("translucent");
-                style_context.remove_class ("color-light");
+                style_context.add_class ("color-light");
                 style_context.remove_class ("color-dark");
+                style_context.remove_class ("maximized");
+                break;
+            case Services.BackgroundState.TRANSLUCENT_LIGHT:
+                style_context.add_class ("translucent");
+                style_context.add_class ("color-dark");
+                style_context.remove_class ("color-light");
                 style_context.remove_class ("maximized");
                 break;
         }
