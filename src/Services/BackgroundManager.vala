@@ -22,7 +22,8 @@ namespace Wingpanel.Services {
         LIGHT,
         DARK,
         MAXIMIZED,
-        TRANSLUCENT
+        TRANSLUCENT_DARK,
+        TRANSLUCENT_LIGHT
     }
 
     [DBus (name = "org.pantheon.gala.WingpanelInterface")]
