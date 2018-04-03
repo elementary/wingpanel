@@ -21,6 +21,7 @@
  * A scroll box that takes its child's height, unless that height is more than max_height.
  * If it is actually higher than max_height, then it will stick to max_height.
  */
+[Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Gtk.ScrolledWindow.max_content_height")]
 public class Wingpanel.Widgets.AutomaticScrollBox : Gtk.ScrolledWindow {
     /**
      * The maximal height of the scroll box before it starts scrolling.
