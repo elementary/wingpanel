@@ -18,46 +18,57 @@
  */
 
 public class Wingpanel.Widgets.Switch : Container {
-    private Gtk.Label button_label;
-
-    private Gtk.Switch button_switch;
-
+    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.caption")]
+    public extern void set_caption (string caption);
+    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.caption")]
+    public extern string get_caption ();
+    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.active")]
+    public extern void set_active (bool active);
+    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.active")]
+    public extern bool get_active ();
+    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.active")]
     public new signal void switched ();
 
+    public bool active { get; set; }
+    public string caption { owned get; set; }
+
+    private Gtk.Label button_label;
+    private Gtk.Switch button_switch;
+
     public Switch (string caption, bool active = false) {
-        button_label = create_label_for_caption (caption);
-        button_switch = create_switch (active);
-
-        content_widget.attach (button_label, 0, 0, 1, 1);
-        content_widget.attach (button_switch, 1, 0, 1, 1);
-
-        connect_signals ();
+        Object (caption: caption, active: active);
     }
 
     public Switch.with_mnemonic (string caption, bool active = false) {
-        button_label = create_label_for_caption (caption, true);
-        button_switch = create_switch (active);
+        Object (caption: caption, active: active);
+        button_label.set_text_with_mnemonic (caption);
+        button_label.set_mnemonic_widget (this);
+    }
+
+    construct {
+        button_switch = new Gtk.Switch ();
+        button_switch.active = active;
+        button_switch.halign = Gtk.Align.END;
+        button_switch.margin_end = 6;
+        button_switch.hexpand = true;
+
+        button_label = new Gtk.Label (null);
+        button_label.halign = Gtk.Align.START;
+        button_label.margin_start = 6;
+        button_label.margin_end = 10;
 
         content_widget.attach (button_label, 0, 0, 1, 1);
         content_widget.attach (button_switch, 1, 0, 1, 1);
 
-        connect_signals ();
-    }
+        clicked.connect (() => {
+            toggle_switch ();
+        });
 
-    public void set_caption (string caption) {
-        button_label.set_label (Markup.escape_text (caption));
-    }
-
-    public string get_caption () {
-        return button_label.get_label ();
-    }
-
-    public void set_active (bool active) {
-        button_switch.set_active (active);
-    }
-
-    public bool get_active () {
-        return button_switch.get_active ();
+        bind_property ("active", button_switch, "active", GLib.BindingFlags.SYNC_CREATE|GLib.BindingFlags.BIDIRECTIONAL);
+        bind_property ("caption", button_label, "label", GLib.BindingFlags.SYNC_CREATE|GLib.BindingFlags.BIDIRECTIONAL);
+        button_switch.notify["active"].connect (() => {
+            switched ();
+        });
     }
 
     public new Gtk.Label get_label () {
@@ -70,43 +81,5 @@ public class Wingpanel.Widgets.Switch : Container {
 
     public void toggle_switch () {
         button_switch.activate ();
-    }
-
-    private Gtk.Label create_label_for_caption (string caption, bool use_mnemonic = false) {
-        Gtk.Label label_widget;
-
-        if (use_mnemonic) {
-            label_widget = new Gtk.Label.with_mnemonic (Markup.escape_text (caption));
-            label_widget.set_mnemonic_widget (this);
-        } else {
-            label_widget = new Gtk.Label (Markup.escape_text (caption));
-        }
-
-        label_widget.use_markup = true;
-        label_widget.halign = Gtk.Align.START;
-        label_widget.margin_start = 6;
-        label_widget.margin_end = 10;
-
-        return label_widget;
-    }
-
-    private Gtk.Switch create_switch (bool active) {
-        var switch_widget = new Gtk.Switch ();
-        switch_widget.active = active;
-        switch_widget.halign = Gtk.Align.END;
-        switch_widget.margin_end = 6;
-        switch_widget.hexpand = true;
-
-        return switch_widget;
-    }
-
-    private void connect_signals () {
-        this.clicked.connect (() => {
-            toggle_switch ();
-        });
-
-        button_switch.notify["active"].connect (() => {
-            switched ();
-        });
     }
 }
