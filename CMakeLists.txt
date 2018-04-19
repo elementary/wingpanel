@@ -83,7 +83,7 @@ set (LIB_PKG
   gio-2.0
   gee-0.8
   gmodule-2.0
-  gtk+-3.0>=3.14
+  gtk+-3.0>=3.22
 )
 find_package(PkgConfig)
 
