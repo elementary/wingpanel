@@ -55,10 +55,11 @@ public class Wingpanel.Services.PopoverManager : Object {
                 owner.set_expanded (true);
                 make_modal (popover, true);
                 owner.present ();
+                popover.popup ();
                 popover.show_all ();
                 _current_indicator.base_indicator.opened ();
             } else {
-                popover.hide ();
+                popover.popdown ();
             }
         }
     }
