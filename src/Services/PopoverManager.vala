@@ -50,8 +50,8 @@ public class Wingpanel.Services.PopoverManager : Object {
             }
 
             if (_current_indicator != null) {
-                popover.relative_to = _current_indicator;
                 popover.set_content (_current_indicator.indicator_widget);
+                popover.relative_to = _current_indicator;
                 owner.set_expanded (true);
                 make_modal (popover, true);
                 owner.present ();
