@@ -31,7 +31,10 @@ namespace WingpanelInterface.Utils {
 
         public override void post_paint () {
             base.post_paint ();
-            done_painting ();
+            Idle.add (() => {
+                done_painting ();
+                return false;
+            });
         }
     }
 
