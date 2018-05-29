@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.Panel : Gtk.Box {
+public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     public Services.PopoverManager popover_manager { get; construct; }
 
     private IndicatorMenuBar right_menubar;
@@ -28,25 +28,29 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
     private Gtk.CssProvider? style_provider = null;
 
     public Panel (Services.PopoverManager popover_manager) {
-        Object (popover_manager : popover_manager, orientation: Gtk.Orientation.HORIZONTAL);
+        Object (popover_manager : popover_manager);
 
         this.set_size_request (-1, 24);
 
         this.hexpand = true;
-        this.vexpand = false;
+        this.vexpand = true;
         this.valign = Gtk.Align.START;
         this.get_style_context ().add_class (StyleClass.PANEL);
 
+        var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+
         left_menubar = new MenuBar ();
         left_menubar.halign = Gtk.Align.START;
-        this.pack_start (left_menubar);
+        box.pack_start (left_menubar);
 
         center_menubar = new MenuBar ();
-        this.set_center_widget (center_menubar);
+        box.set_center_widget (center_menubar);
 
         right_menubar = new IndicatorMenuBar ();
         right_menubar.halign = Gtk.Align.END;
-        this.pack_end (right_menubar);
+        box.pack_end (right_menubar);
+
+        add (box);
 
         unowned IndicatorManager indicator_manager = IndicatorManager.get_default ();
         indicator_manager.indicator_added.connect (add_indicator);
@@ -61,6 +65,38 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
         style_context = this.get_style_context ();
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
+    }
+
+    public override bool button_press_event (Gdk.EventButton event) {
+        if (event.button != Gdk.BUTTON_PRIMARY) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        var window = get_window ();
+        if (window == null) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        // Grabbing with touchscreen on X does not work unfortunately
+        if (event.device.get_source () == Gdk.InputSource.TOUCHSCREEN) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        uint32 time = event.time;
+        
+#if HAS_GTK320
+        window.get_display ().get_default_seat ().ungrab ();
+#else
+        window.get_display ().pointer_ungrab (time);
+#endif
+
+        Gdk.ModifierType state;
+        event.get_state (out state);
+
+        popover_manager.close ();
+
+        var background_manager = Services.BackgroundManager.get_default ();
+        return background_manager.begin_grab_focused_window ((int)event.x_root, (int)event.y_root, (int)event.button, time, state);
     }
 
     public void cycle (bool forward) {

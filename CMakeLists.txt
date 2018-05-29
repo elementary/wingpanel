@@ -96,6 +96,12 @@ set (GLOBAL_VALAC_OPTIONS
   --thread
 )
 
+pkg_check_modules(GTK320 QUIET gtk+-3.0>=3.20)
+
+if (GTK320_FOUND)
+    set (GLOBAL_VALAC_OPTIONS ${GLOBAL_VALAC_OPTIONS} --define HAS_GTK320)
+endif ()
+
 find_package (Vala REQUIRED)
 include (ValaVersion)
 ensure_vala_version ("0.24.0" MINIMUM)

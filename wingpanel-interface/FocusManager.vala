@@ -50,6 +50,43 @@ public class WingpanelInterface.FocusManager : Object {
         }
     }
 
+    public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
+        var display = Main.screen.get_display ();
+        var window = display.get_focus_window ();
+        if (window == null || !get_can_grab_window (window, x, y)) {
+            unowned Meta.Workspace workspace = Main.screen.get_active_workspace ();
+            List<unowned Meta.Window>? windows = workspace.list_windows ();
+            if (windows == null) {
+                return false;
+            }
+
+            window = null;
+            List<unowned Meta.Window> copy = windows.copy ();
+            copy.reverse ();
+            copy.@foreach ((win) => {
+                if (window != null) {
+                    return;
+                }
+
+                if (get_can_grab_window (win, x, y)) {
+                    window = win;
+                }
+            });
+        }
+
+        if (window != null) {
+            display.begin_grab_op (Main.screen, window, Meta.GrabOp.MOVING, false, true, button, state, time, x, y);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool get_can_grab_window (Meta.Window window, int x, int y) {
+        var frame = window.get_frame_rect ();
+        return window.maximized_vertically && x >= frame.x && x <= frame.x + frame.width;
+    }
+
     private void update_current_workspace () {
         var workspace = Main.screen.get_workspace_by_index (Main.screen.get_active_workspace_index ());
 

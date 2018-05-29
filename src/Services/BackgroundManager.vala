@@ -33,6 +33,7 @@ namespace Wingpanel.Services {
         public abstract void initialize (int monitor, int panel_height) throws IOError;
         public abstract void remember_focused_window () throws IOError;
         public abstract void restore_focused_window () throws IOError;
+        public abstract bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws IOError;
     }
 
     public class BackgroundManager : Object {
@@ -98,6 +99,16 @@ namespace Wingpanel.Services {
             } catch (Error e) {
                 warning ("Restoring last focused window failed: %s", e.message);
             }
+        }
+
+        public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
+            try {
+                return bus.begin_grab_focused_window (x, y, button, time, state);
+            } catch (Error e) {
+                warning ("Grabbing focused window failed: %s", e.message);
+            }
+
+            return false;
         }
 
         private bool connect_dbus () {
