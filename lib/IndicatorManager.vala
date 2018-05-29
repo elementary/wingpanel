@@ -147,7 +147,9 @@ public class Wingpanel.IndicatorManager : GLib.Object {
             error ("Wingpanel is not supported by this system!");
         }
 
-        if (indicators.has_key (path)) {
+        if (!path.has_suffix (GLib.Module.SUFFIX)) {
+            return;
+        } else if (indicators.has_key (path)) {
             return;
         } else if (check_indicator_blacklist (path)) {
             debug ("Indicator %s will not be loaded since it is blacklisted", path);

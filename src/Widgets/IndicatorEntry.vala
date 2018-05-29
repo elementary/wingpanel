@@ -59,18 +59,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         this.add (revealer);
         revealer.add (display_widget);
 
-        if (indicator_widget == null) {
-            this.button_press_event.connect ((e) => {
-                popover_manager.close ();
-                display_widget.button_press_event (e);
-
-                return Gdk.EVENT_PROPAGATE;
-            });
-            set_reveal (base_indicator.visible);
-
-            return;
-        }
-
         if (base_indicator.visible) {
             popover_manager.register_indicator (this);
         }

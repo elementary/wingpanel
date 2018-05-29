@@ -73,7 +73,11 @@ public class WingpanelInterface.BackgroundManager : Object {
             });
 
             return true;
+#if VALA_0_42
+        });
+#else
         }, null);
+#endif
     }
 
     private void update_current_workspace () {
