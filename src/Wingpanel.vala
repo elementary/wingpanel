@@ -47,7 +47,7 @@ namespace Wingpanel {
             exec_name = "wingpanel";
             app_launcher = exec_name + ".desktop";
 
-            build_version = "2.0.4";
+            build_version = "2.1.0";
 
             add_main_option_entries (OPTIONS);
         }
