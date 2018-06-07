@@ -1,2 +1,2 @@
 include(GSettings)
-add_schema("org.pantheon.desktop.wingpanel.gschema.xml")
+add_schema("io.elementary.desktop.wingpanel.gschema.xml")
