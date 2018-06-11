@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-	<schema path="/org/pantheon/desktop/wingpanel/" id="org.pantheon.desktop.wingpanel" gettext-domain="wingpanel">
+	<schema path="/io/elementary/desktop/wingpanel/" id="io.elementary.desktop.wingpanel" gettext-domain="wingpanel">
 		<key type="b" name="use-transparency">
 			<default>true</default>
 			<summary>Sets if the panel uses transparency.</summary>
