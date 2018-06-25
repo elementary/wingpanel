@@ -84,7 +84,7 @@ public class WingpanelInterface.FocusManager : Object {
 
     private static bool get_can_grab_window (Meta.Window window, int x, int y) {
         var frame = window.get_frame_rect ();
-        return window.maximized_vertically && x >= frame.x && x <= frame.x + frame.width;
+        return !window.minimized && window.maximized_vertically && x >= frame.x && x <= frame.x + frame.width;
     }
 
     private void update_current_workspace () {
