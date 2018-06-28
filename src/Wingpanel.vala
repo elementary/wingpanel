@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ * Copyright (c) 2011-2018 elementary, Inc. (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -24,7 +24,7 @@ namespace Wingpanel {
         return app.run (args);
     }
 
-    public class WingpanelApp : Granite.Application {
+    public class WingpanelApp : Gtk.Application {
         private const string LIST_INDICATORS_ACTION_NAME = "list-indicators";
         private const string OPEN_INDICATOR_ACTION_NAME = "open-indicator";
         private const string CLOSE_INDICATOR_ACTION_NAME = "close-indicator";
@@ -41,13 +41,7 @@ namespace Wingpanel {
 
         construct {
             flags = ApplicationFlags.HANDLES_COMMAND_LINE;
-
             application_id = "org.elementary.wingpanel";
-            program_name = _("System Panel");
-            exec_name = "wingpanel";
-            app_launcher = exec_name + ".desktop";
-
-            build_version = "2.1.1";
 
             add_main_option_entries (OPTIONS);
         }
