@@ -34,7 +34,7 @@ namespace Wingpanel {
         private const OptionEntry[] OPTIONS = {
             { OPEN_INDICATOR_ACTION_NAME, 'o', 0, OptionArg.STRING, null, "Open an indicator", "code_name" },
             { CLOSE_INDICATOR_ACTION_NAME, 'c', 0, OptionArg.STRING, null, "Close an indicator", "code_name" },
-            { SERVER_TYPE_ACTION_NAME, 'g', 0, OptionArg.NONE, null, "server is a greeter", "code_name" },
+            { SERVER_TYPE_ACTION_NAME, 'g', 0, OptionArg.NONE, null, "Server is a greeter", null },
             { TOGGLE_INDICATOR_ACTION_NAME, 't', 0, OptionArg.STRING, null, "Toggle an indicator", "code_name" },
             { null }
         };
