@@ -28,11 +28,13 @@ namespace Wingpanel {
         private const string LIST_INDICATORS_ACTION_NAME = "list-indicators";
         private const string OPEN_INDICATOR_ACTION_NAME = "open-indicator";
         private const string CLOSE_INDICATOR_ACTION_NAME = "close-indicator";
+        private const string SERVER_TYPE_ACTION_NAME = "greeter";
         private const string TOGGLE_INDICATOR_ACTION_NAME = "toggle-indicator";
 
         private const OptionEntry[] OPTIONS = {
             { OPEN_INDICATOR_ACTION_NAME, 'o', 0, OptionArg.STRING, null, "Open an indicator", "code_name" },
             { CLOSE_INDICATOR_ACTION_NAME, 'c', 0, OptionArg.STRING, null, "Close an indicator", "code_name" },
+            { SERVER_TYPE_ACTION_NAME, 'g', 0, OptionArg.NONE, null, "Server is a greeter", null },
             { TOGGLE_INDICATOR_ACTION_NAME, 't', 0, OptionArg.STRING, null, "Toggle an indicator", "code_name" },
             { null }
         };
@@ -61,6 +63,12 @@ namespace Wingpanel {
         protected override int command_line (ApplicationCommandLine command_line) {
             VariantDict options = command_line.get_options_dict ();
 
+            if (options.contains (SERVER_TYPE_ACTION_NAME)) {
+                IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.GREETER);
+            } else {
+                IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
+            }
+
             if (options.contains (OPEN_INDICATOR_ACTION_NAME)) {
                 activate_action (OPEN_INDICATOR_ACTION_NAME, options.lookup_value (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING));
             }
@@ -78,8 +86,6 @@ namespace Wingpanel {
 
         protected override void startup () {
             base.startup ();
-
-            IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
 
             panel_window = new PanelWindow (this);
             panel_window.show_all ();
