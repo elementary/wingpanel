@@ -130,8 +130,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         }
 
         var monitor = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
-
         var position_top = monitor_y - panel_displacement;
+        var scale_factor = this.get_scale_factor ();
 
         Gdk.Atom atom;
         Gdk.Rectangle primary_monitor_rect;
@@ -141,10 +141,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         this.screen.get_monitor_geometry (monitor, out primary_monitor_rect);
 
 		// We need to manually include the scale factor here as GTK gives us unscaled sizes for widgets
-        struts = { 0, 0, position_top * this.get_scale_factor () , 0, /* strut-left, strut-right, strut-top, strut-bottom */
+        struts = { 0, 0, position_top * scale_factor, 0, /* strut-left, strut-right, strut-top, strut-bottom */
                    0, 0, /* strut-left-start-y, strut-left-end-y */
                    0, 0, /* strut-right-start-y, strut-right-end-y */
-                   monitor_x, monitor_x + monitor_width - 1, /* strut-top-start-x, strut-top-end-x */
+                   monitor_x, ((monitor_x + monitor_width) * scale_factor) - 1, /* strut-top-start-x, strut-top-end-x */
                    0, 0 }; /* strut-bottom-start-x, strut-bottom-end-x */
 
         atom = Gdk.Atom.intern ("_NET_WM_STRUT_PARTIAL", false);
