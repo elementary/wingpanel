@@ -132,6 +132,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         var monitor = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
         var position_top = monitor_y - panel_displacement;
         var scale_factor = this.get_scale_factor ();
+        if ("io.elementary.greeter" != "fullscreen"){
+        position_top = monitor_y;
+        }
 
         Gdk.Atom atom;
         Gdk.Rectangle primary_monitor_rect;
