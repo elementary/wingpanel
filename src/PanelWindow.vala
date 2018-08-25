@@ -30,7 +30,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private bool expanded = false;
     private int panel_displacement;
     private uint shrink_timeout = 0;
-    private int greeter;
+    private bool greeter = false;
 
     public PanelWindow (Gtk.Application application) {
         Object (
@@ -127,7 +127,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     
     public void greeter_mode () {
     
-    greeter = 1;
+    greeter = true;
     
     }
     
@@ -139,7 +139,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         var monitor = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
         var position_top = monitor_y - panel_displacement;
         var scale_factor = this.get_scale_factor ();
-        if (greeter == 1){
+        if (greeter == true){
         position_top = monitor_y;
         }
 
