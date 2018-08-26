@@ -137,10 +137,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         }
 
         var monitor = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
-        var position_top = monitor_y - panel_displacement;
+        var position_top = monitor_y;
         var scale_factor = this.get_scale_factor ();
-        if (greeter == true){
-        position_top = monitor_y;
+        if (greeter != true){
+        position_top = monitor_y - panel_displacement;
         }
 
         Gdk.Atom atom;
