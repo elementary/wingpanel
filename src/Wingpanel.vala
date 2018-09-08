@@ -65,6 +65,7 @@ namespace Wingpanel {
 
             if (options.contains (SERVER_TYPE_ACTION_NAME)) {
                 IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.GREETER);
+                panel_window.greeter_mode();
             } else {
                 IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
             }
