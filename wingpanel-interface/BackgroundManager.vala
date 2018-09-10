@@ -161,7 +161,7 @@ public class WingpanelInterface.BackgroundManager : Object {
         bool has_maximized_window = false;
 
         foreach (Meta.Window window in current_workspace.list_windows ()) {
-            if (window.get_monitor () == monitor) {
+            if (window.is_on_primary_monitor ()) {
                 if (!window.minimized && window.maximized_vertically) {
                     has_maximized_window = true;
                     break;
