@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ * Copyright (c) 2011-2018 elementary, Inc. (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -51,6 +51,7 @@ public class Wingpanel.Widgets.Switch : Container {
         button_switch.halign = Gtk.Align.END;
         button_switch.margin_end = 6;
         button_switch.hexpand = true;
+        button_switch.valign = Gtk.Align.CENTER;
 
         button_label = new Gtk.Label (null);
         button_label.halign = Gtk.Align.START;
