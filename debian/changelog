@@ -1,3 +1,9 @@
+wingpanel (2.2.0) bionic; urgency=medium
+
+  * New upstream release.
+
+ -- Cody Garver <cody@elementary.io>  Thu, 04 Oct 2018 09:34:15 -0500
+
 wingpanel (2.1.1) bionic; urgency=medium
 
   * New upstream release.
