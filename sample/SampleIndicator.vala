@@ -23,10 +23,10 @@
  */
 public class Sample.Indicator : Wingpanel.Indicator {
     /* Our display widget, a composited icon */
-    private Wingpanel.Widgets.OverlayIcon? display_widget;
+    private Wingpanel.Widgets.OverlayIcon display_widget;
 
     /* The main widget that is displayed in the popover */
-    private Gtk.Grid? main_widget;
+    private Gtk.Grid main_widget;
 
     public Indicator () {
         /* Some information about the indicator */
