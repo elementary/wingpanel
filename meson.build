@@ -7,6 +7,12 @@ project(
 lib_version = '2.0'
 
 add_project_arguments([
+        '--vapidir=' + join_paths(meson.source_root(), 'vapi'),
+    ],
+    language: 'vala',
+)
+
+add_project_arguments([
         '-DGETTEXT_PACKAGE="wingpanel"',
         '-DG_LOG_DOMAIN="wingpanel"'
     ],
@@ -30,6 +36,7 @@ subdir('data')
 subdir('lib')
 subdir('schemas')
 subdir('src')
+subdir('wingpanel-interface')
 if get_option('example')
     subdir('sample')
 endif
