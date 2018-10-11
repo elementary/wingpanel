@@ -46,7 +46,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
         var compositing_switch = new Wingpanel.Widgets.Switch (_("Composited Icon"));
 
-        var main_widget = new Gtk.Grid ();
+        main_widget = new Gtk.Grid ();
         main_widget.attach (hide_button, 0, 0);
         main_widget.attach (new Wingpanel.Widgets.Separator (), 0, 1);
         main_widget.attach (compositing_switch, 0, 2);
@@ -65,7 +65,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
         compositing_switch.notify["active"].connect (() => {
             /* If the switch is enabled set the icon name of the icon that should be drawn on top of the other one, if not hide the top icon. */
-            display_widget.set_overlay_icon_name (compositing_switch.active ? "nm-vpn-active-lock" : "");
+            display_widget.set_overlay_icon_name (compositing_switch.active ? "network-vpn-lock-symbolic" : "");
         });
     }
 
