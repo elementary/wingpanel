@@ -84,6 +84,7 @@ endif
 mutter_typelib_dir = libmutter_dep.get_pkgconfig_variable('typelibdir')
 
 gala_dep = dependency('gala')
+m_dep = meson.get_compiler('c').find_library('m', required: false)
 
 shared_module(
     'wingpanel-interface',
@@ -93,9 +94,11 @@ shared_module(
     'FocusManager.vala',
     'Settings.vala',
     'Utils.vala',
-    dependencies: [gala_dep, granite_dep, mutter_dep],
+    dependencies: [gala_dep, granite_dep, mutter_dep, m_dep],
     vala_args: vala_flags,
     c_args: c_flags,
-    install_rpath: '-Wl,-rpath,@0@'.format(mutter_typelib_dir)
+    install_rpath: mutter_typelib_dir,
+    install: true,
+    install_dir: join_paths(get_option('libdir'), 'gala', 'plugins'),
 )
 
