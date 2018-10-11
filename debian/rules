@@ -10,7 +10,7 @@
 #export DH_VERBOSE=1
 
 %:
-	dh $@ 
+	dh $@ --buildsystem=meson
 
 override_dh_strip:
 	dh_strip --dbg-package=wingpanel-dbg
