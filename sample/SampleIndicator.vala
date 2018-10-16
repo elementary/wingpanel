@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ * Copyright (c) 2011-2018 elementary, Inc. (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -23,52 +23,59 @@
  */
 public class Sample.Indicator : Wingpanel.Indicator {
     /* Our display widget, a composited icon */
-    private Wingpanel.Widgets.OverlayIcon? display_widget = null;
+    private Wingpanel.Widgets.OverlayIcon display_widget;
 
     /* The main widget that is displayed in the popover */
-    private Gtk.Grid? main_widget = null;
+    private Gtk.Grid main_widget;
 
-    /* Button to hide the indicator */
-    private Wingpanel.Widgets.Button hide_button;
-
-    /* Switch to set the compositing mode of the icon */
-    private Wingpanel.Widgets.Switch compositing_switch;
-
-    /* Constructor */
     public Indicator () {
         /* Some information about the indicator */
-        Object (code_name : "sample-indicator", /* Unique name */
-                display_name : _("Sample Indicator"), /* Localised name */
-                description: _("Does nothing, but it is cool!")); /* Short description */
+        Object (
+            code_name : "sample-indicator", /* Unique name */
+            display_name : _("Sample Indicator"), /* Localised name */
+            description: _("Does nothing, but it is cool!") /* Short description */
+        );
+    }
+
+    construct {
+        /* Create a new composited icon */
+        display_widget = new Wingpanel.Widgets.OverlayIcon ("dialog-information-symbolic");
+
+        var hide_button = new Gtk.ModelButton ();
+        hide_button.text = _("Hide me!");
+
+        var compositing_switch = new Wingpanel.Widgets.Switch (_("Composited Icon"));
+
+        main_widget = new Gtk.Grid ();
+        main_widget.attach (hide_button, 0, 0);
+        main_widget.attach (new Wingpanel.Widgets.Separator (), 0, 1);
+        main_widget.attach (compositing_switch, 0, 2);
 
         /* Indicator should be visible at startup */
         this.visible = true;
+
+        hide_button.clicked.connect (() => {
+            this.visible = false;
+
+            Timeout.add (2000, () => {
+                this.visible = true;
+                return false;
+            });
+        });
+
+        compositing_switch.notify["active"].connect (() => {
+            /* If the switch is enabled set the icon name of the icon that should be drawn on top of the other one, if not hide the top icon. */
+            display_widget.set_overlay_icon_name (compositing_switch.active ? "network-vpn-lock-symbolic" : "");
+        });
     }
 
-    /* This method is called to get the widget that is displayed in the top bar */
+    /* This method is called to get the widget that is displayed in the panel */
     public override Gtk.Widget get_display_widget () {
-        /* Check if the display widget is already created */
-        if (display_widget == null) {
-            /* Create a new composited icon */
-            display_widget = new Wingpanel.Widgets.OverlayIcon ("dialog-information-symbolic");
-        }
-
-        /* Return our display widget */
         return display_widget;
     }
 
     /* This method is called to get the widget that is displayed in the popover */
     public override Gtk.Widget? get_widget () {
-        /* Check if the main widget is already created */
-        if (main_widget == null) {
-            /* Create the main widget */
-            main_widget = create_main_widget ();
-
-            /* Connect the signals */
-            connect_signals ();
-        }
-
-        /* Return our main widget */
         return main_widget;
     }
 
@@ -80,56 +87,6 @@ public class Sample.Indicator : Wingpanel.Indicator {
     /* This method is called when the indicator popover closed */
     public override void closed () {
         /* Your stuff isn't shown anymore, now you can free some RAM, stop timers or anything else... */
-    }
-
-    /* Let's move this gui code to an own method to make the code better readable */
-    private Gtk.Grid create_main_widget () {
-        /* Create the grid for our content */
-        var grid = new Gtk.Grid ();
-
-        /* Create the hide button */
-        hide_button = new Wingpanel.Widgets.Button (_("Hide me!"));
-
-        /* Create the compositing switch */
-        compositing_switch = new Wingpanel.Widgets.Switch (_("Composited Icon"));
-
-        /* Add the widgets */
-        grid.attach (hide_button, 0, 0, 1, 1);
-        grid.attach (new Wingpanel.Widgets.Separator (), 0, 1, 1, 1);
-        grid.attach (compositing_switch, 0, 2, 1, 1);
-
-        /* Return the grid */
-        return grid;
-    }
-
-    /* Method to connect the signals */
-    private void connect_signals () {
-        /* Connect to the click signal of the hide button */
-        hide_button.clicked.connect (hide_me);
-
-        /* Connect to the switch signal of the compositing switch */
-        compositing_switch.switched.connect (update_compositing);
-    }
-
-    /* Method to hide the indicator for a short time */
-    private void hide_me () {
-        /* Hide the indicator */
-        this.visible = false;
-
-        /* Show the indicator after two seconds */
-        Timeout.add (2000, () => {
-            /* Show it */
-            this.visible = true;
-
-            /* Don't run this timer in an endless loop */
-            return false;
-        });
-    }
-
-    /* Method to check the status of the compositing switch and update the indicator */
-    private void update_compositing () {
-        /* If the switch is enabled set the icon name of the icon that should be drawn on top of the other one, if not hide the top icon. */
-        display_widget.set_overlay_icon_name (compositing_switch.get_active () ? "nm-vpn-active-lock" : "");
     }
 }
 
