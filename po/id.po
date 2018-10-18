@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-25 15:59+0200\n"
+"POT-Creation-Date: 2018-10-18 10:30+0200\n"
 "PO-Revision-Date: 2017-07-06 14:51+0700\n"
 "Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
 "Language-Team: \n"
@@ -14,13 +14,12 @@ msgstr ""
 "X-Generator: Poedit 2.0.2\n"
 "X-Launchpad-Export-Date: 2017-03-24 05:38+0000\n"
 
-#: ../src/Wingpanel.vala:32
-msgid "System Panel"
-msgstr "Panel Sistem"
-
-#: ../src/Wingpanel.vala:74
+#: src/Wingpanel.vala:157
 msgid "A super sexy space-saving top panel"
 msgstr "Panel atas super seksi yang hemat ruang"
+
+#~ msgid "System Panel"
+#~ msgstr "Panel Sistem"
 
 #~ msgid "Applications"
 #~ msgstr "Aplikasi"

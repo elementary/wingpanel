@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wingpanel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-25 15:59+0200\n"
+"POT-Creation-Date: 2018-10-18 10:30+0200\n"
 "PO-Revision-Date: 2013-06-18 15:36+0000\n"
 "Last-Translator: Jaap K <jaapkoornstra@outlook.com>\n"
 "Language-Team: Frisian <fy@li.org>\n"
@@ -18,11 +18,7 @@ msgstr ""
 "X-Launchpad-Export-Date: 2017-03-24 05:38+0000\n"
 "X-Generator: Launchpad (build 18334)\n"
 
-#: ../src/Wingpanel.vala:32
-msgid "System Panel"
-msgstr ""
-
-#: ../src/Wingpanel.vala:74
+#: src/Wingpanel.vala:157
 msgid "A super sexy space-saving top panel"
 msgstr ""
 
