@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-25 15:59+0200\n"
+"POT-Creation-Date: 2018-10-18 10:30+0200\n"
 "PO-Revision-Date: 2015-11-14 14:31+0000\n"
 "Last-Translator: Beqa Arabuli <arabulibeqa@yahoo.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,10 +13,9 @@ msgstr ""
 "X-Launchpad-Export-Date: 2017-03-24 05:38+0000\n"
 "X-Generator: Launchpad (build 18334)\n"
 
-#: ../src/Wingpanel.vala:32
-msgid "System Panel"
-msgstr "სისტემის პანელი"
-
-#: ../src/Wingpanel.vala:74
+#: src/Wingpanel.vala:157
 msgid "A super sexy space-saving top panel"
 msgstr "სუპერ სექსუალური სივრცის-დამზოგავი მაღლითა პანელი"
+
+#~ msgid "System Panel"
+#~ msgstr "სისტემის პანელი"
