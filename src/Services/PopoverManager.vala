@@ -84,6 +84,8 @@ public class Wingpanel.Services.PopoverManager : Object {
 
         popover.closed.connect (() => {
             make_modal (popover, false);
+        });
+        popover.unmap.connect (() => {
             owner.set_expanded (false);
         });
 
