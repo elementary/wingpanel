@@ -68,6 +68,12 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         });
 
         base_indicator.notify["visible"].connect (() => {
+            // switch revealer transition
+            if (revealer.transition_type == Gtk.RevealerTransitionType.SLIDE_LEFT) {
+                revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_RIGHT;
+            } else if (revealer.transition_type == Gtk.RevealerTransitionType.SLIDE_RIGHT) {
+                revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
+            }
             if (menu_bar != null) {
                 /* order will be changed so close all open popovers */
                 popover_manager.close ();
