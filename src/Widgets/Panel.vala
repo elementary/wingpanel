@@ -65,6 +65,17 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         style_context = this.get_style_context ();
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
+
+        const string DESKTOP_SCHEMA = "io.elementary.desktop";
+        const string DARK_KEY = "prefer-dark";
+
+        var lookup = SettingsSchemaSource.get_default ().lookup (DESKTOP_SCHEMA, false);
+
+        if (lookup != null) {
+            var desktop_settings = new Settings (DESKTOP_SCHEMA);
+            var gtk_settings = Gtk.Settings.get_default ();
+            desktop_settings.bind (DARK_KEY, gtk_settings, "gtk_application_prefer_dark_theme", SettingsBindFlags.DEFAULT);
+        }
     }
 
     public override bool button_press_event (Gdk.EventButton event) {
@@ -83,7 +94,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         }
 
         uint32 time = event.time;
-        
+
 #if HAS_GTK320
         window.get_display ().get_default_seat ().ungrab ();
 #else
