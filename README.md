@@ -8,11 +8,13 @@ The extensible top panel for Pantheon. Wingpanel is an empty container that acce
 
 You'll need the following dependencies:
 
+* libgala-dev
 * libgee-0.8-dev
 * libglib2.0-dev
 * libgranite-dev
 * libgtk-3-dev
 * meson
+* libmutter-2-dev
 * valac
 
 Run `meson` to configure the build environment and then `ninja` to build

@@ -29,7 +29,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private int panel_height;
     private bool expanded = false;
     private int panel_displacement;
-    private uint shrink_timeout = 0;
 
     public PanelWindow (Gtk.Application application) {
         Object (
@@ -158,28 +157,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             Services.BackgroundManager.get_default ().remember_window ();
 
             this.expanded = true;
-
-            if (shrink_timeout > 0) {
-                Source.remove (shrink_timeout);
-                shrink_timeout = 0;
-            }
-
             this.set_size_request (monitor_width, monitor_height);
         } else if (!expand) {
             Services.BackgroundManager.get_default ().restore_window ();
 
             this.expanded = false;
-
-            if (shrink_timeout > 0) {
-                Source.remove (shrink_timeout);
-            }
-
-            shrink_timeout = Timeout.add (300, () => {
-                shrink_timeout = 0;
-                this.set_size_request (monitor_width, expanded ? monitor_height : -1);
-                this.resize (monitor_width, expanded ? monitor_height : 1);
-                return false;
-            });
+            this.set_size_request (monitor_width, expanded ? monitor_height : -1);
+            this.resize (monitor_width, expanded ? monitor_height : 1);
         }
     }
 }
