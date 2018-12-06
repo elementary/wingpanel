@@ -1,5 +1,5 @@
 project(
-    'wingpanel',
+    'io.elementary.panel',
     'c', 'vala',
     version: '2.2.0',
 )
