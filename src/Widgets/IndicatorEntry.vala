@@ -38,6 +38,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
     Services.PopoverManager popover_manager;
 
+    private uint reorder_timeout_id;
+
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
         this.popover_manager = popover_manager;
         this.base_indicator = base_indicator;
@@ -76,13 +78,15 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
                     popover_manager.register_indicator (this);
                     menu_bar.apply_new_order ();
                     set_reveal (base_indicator.visible);
+                    // cancel unmapped reorder
+                    if (reorder_timeout_id > 0) {
+                        Source.remove (reorder_timeout_id);
+                    }
                 } else {
                     set_reveal (base_indicator.visible);
                     popover_manager.unregister_indicator (this);
-                    Timeout.add (revealer.get_transition_duration (), () => {
-                        menu_bar.apply_new_order ();
-                        return false;
-                    });
+                    // reorder indicators when indicator is invisible
+                    display_widget.unmap.connect (indicator_unmapped);
                 }
             } else {
                 set_reveal (base_indicator.visible);
@@ -120,6 +124,16 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         });
 
         set_reveal (base_indicator.visible);
+    }
+
+    private void indicator_unmapped () {
+        base_indicator.get_display_widget ().unmap.disconnect (indicator_unmapped);
+
+        // using timeout to make it cancelable
+        reorder_timeout_id = Timeout.add (0, () => {
+            menu_bar.apply_new_order ();
+            return false;
+        });
     }
 
     public void set_transition_type (Gtk.RevealerTransitionType transition_type) {
