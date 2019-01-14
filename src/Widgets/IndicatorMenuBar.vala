@@ -20,7 +20,7 @@
 public class Wingpanel.Widgets.IndicatorMenuBar : MenuBar {
     private Gee.List<IndicatorEntry> sorted_items;
     private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
-    private uint apply_new_order_idle_id;
+    private uint apply_new_order_idle_id = 0;
 
     public IndicatorMenuBar () {
         sorted_items = new Gee.ArrayList<IndicatorEntry> ();
