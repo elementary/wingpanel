@@ -1,7 +1,7 @@
 project(
     'wingpanel',
     'c', 'vala',
-    version: '2.2.1',
+    version: '2.2.2',
 )
 
 lib_version = '0.2.0'
