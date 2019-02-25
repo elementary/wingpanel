@@ -30,7 +30,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
 
-        this.set_size_request (-1, 24);
+        this.set_size_request (-1, 30);
 
         this.hexpand = true;
         this.vexpand = true;
