@@ -20,6 +20,7 @@
 public class Wingpanel.Widgets.IndicatorMenuBar : MenuBar {
     private Gee.List<IndicatorEntry> sorted_items;
     private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
+    private uint apply_new_order_idle_id = 0;
 
     public IndicatorMenuBar () {
         sorted_items = new Gee.ArrayList<IndicatorEntry> ();
@@ -51,8 +52,16 @@ public class Wingpanel.Widgets.IndicatorMenuBar : MenuBar {
     }
 
     public void apply_new_order () {
-        clear ();
-        append_all_items ();
+        if (apply_new_order_idle_id > 0) {
+            GLib.Source.remove (apply_new_order_idle_id);
+            apply_new_order_idle_id = 0;
+        }
+        apply_new_order_idle_id = GLib.Idle.add_full (GLib.Priority.LOW, () => {
+            clear ();
+            append_all_items ();
+            apply_new_order_idle_id = 0;
+            return false;
+        });
     }
 
     private void clear () {

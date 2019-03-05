@@ -1,7 +1,7 @@
 project(
     'io.elementary.panel',
     'c', 'vala',
-    version: '2.2.0',
+    version: '2.2.2',
 )
 
 lib_version = '0.2.0'
