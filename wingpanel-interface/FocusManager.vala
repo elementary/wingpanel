@@ -33,14 +33,15 @@ public class WingpanelInterface.FocusManager : Object {
 
     public void remember_focused_window () {
         var windows = current_workspace.list_windows ();
-
         foreach (Meta.Window window in windows) {
+            window.focused.connect (window_focused);
+            window.unmanaged.connect (window_unmanaged);
             if (window.has_focus ()) {
                 last_focused_window = window;
-
-                return;
             }
         }
+
+        Main.screen.get_display ().window_created.connect (window_created);
     }
 
     public void restore_focused_window () {
@@ -48,6 +49,30 @@ public class WingpanelInterface.FocusManager : Object {
             var display = Main.screen.get_display ();
             last_focused_window.focus (display.get_current_time ());
         }
+
+        var windows = current_workspace.list_windows ();
+        foreach (Meta.Window window in windows) {
+            window.focused.disconnect (window_focused);
+            window.unmanaged.disconnect (window_unmanaged);
+        }
+
+        Main.screen.get_display ().window_created.disconnect (window_created);
+    }
+
+    void window_created (Meta.Window window) {
+        window.focused.connect (window_focused);
+        window.unmanaged.connect (window_unmanaged);
+    }
+
+    void window_focused (Meta.Window window) {
+        if (window.window_type == Meta.WindowType.NORMAL) {
+            last_focused_window = window;
+        }
+    }
+
+    void window_unmanaged (Meta.Window window) {
+        window.focused.disconnect (window_focused);
+        window.unmanaged.disconnect (window_unmanaged);
     }
 
     public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
