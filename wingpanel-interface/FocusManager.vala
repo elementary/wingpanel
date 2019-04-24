@@ -34,8 +34,7 @@ public class WingpanelInterface.FocusManager : Object {
     public void remember_focused_window () {
         var windows = current_workspace.list_windows ();
         foreach (Meta.Window window in windows) {
-            window.focused.connect (window_focused);
-            window.unmanaged.connect (window_unmanaged);
+            window_created (window);
             if (window.has_focus ()) {
                 last_focused_window = window;
             }
