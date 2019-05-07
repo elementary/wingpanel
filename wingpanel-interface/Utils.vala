@@ -83,6 +83,17 @@ namespace WingpanelInterface.Utils {
 
             CoglFixes.texture_get_data (texture, Cogl.PixelFormat.BGRA_8888_PRE, 0, pixels);
 
+            uint8[] data = {};
+            for (int i = 0; i < pixels.length; i += 4) {
+                data += pixels[i+2];
+                data += pixels[i+1];
+                data += pixels[i+0];
+                data += pixels[i+3];
+            }
+
+            var img = new Gdk.Pixbuf.from_data (data, Gdk.Colorspace.RGB, true, 8, width, height, 4*width);
+            img.savev (Path.build_filename (Environment.get_home_dir (), "test.png"), "png", {}, {});
+
             int size = width * height;
 
             double mean_squares = 0;
