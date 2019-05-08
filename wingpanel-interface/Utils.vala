@@ -61,8 +61,8 @@ namespace WingpanelInterface.Utils {
         var tex_width = (int)background.width;
         var tex_height = (int)background.height;
 
-        int x_start = reference_x;
-        int y_start = reference_y;
+        int x_start = reference_x + 2;
+        int y_start = reference_y + 2;
         int width = int.min (tex_width - reference_x, reference_width);
         int height = int.min (tex_height - reference_y, reference_height);
 
@@ -84,16 +84,6 @@ namespace WingpanelInterface.Utils {
             CoglFixes.texture_get_data (texture, Cogl.PixelFormat.BGRA_8888_PRE, 0, pixels);
 
             uint8[] data = {};
-            for (int i = 0; i < pixels.length; i += 4) {
-                data += pixels[i+2];
-                data += pixels[i+1];
-                data += pixels[i+0];
-                data += pixels[i+3];
-            }
-
-            var img = new Gdk.Pixbuf.from_data (data, Gdk.Colorspace.RGB, true, 8, width, height, 4*width);
-            img.savev (Path.build_filename (Environment.get_home_dir (), "test.png"), "png", {}, {});
-
             int size = width * height;
 
             double mean_squares = 0;
@@ -106,16 +96,20 @@ namespace WingpanelInterface.Utils {
              * plank's lib/Drawing/DrawingService.vala average_color()
              * http://bazaar.launchpad.net/~docky-core/plank/trunk/view/head:/lib/Drawing/DrawingService.vala
              */
-            for (int y = y_start; y < height; y++) {
-                for (int x = x_start; x < width; x++) {
-                    int i = y * width * 4 + x * 4;
+            for (int y = y_start; y < (height + y_start); y++) {
+                for (int x = x_start; x < (width + x_start); x++) {
+                    int i = y * ((int)texture.get_width () * 4) + (x * 4);
 
-                    uint8 r = pixels[i];
+                    uint8 r = pixels[i + 2];
                     uint8 g = pixels[i + 1];
-                    uint8 b = pixels[i + 2];
+                    uint8 b = pixels[i];
+
+                    data += r;
+                    data += g;
+                    data += b;
 
                     pixel = (0.3 * r + 0.59 * g + 0.11 * b) ;
-                    
+
                     pixel_lums[y * width + x] = pixel;
 
                     min = uint8.min (r, uint8.min (g, b));
@@ -139,7 +133,10 @@ namespace WingpanelInterface.Utils {
                     mean_squares += pixel * pixel;
                 }
             }
-            
+
+            var img = new Gdk.Pixbuf.from_data (data, Gdk.Colorspace.RGB, false, 8, width, height, 3*width);
+            img.savev (Path.build_filename (Environment.get_home_dir (), "test.png"), "png", {}, {});
+
             for (int y = y_start + 1; y < height - 1; y++) {
                 for (int x = x_start + 1; x < width - 1; x++) {
                     var acutance =
@@ -150,7 +147,7 @@ namespace WingpanelInterface.Utils {
                             pixel_lums[(y - 1) * width + x] +
                             pixel_lums[(y + 1) * width + x]
                         );
-                    
+
                     mean_acutance += acutance > 0 ? acutance : -acutance;
                 }
             }
@@ -197,7 +194,7 @@ namespace WingpanelInterface.Utils {
             mean_squares = mean_squares / size;
 
             variance = (mean_squares - (mean * mean));
-            
+
             mean_acutance /= (width - 2) * (height - 2);
 
             get_background_color_information.callback ();
