@@ -61,7 +61,11 @@ namespace WingpanelInterface.Utils {
         var bg_actor_width = (int)background.width;
         var bg_actor_height = (int)background.height;
 
-        // Avoid looking at the edges of the texture as it often has a black border
+        // A commit in mutter added some padding to offscreen textures, so we
+        // need to avoid looking at the edges of the texture as it often has a
+        // black border. The commit specifies that up to 1.75px around each side
+        // could now be padding, so cut off 2px from left and top if necessary
+        // (https://gitlab.gnome.org/GNOME/mutter/commit/8655bc5d8de6a969e0ca83eff8e450f62d28fbee)
         int x_start = reference_x;
         if (x_start < 2) {
             x_start = 2;
@@ -72,8 +76,10 @@ namespace WingpanelInterface.Utils {
             y_start = 2;
         }
 
-        // If the caller has specified an area of interest smaller than 2px less than the width/height,
-        // use that, otherwise chop 2px off the edges again
+        // For the same reason as above, we need to not use the bottom and right
+        // 2px of the texture. However, if the caller has specified an area of
+        // interest that already misses these parts, use that instead, otherwise
+        // chop 2px
         int width = int.min (bg_actor_width - 2 - reference_x, reference_width);
         int height = int.min (bg_actor_height - 2 - reference_y, reference_height);
 
