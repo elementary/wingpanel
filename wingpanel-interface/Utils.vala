@@ -58,15 +58,32 @@ namespace WingpanelInterface.Utils {
         var effect = new DummyOffscreenEffect ();
         background.add_effect (effect);
 
-        var tex_width = (int)background.width;
-        var tex_height = (int)background.height;
+        var bg_actor_width = (int)background.width;
+        var bg_actor_height = (int)background.height;
 
+        // A commit in mutter added some padding to offscreen textures, so we
+        // need to avoid looking at the edges of the texture as it often has a
+        // black border. The commit specifies that up to 1.75px around each side
+        // could now be padding, so cut off 2px from left and top if necessary
+        // (https://gitlab.gnome.org/GNOME/mutter/commit/8655bc5d8de6a969e0ca83eff8e450f62d28fbee)
         int x_start = reference_x;
-        int y_start = reference_y;
-        int width = int.min (tex_width - reference_x, reference_width);
-        int height = int.min (tex_height - reference_y, reference_height);
+        if (x_start < 2) {
+            x_start = 2;
+        }
 
-        if (x_start > tex_width || x_start > tex_height || width <= 0 || height <= 0) {
+        int y_start = reference_y;
+        if (y_start < 2) {
+            y_start = 2;
+        }
+
+        // For the same reason as above, we need to not use the bottom and right
+        // 2px of the texture. However, if the caller has specified an area of
+        // interest that already misses these parts, use that instead, otherwise
+        // chop 2px
+        int width = int.min (bg_actor_width - 2 - reference_x, reference_width);
+        int height = int.min (bg_actor_height - 2 - reference_y, reference_height);
+
+        if (x_start > bg_actor_width || y_start > bg_actor_height || width <= 0 || height <= 0) {
             throw new DBusError.INVALID_ARGS ("Invalid rectangle specified: %i, %i, %i, %i".printf (x_start, y_start, width, height));
         }
 
@@ -78,8 +95,11 @@ namespace WingpanelInterface.Utils {
             background.remove_effect (effect);
 
             var texture = (Cogl.Texture)effect.get_texture ();
-            var pixels = new uint8[texture.get_width () * texture.get_height () * 4];
-            var pixel_lums = new double[texture.get_width () * texture.get_height ()];
+            var texture_width = texture.get_width ();
+            var texture_height = texture.get_height ();
+
+            var pixels = new uint8[texture_width * texture_height * 4];
+            var pixel_lums = new double[texture_width * texture_height];
 
             CoglFixes.texture_get_data (texture, Cogl.PixelFormat.BGRA_8888_PRE, 0, pixels);
 
@@ -95,13 +115,13 @@ namespace WingpanelInterface.Utils {
              * plank's lib/Drawing/DrawingService.vala average_color()
              * http://bazaar.launchpad.net/~docky-core/plank/trunk/view/head:/lib/Drawing/DrawingService.vala
              */
-            for (int y = y_start; y < height; y++) {
-                for (int x = x_start; x < width; x++) {
-                    int i = y * width * 4 + x * 4;
+            for (int y = y_start; y < (y_start + height); y++) {
+                for (int x = x_start; x < (x_start + width); x++) {
+                    int i = (y * (int)texture_width * 4) + (x * 4);
 
-                    uint8 r = pixels[i];
+                    uint8 b = pixels[i];
                     uint8 g = pixels[i + 1];
-                    uint8 b = pixels[i + 2];
+                    uint8 r = pixels[i + 2];
 
                     pixel = (0.3 * r + 0.59 * g + 0.11 * b) ;
                     
@@ -129,8 +149,8 @@ namespace WingpanelInterface.Utils {
                 }
             }
             
-            for (int y = y_start + 1; y < height - 1; y++) {
-                for (int x = x_start + 1; x < width - 1; x++) {
+            for (int y = y_start + 1; y < (y_start + height) - 1; y++) {
+                for (int x = x_start + 1; x < (x_start + width) - 1; x++) {
                     var acutance =
                         (pixel_lums[y * width + x] * 4) -
                         (
