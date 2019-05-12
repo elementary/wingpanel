@@ -39,11 +39,13 @@ public abstract class Wingpanel.Indicator : GLib.Object {
     /**
      * The localised name of the indicator.
      */
+    [Version (deprecated = true, deprecated_since = "2.3.0", replacement = "")]
     public string display_name { get; construct; }
 
     /**
      * A short description of the indicator.
      */
+    [Version (deprecated = true, deprecated_since = "2.3.0", replacement = "")]
     public string description { get; construct; }
 
     /**
