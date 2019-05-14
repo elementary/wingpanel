@@ -176,8 +176,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     private bool hide_panel (bool window_update) {
-        // Do not hide if the active window was updated
-        // while the user was hovering on the panel
+        /**
+         * Do not hide if the active window was updated
+         * while the user was hovering on the panel.
+         */
         if (window_update && hovering) {
             return false;
         }
