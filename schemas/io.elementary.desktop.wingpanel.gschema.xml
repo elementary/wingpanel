@@ -19,7 +19,7 @@
 		</key>
 		<key type="i" name="delay">
 			<range min="0" max="1000"/>
-			<default>200</default>
+			<default>250</default>
 			<summary>Sets how long before the panel will autohide in milliseconds.</summary>
 			<description>Increase or decrease this value to your preference.</description>
 		</key>
