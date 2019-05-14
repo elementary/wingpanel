@@ -19,6 +19,7 @@
 
 public class Wingpanel.PanelWindow : Gtk.Window {
     public Services.PopoverManager popover_manager;
+    private Services.NotifyPluginClient plugin_client;
 
     private Widgets.Panel panel;
     private int monitor_number;
@@ -63,6 +64,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         update_visual ();
 
         popover_manager = new Services.PopoverManager (this);
+        plugin_client = new Services.NotifyPluginClient ();
 
         panel = new Widgets.Panel (popover_manager);
         panel.realize.connect (on_realize);
@@ -78,10 +80,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         application.add_accelerator ("<Control>Tab", "app.cycle", null);
         application.add_accelerator ("<Control><Shift>Tab", "app.cycle-back", null);
 
-        var background_manager = Services.BackgroundManager.get_default ();
-        background_manager.active_window_changed.connect (on_active_window_changed);
-
-        Services.PanelSettings.get_default ().notify["autohide"].connect (() => background_manager.request_active_update ());
+        Services.PanelSettings.get_default ().notify["autohide"].connect (() =>
+            Services.BackgroundManager.get_default ().request_active_update ());
 
         add (panel);
     }
@@ -160,6 +160,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         update_panel_dimensions ();
 
         Services.BackgroundManager.initialize (this.monitor_number, panel_height);
+        Services.BackgroundManager.get_default ().active_window_changed.connect (on_active_window_changed);
     }
 
     private bool show_panel () {
@@ -266,19 +267,21 @@ public class Wingpanel.PanelWindow : Gtk.Window {
          * we will only move the window when it has been hidden / shown
          * The actual animation is handed off to the panel widget.
          */
+        int y = monitor_y - (panel_height + panel_displacement);
         if (panel_displacement == -1) {
-            int y = monitor_y - (panel_height + panel_displacement);
             if (wx != monitor_x || wy != y) {
                 move (monitor_x, y);
             }
 
+            plugin_client.set_stack_y_offset (0);
             panel.draw_y = 0;
         } else {
             if (wx != 0 || wy != 0) {
                 move (0, 0);
             }
 
-            panel.draw_y = monitor_y - (panel_height + panel_displacement);
+            plugin_client.set_stack_y_offset (y + panel_height);
+            panel.draw_y = y;
         }
     }
 
