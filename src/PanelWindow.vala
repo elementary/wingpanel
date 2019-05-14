@@ -28,7 +28,15 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private int monitor_y;
     private int panel_height;
     private bool expanded = false;
-    private int panel_displacement;
+    private int panel_displacement = -1;
+
+    private uint timeout;
+    private uint delay_timeout = 0U;
+    private bool hiding = false;
+    private bool hovering = false;
+
+    private bool current_maximized = false;
+    private bool current_minimized = false;
 
     public PanelWindow (Gtk.Application application) {
         Object (
@@ -70,18 +78,81 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         application.add_accelerator ("<Control>Tab", "app.cycle", null);
         application.add_accelerator ("<Control><Shift>Tab", "app.cycle-back", null);
 
+        var background_manager = Services.BackgroundManager.get_default ();
+        background_manager.active_window_changed.connect (on_active_window_changed);
+
+        Services.PanelSettings.get_default ().notify["autohide"].connect (() => background_manager.request_active_update ());
+
         add (panel);
     }
 
-    private bool animation_step () {
-        if (panel_displacement <= panel_height * (-1)) {
-            return false;
+    public override bool leave_notify_event (Gdk.EventCrossing event) {
+        bool handled = false;
+        switch (Services.PanelSettings.get_default ().autohide) {
+            case DODGE_FLOAT:
+                if (current_maximized) {
+                    hide_panel (false);
+                }
+                
+                handled = true;
+                break;
+            case FLOAT:
+                hide_panel (false);
+                handled = true;
+                break;
         }
 
-        panel_displacement--;
+        hovering = false;
+        return handled;
+    }
+
+    public override bool enter_notify_event (Gdk.EventCrossing event) {
+        remove_id (ref delay_timeout);
+
+        hovering = true;
+        show_panel ();
+        return true;
+    }
+
+    private static void remove_id (ref uint id) {
+        if (id > 0U) {
+            Source.remove (id);
+            id = 0U;
+        }
+    }
+
+    private void queue_animation (uint duration) {
+        timeout = Timeout.add (duration / panel_height, animation_step);
+    }
+
+    private bool animation_step () {
+        if (hiding) {
+            if (popover_manager.current_indicator != null) {
+                timeout = 0;
+                return false;
+            }
+
+            if (panel_displacement == -1) {
+                timeout = 0;
+                update_struts ();
+                return false;
+            }
+
+            panel_displacement++;
+        } else {
+            if (panel_displacement == panel_height * -1) {
+                timeout = 0;
+                if (Services.PanelSettings.get_default ().autohide == NONE) {
+                    update_struts ();
+                }
+
+                return false;
+            }
+
+            panel_displacement--;
+        }
 
         update_panel_dimensions ();
-
         return true;
     }
 
@@ -89,8 +160,85 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         update_panel_dimensions ();
 
         Services.BackgroundManager.initialize (this.monitor_number, panel_height);
+    }
 
-        Timeout.add (300 / panel_height, animation_step);
+    private bool show_panel () {
+        stop_animation ();
+        hiding = false;
+        if (Services.PanelSettings.get_default ().autohide != NONE) {
+            start_animation ();
+        } else {
+            delay_timeout = 0U;
+            queue_animation (300);
+        }
+        
+        return true;
+    }
+
+    private bool hide_panel (bool window_update) {
+        // Do not hide if the active window was updated
+        // while the user was hovering on the panel
+        if (window_update && hovering) {
+            return false;
+        }
+
+        stop_animation ();
+        hiding = true;
+        start_animation ();
+
+        return true;
+    }
+
+    private void start_animation () {
+        if (hovering) {
+            delay_timeout = Timeout.add (Services.PanelSettings.get_default ().delay, () => {
+                delay_timeout = 0U;
+                queue_animation (100);
+                return false;
+            });
+        } else {
+            delay_timeout = 0U;
+            queue_animation (100);
+        }
+    }
+
+    private void stop_animation () {
+        remove_id (ref delay_timeout);
+        remove_id (ref timeout);
+    }
+
+    private void on_active_window_changed (bool maximized, bool minimized) {
+        current_maximized = maximized;
+        current_minimized = minimized;
+
+        if (current_minimized) {
+            switch (Services.PanelSettings.get_default ().autohide) {
+                case FLOAT:
+                    hide_panel (true);
+                    break;
+                case DODGE_FLOAT:
+                default:
+                    show_panel ();
+                    break;
+            }
+        } else {
+            switch (Services.PanelSettings.get_default ().autohide) {
+                case FLOAT:
+                    hide_panel (true);
+                    break;
+                case DODGE_FLOAT:
+                    if (current_maximized && popover_manager.current_indicator == null) {
+                        hide_panel (true);
+                    } else {
+                        show_panel ();
+                    }
+
+                    break;
+                default:
+                    show_panel ();
+                    break;
+            }
+        }
     }
 
     private void update_panel_dimensions () {
@@ -108,9 +256,28 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         monitor_x = monitor_dimensions.x;
         monitor_y = monitor_dimensions.y;
 
-        this.move (monitor_x, monitor_y - (panel_height + panel_displacement));
+        int wx, wy;
+        get_position (out wx, out wy);
 
-        update_struts ();
+        /**
+         * Instead of constantly moving the window for the animation,
+         * we will only move the window when it has been hidden / shown
+         * The actual animation is handed off to the panel widget.
+         */
+        if (panel_displacement == -1) {
+            int y = monitor_y - (panel_height + panel_displacement);
+            if (wx != monitor_x || wy != y) {
+                move (monitor_x, y);
+            }
+
+            panel.draw_y = 0;
+        } else {
+            if (wx != 0 || wy != 0) {
+                move (0, 0);
+            }
+
+            panel.draw_y = monitor_y - (panel_height + panel_displacement);
+        }
     }
 
     private void update_visual () {

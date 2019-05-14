@@ -29,11 +29,13 @@ namespace Wingpanel.Services {
     [DBus (name = "org.pantheon.gala.WingpanelInterface")]
     public interface InterfaceBus : Object {
         public signal void state_changed (BackgroundState state, uint animation_duration);
+        public signal void active_window_changed (bool maximized, bool minimized);
 
         public abstract void initialize (int monitor, int panel_height) throws IOError;
         public abstract void remember_focused_window () throws IOError;
         public abstract void restore_focused_window () throws IOError;
         public abstract bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws IOError;
+        public abstract void request_active_update () throws IOError;
     }
 
     public class BackgroundManager : Object {
@@ -57,6 +59,7 @@ namespace Wingpanel.Services {
         private int panel_height;
 
         public signal void background_state_changed (BackgroundState state, uint animation_duration);
+        public signal void active_window_changed (bool maximized, bool minimized);
 
         public static void initialize (int monitor, int panel_height) {
             var manager = BackgroundManager.get_default ();
@@ -111,6 +114,18 @@ namespace Wingpanel.Services {
             return false;
         }
 
+        public void request_active_update () {
+            if (!bus_available) {
+                return;
+            }
+
+            try {
+                bus.request_active_update ();
+            } catch (Error e) {
+                warning (e.message);
+            }
+        }
+
         private bool connect_dbus () {
             try {
                 bus = Bus.get_proxy_sync (BusType.SESSION, DBUS_NAME, DBUS_PATH);
@@ -124,6 +139,9 @@ namespace Wingpanel.Services {
                 current_state = state;
                 state_updated (animation_duration);
             });
+
+            bus.active_window_changed.connect ((maximized, minimized) => active_window_changed (maximized, minimized));
+            request_active_update ();
 
             state_updated ();
             return true;

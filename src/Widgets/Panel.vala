@@ -27,6 +27,18 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
 
+    private int _draw_y = 0;
+    public int draw_y {
+        get {
+            return _draw_y;
+        }
+
+        set {
+            _draw_y = value;
+            queue_draw ();
+        }
+    }
+
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
 
@@ -65,6 +77,11 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         style_context = this.get_style_context ();
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
+    }
+
+    public override bool draw (Cairo.Context ctx) {
+        ctx.translate (0, draw_y);
+        return base.draw (ctx);
     }
 
     public override bool button_press_event (Gdk.EventButton event) {
