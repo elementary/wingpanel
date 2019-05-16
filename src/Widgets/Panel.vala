@@ -77,7 +77,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
             desktop_settings.bind_with_mapping (
                 PREFERS_KEY,
                 gtk_settings,
-                "gtk_application_prefer_dark_theme",
+                "gtk-application-prefer-dark-theme",
                 SettingsBindFlags.DEFAULT,
                 (value, variant) => {
                     value.set_boolean (variant.get_string () == "dark");
