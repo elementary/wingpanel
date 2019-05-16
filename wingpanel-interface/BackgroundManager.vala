@@ -116,6 +116,10 @@ public class WingpanelInterface.BackgroundManager : Object {
         window.notify["minimized"].connect (() => {
             check_for_state_change (AnimationSettings.get_default ().minimize_duration);
         });
+
+        window.workspace_changed.connect (() => {
+            check_for_state_change (AnimationSettings.get_default ().minimize_duration);
+        });
     }
 
     private void on_window_added (Meta.Window window) {
