@@ -20,7 +20,7 @@
 public class Wingpanel.Services.PopoverManager : Object {
     private unowned Wingpanel.PanelWindow? owner;
 
-    private bool grabbed = false;
+    private bool grabbed = false; // whether the wingpanel grabbed focus
     private bool mousing = false;
 
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
@@ -86,7 +86,9 @@ public class Wingpanel.Services.PopoverManager : Object {
             make_modal (popover, false);
         });
         popover.unmap.connect (() => {
-            owner.set_expanded (false);
+            if (!grabbed) {
+                owner.set_expanded (false);
+            }
         });
 
         owner.focus_out_event.connect ((e) => {
