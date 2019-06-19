@@ -41,7 +41,7 @@ public class WingpanelInterface.BackgroundManager : Object {
     private Meta.Workspace? current_workspace = null;
 
     private BackgroundState current_state = BackgroundState.LIGHT;
-    
+
     private Utils.ColorInformation? bk_color_info = null;
 
     public BackgroundManager (int monitor, int panel_height) {
@@ -60,10 +60,15 @@ public class WingpanelInterface.BackgroundManager : Object {
     }
 
     private void connect_signals () {
+#if HAS_MUTTER330
+        Main.display.get_workspace_manager ().workspace_switched.connect (() => {
+            update_current_workspace ();
+        });
+#else
         Main.screen.workspace_switched.connect (() => {
             update_current_workspace ();
         });
-
+#endif
         var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
 
         wallpaper_hook_id = GLib.Signal.add_emission_hook (signal_id, 0, (ihint, param_values) => {
@@ -81,7 +86,12 @@ public class WingpanelInterface.BackgroundManager : Object {
     }
 
     private void update_current_workspace () {
+#if HAS_MUTTER330
+        Meta.WorkspaceManager ws_manager = Main.display.get_workspace_manager ();
+        var workspace = ws_manager.get_workspace_by_index (ws_manager.get_active_workspace_index ());
+#else
         var workspace = Main.screen.get_workspace_by_index (Main.screen.get_active_workspace_index ());
+#endif
 
         if (workspace == null) {
             warning ("Cannot get active workspace");
@@ -147,7 +157,7 @@ public class WingpanelInterface.BackgroundManager : Object {
                 callback ();
             }
         });
-        
+
         yield;
     }
 
@@ -198,7 +208,7 @@ public class WingpanelInterface.BackgroundManager : Object {
                 new_state = BackgroundState.DARK;
             } else {
                 new_state = BackgroundState.LIGHT;
-            } 
+            }
         }
 
         if (new_state != current_state) {

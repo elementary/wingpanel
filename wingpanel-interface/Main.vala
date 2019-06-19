@@ -27,8 +27,11 @@ public class WingpanelInterface.Main : Gala.Plugin {
     private const string DBUS_PATH = "/org/pantheon/gala/WingpanelInterface";
 
     public static Gala.WindowManager wm;
+#if HAS_MUTTER330
+    public static Meta.Display display;
+#else
     public static Meta.Screen screen;
-
+#endif
     private DBusConnection? dbus_connection = null;
 
     public override void initialize (Gala.WindowManager _wm) {
@@ -37,8 +40,11 @@ public class WingpanelInterface.Main : Gala.Plugin {
         }
 
         wm = _wm;
+#if HAS_MUTTER330
+        display = wm.get_display ();
+#else
         screen = wm.get_screen ();
-
+#endif
         Bus.own_name (BusType.SESSION,
                       DBUS_NAME,
                       BusNameOwnerFlags.NONE,

@@ -1,1 +1,1 @@
-mutter-clutter-1.vapi
+mutter-clutter-1.0.vapi

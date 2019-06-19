@@ -24,10 +24,15 @@ public class WingpanelInterface.FocusManager : Object {
     private Meta.Window? last_focused_window = null;
 
     public FocusManager () {
+#if HAS_MUTTER330
+        Main.display.get_workspace_manager ().workspace_switched.connect (() => {
+            update_current_workspace ();
+        });
+#else
         Main.screen.workspace_switched.connect (() => {
             update_current_workspace ();
         });
-
+#endif
         update_current_workspace ();
     }
 
@@ -39,14 +44,21 @@ public class WingpanelInterface.FocusManager : Object {
                 last_focused_window = window;
             }
         }
-
+#if HAS_MUTTER330
+        Main.display.window_created.connect (window_created);
+#else
         Main.screen.get_display ().window_created.connect (window_created);
+#endif
     }
 
     public void restore_focused_window () {
         if (last_focused_window != null) {
+#if HAS_MUTTER330
+            last_focused_window.focus (Main.display.get_current_time ());
+#else
             var display = Main.screen.get_display ();
             last_focused_window.focus (display.get_current_time ());
+#endif
         }
 
         var windows = current_workspace.list_windows ();
@@ -54,8 +66,11 @@ public class WingpanelInterface.FocusManager : Object {
             window.focused.disconnect (window_focused);
             window.unmanaged.disconnect (window_unmanaged);
         }
-
+#if HAS_MUTTER330
+        Main.display.window_created.disconnect (window_created);
+#else
         Main.screen.get_display ().window_created.disconnect (window_created);
+#endif
     }
 
     void window_created (Meta.Window window) {
@@ -75,10 +90,18 @@ public class WingpanelInterface.FocusManager : Object {
     }
 
     public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
+#if HAS_MUTTER330
+        var window = Main.display.get_focus_window ();
+#else
         var display = Main.screen.get_display ();
         var window = display.get_focus_window ();
+#endif
         if (window == null || !get_can_grab_window (window, x, y)) {
+#if HAS_MUTTER330
+            unowned Meta.Workspace workspace = Main.display.get_workspace_manager ().get_active_workspace ();
+#else
             unowned Meta.Workspace workspace = Main.screen.get_active_workspace ();
+#endif
             List<unowned Meta.Window>? windows = workspace.list_windows ();
             if (windows == null) {
                 return false;
@@ -99,7 +122,11 @@ public class WingpanelInterface.FocusManager : Object {
         }
 
         if (window != null) {
+#if HAS_MUTTER330
+            Main.display.begin_grab_op (window, Meta.GrabOp.MOVING, false, true, button, state, time, x, y);
+#else
             display.begin_grab_op (Main.screen, window, Meta.GrabOp.MOVING, false, true, button, state, time, x, y);
+#endif
             return true;
         }
 
@@ -112,8 +139,12 @@ public class WingpanelInterface.FocusManager : Object {
     }
 
     private void update_current_workspace () {
+#if HAS_MUTTER330
+        Meta.WorkspaceManager ws_manager = Main.display.get_workspace_manager ();
+        var workspace = ws_manager.get_workspace_by_index (ws_manager.get_active_workspace_index ());
+#else
         var workspace = Main.screen.get_workspace_by_index (Main.screen.get_active_workspace_index ());
-
+#endif
         if (workspace == null) {
             warning ("Cannot get active workspace");
 
