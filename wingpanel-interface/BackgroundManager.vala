@@ -144,19 +144,24 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     public async void update_bk_color_info () {
         SourceFunc callback = update_bk_color_info.callback;
-        Gdk.Rectangle monitor_geometry;
 
-        Gdk.Screen.get_default ().get_monitor_geometry (monitor, out monitor_geometry);
+        var display = Gdk.Display.get_default ();
+        if (display != null) {
+            var current_monitor = display.get_monitor (monitor);
+            if (current_monitor != null) {
+                Gdk.Rectangle monitor_geometry = current_monitor.get_geometry ();
 
-        Utils.get_background_color_information.begin (Main.wm, monitor, 0, 0, monitor_geometry.width, panel_height, (obj, res) => {
-            try {
-                bk_color_info = Utils.get_background_color_information.end (res);
-            } catch (Error e) {
-                warning (e.message);
-            } finally {
-                callback ();
+                Utils.get_background_color_information.begin (Main.wm, monitor, 0, 0, monitor_geometry.width, panel_height, (obj, res) => {
+                    try {
+                        bk_color_info = Utils.get_background_color_information.end (res);
+                    } catch (Error e) {
+                        warning (e.message);
+                    } finally {
+                        callback ();
+                    }
+                });
             }
-        });
+        }
 
         yield;
     }

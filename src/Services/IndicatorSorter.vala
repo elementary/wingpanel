@@ -76,7 +76,8 @@ public class Wingpanel.Services.IndicatorSorter : Object {
             return indicator_order[AYATANA_INDICATOR];
         }
 
-        if (node.base_indicator.code_name in indicator_order) {
+        /* if (node.base_indicator.code_name in indicator_order) { */
+        if (indicator_order.has_key (node.base_indicator.code_name)) {
             return indicator_order[node.base_indicator.code_name];
         }
 

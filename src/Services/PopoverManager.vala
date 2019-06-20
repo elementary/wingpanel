@@ -118,7 +118,7 @@ public class Wingpanel.Services.PopoverManager : Object {
             current_indicator.get_parent ().get_allocation (out container_allocation);
 
             int wingpanel_width;
-            owner.get_root_window ().get_geometry (null, null, out wingpanel_width, null);
+            owner.screen.get_root_window ().get_geometry (null, null, out wingpanel_width, null);
 
             allocation.x += indicator_allocation.x +
                             container_allocation.x -

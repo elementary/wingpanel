@@ -30,10 +30,10 @@ namespace Wingpanel.Services {
     public interface InterfaceBus : Object {
         public signal void state_changed (BackgroundState state, uint animation_duration);
 
-        public abstract void initialize (int monitor, int panel_height) throws IOError;
-        public abstract void remember_focused_window () throws IOError;
-        public abstract void restore_focused_window () throws IOError;
-        public abstract bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws IOError;
+        public abstract void initialize (int monitor, int panel_height) throws GLib.DBusError, GLib.IOError;
+        public abstract void remember_focused_window () throws GLib.DBusError, GLib.IOError;
+        public abstract void restore_focused_window () throws GLib.DBusError, GLib.IOError;
+        public abstract bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws GLib.DBusError, GLib.IOError;
     }
 
     public class BackgroundManager : Object {

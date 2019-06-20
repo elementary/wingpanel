@@ -67,8 +67,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         application.add_action (cycle_action);
         application.add_action (cycle_back_action);
-        application.add_accelerator ("<Control>Tab", "app.cycle", null);
-        application.add_accelerator ("<Control><Shift>Tab", "app.cycle-back", null);
+        application.set_accels_for_action ("app.cycle", { "<Control>Tab" });
+        application.set_accels_for_action ("app.cycle-back", { "<Control><Shift>Tab" });
 
         add (panel);
     }
@@ -97,8 +97,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         panel_height = panel.get_allocated_height ();
 
         monitor_number = screen.get_primary_monitor ();
-        Gdk.Rectangle monitor_dimensions;
-        this.screen.get_monitor_geometry (monitor_number, out monitor_dimensions);
+        Gdk.Rectangle monitor_dimensions = get_display ().get_primary_monitor ().get_geometry ();
+        /* this.screen.get_monitor_geometry (monitor_number, out monitor_dimensions); */
 
         monitor_width = monitor_dimensions.width;
         monitor_height = monitor_dimensions.height;
@@ -128,16 +128,12 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             return;
         }
 
-        var monitor = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
         var position_top = monitor_y - panel_displacement;
         var scale_factor = this.get_scale_factor ();
 
         Gdk.Atom atom;
-        Gdk.Rectangle primary_monitor_rect;
 
         long struts[12];
-
-        this.screen.get_monitor_geometry (monitor, out primary_monitor_rect);
 
 		// We need to manually include the scale factor here as GTK gives us unscaled sizes for widgets
         struts = { 0, 0, position_top * scale_factor, 0, /* strut-left, strut-right, strut-top, strut-bottom */
