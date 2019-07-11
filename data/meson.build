@@ -7,3 +7,9 @@ install_data(
     'wingpanel.svg',
     install_dir: join_paths(get_option('datadir'), 'icons', 'hicolor', 'scalable', 'apps')
 )
+
+# Use GResource
+css_gresource = gnome.compile_resources(
+    'gresource_css',
+    meson.project_name() + '.gresource.xml'
+)

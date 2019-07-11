@@ -19,6 +19,7 @@ wingpanel_deps = [
 ]
 
 executable(meson.project_name(),
+    css_gresource,
     wingpanel_files,
     dependencies: wingpanel_deps,
     install: true

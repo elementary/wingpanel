@@ -48,6 +48,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         style_context.add_class (Widgets.StyleClass.PANEL);
         style_context.add_class (Gtk.STYLE_CLASS_MENUBAR);
 
+        var provider = new Gtk.CssProvider ();
+        provider.load_from_resource ("io/elementary/wingpanel/application.css");
+        style_context.add_provider (provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+
         this.screen.size_changed.connect (update_panel_dimensions);
         this.screen.monitors_changed.connect (update_panel_dimensions);
         this.screen_changed.connect (update_visual);
