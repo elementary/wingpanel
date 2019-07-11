@@ -48,6 +48,20 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         style_context.add_class (Widgets.StyleClass.PANEL);
         style_context.add_class (Gtk.STYLE_CLASS_MENUBAR);
 
+        var style_provider = new Gtk.CssProvider ();
+        style_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        string css = """
+            .panel {
+                -GtkWidget-window-dragging: false;
+            }
+        """;
+
+        try {
+            style_provider.load_from_data (css, css.length);
+        } catch (Error e) {
+            warning ("Parsing own style configuration failed: %s", e.message);
+        }
+
         this.screen.size_changed.connect (update_panel_dimensions);
         this.screen.monitors_changed.connect (update_panel_dimensions);
         this.screen_changed.connect (update_visual);
