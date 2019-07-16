@@ -64,8 +64,11 @@ public class WingpanelInterface.FocusManager : Object {
     }
 
     void window_focused (Meta.Window window) {
-        if (window.window_type == Meta.WindowType.NORMAL) {
-            last_focused_window = window;
+        switch (window.window_type) {
+            case Meta.WindowType.NORMAL:
+            case Meta.WindowType.DIALOG:
+                last_focused_window = window;
+                break;
         }
     }
 
