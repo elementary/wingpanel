@@ -76,7 +76,6 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     static construct {
         resource_provider = new Gtk.CssProvider ();
         resource_provider.load_from_resource ("io/elementary/wingpanel/application.css");
-
     }
 
     public override bool button_press_event (Gdk.EventButton event) {
