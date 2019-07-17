@@ -27,6 +27,8 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
 
+    private static Gtk.CssProvider resource_provider;
+
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
 
@@ -37,17 +39,20 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         this.valign = Gtk.Align.START;
         this.get_style_context ().add_class (StyleClass.PANEL);
 
-        var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-
         left_menubar = new MenuBar ();
         left_menubar.halign = Gtk.Align.START;
-        box.pack_start (left_menubar);
+        left_menubar.get_style_context ().add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         center_menubar = new MenuBar ();
-        box.set_center_widget (center_menubar);
+        center_menubar.get_style_context ().add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         right_menubar = new IndicatorMenuBar ();
         right_menubar.halign = Gtk.Align.END;
+        right_menubar.get_style_context ().add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+        var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        box.pack_start (left_menubar);
+        box.set_center_widget (center_menubar);
         box.pack_end (right_menubar);
 
         add (box);
@@ -63,8 +68,15 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         });
 
         style_context = this.get_style_context ();
+        style_context.add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
+    }
+
+    static construct {
+        resource_provider = new Gtk.CssProvider ();
+        resource_provider.load_from_resource ("io/elementary/wingpanel/application.css");
+
     }
 
     public override bool button_press_event (Gdk.EventButton event) {
