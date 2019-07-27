@@ -22,12 +22,19 @@ public class WingpanelInterface.DBusServer : Object {
     private BackgroundManager background_manager;
 
     public signal void state_changed (BackgroundState state, uint animation_duration);
+    public signal void active_window_changed (bool maximized, bool minimized);
 
     public void initialize (int monitor, int panel_height) {
         background_manager = new BackgroundManager (monitor, panel_height);
         background_manager.state_changed.connect ((state, animation_duration) => {
             state_changed (state, animation_duration);
         });
+
+        background_manager.active_window_changed.connect ((maximized, minimized) => active_window_changed (maximized, minimized));
+    }
+
+    public void request_active_update () {
+        background_manager.update_active_window ();
     }
 
     public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {

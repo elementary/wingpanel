@@ -32,6 +32,7 @@ public class WingpanelInterface.BackgroundManager : Object {
     private const double LUMINANCE_THRESHOLD = 180;
 
     public signal void state_changed (BackgroundState state, uint animation_duration);
+    public signal void active_window_changed (bool maximized, bool minimized);
 
     public int monitor { private get; construct; }
     public int panel_height{ private get; construct; }
@@ -117,6 +118,8 @@ public class WingpanelInterface.BackgroundManager : Object {
             check_for_state_change (AnimationSettings.get_default ().minimize_duration);
         });
 
+        window.focused.connect (() => update_active_window ());
+
         window.workspace_changed.connect (() => {
             check_for_state_change (AnimationSettings.get_default ().minimize_duration);
         });
@@ -130,6 +133,16 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     private void on_window_removed (Meta.Window window) {
         check_for_state_change (AnimationSettings.get_default ().snap_duration);
+    }
+
+    public void update_active_window () {
+        unowned Meta.Window active = Main.wm.get_screen ().get_display ().get_focus_window ();
+        if (active != null &&
+            (active.get_window_type () == Meta.WindowType.NORMAL || active.get_window_type () == Meta.WindowType.DIALOG)) {
+            active_window_changed (active.maximized_vertically, active.minimized);
+        } else {
+            active_window_changed (false, false);
+        }
     }
 
     public async void update_bk_color_info () {
@@ -162,6 +175,7 @@ public class WingpanelInterface.BackgroundManager : Object {
      *  - Else it should be LIGHT.
      */
     private void check_for_state_change (uint animation_duration) {
+        update_active_window ();
         bool has_maximized_window = false;
 
         foreach (Meta.Window window in current_workspace.list_windows ()) {

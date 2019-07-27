@@ -18,10 +18,18 @@
  */
 
 namespace Wingpanel.Services {
+    public enum AutohideMode {
+        NONE = 0,
+        FLOAT,
+        DODGE_FLOAT
+    }
+
     public class PanelSettings : Granite.Services.Settings {
         private static PanelSettings? instance = null;
 
         public bool use_transparency { get; set; }
+        public AutohideMode autohide { get; set; }
+        public int delay { get; set; }
 
         public PanelSettings () {
             base ("io.elementary.desktop.wingpanel");
