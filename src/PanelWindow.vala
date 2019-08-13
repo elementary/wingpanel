@@ -101,8 +101,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         panel_height = panel.get_allocated_height ();
 
         monitor_number = screen.get_primary_monitor ();
-        Gdk.Rectangle monitor_dimensions;
-        this.screen.get_monitor_geometry (monitor_number, out monitor_dimensions);
+        Gdk.Rectangle monitor_dimensions = get_display ().get_primary_monitor ().get_geometry ();
 
         monitor_width = monitor_dimensions.width;
         monitor_height = monitor_dimensions.height;
@@ -132,28 +131,143 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             return;
         }
 
-        var monitor = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
-        var position_top = monitor_y - panel_displacement;
+        /**
+        * https://specifications.freedesktop.org/wm-spec/wm-spec-1.5.html#NETWMSTRUT
+        * The _NET_WM_STRUCT_PARTICAL specification does not allow to reserve space for arbitrary rectangles 
+        * on the screen. Instead it only allows to reserve space at the borders of screen. 
+        * As for multi-monitor layouts the wingpanel can be at the within the screen (and not at the border)
+        * this makes it impossible to reserve the correct space for all possible multi-monitor layouts.
+        * Fortunately for up to 3 monitors there is always a possiblity to reserve the right space by also
+        * using the struct-left and struct-right cardinals.
+        */
+
+        var display = get_display ();
+        var n_monitors = display.get_n_monitors ();
+        long struts[12] = {0};
+
+        if (n_monitors == 1) {
+            set_struct_from_top (struts);
+        } else {
+            // get list of other monitor rects and get screen width
+            var other_rects = new GLib.List <Gdk.Rectangle?> ();
+            int screen_width = 0;
+
+            for (var i = 0; i < n_monitors; i++) {
+                var other_rect = display.get_monitor (i).get_geometry ();
+                var end_x = other_rect.x + other_rect.width;
+
+                if (end_x > screen_width) {
+                    screen_width = end_x;
+                }
+
+                other_rects.append (other_rect);
+            }
+
+            if (no_monitor_to_left (other_rects)) {
+                debug ("no monitor to the left!");
+                set_struct_from_left (struts);
+            } else if (no_monitor_to_right (other_rects, screen_width)) {
+                debug ("no monitor to the right!");
+                set_struct_from_right (struts, screen_width);
+            } else if (no_other_monitor_above (other_rects)) {
+                debug ("no monitor above!");
+                set_struct_from_top (struts);
+            } else {
+                debug ("cant place strut!");
+            }
+        }
+
+
+        debug ("monitor x %d, monitor y %d", monitor_x, monitor_y);
+        stdout.printf ("Struts: ");
+        for (var i = 0; i < 12; i ++) {
+            stdout.printf ("%li, ", struts [i]);
+        }
+        stdout.printf ("\n");
+
+        Gdk.property_change (this.get_window (), Gdk.Atom.intern ("_NET_WM_STRUT_PARTIAL", false),
+                             Gdk.Atom.intern ("CARDINAL", false), 32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
+    }
+
+    bool no_other_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
+        if (monitor_y == 0) {
+            return true;
+        } 
+
+        var monitor_end_x = monitor_x + monitor_width - 1;
+        foreach (var rect in other_rects) {
+            var end_y = rect.y + rect.height - 1;
+            if (end_y > monitor_y) {
+                var end_x = rect.x + rect.width - 1;
+                if (monitor_x < end_x || monitor_end_x > rect.x) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    bool no_monitor_to_left (GLib.List <Gdk.Rectangle?> other_rects) {
+        if (monitor_x == 0) {
+            return true;
+        }
+
+        foreach (var rect in other_rects) {
+            var end_x = rect.x + rect.width - 1;
+            if (monitor_x > end_x) {
+                var panel_start = monitor_y;
+                var panel_end = monitor_y + panel_height - 1;
+                var end_y = rect.y + rect.height - 1;
+                if (panel_end > rect.y && panel_start < end_y) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    bool no_monitor_to_right (GLib.List <Gdk.Rectangle?> other_rects, int screen_width) {
+        var monitor_end_x = monitor_x + monitor_width - 1;
+
+        if (monitor_end_x == screen_width - 1) {
+            return true;
+        }
+
+        foreach (var rect in other_rects) {
+            if (monitor_end_x < rect.x) {
+                var panel_start = monitor_y;
+                var panel_end = monitor_y + panel_height - 1;
+                var end_y = rect.y + rect.height - 1;
+                if (panel_end > rect.y && panel_start < end_y) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    void set_struct_from_left (long *struts) {
         var scale_factor = this.get_scale_factor ();
+        struts [0] = (monitor_x + monitor_width) * scale_factor;
+        struts [4] = monitor_y * scale_factor;
+        struts [5] = (monitor_y - panel_displacement) * scale_factor - 1;
+    }
 
-        Gdk.Atom atom;
-        Gdk.Rectangle primary_monitor_rect;
+    void set_struct_from_right (long *struts, int screen_width) {
+        var scale_factor = this.get_scale_factor ();
+        struts [1] = (screen_width - monitor_x) * scale_factor;
+        struts [6] = monitor_y * scale_factor;
+        struts [7] = (monitor_y - panel_displacement) * scale_factor - 1;
+    }
 
-        long struts[12];
-
-        this.screen.get_monitor_geometry (monitor, out primary_monitor_rect);
-
-		// We need to manually include the scale factor here as GTK gives us unscaled sizes for widgets
-        struts = { 0, 0, position_top * scale_factor, 0, /* strut-left, strut-right, strut-top, strut-bottom */
-                   0, 0, /* strut-left-start-y, strut-left-end-y */
-                   0, 0, /* strut-right-start-y, strut-right-end-y */
-                   monitor_x, ((monitor_x + monitor_width) * scale_factor) - 1, /* strut-top-start-x, strut-top-end-x */
-                   0, 0 }; /* strut-bottom-start-x, strut-bottom-end-x */
-
-        atom = Gdk.Atom.intern ("_NET_WM_STRUT_PARTIAL", false);
-
-        Gdk.property_change (this.get_window (), atom, Gdk.Atom.intern ("CARDINAL", false),
-                             32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
+    void set_struct_from_top (long *struts) {
+        var scale_factor = this.get_scale_factor ();
+        struts [2] = (monitor_y - panel_displacement) * scale_factor;
+        struts [8] = monitor_x;
+        struts [9] = ((monitor_x + monitor_width) * scale_factor) - 1;
     }
 
     public void set_expanded (bool expand) {
