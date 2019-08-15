@@ -156,8 +156,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 var other_rect = display.get_monitor (i).get_geometry ();
                 var end_x = other_rect.x + other_rect.width;
 
-                if (end_x > screen_width) {
-                    screen_width = end_x;
+                if (end_x + 1 > screen_width) {
+                    screen_width = end_x + 1;
                 }
 
                 other_rects.append (other_rect);
@@ -189,37 +189,19 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                              Gdk.Atom.intern ("CARDINAL", false), 32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
     }
 
-    bool no_other_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
-        if (monitor_y == 0) {
-            return true;
-        } 
-
-        var monitor_end_x = monitor_x + monitor_width - 1;
-        foreach (var rect in other_rects) {
-            var end_y = rect.y + rect.height - 1;
-            if (end_y > monitor_y) {
-                var end_x = rect.x + rect.width - 1;
-                if (monitor_x < end_x || monitor_end_x > rect.x) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     bool no_monitor_to_left (GLib.List <Gdk.Rectangle?> other_rects) {
         if (monitor_x == 0) {
             return true;
         }
 
+        var panel_start = monitor_y;
+        var panel_end = monitor_y + panel_height - 1;
+
         foreach (var rect in other_rects) {
             var end_x = rect.x + rect.width - 1;
             if (monitor_x > end_x) {
-                var panel_start = monitor_y;
-                var panel_end = monitor_y + panel_height - 1;
                 var end_y = rect.y + rect.height - 1;
-                if (panel_end > rect.y && panel_start < end_y) {
+                if (panel_end >= rect.y && panel_start <= end_y) {
                     return false;
                 }
             }
@@ -235,12 +217,32 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             return true;
         }
 
+        var panel_start = monitor_y;
+        var panel_end = monitor_y + panel_height - 1;
+
         foreach (var rect in other_rects) {
-            if (monitor_end_x < rect.x) {
-                var panel_start = monitor_y;
-                var panel_end = monitor_y + panel_height - 1;
+            if (monitor_end_x < (rect.x + rect.width - 1)) {
                 var end_y = rect.y + rect.height - 1;
-                if (panel_end > rect.y && panel_start < end_y) {
+                if (panel_end >= rect.y && panel_start <= end_y) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    bool no_other_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
+        if (monitor_y == 0) {
+            return true;
+        } 
+
+        var monitor_end_x = monitor_x + monitor_width - 1;
+        foreach (var rect in other_rects) {
+            var end_y = rect.y + rect.height - 1;
+            if (end_y > monitor_y) {
+                var end_x = rect.x + rect.width - 1;
+                if (monitor_x <= end_x && monitor_end_x >= rect.x) {
                     return false;
                 }
             }
@@ -266,8 +268,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     void set_struct_from_top (long *struts) {
         var scale_factor = this.get_scale_factor ();
         struts [2] = (monitor_y - panel_displacement) * scale_factor;
-        struts [8] = monitor_x;
-        struts [9] = ((monitor_x + monitor_width) * scale_factor) - 1;
+        struts [8] = monitor_x * scale_factor;
+        struts [9] = (monitor_x + monitor_width) * scale_factor - 1;
     }
 
     public void set_expanded (bool expand) {
