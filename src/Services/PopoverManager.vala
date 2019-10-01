@@ -65,7 +65,7 @@ public class Wingpanel.Services.PopoverManager : Object {
     }
 
     public PopoverManager (Wingpanel.PanelWindow? owner) {
-        registered_indicators = new Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry>();
+        registered_indicators = new Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> ();
 
         this.owner = owner;
 

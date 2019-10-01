@@ -34,14 +34,14 @@ public class WingpanelInterface.BackgroundManager : Object {
     public signal void state_changed (BackgroundState state, uint animation_duration);
 
     public int monitor { private get; construct; }
-    public int panel_height{ private get; construct; }
+    public int panel_height { private get; construct; }
 
     private ulong wallpaper_hook_id;
 
     private Meta.Workspace? current_workspace = null;
 
     private BackgroundState current_state = BackgroundState.LIGHT;
-    
+
     private Utils.ColorInformation? bk_color_info = null;
 
     public BackgroundManager (int monitor, int panel_height) {
@@ -147,7 +147,7 @@ public class WingpanelInterface.BackgroundManager : Object {
                 callback ();
             }
         });
-        
+
         yield;
     }
 
@@ -198,7 +198,7 @@ public class WingpanelInterface.BackgroundManager : Object {
                 new_state = BackgroundState.DARK;
             } else {
                 new_state = BackgroundState.LIGHT;
-            } 
+            }
         }
 
         if (new_state != current_state) {

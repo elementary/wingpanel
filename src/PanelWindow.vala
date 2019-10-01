@@ -143,7 +143,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         this.screen.get_monitor_geometry (monitor, out primary_monitor_rect);
 
-		// We need to manually include the scale factor here as GTK gives us unscaled sizes for widgets
+        // We need to manually include the scale factor here as GTK gives us unscaled sizes for widgets
         struts = { 0, 0, position_top * scale_factor, 0, /* strut-left, strut-right, strut-top, strut-bottom */
                    0, 0, /* strut-left-start-y, strut-left-end-y */
                    0, 0, /* strut-right-start-y, strut-right-end-y */

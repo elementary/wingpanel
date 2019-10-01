@@ -50,7 +50,7 @@ public class WingpanelInterface.FocusManager : Object {
         if (last_focused_dialog_window != null) {
             last_focused_dialog_window.focus (display.get_current_time ());
             //  if dialog is closed pass focus to last focussed window
-            last_focused_dialog_window.unmanaged.connect(() => {
+            last_focused_dialog_window.unmanaged.connect (() => {
                 last_focused_dialog_window = null;
                 restore_focused_window ();
             });
