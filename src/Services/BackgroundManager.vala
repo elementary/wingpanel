@@ -65,12 +65,14 @@ namespace Wingpanel.Services {
         }
 
         private BackgroundManager () {
-            PanelSettings.get_default ().notify["use-transparency"].connect (() => {
-                use_transparency = PanelSettings.get_default ().use_transparency;
+            var panel_settings = new GLib.Settings ("io.elementary.desktop.wingpanel");
+
+            panel_settings.changed["use-transparency"].connect (() => {
+                use_transparency = panel_settings.get_boolean ("use-transparency");
                 state_updated ();
             });
 
-            use_transparency = PanelSettings.get_default ().use_transparency;
+            use_transparency = panel_settings.get_boolean ("use-transparency");
 
             Bus.watch_name (BusType.SESSION, DBUS_NAME, BusNameWatcherFlags.NONE,
                 () => connect_dbus (),
