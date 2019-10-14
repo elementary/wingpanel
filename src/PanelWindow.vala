@@ -71,8 +71,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         application.add_action (cycle_action);
         application.add_action (cycle_back_action);
-        application.add_accelerator ("<Control>Tab", "app.cycle", null);
-        application.add_accelerator ("<Control><Shift>Tab", "app.cycle-back", null);
+        application.set_accels_for_action ("app.cycle", {"<Control>Tab"});
+        application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
         add (panel);
     }
