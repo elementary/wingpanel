@@ -27,6 +27,7 @@
 }
 
 .panel menubar {
+    background: transparent;
     box-shadow: none;
     border: none;
 }
