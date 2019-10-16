@@ -44,6 +44,8 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     private Utils.ColorInformation? bk_color_info = null;
 
+    public static GLib.Settings animation_settings;
+
     public BackgroundManager (int monitor, int panel_height) {
         Object (monitor : monitor, panel_height: panel_height);
 
@@ -52,6 +54,10 @@ public class WingpanelInterface.BackgroundManager : Object {
             update_bk_color_info.end (res);
             update_current_workspace ();
         });
+    }
+
+    static construct {
+        animation_settings = new GLib.Settings ("org.pantheon.desktop.gala.animations");
     }
 
     ~BackgroundManager () {
@@ -105,31 +111,31 @@ public class WingpanelInterface.BackgroundManager : Object {
         current_workspace.window_added.connect (on_window_added);
         current_workspace.window_removed.connect (on_window_removed);
 
-        check_for_state_change (AnimationSettings.get_default ().workspace_switch_duration);
+        check_for_state_change (animation_settings.get_int ("workspace-switch-duration"));
     }
 
     private void register_window (Meta.Window window) {
         window.notify["maximized-vertically"].connect (() => {
-            check_for_state_change (AnimationSettings.get_default ().snap_duration);
+            check_for_state_change (animation_settings.get_int ("snap-duration"));
         });
 
         window.notify["minimized"].connect (() => {
-            check_for_state_change (AnimationSettings.get_default ().minimize_duration);
+            check_for_state_change (animation_settings.get_int ("minimize-duration"));
         });
 
         window.workspace_changed.connect (() => {
-            check_for_state_change (AnimationSettings.get_default ().minimize_duration);
+            check_for_state_change (animation_settings.get_int ("minimize-duration"));
         });
     }
 
     private void on_window_added (Meta.Window window) {
         register_window (window);
 
-        check_for_state_change (AnimationSettings.get_default ().snap_duration);
+        check_for_state_change (animation_settings.get_int ("snap-duration"));
     }
 
     private void on_window_removed (Meta.Window window) {
-        check_for_state_change (AnimationSettings.get_default ().snap_duration);
+        check_for_state_change (animation_settings.get_int ("snap-duration"));
     }
 
     public async void update_bk_color_info () {
