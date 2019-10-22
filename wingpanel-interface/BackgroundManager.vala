@@ -121,7 +121,7 @@ public class WingpanelInterface.BackgroundManager : Object {
         });
 
         window.workspace_changed.connect (() => {
-            check_for_state_change (MINIMIZE_DURATION);
+            check_for_state_change (WORKSPACE_SWITCH_DURATION);
         });
     }
 
