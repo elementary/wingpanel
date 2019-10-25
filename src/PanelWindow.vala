@@ -148,7 +148,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         if (n_monitors == 1) {
             set_struts_from_top (struts);
         } else {
-            // get list of other monitor rects and get screen width
             var other_rects = new GLib.List <Gdk.Rectangle?> ();
             int screen_width = 0;
 
