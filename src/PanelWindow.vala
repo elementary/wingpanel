@@ -71,8 +71,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         application.add_action (cycle_action);
         application.add_action (cycle_back_action);
-        application.add_accelerator ("<Control>Tab", "app.cycle", null);
-        application.add_accelerator ("<Control><Shift>Tab", "app.cycle-back", null);
+        application.set_accels_for_action ("app.cycle", {"<Control>Tab"});
+        application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
         add (panel);
     }
@@ -146,7 +146,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         long struts[12] = {0};
 
         if (n_monitors == 1) {
-            set_struct_from_top (struts);
+            set_struts_from_top (struts);
         } else {
             // get list of other monitor rects and get screen width
             var other_rects = new GLib.List <Gdk.Rectangle?> ();
@@ -165,13 +165,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
             if (no_monitor_to_left (other_rects)) {
                 debug ("no monitor to the left!");
-                set_struct_from_left (struts);
+                set_struts_from_left (struts);
             } else if (no_monitor_to_right (other_rects, screen_width)) {
                 debug ("no monitor to the right!");
-                set_struct_from_right (struts, screen_width);
+                set_struts_from_right (struts, screen_width);
             } else if (no_other_monitor_above (other_rects)) {
                 debug ("no monitor above!");
-                set_struct_from_top (struts);
+                set_struts_from_top (struts);
             } else {
                 debug ("cant place strut!");
             }
@@ -235,7 +235,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     bool no_other_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
         if (monitor_y == 0) {
             return true;
-        } 
+        }
 
         var monitor_end_x = monitor_x + monitor_width - 1;
         foreach (var rect in other_rects) {
@@ -251,21 +251,21 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         return true;
     }
 
-    void set_struct_from_left (long *struts) {
+    void set_struts_from_left (long *struts) {
         var scale_factor = this.get_scale_factor ();
         struts [0] = (monitor_x + monitor_width) * scale_factor;
         struts [4] = monitor_y * scale_factor;
         struts [5] = (monitor_y - panel_displacement) * scale_factor - 1;
     }
 
-    void set_struct_from_right (long *struts, int screen_width) {
+    void set_struts_from_right (long *struts, int screen_width) {
         var scale_factor = this.get_scale_factor ();
         struts [1] = (screen_width - monitor_x) * scale_factor;
         struts [6] = monitor_y * scale_factor;
         struts [7] = (monitor_y - panel_displacement) * scale_factor - 1;
     }
 
-    void set_struct_from_top (long *struts) {
+    void set_struts_from_top (long *struts) {
         var scale_factor = this.get_scale_factor ();
         struts [2] = (monitor_y - panel_displacement) * scale_factor;
         struts [8] = monitor_x * scale_factor;

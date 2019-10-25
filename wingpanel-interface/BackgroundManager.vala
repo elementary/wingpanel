@@ -26,7 +26,10 @@ public enum BackgroundState {
 }
 
 public class WingpanelInterface.BackgroundManager : Object {
+    private const int MINIMIZE_DURATION = 200;
+    private const int SNAP_DURATION = 250;
     private const int WALLPAPER_TRANSITION_DURATION = 150;
+    private const int WORKSPACE_SWITCH_DURATION = 300;
     private const double ACUTANCE_THRESHOLD = 8;
     private const double STD_THRESHOLD = 45;
     private const double LUMINANCE_THRESHOLD = 180;
@@ -34,14 +37,14 @@ public class WingpanelInterface.BackgroundManager : Object {
     public signal void state_changed (BackgroundState state, uint animation_duration);
 
     public int monitor { private get; construct; }
-    public int panel_height{ private get; construct; }
+    public int panel_height { private get; construct; }
 
     private ulong wallpaper_hook_id;
 
     private Meta.Workspace? current_workspace = null;
 
     private BackgroundState current_state = BackgroundState.LIGHT;
-    
+
     private Utils.ColorInformation? bk_color_info = null;
 
     public BackgroundManager (int monitor, int panel_height) {
@@ -105,31 +108,31 @@ public class WingpanelInterface.BackgroundManager : Object {
         current_workspace.window_added.connect (on_window_added);
         current_workspace.window_removed.connect (on_window_removed);
 
-        check_for_state_change (AnimationSettings.get_default ().workspace_switch_duration);
+        check_for_state_change (WORKSPACE_SWITCH_DURATION);
     }
 
     private void register_window (Meta.Window window) {
         window.notify["maximized-vertically"].connect (() => {
-            check_for_state_change (AnimationSettings.get_default ().snap_duration);
+            check_for_state_change (SNAP_DURATION);
         });
 
         window.notify["minimized"].connect (() => {
-            check_for_state_change (AnimationSettings.get_default ().minimize_duration);
+            check_for_state_change (MINIMIZE_DURATION);
         });
 
         window.workspace_changed.connect (() => {
-            check_for_state_change (AnimationSettings.get_default ().minimize_duration);
+            check_for_state_change (WORKSPACE_SWITCH_DURATION);
         });
     }
 
     private void on_window_added (Meta.Window window) {
         register_window (window);
 
-        check_for_state_change (AnimationSettings.get_default ().snap_duration);
+        check_for_state_change (SNAP_DURATION);
     }
 
     private void on_window_removed (Meta.Window window) {
-        check_for_state_change (AnimationSettings.get_default ().snap_duration);
+        check_for_state_change (SNAP_DURATION);
     }
 
     public async void update_bk_color_info () {
@@ -147,7 +150,7 @@ public class WingpanelInterface.BackgroundManager : Object {
                 callback ();
             }
         });
-        
+
         yield;
     }
 
@@ -198,7 +201,7 @@ public class WingpanelInterface.BackgroundManager : Object {
                 new_state = BackgroundState.DARK;
             } else {
                 new_state = BackgroundState.LIGHT;
-            } 
+            }
         }
 
         if (new_state != current_state) {
