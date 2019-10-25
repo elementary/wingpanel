@@ -163,26 +163,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             }
 
             if (no_monitor_to_left (other_rects)) {
-                debug ("no monitor to the left!");
                 set_struts_from_left (struts);
             } else if (no_monitor_to_right (other_rects, screen_width)) {
-                debug ("no monitor to the right!");
                 set_struts_from_right (struts, screen_width);
             } else if (no_other_monitor_above (other_rects)) {
-                debug ("no monitor above!");
                 set_struts_from_top (struts);
-            } else {
-                debug ("cant place strut!");
             }
         }
-
-
-        debug ("monitor x %d, monitor y %d", monitor_x, monitor_y);
-        stdout.printf ("Struts: ");
-        for (var i = 0; i < 12; i ++) {
-            stdout.printf ("%li, ", struts [i]);
-        }
-        stdout.printf ("\n");
 
         Gdk.property_change (this.get_window (), Gdk.Atom.intern ("_NET_WM_STRUT_PARTIAL", false),
                              Gdk.Atom.intern ("CARDINAL", false), 32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
