@@ -133,8 +133,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         /**
         * https://specifications.freedesktop.org/wm-spec/wm-spec-1.5.html#NETWMSTRUT
-        * The _NET_WM_STRUCT_PARTICAL specification does not allow to reserve space for arbitrary rectangles 
-        * on the screen. Instead it only allows to reserve space at the borders of screen. 
+        * The _NET_WM_STRUCT_PARTICAL specification does not allow to reserve space for arbitrary rectangles
+        * on the screen. Instead it only allows to reserve space at the borders of screen.
         * As for multi-monitor layouts the wingpanel can be at the within the screen (and not at the border)
         * this makes it impossible to reserve the correct space for all possible multi-monitor layouts.
         * Fortunately for up to 3 monitors there is always a possiblity to reserve the right space by also
@@ -168,6 +168,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 set_struts_from_right (struts, screen_width);
             } else if (no_other_monitor_above (other_rects)) {
                 set_struts_from_top (struts);
+            } else {
+                warning ("Unable to set struts, because Wingpanel is not at the edge of the Gdk.Screen area.");
+                return;
             }
         }
 
