@@ -143,7 +143,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         var display = get_display ();
         var n_monitors = display.get_n_monitors ();
-        long struts[12] = {0};
+        long struts[12] = { 0 };
 
         if (n_monitors == 1) {
             set_struts_from_top (struts);
@@ -162,12 +162,12 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 other_rects.append (other_rect);
             }
 
-            if (no_monitor_to_left (other_rects)) {
+            if (no_other_monitor_above (other_rects)) {
+                set_struts_from_top (struts);
+            } else if (no_monitor_to_left (other_rects)) {
                 set_struts_from_left (struts);
             } else if (no_monitor_to_right (other_rects, screen_width)) {
                 set_struts_from_right (struts, screen_width);
-            } else if (no_other_monitor_above (other_rects)) {
-                set_struts_from_top (struts);
             } else {
                 warning ("Unable to set struts, because Wingpanel is not at the edge of the Gdk.Screen area.");
                 return;
@@ -176,6 +176,25 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         Gdk.property_change (this.get_window (), Gdk.Atom.intern ("_NET_WM_STRUT_PARTIAL", false),
                              Gdk.Atom.intern ("CARDINAL", false), 32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
+    }
+
+    bool no_other_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
+        if (monitor_y == 0) {
+            return true;
+        }
+
+        var monitor_end_x = monitor_x + monitor_width - 1;
+        foreach (var rect in other_rects) {
+            var end_y = rect.y + rect.height - 1;
+            if (end_y > monitor_y) {
+                var end_x = rect.x + rect.width - 1;
+                if (monitor_x <= end_x && monitor_end_x >= rect.x) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     bool no_monitor_to_left (GLib.List <Gdk.Rectangle?> other_rects) {
@@ -221,44 +240,25 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         return true;
     }
 
-    bool no_other_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
-        if (monitor_y == 0) {
-            return true;
-        }
-
-        var monitor_end_x = monitor_x + monitor_width - 1;
-        foreach (var rect in other_rects) {
-            var end_y = rect.y + rect.height - 1;
-            if (end_y > monitor_y) {
-                var end_x = rect.x + rect.width - 1;
-                if (monitor_x <= end_x && monitor_end_x >= rect.x) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+    void set_struts_from_top (long struts[12]) {
+        var scale_factor = this.get_scale_factor ();
+        struts [2] = (monitor_y - panel_displacement) * scale_factor;
+        struts [8] = monitor_x * scale_factor;
+        struts [9] = (monitor_x + monitor_width) * scale_factor - 1;
     }
 
-    void set_struts_from_left (long *struts) {
+    void set_struts_from_left (long struts[12]) {
         var scale_factor = this.get_scale_factor ();
         struts [0] = (monitor_x + monitor_width) * scale_factor;
         struts [4] = monitor_y * scale_factor;
         struts [5] = (monitor_y - panel_displacement) * scale_factor - 1;
     }
 
-    void set_struts_from_right (long *struts, int screen_width) {
+    void set_struts_from_right (long struts[12], int screen_width) {
         var scale_factor = this.get_scale_factor ();
         struts [1] = (screen_width - monitor_x) * scale_factor;
         struts [6] = monitor_y * scale_factor;
         struts [7] = (monitor_y - panel_displacement) * scale_factor - 1;
-    }
-
-    void set_struts_from_top (long *struts) {
-        var scale_factor = this.get_scale_factor ();
-        struts [2] = (monitor_y - panel_displacement) * scale_factor;
-        struts [8] = monitor_x * scale_factor;
-        struts [9] = (monitor_x + monitor_width) * scale_factor - 1;
     }
 
     public void set_expanded (bool expand) {
