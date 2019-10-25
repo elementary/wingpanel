@@ -162,11 +162,11 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 other_rects.append (other_rect);
             }
 
-            if (no_other_monitor_above (other_rects)) {
+            if (has_no_other_monitor_above (other_rects)) {
                 set_struts_from_top (struts);
-            } else if (no_monitor_to_left (other_rects)) {
+            } else if (has_no_monitor_to_left (other_rects)) {
                 set_struts_from_left (struts);
-            } else if (no_monitor_to_right (other_rects, screen_width)) {
+            } else if (has_no_monitor_to_right (other_rects, screen_width)) {
                 set_struts_from_right (struts, screen_width);
             } else {
                 warning ("Unable to set struts, because Wingpanel is not at the edge of the Gdk.Screen area.");
@@ -178,7 +178,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                              Gdk.Atom.intern ("CARDINAL", false), 32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
     }
 
-    bool no_other_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
+    bool has_no_other_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
         if (monitor_y == 0) {
             return true;
         }
@@ -197,7 +197,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         return true;
     }
 
-    bool no_monitor_to_left (GLib.List <Gdk.Rectangle?> other_rects) {
+    bool has_no_monitor_to_left (GLib.List <Gdk.Rectangle?> other_rects) {
         if (monitor_x == 0) {
             return true;
         }
@@ -218,7 +218,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         return true;
     }
 
-    bool no_monitor_to_right (GLib.List <Gdk.Rectangle?> other_rects, int screen_width) {
+    bool has_no_monitor_to_right (GLib.List <Gdk.Rectangle?> other_rects, int screen_width) {
         var monitor_end_x = monitor_x + monitor_width - 1;
 
         if (monitor_end_x == screen_width - 1) {
