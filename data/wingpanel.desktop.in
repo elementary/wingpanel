@@ -1,8 +1,8 @@
 [Desktop Entry]
 Name=Wingpanel
-Comment=A super sexy space-saving top panel
+Comment=Top panel that holds indicators and the applications menu
 Exec=wingpanel
-Icon=wingpanel
+Icon=io.elementary.wingpanel
 Terminal=false
 Type=Application
 Categories=Utility;
