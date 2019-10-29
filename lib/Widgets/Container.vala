@@ -22,9 +22,7 @@ public class Wingpanel.Widgets.Container : Gtk.Button {
 
     public extern Gtk.Grid get_content_widget ();
 
-    public Container () {
-        
-    }
+    public Container () {}
 
     construct {
         content_widget = new Gtk.Grid ();

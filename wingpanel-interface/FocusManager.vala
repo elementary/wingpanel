@@ -22,6 +22,7 @@ public class WingpanelInterface.FocusManager : Object {
 
     private Meta.Workspace? current_workspace = null;
     private Meta.Window? last_focused_window = null;
+    private Meta.Window? last_focused_dialog_window = null;
 
     public FocusManager () {
         Main.screen.workspace_switched.connect (() => {
@@ -44,8 +45,16 @@ public class WingpanelInterface.FocusManager : Object {
     }
 
     public void restore_focused_window () {
-        if (last_focused_window != null) {
-            var display = Main.screen.get_display ();
+        var display = Main.screen.get_display ();
+        // when a dialog was opened give it focus
+        if (last_focused_dialog_window != null) {
+            last_focused_dialog_window.focus (display.get_current_time ());
+            //  if dialog is closed pass focus to last focussed window
+            last_focused_dialog_window.unmanaged.connect (() => {
+                last_focused_dialog_window = null;
+                restore_focused_window ();
+            });
+        } else if (last_focused_window != null) {
             last_focused_window.focus (display.get_current_time ());
         }
 
@@ -64,7 +73,10 @@ public class WingpanelInterface.FocusManager : Object {
     }
 
     void window_focused (Meta.Window window) {
-        if (window.window_type == Meta.WindowType.NORMAL) {
+        // make sure we keep the last_focused_window when a dialog is started from wingpanel
+        if (window.window_type == Meta.WindowType.DIALOG) {
+            last_focused_dialog_window = window;
+        } else if (window.window_type != Meta.WindowType.DOCK) { // ignore focus to wingpanel
             last_focused_window = window;
         }
     }

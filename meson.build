@@ -1,7 +1,7 @@
 project(
     'wingpanel',
     'c', 'vala',
-    version: '2.2.4',
+    version: '2.2.5',
 )
 
 lib_version = '0.2.0'
@@ -22,6 +22,7 @@ add_project_arguments([
 indicators_dir = join_paths(get_option('prefix'), get_option('libdir'), 'wingpanel')
 
 i18n = import('i18n')
+gnome = import('gnome')
 pkg = import('pkgconfig')
 
 glib_dep = dependency('glib-2.0', version: '>=2.32')

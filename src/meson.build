@@ -4,7 +4,6 @@ wingpanel_files = files(
     'Services/BackgroundManager.vala',
     'Services/IndicatorSorter.vala',
     'Services/PopoverManager.vala',
-    'Services/Settings.vala',
     'Widgets/IndicatorEntry.vala',
     'Widgets/IndicatorMenuBar.vala',
     'Widgets/IndicatorPopover.vala',
@@ -19,6 +18,7 @@ wingpanel_deps = [
 ]
 
 executable(meson.project_name(),
+    css_gresource,
     wingpanel_files,
     dependencies: wingpanel_deps,
     install: true

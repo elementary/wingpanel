@@ -20,7 +20,7 @@
 public class Wingpanel.Services.PopoverManager : Object {
     private unowned Wingpanel.PanelWindow? owner;
 
-    private bool grabbed = false;
+    private bool grabbed = false; // whether the wingpanel grabbed focus
     private bool mousing = false;
 
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
@@ -65,7 +65,7 @@ public class Wingpanel.Services.PopoverManager : Object {
     }
 
     public PopoverManager (Wingpanel.PanelWindow? owner) {
-        registered_indicators = new Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry>();
+        registered_indicators = new Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> ();
 
         this.owner = owner;
 
@@ -86,7 +86,9 @@ public class Wingpanel.Services.PopoverManager : Object {
             make_modal (popover, false);
         });
         popover.unmap.connect (() => {
-            owner.set_expanded (false);
+            if (!grabbed) {
+                owner.set_expanded (false);
+            }
         });
 
         owner.focus_out_event.connect ((e) => {
@@ -117,8 +119,7 @@ public class Wingpanel.Services.PopoverManager : Object {
             Gtk.Allocation container_allocation;
             current_indicator.get_parent ().get_allocation (out container_allocation);
 
-            int wingpanel_width;
-            owner.get_root_window ().get_geometry (null, null, out wingpanel_width, null);
+            var wingpanel_width = owner.get_allocated_width ();
 
             allocation.x += indicator_allocation.x +
                             container_allocation.x -

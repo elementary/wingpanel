@@ -20,3 +20,9 @@ i18n.merge_file(
     install: true,
     install_dir: join_paths(get_option('datadir'), 'metainfo'),
 )
+
+# Use GResource
+css_gresource = gnome.compile_resources(
+    'gresource_css',
+    meson.project_name() + '.gresource.xml'
+)
