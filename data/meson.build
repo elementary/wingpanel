@@ -1,11 +1,12 @@
 install_data(
     'wingpanel.svg',
+    rename: 'io.elementary.wingpanel.svg',
     install_dir: join_paths(get_option('datadir'), 'icons', 'hicolor', 'scalable', 'apps')
 )
 
 i18n.merge_file(
     input: 'wingpanel.desktop.in',
-    output: 'io.elementary.desktop.wingpanel.desktop',
+    output: 'io.elementary.wingpanel.desktop',
     po_dir: join_paths(meson.source_root(), 'po', 'extra'),
     type: 'desktop',
     install: true,
@@ -14,7 +15,7 @@ i18n.merge_file(
 
 i18n.merge_file(
     input: 'wingpanel.appdata.xml.in',
-    output: 'io.elementary.desktop.wingpanel.appdata.xml',
+    output: 'io.elementary.wingpanel.appdata.xml',
     po_dir: join_paths(meson.source_root(), 'po', 'extra'),
     type: 'xml',
     install: true,
