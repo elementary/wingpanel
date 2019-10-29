@@ -10,6 +10,15 @@
   <description>
     <p>The extensible top panel for Pantheon. Wingpanel is an empty container that accepts indicators as extensions, including the applications menu.</p>
   </description>
+  <releases>
+    <release version="2.2.6" date="2019-10-29" urgency="medium">
+      <description>
+        <p>Fix an issue with the panel being draggable on touch screens</p>
+        <p>Fix focus on dialogs launched from the panel</p>
+        <p>Updated translations</p>
+      </description>
+    </release>
+  </releases>
   <provides>
     <binary>wingpanel</binary>
   </provides>
@@ -18,7 +27,7 @@
   <url type="homepage">https://elementary.io/</url>
   <url type="bugtracker">https://github.com/elementary/wingpanel/issues</url>
   <url type="donation">https://elementary.io/get-involved#funding</url>
-  <url type="help">https://elementaryos.stackexchange.com/questions/tagged/settings</url>
+  <url type="help">https://elementaryos.stackexchange.com/questions/tagged/wingpanel</url>
   <url type="translate">https://l10n.elementary.io/projects/wingpanel</url>
   <update_contact>contact_AT_elementary.io</update_contact>
 </component>
