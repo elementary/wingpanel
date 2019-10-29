@@ -5,7 +5,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_group>elementary</project_group>
   <project_license>GPL-3.0+</project_license>
-  <name>System Settings</name>
+  <name>Wingpanel</name>
   <summary>Top panel that holds indicators and the applications menu</summary>
   <description>
     <p>The extensible top panel for Pantheon. Wingpanel is an empty container that accepts indicators as extensions, including the applications menu.</p>
