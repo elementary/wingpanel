@@ -92,7 +92,6 @@ shared_module(
     'DBusServer.vala',
     'BackgroundManager.vala',
     'FocusManager.vala',
-    'Settings.vala',
     'Utils.vala',
     dependencies: [gala_dep, granite_dep, mutter_dep, m_dep],
     vala_args: vala_flags,
