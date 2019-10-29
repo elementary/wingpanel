@@ -2,7 +2,7 @@
 Name=Wingpanel
 Comment=Top panel that holds indicators and the applications menu
 Exec=wingpanel
-Icon=wingpanel
+Icon=io.elementary.wingpanel
 Terminal=false
 Type=Application
 Categories=Utility;
