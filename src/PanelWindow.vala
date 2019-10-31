@@ -170,7 +170,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 set_struts_from_right (struts, screen_width);
             } else {
                 warning ("Unable to set struts, because Wingpanel is not at the edge of the Gdk.Screen area.");
-                return;
             }
         }
 
