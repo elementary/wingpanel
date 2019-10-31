@@ -1,3 +1,32 @@
+wingpanel (2.2.6) bionic; urgency=medium
+
+  * Release 2.2.6 (#261)
+  * Update translation files
+  * AppData: add release info for 2.2.6 (#259)
+  * Add appdata and translations (#210)
+  * Add Release to Actions (#258)
+  * Add application CSS (#256)
+  * WingpanelInterface: Set durations with constants (#257)
+  * PopoverManager: use allocated_width (#254)
+  * Panel: Remove unused IFDEF (#255)
+  * Set menubar transparency in CSS (#253)
+  * PanelWindow: use set_accels_for_action (#252)
+  * Granite.Services.Settings → GLib.Settings (#251)
+  * run installation in CI (#246)
+  * Add Lint to CI (#244)
+  * lint files with vala-lint (#245)
+  * Test with GitHub CI (#243)
+  * Delete CODE_OF_CONDUCT.md
+  * Delete FUNDING.yml
+  * Move panel css to resource (#230)
+  * Fix focus on dialogs started from wingpanel (#229)
+  * Disable GtkWidget-window-dragging on panel (#227)
+  * Only shrink and restore focus when wingpanel hasn't grabbed focus
+    (#222)
+  * Add Silesian and update translation template
+
+ -- Cody Garver <cody@elementary.io>  Thu, 31 Oct 2019 20:43:26 +0000
+
 wingpanel (2.2.5) bionic; urgency=medium
 
   * New upstream release.
