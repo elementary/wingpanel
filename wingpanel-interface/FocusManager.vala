@@ -114,7 +114,7 @@ public class WingpanelInterface.FocusManager : Object {
         var window = display.get_focus_window ();
         if (window == null || !get_can_grab_window (window, x, y)) {
 #if HAS_MUTTER330
-            unowned Meta.Workspace workspace = Main.display.get_workspace_manager ().get_active_workspace ();
+            unowned Meta.Workspace workspace = display.get_workspace_manager ().get_active_workspace ();
 #else
             unowned Meta.Workspace workspace = Main.screen.get_active_workspace ();
 #endif
