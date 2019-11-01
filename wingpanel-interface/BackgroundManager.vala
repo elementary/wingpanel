@@ -63,9 +63,16 @@ public class WingpanelInterface.BackgroundManager : Object {
     }
 
     private void connect_signals () {
+#if HAS_MUTTER330
+        unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
+        manager.workspace_switched.connect (() => {
+            update_current_workspace ();
+        });
+#else
         Main.screen.workspace_switched.connect (() => {
             update_current_workspace ();
         });
+#endif
 
         var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
 
@@ -84,7 +91,12 @@ public class WingpanelInterface.BackgroundManager : Object {
     }
 
     private void update_current_workspace () {
+#if HAS_MUTTER330
+        unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
+        var workspace = manager.get_workspace_by_index (manager.get_active_workspace_index ());
+#else
         var workspace = Main.screen.get_workspace_by_index (Main.screen.get_active_workspace_index ());
+#endif
 
         if (workspace == null) {
             warning ("Cannot get active workspace");
