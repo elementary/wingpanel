@@ -8,23 +8,25 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-29 15:21-0700\n"
-"PO-Revision-Date: 2019-05-12 13:36-0700\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-11-03 00:23+0000\n"
+"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
+"Language-Team: Japanese <https://l10n.elementary.io/projects/wingpanel/"
+"wingpanel-extra/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.7.1\n"
 
 #: data/wingpanel.desktop.in:3
 msgid "Wingpanel"
-msgstr ""
+msgstr "Wingpanel"
 
 #: data/wingpanel.desktop.in:4
 msgid "Top panel that holds indicators and the applications menu"
-msgstr ""
+msgstr "インジケーターとアプリケーションメニューを表示する最上部のパネル"
 
 #: data/wingpanel.desktop.in:6
 msgid "io.elementary.wingpanel"
-msgstr ""
+msgstr "io.elementary.wingpanel"
