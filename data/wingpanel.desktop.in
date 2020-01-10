@@ -8,5 +8,3 @@ Type=Application
 Categories=Utility;
 NoDisplay=true
 X-Ubuntu-Gettext-Domain=wingpanel
-X-GNOME-Autostart-Notify=false
-X-GNOME-AutoRestart=true
