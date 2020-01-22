@@ -71,4 +71,3 @@ namespace Wingpanel.SessionManager {
         return sclient;
     }
 }
-
