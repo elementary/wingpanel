@@ -92,8 +92,8 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     private void update_current_workspace () {
 #if HAS_MUTTER330
-        unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
-        var workspace = manager.get_workspace_by_index (manager.get_active_workspace_index ());
+        unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();      
+        var workspace = manager.get_active_workspace ();
 #else
         var workspace = Main.screen.get_workspace_by_index (Main.screen.get_active_workspace_index ());
 #endif
