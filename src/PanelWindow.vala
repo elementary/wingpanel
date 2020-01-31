@@ -166,7 +166,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 other_rects.append (other_rect);
             }
 
-            if (has_no_other_monitor_above (other_rects)) {
+            if (has_no_monitor_above (other_rects)) {
                 set_struts_from_top (struts);
             } else if (has_no_monitor_to_left (other_rects)) {
                 set_struts_from_left (struts);
@@ -181,7 +181,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                              Gdk.Atom.intern ("CARDINAL", false), 32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
     }
 
-    bool has_no_other_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
+    bool has_no_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
         if (monitor_y == 0) {
             return true;
         }
