@@ -208,7 +208,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         var panel_start = monitor_y;
         var panel_end = monitor_y + panel_height - 1;
 
-        foreach (var rect in other_rects) {
+        foreach (unowned Gdk.Rectangle? rect in other_rects) {
             var end_x = rect.x + rect.width - 1;
             if (monitor_x > end_x) {
                 var end_y = rect.y + rect.height - 1;
