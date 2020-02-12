@@ -11,6 +11,17 @@
     <p>The extensible top panel for Pantheon. Wingpanel is an empty container that accepts indicators as extensions, including the applications menu.</p>
   </description>
   <releases>
+    <release version="2.3.0" date="2020-02-12" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Fix an issue where moving windows to a secondary display above the panel wouldn't work</li>
+          <li>Register with session manager</li>
+          <li>Add support for mutter 3.3x</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
     <release version="2.2.6" date="2019-10-31" urgency="medium">
       <description>
         <p>Fix an issue with the panel being draggable on touch screens</p>
