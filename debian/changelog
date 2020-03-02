@@ -1,3 +1,17 @@
+wingpanel (2.3.0) bionic; urgency=medium
+
+  * Release 2.3.0 (#288)
+  * Fix: Cannot move windows to secondary display above panel (#235)
+  * Reduce Mutter minimal version to 3.28 (#279)
+  * Use builtin method to get active workspace (#280)
+  * Add autostart.desktop (#274)
+  * Register with the session manager (#276)
+  * Update translation files
+  * Add Gettext Updates to Actions
+  * add support for mutter 3.3x (#260)
+
+ -- Cody Garver <cody@elementary.io>  Mon, 02 Mar 2020 19:38:00 +0000
+
 wingpanel (2.2.6) bionic; urgency=medium
 
   * Release 2.2.6 (#261)
