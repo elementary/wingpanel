@@ -165,9 +165,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
                 other_rects.append (other_rect);
             }
-            debug(@"Has no monitor above $(has_no_monitor_above (other_rects))");
-            debug(@"Has no monitor left $(has_no_monitor_to_left (other_rects))");
-            debug(@"Has no monitor right $(has_no_monitor_to_right (other_rects, screen_width))");
+            debug (@"Has no monitor above $(has_no_monitor_above (other_rects))");
+            debug (@"Has no monitor left $(has_no_monitor_to_left (other_rects))");
+            debug (@"Has no monitor right $(has_no_monitor_to_right (other_rects, screen_width))");
 
             if (has_no_monitor_above (other_rects)) {
                 set_struts_from_top (struts);
