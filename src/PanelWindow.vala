@@ -236,7 +236,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         foreach (unowned Gdk.Rectangle? rect in other_rects) {
             if (monitor_end_x < rect.x) {
-                debug("possible to right!");
+                debug ("possible to right!");
                 var end_y = rect.y + rect.height - 1;
                 if (panel_start <= end_y && panel_end >= rect.y) {
                     return false;
