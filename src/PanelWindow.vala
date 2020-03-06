@@ -165,6 +165,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
                 other_rects.append (other_rect);
             }
+            debug(@"Has no monitor above $(has_no_monitor_above (other_rects))");
+            debug(@"Has no monitor left $(has_no_monitor_to_left (other_rects))");
+            debug(@"Has no monitor right $(has_no_monitor_to_right (other_rects, screen_width))");
 
             if (has_no_monitor_above (other_rects)) {
                 set_struts_from_top (struts);
@@ -189,7 +192,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         var monitor_end_x = monitor_x + monitor_width - 1;
         foreach (unowned Gdk.Rectangle? rect in other_rects) {
             var end_y = rect.y + rect.height - 1;
-            if (end_y > monitor_y) {
+            if (monitor_y > end_y) {
                 var end_x = rect.x + rect.width - 1;
                 if (monitor_x <= end_x && monitor_end_x >= rect.x) {
                     return false;
@@ -212,7 +215,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             var end_x = rect.x + rect.width - 1;
             if (monitor_x > end_x) {
                 var end_y = rect.y + rect.height - 1;
-                if (panel_end >= rect.y && panel_start <= end_y) {
+                if (panel_start <= end_y && panel_end >= rect.y) {
                     return false;
                 }
             }
@@ -232,9 +235,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         var panel_end = monitor_y + panel_height - 1;
 
         foreach (unowned Gdk.Rectangle? rect in other_rects) {
-            if (monitor_end_x < (rect.x + rect.width - 1)) {
+            if (monitor_end_x < rect.x) {
+                debug("possible to right!");
                 var end_y = rect.y + rect.height - 1;
-                if (panel_end >= rect.y && panel_start <= end_y) {
+                if (panel_start <= end_y && panel_end >= rect.y) {
                     return false;
                 }
             }
