@@ -147,7 +147,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         var display = get_display ();
         var n_monitors = display.get_n_monitors ();
-        var other_rects = new GLib.List <Gdk.Rectangle?> (); // remove
         int screen_width = 0;
         bool no_monitor_left = true;
         bool no_monitor_right = true;
@@ -166,23 +165,19 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             no_monitor_left &= !is_left || is_above || is_below;
             no_monitor_right &= !is_right || is_above || is_below;
             no_monitor_above &= !is_above || is_left || is_right;
-            other_rects.append (rect); // TODO: remove
         }
-        debug(@"has_no_monitor__left: $(_has_no_monitor_to_left (other_rects) == no_monitor_left)");
-        debug(@"has_no_monitor_right: $(_has_no_monitor_to_right (other_rects, screen_width) == no_monitor_right)");
-        debug(@"has_no_monitor_above: $(_has_no_monitor_above (other_rects) == no_monitor_above)");
 
         long struts[12] = { 0 };
         var scale_factor = this.get_scale_factor ();
-        if (n_monitors == 1 || _has_no_monitor_to_left (other_rects)) {
+        if (no_monitor_left) {
             struts [0] = (monitor_x + monitor_width) * scale_factor;
             struts [4] = monitor_y * scale_factor;
             struts [5] = (monitor_y - panel_displacement) * scale_factor - 1;
-        } else if (_has_no_monitor_to_right (other_rects, screen_width)) {
+        } else if (no_monitor_right) {
             struts [1] = (screen_width - monitor_x) * scale_factor;
             struts [6] = monitor_y * scale_factor;
             struts [7] = (monitor_y - panel_displacement) * scale_factor - 1;
-        } else if (_has_no_monitor_above (other_rects)) {
+        } else if (no_monitor_above) {
             struts [2] = (monitor_y - panel_displacement) * scale_factor;
             struts [8] = monitor_x * scale_factor;
             struts [9] = (monitor_x + monitor_width) * scale_factor - 1;
@@ -192,57 +187,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         Gdk.property_change (this.get_window (), Gdk.Atom.intern ("_NET_WM_STRUT_PARTIAL", false),
                              Gdk.Atom.intern ("CARDINAL", false), 32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
-    }
-
-    bool _has_no_monitor_above (GLib.List <Gdk.Rectangle?> other_rects) {
-        if (monitor_y == 0) {
-            return true;
-        }
-
-        foreach (unowned Gdk.Rectangle? rect in other_rects) {
-            if (rect.y + rect.height <= monitor_y && // !b
-                rect.x < monitor_x + monitor_width && // !d
-                rect.x + rect.width > monitor_x) { // !c
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    bool _has_no_monitor_to_left (GLib.List <Gdk.Rectangle?> other_rects) {
-        if (monitor_x == 0) {
-            return true;
-        }
-
-        var i = 0;
-        foreach (unowned Gdk.Rectangle? rect in other_rects) {
-            i++;
-            if (rect.x + rect.width <= monitor_x && // c
-                rect.y < monitor_y + panel_height && // a
-                rect.y + rect.height > monitor_y) { // b
-                return false;
-            }
-        }
-        debug(@"i is $i");
-
-        return true;
-    }
-
-    bool _has_no_monitor_to_right (GLib.List <Gdk.Rectangle?> other_rects, int screen_width) {
-        if (monitor_x + monitor_width == screen_width) {
-            return true;
-        }
-
-        foreach (unowned Gdk.Rectangle? rect in other_rects) {
-            if (rect.x >= monitor_x + monitor_width && // d
-                rect.y < monitor_y + panel_height && //a
-                rect.y + rect.height > monitor_y) { // b
-                return false;
-            }
-        }
-
-        return true;
     }
 
     public void set_expanded (bool expand) {
