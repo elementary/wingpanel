@@ -153,7 +153,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         bool no_monitor_above = true;
         for (var i = 0; i < n_monitors; i++) {
             var rect = display.get_monitor (i).get_geometry ();
-            screen_width = int.max(screen_width, rect.x + rect.width);
+            screen_width = int.max (screen_width, rect.x + rect.width);
             if (i == monitor_number) {
                 continue;
             }
