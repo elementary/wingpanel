@@ -28,9 +28,13 @@ namespace WingpanelInterface.Utils {
 
     private class DummyOffscreenEffect : Clutter.OffscreenEffect {
         public signal void done_painting ();
-
+#if HAS_MUTTER336
+        public override void post_paint (Clutter.PaintContext context) {
+            base.post_paint (context);
+#else
         public override void post_paint () {
             base.post_paint ();
+#endif
             Idle.add (() => {
                 done_painting ();
                 return false;
