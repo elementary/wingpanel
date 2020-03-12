@@ -101,7 +101,7 @@ namespace WingpanelInterface.Utils {
             var pixels = new uint8[texture_width * texture_height * 4];
             var pixel_lums = new double[texture_width * texture_height];
 
-            CoglFixes.texture_get_data (texture, Cogl.PixelFormat.BGRA_8888_PRE, 0, pixels);
+            texture.get_data (Cogl.PixelFormat.BGRA_8888_PRE, 0, pixels);
 
             int size = width * height;
 
