@@ -42,5 +42,9 @@ if get_option('example')
     subdir('sample')
 endif
 subdir('po')
+vapigen = find_program('vapigen', required: false)
+if vapigen.found()
+	subdir('vapi')
+endif
 
 meson.add_install_script('meson/post_install.py')
