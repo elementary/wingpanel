@@ -1178,7 +1178,7 @@ namespace Meta {
 		public signal void window_removed (Meta.Window object);
 	}
 #if HAS_MUTTER330
-	[CCode (cheader_filename = "meta/display.h,meta/meta-workspace-manager.h", type_id = "meta_workspace_manager_get_type ()")]
+	[CCode (cheader_filename = "meta/meta-workspace-manager.h", type_id = "meta_workspace_manager_get_type ()")]
 	public class WorkspaceManager : GLib.Object {
 		[CCode (has_construct_function = false)]
 		protected WorkspaceManager ();
