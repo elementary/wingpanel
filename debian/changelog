@@ -1,3 +1,16 @@
+wingpanel (2.3.1) bionic; urgency=medium
+
+  * Release 2.3.1 (#307)
+  * IndicatorSorter: fix deprecated Gee.Map.contains (#308)
+  * Update wingpanel.appdata.xml.in
+  * Application.css: reduce padding to 6px (#304)
+  * Fix windows below wingpanel for some 3 monitor layouts (#295)
+  * dbus: Add GLib.Error to all D-Bus methods (#299)
+  * Mutter 3.36 support (#298)
+  * Sync mutter vapis with gala (#297)
+
+ -- Cody Garver <cody@elementary.io>  Mon, 06 Apr 2020 04:01:26 +0000
+
 wingpanel (2.3.0) bionic; urgency=medium
 
   * Release 2.3.0 (#288)
