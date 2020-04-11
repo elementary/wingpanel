@@ -31,9 +31,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
     public Indicator () {
         /* Some information about the indicator */
         Object (
-            code_name : "sample-indicator", /* Unique name */
-            display_name : _("Sample Indicator"), /* Localised name */
-            description: _("Does nothing, but it is cool!") /* Short description */
+            code_name : "sample-indicator" /* Unique name */
         );
     }
 
