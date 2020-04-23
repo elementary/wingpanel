@@ -1,0 +1,32 @@
+# Marathi translations for extra package.
+# Copyright (C) 2019 THE extra'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the extra package.
+# Automatically generated, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: extra\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-29 15:21-0700\n"
+"PO-Revision-Date: 2019-11-07 20:24+0000\n"
+"Last-Translator: Prachi Joshi <josprachi@yahoo.com>\n"
+"Language-Team: Marathi <https://l10n.elementary.io/projects/wingpanel/"
+"wingpanel-extra/mr/>\n"
+"Language: mr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.7.1\n"
+
+#: data/wingpanel.desktop.in:3
+msgid "Wingpanel"
+msgstr "विंगपॅनेल"
+
+#: data/wingpanel.desktop.in:4
+msgid "Top panel that holds indicators and the applications menu"
+msgstr "शीर्ष पॅनेल ज्यात सूचक आणि अनुप्रयोग मेनू असतात"
+
+#: data/wingpanel.desktop.in:6
+msgid "io.elementary.wingpanel"
+msgstr "io.elementary.wingpanel"

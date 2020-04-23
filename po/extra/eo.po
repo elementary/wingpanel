@@ -1,0 +1,32 @@
+# Esperanto translations for extra package.
+# Copyright (C) 2019 THE extra'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the extra package.
+# Automatically generated, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: extra\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-29 15:21-0700\n"
+"PO-Revision-Date: 2019-11-03 00:23+0000\n"
+"Last-Translator: Shtonchjo <shtonchjo@gmail.com>\n"
+"Language-Team: Esperanto <https://l10n.elementary.io/projects/wingpanel/"
+"wingpanel-extra/eo/>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.7.1\n"
+
+#: data/wingpanel.desktop.in:3
+msgid "Wingpanel"
+msgstr "Alopanelo"
+
+#: data/wingpanel.desktop.in:4
+msgid "Top panel that holds indicators and the applications menu"
+msgstr "Supra panelo kiu entenas indikilojn kaj la aplikaĵan menuon"
+
+#: data/wingpanel.desktop.in:6
+msgid "io.elementary.wingpanel"
+msgstr "io.elementary.wingpanel"

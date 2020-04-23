@@ -30,10 +30,10 @@ namespace Wingpanel.Services {
     public interface InterfaceBus : Object {
         public signal void state_changed (BackgroundState state, uint animation_duration);
 
-        public abstract void initialize (int monitor, int panel_height) throws IOError;
-        public abstract void remember_focused_window () throws IOError;
-        public abstract void restore_focused_window () throws IOError;
-        public abstract bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws IOError;
+        public abstract void initialize (int monitor, int panel_height) throws GLib.Error;
+        public abstract void remember_focused_window () throws GLib.Error;
+        public abstract void restore_focused_window () throws GLib.Error;
+        public abstract bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws GLib.Error;
     }
 
     public class BackgroundManager : Object {
@@ -65,12 +65,14 @@ namespace Wingpanel.Services {
         }
 
         private BackgroundManager () {
-            PanelSettings.get_default ().notify["use-transparency"].connect (() => {
-                use_transparency = PanelSettings.get_default ().use_transparency;
+            var panel_settings = new GLib.Settings ("io.elementary.desktop.wingpanel");
+
+            panel_settings.changed["use-transparency"].connect (() => {
+                use_transparency = panel_settings.get_boolean ("use-transparency");
                 state_updated ();
             });
 
-            use_transparency = PanelSettings.get_default ().use_transparency;
+            use_transparency = panel_settings.get_boolean ("use-transparency");
 
             Bus.watch_name (BusType.SESSION, DBUS_NAME, BusNameWatcherFlags.NONE,
                 () => connect_dbus (),

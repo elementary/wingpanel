@@ -48,9 +48,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         style_context.add_class (Widgets.StyleClass.PANEL);
         style_context.add_class (Gtk.STYLE_CLASS_MENUBAR);
 
-        var provider = new Gtk.CssProvider ();
-        provider.load_from_resource ("io/elementary/wingpanel/application.css");
-        style_context.add_provider (provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        var panel_provider = new Gtk.CssProvider ();
+        panel_provider.load_from_resource ("io/elementary/wingpanel/panel.css");
+        style_context.add_provider (panel_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+        var app_provider = new Gtk.CssProvider ();
+        app_provider.load_from_resource ("io/elementary/wingpanel/application.css");
+        Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), app_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         this.screen.size_changed.connect (update_panel_dimensions);
         this.screen.monitors_changed.connect (update_panel_dimensions);
@@ -71,8 +75,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         application.add_action (cycle_action);
         application.add_action (cycle_back_action);
-        application.add_accelerator ("<Control>Tab", "app.cycle", null);
-        application.add_accelerator ("<Control><Shift>Tab", "app.cycle-back", null);
+        application.set_accels_for_action ("app.cycle", {"<Control>Tab"});
+        application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
         add (panel);
     }
@@ -101,8 +105,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         panel_height = panel.get_allocated_height ();
 
         monitor_number = screen.get_primary_monitor ();
-        Gdk.Rectangle monitor_dimensions;
-        this.screen.get_monitor_geometry (monitor_number, out monitor_dimensions);
+        Gdk.Rectangle monitor_dimensions = get_display ().get_primary_monitor ().get_geometry ();
 
         monitor_width = monitor_dimensions.width;
         monitor_height = monitor_dimensions.height;
@@ -132,28 +135,58 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             return;
         }
 
-        var monitor = monitor_number == -1 ? this.screen.get_primary_monitor () : monitor_number;
-        var position_top = monitor_y - panel_displacement;
+        /**
+        * https://specifications.freedesktop.org/wm-spec/wm-spec-1.5.html#NETWMSTRUT
+        * The _NET_WM_STRUCT_PARTICAL specification does not allow to reserve space for arbitrary rectangles
+        * on the screen. Instead it only allows to reserve space at the borders of screen.
+        * As for multi-monitor layouts the wingpanel can be at the within the screen (and not at the border)
+        * this makes it impossible to reserve the correct space for all possible multi-monitor layouts.
+        * Fortunately for up to 3 monitors there is always a possiblity to reserve the right space by also
+        * using the struct-left and struct-right cardinals.
+        */
+
+        var display = get_display ();
+        var n_monitors = display.get_n_monitors ();
+        int screen_width = 0;
+        bool no_monitor_left = true;
+        bool no_monitor_right = true;
+        bool no_monitor_above = true;
+        for (var i = 0; i < n_monitors; i++) {
+            var rect = display.get_monitor (i).get_geometry ();
+            screen_width = int.max (screen_width, rect.x + rect.width);
+            if (i == monitor_number) {
+                continue;
+            }
+
+            var is_left = rect.x + rect.width <= monitor_x;
+            var is_right = rect.x >= monitor_x + monitor_width;
+            var is_above = rect.y + rect.height <= monitor_y;
+            var is_below = rect.y >= monitor_y + panel_height;
+            no_monitor_left &= !is_left || is_above || is_below;
+            no_monitor_right &= !is_right || is_above || is_below;
+            no_monitor_above &= !is_above || is_left || is_right;
+        }
+
+        long struts[12] = { 0 };
         var scale_factor = this.get_scale_factor ();
+        if (no_monitor_left) {
+            struts [0] = (monitor_x + monitor_width) * scale_factor;
+            struts [4] = monitor_y * scale_factor;
+            struts [5] = (monitor_y - panel_displacement) * scale_factor - 1;
+        } else if (no_monitor_right) {
+            struts [1] = (screen_width - monitor_x) * scale_factor;
+            struts [6] = monitor_y * scale_factor;
+            struts [7] = (monitor_y - panel_displacement) * scale_factor - 1;
+        } else if (no_monitor_above) {
+            struts [2] = (monitor_y - panel_displacement) * scale_factor;
+            struts [8] = monitor_x * scale_factor;
+            struts [9] = (monitor_x + monitor_width) * scale_factor - 1;
+        } else {
+            warning ("Unable to set struts, because Wingpanel is not at the edge of the Gdk.Screen area.");
+        }
 
-        Gdk.Atom atom;
-        Gdk.Rectangle primary_monitor_rect;
-
-        long struts[12];
-
-        this.screen.get_monitor_geometry (monitor, out primary_monitor_rect);
-
-		// We need to manually include the scale factor here as GTK gives us unscaled sizes for widgets
-        struts = { 0, 0, position_top * scale_factor, 0, /* strut-left, strut-right, strut-top, strut-bottom */
-                   0, 0, /* strut-left-start-y, strut-left-end-y */
-                   0, 0, /* strut-right-start-y, strut-right-end-y */
-                   monitor_x, ((monitor_x + monitor_width) * scale_factor) - 1, /* strut-top-start-x, strut-top-end-x */
-                   0, 0 }; /* strut-bottom-start-x, strut-bottom-end-x */
-
-        atom = Gdk.Atom.intern ("_NET_WM_STRUT_PARTIAL", false);
-
-        Gdk.property_change (this.get_window (), atom, Gdk.Atom.intern ("CARDINAL", false),
-                             32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
+        Gdk.property_change (this.get_window (), Gdk.Atom.intern ("_NET_WM_STRUT_PARTIAL", false),
+                             Gdk.Atom.intern ("CARDINAL", false), 32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
     }
 
     public void set_expanded (bool expand) {

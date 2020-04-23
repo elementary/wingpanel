@@ -1,0 +1,32 @@
+# Dutch translations for extra package.
+# Copyright (C) 2019 THE extra'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the extra package.
+# Automatically generated, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: extra\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-29 15:21-0700\n"
+"PO-Revision-Date: 2020-01-03 22:07+0000\n"
+"Last-Translator: Jaimie85 <alsemgeest@gmail.com>\n"
+"Language-Team: Dutch <https://l10n.elementary.io/projects/wingpanel/"
+"wingpanel-extra/nl/>\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.9.1\n"
+
+#: data/wingpanel.desktop.in:3
+msgid "Wingpanel"
+msgstr "Vleugelpaneel"
+
+#: data/wingpanel.desktop.in:4
+msgid "Top panel that holds indicators and the applications menu"
+msgstr "Bovenste paneel met de indicatoren en het toepassingen menu"
+
+#: data/wingpanel.desktop.in:6
+msgid "io.elementary.wingpanel"
+msgstr "io.elementary.wingpanel"

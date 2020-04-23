@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Wingpanel
+Comment=Top panel that holds indicators and the applications menu
+Exec=wingpanel
+Icon=io.elementary.wingpanel
+Terminal=false
+Type=Application
+Categories=Utility;
+NoDisplay=true
+X-GNOME-Autostart-Notify=false
+X-GNOME-AutoRestart=true
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Phase=Panel
+OnlyShowIn=Pantheon;

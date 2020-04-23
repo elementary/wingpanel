@@ -1,7 +1,7 @@
 project(
     'wingpanel',
     'c', 'vala',
-    version: '2.2.5',
+    version: '2.3.1',
 )
 
 lib_version = '0.2.0'
@@ -42,5 +42,9 @@ if get_option('example')
     subdir('sample')
 endif
 subdir('po')
+vapigen = find_program('vapigen', required: false)
+if vapigen.found()
+	subdir('vapi')
+endif
 
 meson.add_install_script('meson/post_install.py')

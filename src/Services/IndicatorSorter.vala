@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ * Copyright 2011-2020 elementary, Inc. (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -76,7 +76,7 @@ public class Wingpanel.Services.IndicatorSorter : Object {
             return indicator_order[AYATANA_INDICATOR];
         }
 
-        if (node.base_indicator.code_name in indicator_order) {
+        if (indicator_order.has_key (node.base_indicator.code_name)) {
             return indicator_order[node.base_indicator.code_name];
         }
 
