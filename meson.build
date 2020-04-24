@@ -31,7 +31,7 @@ gio_unix_dep = dependency('gio-unix-2.0')
 gmodule_dep = dependency('gmodule-2.0')
 gtk_dep = dependency('gtk+-3.0', version: '>=3.10')
 gee_dep = dependency('gee-0.8')
-granite_dep = dependency('granite')
+granite_dep = dependency('granite', version: '>=5.4.0')
 
 subdir('data')
 subdir('lib')
