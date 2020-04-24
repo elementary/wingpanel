@@ -10,7 +10,7 @@ You'll need the following dependencies:
 * libgala-dev
 * libgee-0.8-dev
 * libglib2.0-dev
-* libgranite-dev
+* libgranite-dev >= 5.4.0
 * libgtk-3-dev
 * meson
 * libmutter-2-dev
