@@ -17,9 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.Container : Gtk.Bin {
-    public signal void clicked ();
-
+public class Wingpanel.Widgets.Container : Gtk.Button {
     public Gtk.Grid content_widget { owned get; construct; }
 
     public extern Gtk.Grid get_content_widget ();
@@ -29,17 +27,11 @@ public class Wingpanel.Widgets.Container : Gtk.Bin {
     construct {
         content_widget = new Gtk.Grid ();
         content_widget.hexpand = true;
+        add (content_widget);
 
-        var modelbutton = new Gtk.ModelButton ();
-        modelbutton.get_child ().destroy ();
-        modelbutton.add (content_widget);
-
-        add (modelbutton);
-
-        modelbutton.button_release_event.connect (() => {
-            clicked ();
-            // Stop modelbutton from closing the popover
-            return Gdk.EVENT_STOP;
-        });
+        var style_context = this.get_style_context ();
+        style_context.add_class (Gtk.STYLE_CLASS_MENUITEM);
+        style_context.remove_class (Gtk.STYLE_CLASS_BUTTON);
+        style_context.remove_class ("text-button");
     }
 }
