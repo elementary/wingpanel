@@ -49,15 +49,13 @@ public class Wingpanel.Widgets.Switch : Container {
         button_switch = new Gtk.Switch ();
         button_switch.active = active;
         button_switch.halign = Gtk.Align.END;
-        button_switch.margin_end = 6;
         button_switch.hexpand = true;
         button_switch.valign = Gtk.Align.CENTER;
 
         button_label = new Gtk.Label (null);
         button_label.halign = Gtk.Align.START;
-        button_label.margin_start = 6;
-        button_label.margin_end = 10;
 
+        content_widget.column_spacing = 12;
         content_widget.attach (button_label, 0, 0, 1, 1);
         content_widget.attach (button_switch, 1, 0, 1, 1);
 
