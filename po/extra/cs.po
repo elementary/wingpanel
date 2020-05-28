@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-29 15:21-0700\n"
-"PO-Revision-Date: 2020-05-08 13:10+0000\n"
+"PO-Revision-Date: 2020-05-29 15:11+0000\n"
 "Last-Translator: p-bo <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/cs/>\n"
@@ -21,13 +21,14 @@ msgstr ""
 
 #: data/wingpanel.desktop.in:3
 msgid "Wingpanel"
-msgstr ""
+msgstr "„Okřídlený“ panel"
 
 #: data/wingpanel.desktop.in:4
 msgid "Top panel that holds indicators and the applications menu"
 msgstr ""
-"Panel nahoře který obsahuje indikátory a nabídky v jednotlivých aplikacích"
+"Panel na horním okraji obrazovky, který obsahuje indikátory a nabídku s "
+"aplikacemi"
 
 #: data/wingpanel.desktop.in:6
 msgid "io.elementary.wingpanel"
-msgstr ""
+msgstr "io.elementary.wingpanel"
