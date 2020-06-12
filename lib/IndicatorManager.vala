@@ -63,10 +63,10 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
     /**
      * Place the files in /etc/wingpanel.d/ or ~/.config/wingpanel.d/
-     * default.blacklist, greeter.whitelist or combinations of it.
+     * default.forbidden, greeter.allowed or combinations of it.
      */
-    private Gee.HashSet<string> indicator_blacklist;
-    private Gee.HashSet<string> indicator_whitelist;
+    private Gee.HashSet<string> forbidden_indicators;
+    private Gee.HashSet<string> allowed_indicators;
 
     [CCode (has_target = false)]
     private delegate Wingpanel.Indicator? RegisterPluginFunction (Module module, ServerType server_type);
@@ -82,8 +82,8 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
     private IndicatorManager () {
         indicators = new Gee.HashMap<string, Wingpanel.Indicator> ();
-        indicator_blacklist = new Gee.HashSet<string> ();
-        indicator_whitelist = new Gee.HashSet<string> ();
+        forbidden_indicators = new Gee.HashSet<string> ();
+        allowed_indicators = new Gee.HashSet<string> ();
     }
 
     /**
@@ -94,7 +94,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
     public void initialize (ServerType server_type) {
         this.server_type = server_type;
 
-        /* load black- and whitelists */
+        /* load inclusion/exclusion lists */
         var root_restrictions_folder = File.new_for_path ("/etc/wingpanel.d/");
         var user_restrictions_folder = File.new_for_path (Path.build_filename (Environment.get_user_config_dir (), "wingpanel.d"));
 
@@ -151,11 +151,11 @@ public class Wingpanel.IndicatorManager : GLib.Object {
             return;
         } else if (indicators.has_key (path)) {
             return;
-        } else if (check_indicator_blacklist (path)) {
-            debug ("Indicator %s will not be loaded since it is blacklisted", path);
+        } else if (check_forbidden_indicators (path)) {
+            debug ("Indicator %s will not be loaded since it is explicitly forbidden", path);
 
             return;
-        } else if (!check_indicator_whitelist (path)) {
+        } else if (!check_allowed_indicators (path)) {
             debug ("Indicator %s will not be loaded since it is not enabled", path);
 
             return;
@@ -214,8 +214,8 @@ public class Wingpanel.IndicatorManager : GLib.Object {
         }
     }
 
-    private bool check_indicator_blacklist (string path) {
-        foreach (var indicator_file_name in indicator_blacklist) {
+    private bool check_forbidden_indicators (string path) {
+        foreach (var indicator_file_name in forbidden_indicators) {
             if (path.has_suffix (indicator_file_name)) {
                 return true;
             }
@@ -224,12 +224,12 @@ public class Wingpanel.IndicatorManager : GLib.Object {
         return false;
     }
 
-    private bool check_indicator_whitelist (string path) {
-        if (indicator_whitelist.size == 0) {
+    private bool check_allowed_indicators (string path) {
+        if (allowed_indicators.size == 0) {
             return true;
         }
 
-        foreach (var indicator_file_name in indicator_whitelist) {
+        foreach (var indicator_file_name in allowed_indicators) {
             if (path.has_suffix (indicator_file_name)) {
                 return true;
             }
@@ -239,15 +239,15 @@ public class Wingpanel.IndicatorManager : GLib.Object {
     }
 
     private void reload_restrictions (File root_restrictions_folder, File user_restrictions_folder) {
-        indicator_blacklist.clear ();
-        indicator_whitelist.clear ();
+        forbidden_indicators.clear ();
+        allowed_indicators.clear ();
         load_restrictions (root_restrictions_folder);
         load_restrictions (user_restrictions_folder);
 
         indicators.@foreach ((entry) => {
-            if (check_indicator_blacklist (entry.key)) {
+            if (check_forbidden_indicators (entry.key)) {
                 deregister_indicator (entry.key, entry.value);
-            } else if (!check_indicator_whitelist (entry.key)) {
+            } else if (!check_allowed_indicators (entry.key)) {
                 deregister_indicator (entry.key, entry.value);
             }
 
@@ -267,19 +267,30 @@ public class Wingpanel.IndicatorManager : GLib.Object {
             var enumerator = restrictions_folder.enumerate_children (FileAttribute.STANDARD_NAME, 0);
 
             while ((file_info = enumerator.next_file ()) != null) {
-                if (!file_info.get_name ().contains (server_type.restrictions_file_name ())) {
+                unowned string file_name = file_info.get_name ();
+                if (!file_name.contains (server_type.restrictions_file_name ())) {
                     continue;
                 }
 
-                var file = restrictions_folder.get_child (file_info.get_name ());
+                var file = restrictions_folder.get_child (file_name);
 
-                if (file_info.get_name ().has_suffix (".whitelist")) {
+                if (file_name.has_suffix (".allowed")) {
                     foreach (var entry in get_restrictions_from_file (file)) {
-                        indicator_whitelist.add (entry);
+                        allowed_indicators.add (entry);
                     }
-                } else if (file_info.get_name ().has_suffix (".blacklist")) {
+                } else if (file_name.has_suffix (".forbidden")) {
                     foreach (var entry in get_restrictions_from_file (file)) {
-                        indicator_blacklist.add (entry);
+                        forbidden_indicators.add (entry);
+                    }
+                } else if (file_name.has_suffix (".whitelist")) {
+                    critical ("Using .whitelist files is deprecated and will be removed in next version, please use .allowed instead");
+                    foreach (var entry in get_restrictions_from_file (file)) {
+                        allowed_indicators.add (entry);
+                    }
+                } else if (file_name.has_suffix (".blacklist")) {
+                    critical ("Using .blacklist files is deprecated and will be removed in next version, please use .forbidden instead");
+                    foreach (var entry in get_restrictions_from_file (file)) {
+                        forbidden_indicators.add (entry);
                     }
                 }
             }
