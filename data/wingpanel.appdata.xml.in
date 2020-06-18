@@ -16,6 +16,7 @@
         <p>Improvements:</p>
         <ul>
           <li>Fix a potential issue when ending the session</li>
+          <li>Use "allow list" and "block list"</li>
           <li>Updated translations</li>
         </ul>
       </description>
