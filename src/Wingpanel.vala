@@ -61,8 +61,8 @@ namespace Wingpanel {
                 return false;
             }
 
-            sclient.query_end_session.connect (session_respond);
-            sclient.end_session.connect (session_respond);
+            sclient.query_end_session.connect ((flags) => session_respond (sclient, flags));
+            sclient.end_session.connect ((flags) => session_respond (sclient, flags));
             sclient.stop.connect (session_stop);
 
             return true;
