@@ -1,3 +1,14 @@
+wingpanel (2.3.2) bionic; urgency=medium
+
+  * Release 2.3.2 (#328)
+  * Use .allowed and .forbidden wordings (#326)
+  * Fix end-session signal signature (#325)
+  * Update README.md
+  * Respect an OS-wide dark preference (#199)
+  * Remove deprecated properties from SampleIndicator (#312)
+
+ -- Cody Garver <cody@elementary.io>  Fri, 19 Jun 2020 19:04:37 +0000
+
 wingpanel (2.3.1) bionic; urgency=medium
 
   * Release 2.3.1 (#307)
