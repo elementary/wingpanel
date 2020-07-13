@@ -56,9 +56,6 @@ public class Wingpanel.Widgets.Switch : Container {
 
         bind_property ("active", button_switch, "active", GLib.BindingFlags.SYNC_CREATE | GLib.BindingFlags.BIDIRECTIONAL);
         bind_property ("caption", button_label, "label", GLib.BindingFlags.SYNC_CREATE | GLib.BindingFlags.BIDIRECTIONAL);
-        button_switch.notify["active"].connect (() => {
-            switched ();
-        });
     }
 
     public new Gtk.Label get_label () {
