@@ -1,10 +1,10 @@
 project(
     'wingpanel',
     'c', 'vala',
-    version: '2.3.2',
+    version: '3.0.0',
 )
 
-lib_version = '0.2.0'
+lib_version = '3.0.0'
 
 add_project_arguments([
         '--vapidir=' + join_paths(meson.source_root(), 'vapi'),
