@@ -37,18 +37,6 @@ public abstract class Wingpanel.Indicator : GLib.Object {
     public string code_name { get; construct; }
 
     /**
-     * The localised name of the indicator.
-     */
-    [Version (deprecated = true, deprecated_since = "2.3.0", replacement = "")]
-    public string display_name { get; construct; }
-
-    /**
-     * A short description of the indicator.
-     */
-    [Version (deprecated = true, deprecated_since = "2.3.0", replacement = "")]
-    public string description { get; construct; }
-
-    /**
      * Defines if the indicator display widget should be shown or not.
      */
     public bool visible { get; set; default = false; }

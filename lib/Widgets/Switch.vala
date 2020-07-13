@@ -18,17 +18,6 @@
  */
 
 public class Wingpanel.Widgets.Switch : Container {
-    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.caption")]
-    public extern void set_caption (string caption);
-    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.caption")]
-    public extern string get_caption ();
-    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.active")]
-    public extern void set_active (bool active);
-    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.active")]
-    public extern bool get_active ();
-    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.active")]
-    public new signal void switched ();
-
     public bool active { get; set; }
     public string caption { owned get; set; }
 
