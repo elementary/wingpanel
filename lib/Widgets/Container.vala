@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
+[Version (deprecated = true, deprecated_since = "3.0.0", replacement = "Gtk.ModelButton")]
 public class Wingpanel.Widgets.Container : Gtk.Button {
     public Gtk.Grid content_widget { owned get; construct; }
 
