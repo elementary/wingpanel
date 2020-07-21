@@ -1,7 +1,7 @@
 Source: wingpanel
 Section: x11
 Priority: extra
-Maintainer: Cody Garver <cody@elementary.io>
+Maintainer: elementary, Inc. <builds@elementary.io>
 Build-Depends: debhelper (>= 10.5.1),
                gettext,
                libgala-dev,
@@ -17,7 +17,7 @@ Homepage: https://github.com/elementary/wingpanel
 
 Package: wingpanel
 Architecture: any
-Depends: libwingpanel-2.0-0 (= ${binary:Version}),
+Depends: libwingpanel-3.0-0 (= ${binary:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
 Recommends: wingpanel-indicator-bluetooth,
@@ -46,7 +46,7 @@ Description: A super sexy space-saving top panel (debugging symbols)
  .
  This package contains debugging symbols for wingpanel.
 
-Package: libwingpanel-2.0-0
+Package: libwingpanel-3.0-0
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Multi-Arch: same
@@ -59,11 +59,11 @@ Description: A super sexy space-saving top panel
  .
  This package contains the shared library used for wingpanel.
 
-Package: libwingpanel-2.0-dev
+Package: libwingpanel-3.0-dev
 Architecture: any
 Section: libdevel
 Depends: libglib2.0-dev (>= 2.32),
-         libwingpanel-2.0-0 (= ${binary:Version}),
+         libwingpanel-3.0-0 (= ${binary:Version}),
          ${misc:Depends}
 Description: Library to build plugins for WingPanel (development files)
  A replacement for the traditional GNOME Panel, designed to be a lightweight
