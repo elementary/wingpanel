@@ -17,7 +17,7 @@ libwingpanel_deps = [
     gtk_dep,
 ]
 
-libwingpanel_lib = shared_library('wingpanel-2.0',
+libwingpanel_lib = shared_library('wingpanel-3.0',
     'Indicator.vala',
     'IndicatorManager.vala',
     'Widgets/Container.vala',
@@ -30,22 +30,22 @@ libwingpanel_lib = shared_library('wingpanel-2.0',
     soversion: '0',
     version: lib_version,
     install: true,
-    install_dir: [true, join_paths(get_option('includedir'), 'wingpanel-2.0'), true]
+    install_dir: [true, join_paths(get_option('includedir'), 'wingpanel-3.0'), true]
 )
 
 pkg.generate(
-    filebase: 'wingpanel-2.0',
+    filebase: 'wingpanel-3.0',
     name: 'Wingpanel',
     description: 'Wingpanel Indicators API',
     version: meson.project_version(),
-    subdirs: 'wingpanel-2.0',
+    subdirs: 'wingpanel-3.0',
     variables: ['indicatorsdir=${libdir}/wingpanel'],
     libraries: libwingpanel_lib,
     requires: libwingpanel_deps
 )
 
 install_data(
-    'wingpanel-2.0.deps',
+    'wingpanel-3.0.deps',
     install_dir: join_paths(get_option('datadir'), 'vala', 'vapi')
 )
 
