@@ -20,8 +20,6 @@ libwingpanel_deps = [
 libwingpanel_lib = shared_library('wingpanel-3.0',
     'Indicator.vala',
     'IndicatorManager.vala',
-    'Widgets/AutomaticScrollBox.vala',
-    'Widgets/Button.vala',
     'Widgets/Container.vala',
     'Widgets/OverlayIcon.vala',
     'Widgets/Separator.vala',
