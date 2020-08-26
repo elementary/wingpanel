@@ -1,7 +1,5 @@
 lib/Indicator.vala
 lib/IndicatorManager.vala
-lib/Widgets/AutomaticScrollBox.vala
-lib/Widgets/Button.vala
 lib/Widgets/Container.vala
 lib/Widgets/OverlayIcon.vala
 lib/Widgets/Separator.vala
