@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-29 15:21-0700\n"
-"PO-Revision-Date: 2020-09-12 20:14+0000\n"
+"PO-Revision-Date: 2020-09-14 13:14+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/uk/>\n"
@@ -26,7 +26,7 @@ msgstr "Wingpanel"
 
 #: data/wingpanel.desktop.in:4
 msgid "Top panel that holds indicators and the applications menu"
-msgstr "Панель індикаторів стану та меню застосунків"
+msgstr "Верхня панель індикаторів стану та меню застосунків"
 
 #: data/wingpanel.desktop.in:6
 msgid "io.elementary.wingpanel"
