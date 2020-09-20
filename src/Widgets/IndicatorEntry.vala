@@ -63,7 +63,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
         add (revealer);
 
-
         if (base_indicator.visible) {
             popover_manager.register_indicator (this);
         }
