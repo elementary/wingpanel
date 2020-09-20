@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ * Copyright 2011-2020 elementary, Inc. (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -22,17 +22,18 @@ public class Wingpanel.Widgets.IndicatorPopover : Gtk.Popover {
 
     private Gtk.Box container;
 
-    public IndicatorPopover () {
-        this.set_size_request (256, -1);
-        this.name = name + "/popover";
+    construct {
+        width_request = 256;
         modal = false;
-
+        name = name + "/popover";
         position = Gtk.PositionType.BOTTOM;
-        container = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        container.margin_top = 3;
-        container.margin_bottom = 3;
 
-        this.add (container);
+        container = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0) {
+            margin_top = 3,
+            margin_bottom = 3
+        };
+
+        add (container);
     }
 
     public void set_content (Gtk.Widget? content) {
