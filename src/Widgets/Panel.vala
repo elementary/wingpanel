@@ -43,7 +43,6 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         hexpand = true;
         vexpand = true;
         valign = Gtk.Align.START;
-        get_style_context ().add_class (StyleClass.PANEL);
 
         left_menubar = new Gtk.MenuBar () {
             can_focus = true,
@@ -80,6 +79,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         });
 
         style_context = get_style_context ();
+        style_context.add_class (StyleClass.PANEL);
         style_context.add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
