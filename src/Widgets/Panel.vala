@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ * Copyright 2011-2020 elementary, Inc. (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -21,33 +21,45 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     public Services.PopoverManager popover_manager { get; construct; }
 
     private IndicatorMenuBar right_menubar;
-    private MenuBar left_menubar;
-    private MenuBar center_menubar;
+    private Gtk.MenuBar left_menubar;
+    private Gtk.MenuBar center_menubar;
 
-    private Gtk.StyleContext style_context;
+    private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
 
     private static Gtk.CssProvider resource_provider;
 
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
+    }
 
-        this.set_size_request (-1, 30);
+    static construct {
+        resource_provider = new Gtk.CssProvider ();
+        resource_provider.load_from_resource ("io/elementary/wingpanel/panel.css");
+    }
 
-        this.hexpand = true;
-        this.vexpand = true;
-        this.valign = Gtk.Align.START;
-        this.get_style_context ().add_class (StyleClass.PANEL);
+    construct {
+        height_request = 30;
+        hexpand = true;
+        vexpand = true;
+        valign = Gtk.Align.START;
+        get_style_context ().add_class (StyleClass.PANEL);
 
-        left_menubar = new MenuBar ();
-        left_menubar.halign = Gtk.Align.START;
+        left_menubar = new Gtk.MenuBar () {
+            can_focus = true,
+            halign = Gtk.Align.START
+        };
         left_menubar.get_style_context ().add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        center_menubar = new MenuBar ();
+        center_menubar = new Gtk.MenuBar () {
+            can_focus = true
+        };
         center_menubar.get_style_context ().add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        right_menubar = new IndicatorMenuBar ();
-        right_menubar.halign = Gtk.Align.END;
+        right_menubar = new IndicatorMenuBar () {
+            can_focus = true,
+            halign = Gtk.Align.END
+        };
         right_menubar.get_style_context ().add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -67,7 +79,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
             return true;
         });
 
-        style_context = this.get_style_context ();
+        style_context = get_style_context ();
         style_context.add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
@@ -80,11 +92,6 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         granite_settings.notify["prefers-color-scheme"].connect (() => {
             gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
         });
-    }
-
-    static construct {
-        resource_provider = new Gtk.CssProvider ();
-        resource_provider.load_from_resource ("io/elementary/wingpanel/panel.css");
     }
 
     public override bool button_press_event (Gdk.EventButton event) {
