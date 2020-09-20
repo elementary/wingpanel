@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ * Copyright 2011-2020 elementary, Inc. (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -18,7 +18,11 @@
  */
 
 public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
-    public Gtk.Widget display_widget;
+    public Indicator base_indicator { get; construct; }
+    public Services.PopoverManager popover_manager { get; construct; }
+
+    public IndicatorMenuBar? menu_bar;
+    public Gtk.Widget display_widget { get; private set; }
 
     private Gtk.Widget _indicator_widget = null;
     public unowned Gtk.Widget indicator_widget {
@@ -33,20 +37,19 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
     private Gtk.Revealer revealer;
 
-    public Indicator base_indicator;
-    public IndicatorMenuBar? menu_bar;
-
-    Services.PopoverManager popover_manager;
-
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
-        this.popover_manager = popover_manager;
-        this.base_indicator = base_indicator;
-        this.halign = Gtk.Align.START;
-        this.get_style_context ().add_class (StyleClass.COMPOSITED_INDICATOR);
-        this.name = base_indicator.code_name + "/entry";
+        Object (
+            base_indicator: base_indicator,
+            popover_manager: popover_manager
+        );
+    }
 
+    construct {
         can_focus = false;
         display_widget = base_indicator.get_display_widget ();
+        halign = Gtk.Align.START;
+        name = base_indicator.code_name + "/entry";
+        get_style_context ().add_class (StyleClass.COMPOSITED_INDICATOR);
 
         if (display_widget == null) {
             return;
@@ -56,8 +59,10 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         display_widget.margin_end = 4;
 
         revealer = new Gtk.Revealer ();
-        this.add (revealer);
         revealer.add (display_widget);
+
+        add (revealer);
+
 
         if (base_indicator.visible) {
             popover_manager.register_indicator (this);
@@ -89,13 +94,13 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
         add_events (Gdk.EventMask.SCROLL_MASK);
 
-        this.scroll_event.connect ((e) => {
+        scroll_event.connect ((e) => {
             display_widget.scroll_event (e);
 
             return Gdk.EVENT_PROPAGATE;
         });
 
-        this.touch_event.connect ((e) => {
+        touch_event.connect ((e) => {
             if (e.type == Gdk.EventType.TOUCH_BEGIN) {
                 popover_manager.current_indicator = this;
                 return Gdk.EVENT_STOP;
@@ -104,7 +109,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
             return Gdk.EVENT_PROPAGATE;
         });
 
-        this.button_press_event.connect ((e) => {
+        button_press_event.connect ((e) => {
             if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
                 && e.type == Gdk.EventType.BUTTON_PRESS) {
                 popover_manager.current_indicator = this;
