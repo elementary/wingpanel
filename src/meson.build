@@ -8,7 +8,6 @@ wingpanel_files = files(
     'Widgets/IndicatorEntry.vala',
     'Widgets/IndicatorMenuBar.vala',
     'Widgets/IndicatorPopover.vala',
-    'Widgets/MenuBar.vala',
     'Widgets/Panel.vala',
     'Widgets/StyleClass.vala',
 )

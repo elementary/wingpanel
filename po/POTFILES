@@ -12,5 +12,4 @@ src/Services/PopoverManager.vala
 src/Widgets/IndicatorEntry.vala
 src/Widgets/IndicatorMenuBar.vala
 src/Widgets/IndicatorPopover.vala
-src/Widgets/MenuBar.vala
 src/Widgets/Panel.vala
