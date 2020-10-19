@@ -32,6 +32,7 @@ gmodule_dep = dependency('gmodule-2.0')
 gtk_dep = dependency('gtk+-3.0', version: '>=3.10')
 gee_dep = dependency('gee-0.8')
 granite_dep = dependency('granite', version: '>=5.4.0')
+is_wayland_dep = meson.get_compiler('vala').find_library('is_wayland', dirs: join_paths(meson.source_root(), 'vapi'))
 
 subdir('data')
 subdir('lib')

@@ -10,11 +10,13 @@ wingpanel_files = files(
     'Widgets/IndicatorPopover.vala',
     'Widgets/Panel.vala',
     'Widgets/StyleClass.vala',
+    'is_wayland.c'
 )
 
 wingpanel_deps = [
     libwingpanel_dep,
     granite_dep,
+    is_wayland_dep
 ]
 
 executable(meson.project_name(),
