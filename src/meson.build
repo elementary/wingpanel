@@ -2,6 +2,7 @@ wingpanel_files = files(
     'PanelWindow.vala',
     'SessionManager.vala',
     'Application.vala',
+    'Utils.vala',
     'Services/BackgroundManager.vala',
     'Services/IndicatorSorter.vala',
     'Services/PopoverManager.vala',
@@ -10,13 +11,12 @@ wingpanel_files = files(
     'Widgets/IndicatorPopover.vala',
     'Widgets/Panel.vala',
     'Widgets/StyleClass.vala',
-    'is_wayland.c'
 )
 
 wingpanel_deps = [
     libwingpanel_dep,
     granite_dep,
-    is_wayland_dep
+    gdk_x11_dep
 ]
 
 executable(meson.project_name(),

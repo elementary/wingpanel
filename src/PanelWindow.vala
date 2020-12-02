@@ -106,7 +106,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         monitor_number = screen.get_primary_monitor ();
         Gdk.Rectangle monitor_dimensions;
-        if (is_wayland ()) {
+        if (Utils.is_wayland ()) {
             // TODO: Wayland doesn't have a concept of a primary monitor and so the GDK
             // call doesn't work, so we need to write some kind of WM interface to get this
             monitor_dimensions = get_display ().get_monitor (0).get_geometry ();
