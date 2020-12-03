@@ -22,4 +22,3 @@ namespace Wingpanel.Utils {
         return !(Gdk.Display.get_default () is Gdk.X11.Display);
     }
 }
-
