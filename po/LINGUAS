@@ -1,5 +1,3 @@
-#
-# please keep this list sorted alphabetically
 aa
 ab
 ae
@@ -24,6 +22,7 @@ bo
 br
 bs
 ca
+ca@valencia
 ce
 ch
 ckb
@@ -49,6 +48,7 @@ eu
 fa
 ff
 fi
+fil
 fj
 fo
 fr
@@ -198,6 +198,3 @@ zh_CN
 zh_HK
 zh_TW
 zu
-fil
-ca@valencia
-en_US
