@@ -52,7 +52,7 @@
     </release>
   </releases>
   <provides>
-    <binary>wingpanel</binary>
+    <binary>io.elementary.wingpanel</binary>
   </provides>
   <compulsory_for_desktop>Pantheon</compulsory_for_desktop>
   <developer_name>elementary, Inc.</developer_name>
