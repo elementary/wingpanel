@@ -1,6 +1,6 @@
 Source: wingpanel
 Section: x11
-Priority: extra
+Priority: optional
 Maintainer: elementary, Inc. <builds@elementary.io>
 Build-Depends: debhelper (>= 10.5.1),
                gettext,
@@ -32,19 +32,6 @@ Description: A super sexy space-saving top panel
  A replacement for the traditional GNOME Panel, designed to be a lightweight
  container for system/application indicators and notification icons.
  Designed by elementary Project.
-
-Package: wingpanel-dbg
-Architecture: any
-Section: debug
-Priority: extra
-Depends: wingpanel (= ${binary:Version}), ${misc:Depends}
-Enhances: wingpanel
-Description: A super sexy space-saving top panel (debugging symbols)
- A replacement for the traditional GNOME Panel, designed to be a lightweight
- container for system/application indicators and notification icons.
- Designed by elementary Project.
- .
- This package contains debugging symbols for wingpanel.
 
 Package: libwingpanel-3.0-0
 Architecture: any
