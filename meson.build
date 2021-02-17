@@ -1,10 +1,8 @@
 project(
-    'wingpanel',
+    'io.elementary.wingpanel',
     'c', 'vala',
     version: '3.0.0',
 )
-
-lib_version = '3.0.0'
 
 add_project_arguments([
         '--vapidir=' + join_paths(meson.source_root(), 'vapi'),
@@ -18,8 +16,6 @@ add_project_arguments([
     ],
     language: 'c'
 )
-
-indicators_dir = join_paths(get_option('prefix'), get_option('libdir'), 'wingpanel')
 
 i18n = import('i18n')
 gnome = import('gnome')
