@@ -1,4 +1,4 @@
-Source: wingpanel
+Source: io.elementary.wingpanel
 Section: x11
 Priority: optional
 Maintainer: elementary, Inc. <builds@elementary.io>
@@ -15,9 +15,9 @@ Build-Depends: debhelper (>= 10.5.1),
 Standards-Version: 4.1.1
 Homepage: https://github.com/elementary/wingpanel
 
-Package: wingpanel
+Package: io.elementary.wingpanel
 Architecture: any
-Depends: libwingpanel-3.0-0 (= ${binary:Version}),
+Depends: libwingpanel3 (= ${binary:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
 Recommends: wingpanel-indicator-bluetooth,
@@ -27,18 +27,18 @@ Recommends: wingpanel-indicator-bluetooth,
             wingpanel-indicator-power,
             wingpanel-indicator-session,
             wingpanel-indicator-sound
+Replaces: wingpanel (<< 2.3.2)
+Breaks: wingpanel (<< 2.3.2)
 Provides: indicator-renderer
 Description: A super sexy space-saving top panel
  A replacement for the traditional GNOME Panel, designed to be a lightweight
  container for system/application indicators and notification icons.
  Designed by elementary Project.
 
-Package: libwingpanel-3.0-0
+Package: libwingpanel3
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Multi-Arch: same
-Conflicts: libwingpanel0
-Replaces: libwingpanel0
 Description: A super sexy space-saving top panel
  A replacement for the traditional GNOME Panel, designed to be a lightweight
  container for system/application indicators and notification icons.
@@ -46,15 +46,33 @@ Description: A super sexy space-saving top panel
  .
  This package contains the shared library used for wingpanel.
 
-Package: libwingpanel-3.0-dev
+Package: libwingpanel-dev
 Architecture: any
 Section: libdevel
 Depends: libglib2.0-dev (>= 2.32),
-         libwingpanel-3.0-0 (= ${binary:Version}),
+         libwingpanel3 (= ${binary:Version}),
          ${misc:Depends}
+Replaces: libwingpanel-3.0-dev (<< 2.3.2)
+Breaks: libwingpanel-3.0-dev (<< 2.3.2)
 Description: Library to build plugins for WingPanel (development files)
  A replacement for the traditional GNOME Panel, designed to be a lightweight
  container for system/application indicators and notification icons.
  Designed by elementary Project.
  .
  This package contains the development files used for wingpanel.
+
+Package: libwingpanel-3.0-dev
+Depends: libwingpanel-dev, ${misc:Depends}
+Architecture: all
+Priority: optional
+Section: oldlibs
+Description: transitional package
+ This is a transitional package. It can safely be removed.
+
+Package: wingpanel
+Depends: io.elementary.wingpanel, ${misc:Depends}
+Architecture: all
+Priority: optional
+Section: oldlibs
+Description: transitional package
+ This is a transitional package. It can safely be removed.
