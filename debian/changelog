@@ -1,4 +1,4 @@
-wingpanel (2.3.2) bionic; urgency=medium
+io.elementary.wingpanel (2.3.2) bionic; urgency=medium
 
   * Release 2.3.2 (#328)
   * Use .allowed and .forbidden wordings (#326)
@@ -9,7 +9,7 @@ wingpanel (2.3.2) bionic; urgency=medium
 
  -- Cody Garver <cody@elementary.io>  Fri, 19 Jun 2020 19:04:37 +0000
 
-wingpanel (2.3.1) bionic; urgency=medium
+io.elementary.wingpanel (2.3.1) bionic; urgency=medium
 
   * Release 2.3.1 (#307)
   * IndicatorSorter: fix deprecated Gee.Map.contains (#308)
@@ -22,7 +22,7 @@ wingpanel (2.3.1) bionic; urgency=medium
 
  -- Cody Garver <cody@elementary.io>  Mon, 06 Apr 2020 04:01:26 +0000
 
-wingpanel (2.3.0) bionic; urgency=medium
+io.elementary.wingpanel (2.3.0) bionic; urgency=medium
 
   * Release 2.3.0 (#288)
   * Fix: Cannot move windows to secondary display above panel (#235)
@@ -36,7 +36,7 @@ wingpanel (2.3.0) bionic; urgency=medium
 
  -- Cody Garver <cody@elementary.io>  Mon, 02 Mar 2020 19:38:00 +0000
 
-wingpanel (2.2.6) bionic; urgency=medium
+io.elementary.wingpanel (2.2.6) bionic; urgency=medium
 
   * Release 2.2.6 (#261)
   * Update translation files
@@ -65,109 +65,109 @@ wingpanel (2.2.6) bionic; urgency=medium
 
  -- Cody Garver <cody@elementary.io>  Thu, 31 Oct 2019 20:43:26 +0000
 
-wingpanel (2.2.5) bionic; urgency=medium
+io.elementary.wingpanel (2.2.5) bionic; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <codygarver@gmail.com>  Wed, 05 Jun 2019 04:55:20 -0500
 
-wingpanel (2.2.3) bionic; urgency=medium
+io.elementary.wingpanel (2.2.3) bionic; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <codygarver@gmail.com>  Mon, 18 Mar 2019 11:38:23 -0500
 
-wingpanel (2.2.2) bionic; urgency=medium
+io.elementary.wingpanel (2.2.2) bionic; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <codygarver@gmail.com>  Thu, 17 Jan 2019 14:03:29 -0600
 
-wingpanel (2.2.1) bionic; urgency=medium
+io.elementary.wingpanel (2.2.1) bionic; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <cody@elementary.io>  Thu, 20 Dec 2018 06:23:56 -0600
 
-wingpanel (2.2.0) bionic; urgency=medium
+io.elementary.wingpanel (2.2.0) bionic; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <cody@elementary.io>  Thu, 04 Oct 2018 09:34:15 -0500
 
-wingpanel (2.1.1) bionic; urgency=medium
+io.elementary.wingpanel (2.1.1) bionic; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <cody@elementary.io>  Fri, 22 Jun 2018 02:24:41 -0500
 
-wingpanel (2.1.0) bionic; urgency=medium
+io.elementary.wingpanel (2.1.0) bionic; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <cody@elementary.io>  Wed, 06 Jun 2018 06:44:34 -0500
 
-wingpanel (2.0.4) xenial; urgency=medium
+io.elementary.wingpanel (2.0.4) xenial; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <cody@elementary.io>  Mon, 11 Sep 2017 20:50:03 -0500
 
-wingpanel (2.0.3) xenial; urgency=medium
+io.elementary.wingpanel (2.0.3) xenial; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <cody@elementary.io>  Tue, 30 May 2017 14:09:42 -0500
 
-wingpanel (2.0.2) xenial; urgency=medium
+io.elementary.wingpanel (2.0.2) xenial; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <cody@elementary.io>  Thu, 16 Mar 2017 16:29:37 -0600
 
-wingpanel (2.0.1) xenial; urgency=medium
+io.elementary.wingpanel (2.0.1) xenial; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <cody@elementary.io>  Sat, 13 Aug 2016 10:17:25 -0500
 
-wingpanel (0.4) trusty; urgency=medium
+io.elementary.wingpanel (0.4) trusty; urgency=medium
 
   * Full rewrite.
 
  -- Cody Garver <cody@elementary.io>  Sat, 20 Jun 2015 18:31:35 -0500
 
-wingpanel (0.3.0.1) trusty; urgency=medium
+io.elementary.wingpanel (0.3.0.1) trusty; urgency=medium
 
   * New upstream release.
 
  -- Cody Garver <cody@elementaryos.org>  Sat, 30 May 2015 09:42:46 -0500
 
-wingpanel (0.3) saucy; urgency=low
+io.elementary.wingpanel (0.3) saucy; urgency=low
 
   * New upstream release.
 
  -- Cody Garver <cody@elementaryos.org>  Sun, 08 Sep 2013 12:36:19 -0500
 
-wingpanel (0.2.4) precise; urgency=low
+io.elementary.wingpanel (0.2.4) precise; urgency=low
 
   * New upstream release.
 
  -- Cody Garver <cody@elementaryos.org>  Fri, 09 Aug 2013 21:12:25 -0500
 
-wingpanel (0.2.3) precise; urgency=low
+io.elementary.wingpanel (0.2.3) precise; urgency=low
 
   * New upstream release.
 
  -- Cody Garver <cody@elementaryos.org>  Sun, 09 Jun 2013 15:26:46 -0500
 
-wingpanel (0.2.2) precise; urgency=low
+io.elementary.wingpanel (0.2.2) precise; urgency=low
 
   * New upstream release.
 
  -- Cody Garver <cody@elementaryos.org>  Wed, 17 Apr 2013 14:58:56 -0500
 
-wingpanel (0.1) oneiric; urgency=low
+io.elementary.wingpanel (0.1) oneiric; urgency=low
 
   * Initial Release.
 
