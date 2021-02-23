@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
+[Version (deprecated = true, deprecated_since = "3.0.0", replacement = "Granite.SwitchModelButton")]
 public class Wingpanel.Widgets.Switch : Gtk.Bin {
     public bool active { get; set; }
     public string caption { owned get; set; }
