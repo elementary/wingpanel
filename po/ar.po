@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-29 15:21-0700\n"
+"POT-Creation-Date: 2021-02-17 00:25+0000\n"
 "PO-Revision-Date: 2018-12-02 05:35+0000\n"
 "Last-Translator: Mohelm97 <mohelm97@gmail.com>\n"
 "Language-Team: Arabic <https://weblate.elementary.io/projects/wingpanel/"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Weblate 3.0.1\n"
 "X-Launchpad-Export-Date: 2017-03-24 05:38+0000\n"
 
-#: src/Wingpanel.vala:157
+#: src/Application.vala:175
 msgid "A super sexy space-saving top panel"
 msgstr "شريط علوي صغير وجميل جدًا"
 
