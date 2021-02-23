@@ -29,6 +29,9 @@ public abstract class Wingpanel.Indicator : GLib.Object {
     public const string PRINTER = "printer";
     public const string BLUETOOTH = "bluetooth";
     public const string KEYBOARD = "keyboard";
+    public const string NIGHT_LIGHT = "nightlight";
+    public const string PRIVACY = "privacy";
+    public const string ACCESSIBILITY = "a11y";
 
     /**
      * The unique name representing the indicator.
