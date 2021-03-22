@@ -11,6 +11,28 @@
     <p>The extensible top panel for Pantheon. Wingpanel is an empty container that accepts indicators as extensions, including the applications menu.</p>
   </description>
   <releases>
+    <release version="3.0.0" date="2020-03-22" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Fix some issues with indicator sort order</li>
+          <li>Adjust special icon colors for dark and light panels to improve contrast</li>
+          <li>Fix getting monitor dimensions under Wayland</li>
+          <li>Updated translations</li>
+        </ul>
+        <p>Deprecations:</p>
+        <ul>
+          <li>Wingpanel.Widgets.Container: Use Gtk.ModelButton instead</li>
+          <li>Wingpanel.Widgets.Separator: Use Gtk.Separator instead</li>
+          <li>Wingpanel.Widgets.Switch: Use Granite.SwitchModelButton instead</li>
+        </ul>
+        <p>Removals:</p>
+        <ul>
+          <li>Wingpanel.Widgets.AutomaticScrollBox: use Gtk.ScrolledWindow.max_content_height instead</li>
+          <li>Wingpanel.Widgets.Button: Use Gtk.ModelButton instead</li>
+        </ul>
+      </description>
+    </release>
     <release version="2.3.2" date="2020-06-19" urgency="medium">
       <description>
         <p>Improvements:</p>
