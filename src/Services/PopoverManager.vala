@@ -81,7 +81,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 
     private void save_and_clear_tooltip (Wingpanel.Widgets.IndicatorEntry? indicator) {
         if (indicator != null) {
-            Gtk.Widget display_widget = indicator.display_widget;
+            unowned Gtk.Widget display_widget = indicator.display_widget;
             if (display_widget != null) {
                 tooltip_markup = display_widget.tooltip_markup;
                 display_widget.set_tooltip_markup (null);
@@ -91,7 +91,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 
     private void restore_tooltip (Wingpanel.Widgets.IndicatorEntry? indicator) {
         if (indicator != null) {
-            Gtk.Widget display_widget = indicator.display_widget;
+            unowned Gtk.Widget display_widget = indicator.display_widget;
             if (display_widget != null) {
                 display_widget.tooltip_markup = tooltip_markup;
             }
