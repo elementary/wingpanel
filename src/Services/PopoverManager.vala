@@ -22,10 +22,13 @@ public class Wingpanel.Services.PopoverManager : Object {
 
     private bool grabbed = false; // whether the wingpanel grabbed focus
     private bool mousing = false;
+    private bool is_popover_open = false;
+    private string tooltip_markup;
 
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
     private Wingpanel.Widgets.IndicatorPopover popover;
     private Wingpanel.Widgets.IndicatorEntry? _current_indicator = null;
+    private Wingpanel.Widgets.IndicatorEntry? _previous_indicator = null;
     public Wingpanel.Widgets.IndicatorEntry? current_indicator {
         get {
             return _current_indicator;
@@ -35,6 +38,8 @@ public class Wingpanel.Services.PopoverManager : Object {
             if (value == null && _current_indicator == null) {
                 return;
             }
+
+            _previous_indicator = _current_indicator;
 
             if (_current_indicator == null && value != null) { // First open
                 _current_indicator = value;
@@ -58,8 +63,37 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.popup ();
                 popover.show_all ();
                 _current_indicator.base_indicator.opened ();
+                is_popover_open = true;
+                restore_tooltip (_previous_indicator);
+                save_and_clear_tooltip (_current_indicator);
+                _current_indicator.base_indicator.notify["tooltip-markup"].connect (() => {
+                    if (is_popover_open) {
+                        save_and_clear_tooltip (_current_indicator);
+                    }
+                });
             } else {
                 popover.popdown ();
+                is_popover_open = false;
+                restore_tooltip (_previous_indicator);
+            }
+        }
+    }
+
+    private void save_and_clear_tooltip (Wingpanel.Widgets.IndicatorEntry? indicator) {
+        if (indicator != null) {
+            Gtk.Widget display_widget = indicator.display_widget;
+            if (display_widget != null) {
+                tooltip_markup = display_widget.tooltip_markup;
+                display_widget.set_tooltip_markup (null);
+            }
+        }
+    }
+
+    private void restore_tooltip (Wingpanel.Widgets.IndicatorEntry? indicator) {
+        if (indicator != null) {
+            Gtk.Widget display_widget = indicator.display_widget;
+            if (display_widget != null) {
+                display_widget.tooltip_markup = tooltip_markup;
             }
         }
     }
