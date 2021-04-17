@@ -27,10 +27,27 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
 
+    private int _draw_y = 0;
+    public int draw_y {
+        get {
+            return _draw_y;
+        }
+
+        set {
+            _draw_y = value;
+            queue_draw ();
+        }
+    }
+
     private static Gtk.CssProvider resource_provider;
 
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
+    }
+
+    public override bool draw (Cairo.Context ctx) {
+        ctx.translate (0, draw_y);
+        return base.draw (ctx);
     }
 
     static construct {

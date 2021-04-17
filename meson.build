@@ -12,7 +12,8 @@ add_project_arguments([
 
 add_project_arguments([
         '-DGETTEXT_PACKAGE="wingpanel"',
-        '-DG_LOG_DOMAIN="wingpanel"'
+        '-DG_LOG_DOMAIN="wingpanel"',
+        '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
     ],
     language: 'c'
 )
@@ -29,6 +30,7 @@ gmodule_dep = dependency('gmodule-2.0')
 # a hard X11 dependency here
 gdk_x11_dep = dependency('gdk-x11-3.0')
 gtk_dep = dependency('gtk+-3.0', version: '>=3.10')
+libwnck_dep = dependency('libwnck-3.0', version: '>=3.14')
 gee_dep = dependency('gee-0.8')
 granite_dep = dependency('granite', version: '>=5.4.0')
 
