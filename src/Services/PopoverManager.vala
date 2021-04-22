@@ -23,7 +23,6 @@ public class Wingpanel.Services.PopoverManager : Object {
     private bool grabbed = false; // whether the wingpanel grabbed focus
     private bool mousing = false;
     private bool is_popover_open = false;
-    private string tooltip_markup;
 
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
     private Wingpanel.Widgets.IndicatorPopover popover;
@@ -57,6 +56,7 @@ public class Wingpanel.Services.PopoverManager : Object {
             if (_current_indicator != null) {
                 popover.set_content (_current_indicator.indicator_widget);
                 popover.relative_to = _current_indicator;
+                _current_indicator.display_widget.has_tooltip = false;
                 owner.set_expanded (true);
                 make_modal (popover, true);
                 owner.present ();
@@ -64,36 +64,15 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.show_all ();
                 _current_indicator.base_indicator.opened ();
                 is_popover_open = true;
-                restore_tooltip (_previous_indicator);
-                save_and_clear_tooltip (_current_indicator);
-                _current_indicator.base_indicator.notify["tooltip-markup"].connect (() => {
+                _current_indicator.display_widget.notify["has-tooltip"].connect (() => {
                     if (is_popover_open) {
-                        save_and_clear_tooltip (_current_indicator);
+                        _current_indicator.display_widget.has_tooltip = false;
                     }
                 });
             } else {
+                ((Wingpanel.Widgets.IndicatorEntry)popover.get_relative_to ()).indicator_widget.has_tooltip = true;
                 popover.popdown ();
                 is_popover_open = false;
-                restore_tooltip (_previous_indicator);
-            }
-        }
-    }
-
-    private void save_and_clear_tooltip (Wingpanel.Widgets.IndicatorEntry? indicator) {
-        if (indicator != null) {
-            unowned Gtk.Widget display_widget = indicator.display_widget;
-            if (display_widget != null) {
-                tooltip_markup = display_widget.tooltip_markup;
-                display_widget.set_tooltip_markup (null);
-            }
-        }
-    }
-
-    private void restore_tooltip (Wingpanel.Widgets.IndicatorEntry? indicator) {
-        if (indicator != null) {
-            unowned Gtk.Widget display_widget = indicator.display_widget;
-            if (display_widget != null) {
-                display_widget.tooltip_markup = tooltip_markup;
             }
         }
     }
