@@ -17,18 +17,8 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.Switch : Container {
-    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.caption")]
-    public extern void set_caption (string caption);
-    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.caption")]
-    public extern string get_caption ();
-    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.active")]
-    public extern void set_active (bool active);
-    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.active")]
-    public extern bool get_active ();
-    [Version (deprecated = true, deprecated_since = "2.0.5", replacement = "Wingpanel.Widgets.Switch.active")]
-    public new signal void switched ();
-
+[Version (deprecated = true, deprecated_since = "3.0.0", replacement = "Granite.SwitchModelButton")]
+public class Wingpanel.Widgets.Switch : Gtk.Bin {
     public bool active { get; set; }
     public string caption { owned get; set; }
 
@@ -49,27 +39,31 @@ public class Wingpanel.Widgets.Switch : Container {
         button_switch = new Gtk.Switch ();
         button_switch.active = active;
         button_switch.halign = Gtk.Align.END;
-        button_switch.margin_end = 6;
         button_switch.hexpand = true;
         button_switch.valign = Gtk.Align.CENTER;
 
         button_label = new Gtk.Label (null);
         button_label.halign = Gtk.Align.START;
-        button_label.margin_start = 6;
-        button_label.margin_end = 10;
 
-        content_widget.attach (button_label, 0, 0, 1, 1);
-        content_widget.attach (button_switch, 1, 0, 1, 1);
+        var grid = new Gtk.Grid ();
+        grid.column_spacing = 12;
+        grid.attach (button_label, 0, 0);
+        grid.attach (button_switch, 1, 0);
 
-        clicked.connect (() => {
+        var modelbutton = new Gtk.ModelButton ();
+        modelbutton.get_child ().destroy ();
+        modelbutton.add (grid);
+
+        add (modelbutton);
+
+        modelbutton.button_release_event.connect (() => {
             toggle_switch ();
+            // Stop modelbutton from closing the popover
+            return Gdk.EVENT_STOP;
         });
 
         bind_property ("active", button_switch, "active", GLib.BindingFlags.SYNC_CREATE | GLib.BindingFlags.BIDIRECTIONAL);
         bind_property ("caption", button_label, "label", GLib.BindingFlags.SYNC_CREATE | GLib.BindingFlags.BIDIRECTIONAL);
-        button_switch.notify["active"].connect (() => {
-            switched ();
-        });
     }
 
     public new Gtk.Label get_label () {

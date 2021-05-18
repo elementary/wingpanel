@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-29 15:21-0700\n"
+"POT-Creation-Date: 2021-02-17 00:25+0000\n"
 "PO-Revision-Date: 2017-06-08 07:41+0000\n"
 "Last-Translator: Jernej Virag <jernej@virag.si>\n"
 "Language-Team: Slovenian <https://l10n.elementary.io/projects/wingpanel/"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Weblate 2.14\n"
 "X-Launchpad-Export-Date: 2017-03-24 05:38+0000\n"
 
-#: src/Wingpanel.vala:157
+#: src/Application.vala:175
 msgid "A super sexy space-saving top panel"
 msgstr "Super seksi vrhnja plošča"
 

@@ -1,12 +1,10 @@
 lib/Indicator.vala
 lib/IndicatorManager.vala
-lib/Widgets/AutomaticScrollBox.vala
-lib/Widgets/Button.vala
 lib/Widgets/Container.vala
 lib/Widgets/OverlayIcon.vala
 lib/Widgets/Separator.vala
 lib/Widgets/Switch.vala
-src/Wingpanel.vala
+src/Application.vala
 src/PanelWindow.vala
 src/Services/BackgroundManager.vala
 src/Services/IndicatorSorter.vala
@@ -14,5 +12,4 @@ src/Services/PopoverManager.vala
 src/Widgets/IndicatorEntry.vala
 src/Widgets/IndicatorMenuBar.vala
 src/Widgets/IndicatorPopover.vala
-src/Widgets/MenuBar.vala
 src/Widgets/Panel.vala

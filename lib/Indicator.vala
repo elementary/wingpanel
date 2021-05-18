@@ -29,24 +29,15 @@ public abstract class Wingpanel.Indicator : GLib.Object {
     public const string PRINTER = "printer";
     public const string BLUETOOTH = "bluetooth";
     public const string KEYBOARD = "keyboard";
+    public const string NIGHT_LIGHT = "nightlight";
+    public const string PRIVACY = "privacy";
+    public const string ACCESSIBILITY = "a11y";
 
     /**
      * The unique name representing the indicator.
      * It is also used for the indicator ordering.
      */
     public string code_name { get; construct; }
-
-    /**
-     * The localised name of the indicator.
-     */
-    [Version (deprecated = true, deprecated_since = "2.3.0", replacement = "")]
-    public string display_name { get; construct; }
-
-    /**
-     * A short description of the indicator.
-     */
-    [Version (deprecated = true, deprecated_since = "2.3.0", replacement = "")]
-    public string description { get; construct; }
 
     /**
      * Defines if the indicator display widget should be shown or not.

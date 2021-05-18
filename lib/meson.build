@@ -1,3 +1,5 @@
+indicators_dir = join_paths(get_option('prefix'), get_option('libdir'), 'wingpanel')
+
 config_vapi = meson.get_compiler('vala').find_library('config', dirs: meson.current_source_dir())
 
 config_data = configuration_data()
@@ -17,11 +19,9 @@ libwingpanel_deps = [
     gtk_dep,
 ]
 
-libwingpanel_lib = shared_library('wingpanel-2.0',
+libwingpanel_lib = library('wingpanel',
     'Indicator.vala',
     'IndicatorManager.vala',
-    'Widgets/AutomaticScrollBox.vala',
-    'Widgets/Button.vala',
     'Widgets/Container.vala',
     'Widgets/OverlayIcon.vala',
     'Widgets/Separator.vala',
@@ -29,25 +29,24 @@ libwingpanel_lib = shared_library('wingpanel-2.0',
     config_header,
     dependencies: [libwingpanel_deps, config_vapi],
     vala_header: 'wingpanel.h',
-    soversion: '0',
-    version: lib_version,
+    version: meson.project_version(),
     install: true,
-    install_dir: [true, join_paths(get_option('includedir'), 'wingpanel-2.0'), true]
+    install_dir: [true, join_paths(get_option('includedir'), 'wingpanel'), true]
 )
 
 pkg.generate(
-    filebase: 'wingpanel-2.0',
+    libwingpanel_lib,
+    filebase: 'wingpanel',
     name: 'Wingpanel',
     description: 'Wingpanel Indicators API',
     version: meson.project_version(),
-    subdirs: 'wingpanel-2.0',
+    subdirs: 'wingpanel',
     variables: ['indicatorsdir=${libdir}/wingpanel'],
-    libraries: libwingpanel_lib,
     requires: libwingpanel_deps
 )
 
 install_data(
-    'wingpanel-2.0.deps',
+    'wingpanel.deps',
     install_dir: join_paths(get_option('datadir'), 'vala', 'vapi')
 )
 

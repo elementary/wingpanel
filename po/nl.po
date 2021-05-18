@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-29 15:21-0700\n"
+"POT-Creation-Date: 2021-02-17 00:25+0000\n"
 "PO-Revision-Date: 2017-04-09 17:12+0000\n"
 "Last-Translator: Dieter Debast <dieter_debast@hotmail.com>\n"
 "Language-Team: Dutch <http://weblate.elementary.io/projects/desktop/"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Weblate 2.13-dev\n"
 "X-Launchpad-Export-Date: 2017-03-24 05:38+0000\n"
 
-#: src/Wingpanel.vala:157
+#: src/Application.vala:175
 msgid "A super sexy space-saving top panel"
 msgstr "Een sexy, ruimtebesparend bovenpaneel"
 
