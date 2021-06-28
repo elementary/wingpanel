@@ -168,7 +168,7 @@ public class Wingpanel.Services.PopoverManager : Object {
         return current_indicator != null && current_indicator.base_indicator.code_name == entry.base_indicator.code_name;
     }
 
-    private void suppress_tooltip (unowned Gtk.Widget display_widget, bool suppress = true) {
+    private void suppress_tooltip (Gtk.Widget display_widget, bool suppress = true) {
         if (display_widget != null) {
             display_widget.has_tooltip = !suppress;
         }
