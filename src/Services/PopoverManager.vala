@@ -45,7 +45,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = null;
             } else { // Switch
-                _current_indicator.display_widget.has_tooltip = true;
+                suppress_tooltip (_current_indicator.display_widget, false);
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = value;
             }
@@ -53,7 +53,7 @@ public class Wingpanel.Services.PopoverManager : Object {
             if (_current_indicator != null) {
                 popover.set_content (_current_indicator.indicator_widget);
                 popover.relative_to = _current_indicator;
-                _current_indicator.display_widget.has_tooltip = false;
+                suppress_tooltip (_current_indicator.display_widget);
                 owner.set_expanded (true);
                 make_modal (popover, true);
                 owner.present ();
@@ -61,7 +61,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.show_all ();
                 _current_indicator.base_indicator.opened ();
             } else {
-                ((Wingpanel.Widgets.IndicatorEntry)popover.get_relative_to ()).display_widget.has_tooltip = true;
+                suppress_tooltip (((Wingpanel.Widgets.IndicatorEntry)popover.get_relative_to ()).display_widget, false);
                 popover.popdown ();
             }
         }
@@ -166,6 +166,12 @@ public class Wingpanel.Services.PopoverManager : Object {
 
     public bool get_visible (Wingpanel.Widgets.IndicatorEntry entry) {
         return current_indicator != null && current_indicator.base_indicator.code_name == entry.base_indicator.code_name;
+    }
+
+    private void suppress_tooltip (unowned Gtk.Widget display_widget, bool suppress = true) {
+        if (display_widget != null) {
+            display_widget.has_tooltip = !suppress;
+        }
     }
 
     private void make_modal (Gtk.Popover? pop, bool modal = true) {
