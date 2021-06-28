@@ -27,7 +27,6 @@ public class Wingpanel.Services.PopoverManager : Object {
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
     private Wingpanel.Widgets.IndicatorPopover popover;
     private Wingpanel.Widgets.IndicatorEntry? _current_indicator = null;
-    private Wingpanel.Widgets.IndicatorEntry? _previous_indicator = null;
     public Wingpanel.Widgets.IndicatorEntry? current_indicator {
         get {
             return _current_indicator;
@@ -37,8 +36,6 @@ public class Wingpanel.Services.PopoverManager : Object {
             if (value == null && _current_indicator == null) {
                 return;
             }
-
-            _previous_indicator = _current_indicator;
 
             if (_current_indicator == null && value != null) { // First open
                 _current_indicator = value;
