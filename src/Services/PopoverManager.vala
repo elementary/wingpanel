@@ -22,7 +22,6 @@ public class Wingpanel.Services.PopoverManager : Object {
 
     private bool grabbed = false; // whether the wingpanel grabbed focus
     private bool mousing = false;
-    private bool is_popover_open = false;
 
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
     private Wingpanel.Widgets.IndicatorPopover popover;
@@ -46,6 +45,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = null;
             } else { // Switch
+                _current_indicator.display_widget.has_tooltip = true;
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = value;
             }
@@ -60,16 +60,9 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.popup ();
                 popover.show_all ();
                 _current_indicator.base_indicator.opened ();
-                is_popover_open = true;
-                _current_indicator.display_widget.notify["has-tooltip"].connect (() => {
-                    if (is_popover_open) {
-                        _current_indicator.display_widget.has_tooltip = false;
-                    }
-                });
             } else {
-                ((Wingpanel.Widgets.IndicatorEntry)popover.get_relative_to ()).indicator_widget.has_tooltip = true;
+                ((Wingpanel.Widgets.IndicatorEntry)popover.get_relative_to ()).display_widget.has_tooltip = true;
                 popover.popdown ();
-                is_popover_open = false;
             }
         }
     }
