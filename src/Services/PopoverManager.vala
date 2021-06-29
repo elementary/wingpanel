@@ -45,7 +45,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = null;
             } else { // Switch
-                suppress_tooltip (_current_indicator.display_widget, false);
+                update_has_tooltip (_current_indicator.display_widget);
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = value;
             }
@@ -53,7 +53,7 @@ public class Wingpanel.Services.PopoverManager : Object {
             if (_current_indicator != null) {
                 popover.set_content (_current_indicator.indicator_widget);
                 popover.relative_to = _current_indicator;
-                suppress_tooltip (_current_indicator.display_widget);
+                update_has_tooltip (_current_indicator.display_widget, false);
                 owner.set_expanded (true);
                 make_modal (popover, true);
                 owner.present ();
@@ -61,7 +61,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.show_all ();
                 _current_indicator.base_indicator.opened ();
             } else {
-                suppress_tooltip (((Wingpanel.Widgets.IndicatorEntry)popover.get_relative_to ()).display_widget, false);
+                update_has_tooltip (((Wingpanel.Widgets.IndicatorEntry)popover.get_relative_to ()).display_widget);
                 popover.popdown ();
             }
         }
@@ -168,9 +168,9 @@ public class Wingpanel.Services.PopoverManager : Object {
         return current_indicator != null && current_indicator.base_indicator.code_name == entry.base_indicator.code_name;
     }
 
-    private void suppress_tooltip (Gtk.Widget display_widget, bool suppress = true) {
+    private void update_has_tooltip (Gtk.Widget display_widget, bool enable = true) {
         if (display_widget != null) {
-            display_widget.has_tooltip = !suppress;
+            display_widget.has_tooltip = enable;
         }
     }
 
