@@ -23,7 +23,8 @@
  */
 public class Sample.Indicator : Wingpanel.Indicator {
     /* Our display widget, a composited icon */
-    private Wingpanel.Widgets.OverlayIcon display_widget;
+    // private Wingpanel.Widgets.OverlayIcon display_widget;
+    private Gtk.Grid? indicator_grid = null;
 
     /* The main widget that is displayed in the popover */
     private Gtk.Grid main_widget;
@@ -31,45 +32,56 @@ public class Sample.Indicator : Wingpanel.Indicator {
     public Indicator () {
         /* Some information about the indicator */
         Object (
-            code_name : "sample-indicator" /* Unique name */
+            code_name : Wingpanel.Indicator.QUICK_LAUNCH /* Unique name */
         );
-    }
-
-    construct {
-        /* Create a new composited icon */
-        display_widget = new Wingpanel.Widgets.OverlayIcon ("dialog-information-symbolic");
-
-        var hide_button = new Gtk.ModelButton ();
-        hide_button.text = _("Hide me!");
-
-        var compositing_switch = new Wingpanel.Widgets.Switch (_("Composited Icon"));
-
-        main_widget = new Gtk.Grid ();
-        main_widget.attach (hide_button, 0, 0);
-        main_widget.attach (new Wingpanel.Widgets.Separator (), 0, 1);
-        main_widget.attach (compositing_switch, 0, 2);
-
-        /* Indicator should be visible at startup */
-        this.visible = true;
-
-        hide_button.clicked.connect (() => {
-            this.visible = false;
-
-            Timeout.add (2000, () => {
-                this.visible = true;
-                return false;
-            });
-        });
-
-        compositing_switch.notify["active"].connect (() => {
-            /* If the switch is enabled set the icon name of the icon that should be drawn on top of the other one, if not hide the top icon. */
-            display_widget.set_overlay_icon_name (compositing_switch.active ? "network-vpn-lock-symbolic" : "");
-        });
     }
 
     /* This method is called to get the widget that is displayed in the panel */
     public override Gtk.Widget get_display_widget () {
-        return display_widget;
+
+        // return display_widget;
+        if (indicator_grid == null) {
+            weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
+            default_theme.add_resource_path ("/io/elementary/wingpanel");
+
+            var workspaces_label = new Gtk.Label (_("Spaces")) {
+                vexpand = true
+            };
+
+            var workspaces_icon = new Gtk.Image.from_icon_name ("workspaces-symbolic", Gtk.IconSize.MENU);
+
+            string[] workspaces_accels = {};
+            workspaces_accels += "<Super>s";
+            workspaces_accels += "<Super>Down";
+
+            var workspaces_grid = new Gtk.Grid () {
+                tooltip_markup = Granite.markup_accel_tooltip (workspaces_accels, _("Multitasking View"))
+            };
+            workspaces_grid.add (workspaces_icon);
+            // workspaces_grid.add (workspaces_label);
+
+            var shortcuts_label = new Gtk.Label (_("Shortcuts")) {
+                vexpand = true
+            };
+
+            var shortcuts_icon = new Gtk.Image.from_icon_name ("system-help-symbolic", Gtk.IconSize.MENU);
+
+            var shortcuts_grid = new Gtk.Grid ();
+            shortcuts_grid.add (shortcuts_icon);
+            // shortcuts_grid.add (shortcuts_label);
+
+            indicator_grid = new Gtk.Grid () {
+                margin_top = 4,
+                margin_bottom = 4,
+                column_spacing = 4 + 6
+            };
+            indicator_grid.add (workspaces_grid);
+            indicator_grid.add (shortcuts_grid);
+        }
+
+        visible = true;
+
+        return indicator_grid;
     }
 
     /* This method is called to get the widget that is displayed in the popover */

@@ -19,6 +19,7 @@
 
 public abstract class Wingpanel.Indicator : GLib.Object {
     public const string APP_LAUNCHER = "app-launcher";
+    public const string QUICK_LAUNCH = "quick-launch";
     public const string SESSION = "session";
     public const string DATETIME = "datetime";
     public const string NETWORK = "network";

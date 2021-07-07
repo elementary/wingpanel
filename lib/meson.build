@@ -17,6 +17,7 @@ libwingpanel_deps = [
     gmodule_dep,
     gee_dep,
     gtk_dep,
+    granite_dep,
 ]
 
 libwingpanel_lib = library('wingpanel',

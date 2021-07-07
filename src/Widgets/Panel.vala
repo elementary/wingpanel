@@ -257,6 +257,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
         switch (indicator.code_name) {
             case Indicator.APP_LAUNCHER:
+            case Indicator.QUICK_LAUNCH:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_RIGHT);
                 left_menubar.add (indicator_entry);
                 break;
