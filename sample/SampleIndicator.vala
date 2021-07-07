@@ -45,24 +45,41 @@ public class Sample.Indicator : Wingpanel.Indicator {
             workspaces_accels += "<Super>s";
             workspaces_accels += "<Super>Down";
 
-            var workspaces_icon = new Gtk.Image.from_icon_name ("workspaces-symbolic", Gtk.IconSize.MENU) {
+            var workspaces_icon = new Gtk.Image.from_icon_name ("workspaces-symbolic", Gtk.IconSize.MENU);
+
+            var workspaces_label = new Gtk.Label (_("Workspaces")) {
+                vexpand = true
+            };
+
+            var workspaces_grid = new Gtk.Grid () {
                 tooltip_markup = Granite.markup_accel_tooltip (workspaces_accels, _("Multitasking View"))
             };
+            workspaces_grid.add (workspaces_icon);
+            workspaces_grid.add (workspaces_label);
 
             string[] shortcuts_accels = {};
             shortcuts_accels += "<Super>";
 
-            var shortcuts_icon = new Gtk.Image.from_icon_name ("system-help-symbolic", Gtk.IconSize.MENU){
+            var shortcuts_icon = new Gtk.Image.from_icon_name ("shortcuts-symbolic", Gtk.IconSize.MENU);
+
+            var shortcuts_label = new Gtk.Label (_("Shortcuts")) {
+                vexpand = true
+            };
+
+            var shortcuts_grid = new Gtk.Grid () {
                 tooltip_markup = Granite.markup_accel_tooltip (shortcuts_accels, _("Shortcuts"))
             };
+
+            shortcuts_grid.add (shortcuts_icon);
+            shortcuts_grid.add (shortcuts_label);
 
             indicator_grid = new Gtk.Grid () {
                 margin_top = 4,
                 margin_bottom = 4,
                 column_spacing = 4 + 6
             };
-            indicator_grid.add (workspaces_icon);
-            indicator_grid.add (shortcuts_icon);
+            indicator_grid.add (workspaces_grid);
+            indicator_grid.add (shortcuts_grid);
         }
 
         visible = true;
