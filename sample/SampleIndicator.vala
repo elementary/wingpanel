@@ -26,9 +26,6 @@ public class Sample.Indicator : Wingpanel.Indicator {
     // private Wingpanel.Widgets.OverlayIcon display_widget;
     private Gtk.Grid? indicator_grid = null;
 
-    /* The main widget that is displayed in the popover */
-    private Gtk.Grid main_widget;
-
     public Indicator () {
         /* Some information about the indicator */
         Object (
@@ -44,39 +41,28 @@ public class Sample.Indicator : Wingpanel.Indicator {
             weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
             default_theme.add_resource_path ("/io/elementary/wingpanel");
 
-            var workspaces_label = new Gtk.Label (_("Spaces")) {
-                vexpand = true
-            };
-
-            var workspaces_icon = new Gtk.Image.from_icon_name ("workspaces-symbolic", Gtk.IconSize.MENU);
-
             string[] workspaces_accels = {};
             workspaces_accels += "<Super>s";
             workspaces_accels += "<Super>Down";
 
-            var workspaces_grid = new Gtk.Grid () {
+            var workspaces_icon = new Gtk.Image.from_icon_name ("workspaces-symbolic", Gtk.IconSize.MENU) {
                 tooltip_markup = Granite.markup_accel_tooltip (workspaces_accels, _("Multitasking View"))
             };
-            workspaces_grid.add (workspaces_icon);
-            // workspaces_grid.add (workspaces_label);
 
-            var shortcuts_label = new Gtk.Label (_("Shortcuts")) {
-                vexpand = true
+            string[] shortcuts_accels = {};
+            shortcuts_accels += "<Super>";
+
+            var shortcuts_icon = new Gtk.Image.from_icon_name ("system-help-symbolic", Gtk.IconSize.MENU){
+                tooltip_markup = Granite.markup_accel_tooltip (shortcuts_accels, _("Shortcuts"))
             };
-
-            var shortcuts_icon = new Gtk.Image.from_icon_name ("system-help-symbolic", Gtk.IconSize.MENU);
-
-            var shortcuts_grid = new Gtk.Grid ();
-            shortcuts_grid.add (shortcuts_icon);
-            // shortcuts_grid.add (shortcuts_label);
 
             indicator_grid = new Gtk.Grid () {
                 margin_top = 4,
                 margin_bottom = 4,
                 column_spacing = 4 + 6
             };
-            indicator_grid.add (workspaces_grid);
-            indicator_grid.add (shortcuts_grid);
+            indicator_grid.add (workspaces_icon);
+            indicator_grid.add (shortcuts_icon);
         }
 
         visible = true;
@@ -86,7 +72,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
     /* This method is called to get the widget that is displayed in the popover */
     public override Gtk.Widget? get_widget () {
-        return main_widget;
+        return null;
     }
 
     /* This method is called when the indicator popover opened */
