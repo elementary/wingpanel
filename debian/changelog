@@ -1,3 +1,34 @@
+io.elementary.wingpanel (3.0.0) bionic; urgency=medium
+
+  * Release 3.0.0 (#400)
+  * Suppress tooltips when popover is open (#393)
+  * AppData: Add release info for 3.0.0 (#390)
+  * Switch: mark as deprecated (#381)
+  * Update translation files
+  * PanelWindow: Support getting monitor dimensions under wayland (#356)
+  * Update translation template
+  * Rename the forgotten translation template file (#380)
+  * Change wingpanel library name to "wingpanel" and properly use the
+    soversion (#377)
+  * Bump Mutter to 3.36 (#376)
+  * Application.css: Hard code -gtk-icon-palette (#365)
+  * Add codenames for missing indicators and sort (#367)
+  * LINGUAS: sort, remove en_US
+  * Panel: simplify menubars and code style (#349)
+  * IndicatorPopover: Code style cleanup (#348)
+  * IndicatorEntry: Use GObject-style (#347)
+  * Winpanel → Application: Remove get instance method (#346)
+  * Update POTFILES
+  * CI: Lint only src and lib dirs (#343)
+  * Remove deprecations before 3.0.0 (#335)
+  * initial support for libmutter-7 / mutter 3.38 (#340)
+  * Container: Mark as deprecated (#332)
+  * Bump version to 3 (#334)
+  * Switch: Use ModelButton instead of Container (#318)
+  * Separator: Mark as deprecated (#333)
+
+ -- elementary, Inc. <builds@elementary.io>  Tue, 13 Jul 2021 23:37:13 +0000
+
 io.elementary.wingpanel (2.3.2) bionic; urgency=medium
 
   * Release 2.3.2 (#328)
