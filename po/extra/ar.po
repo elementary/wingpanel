@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 00:25+0000\n"
-"PO-Revision-Date: 2021-08-25 10:29+0000\n"
+"PO-Revision-Date: 2021-08-26 22:37+0000\n"
 "Last-Translator: Muhammad Al-Jayyousi <m7md.j99@protonmail.com>\n"
 "Language-Team: Arabic <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/ar/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: data/wingpanel.desktop.in:3
 msgid "Wingpanel"
-msgstr "اللوحة الجانبية"
+msgstr "اللوحة العلوية"
 
 #: data/wingpanel.desktop.in:4
 msgid "Top panel that holds indicators and the applications menu"
