@@ -11,13 +11,14 @@
     <p>The extensible top panel for Pantheon. Wingpanel is an empty container that accepts indicators as extensions, including the applications menu.</p>
   </description>
   <releases>
-    <release version="3.0.0" date="2020-03-22" urgency="medium">
+    <release version="3.0.0" date="2021-07-13" urgency="medium">
       <description>
         <p>Improvements:</p>
         <ul>
           <li>Fix some issues with indicator sort order</li>
           <li>Adjust special icon colors for dark and light panels to improve contrast</li>
           <li>Fix getting monitor dimensions under Wayland</li>
+          <li>Hide tooltips when indicators are open</li>
           <li>Updated translations</li>
         </ul>
         <p>Deprecations:</p>
@@ -76,6 +77,11 @@
   <provides>
     <binary>io.elementary.wingpanel</binary>
   </provides>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/elementary/wingpanel/master/data/screenshot.png</image>
+    </screenshot>
+  </screenshots>
   <compulsory_for_desktop>Pantheon</compulsory_for_desktop>
   <developer_name>elementary, Inc.</developer_name>
   <url type="homepage">https://elementary.io/</url>

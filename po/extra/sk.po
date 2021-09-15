@@ -8,22 +8,24 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 00:25+0000\n"
-"PO-Revision-Date: 2019-05-12 13:36-0700\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-08-20 14:25+0000\n"
+"Last-Translator: JohnDumpling <john_dumpling@protonmail.com>\n"
+"Language-Team: Slovak <https://l10n.elementary.io/projects/wingpanel/"
+"wingpanel-extra/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: data/wingpanel.desktop.in:3
 msgid "Wingpanel"
-msgstr ""
+msgstr "Vrchný panel"
 
 #: data/wingpanel.desktop.in:4
 msgid "Top panel that holds indicators and the applications menu"
-msgstr ""
+msgstr "Horný panel, ktorý obsahuje indikátory a ponuku aplikácií"
 
 #: data/wingpanel.desktop.in:6
 msgid "io.elementary.wingpanel"
