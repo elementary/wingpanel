@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2015-2019 elementary, Inc. <contact@elementary.io> -->
+<!-- Copyright 2015–2021 elementary, Inc. <contact@elementary.io> -->
 <component type="desktop-application">
   <id>io.elementary.wingpanel</id>
   <metadata_license>CC0-1.0</metadata_license>
@@ -11,6 +11,14 @@
     <p>The extensible top panel for Pantheon. Wingpanel is an empty container that accepts indicators as extensions, including the applications menu.</p>
   </description>
   <releases>
+    <release version="3.0.1" date="2021-09-27" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
     <release version="3.0.0" date="2021-07-13" urgency="medium">
       <description>
         <p>Improvements:</p>
