@@ -1,3 +1,11 @@
+io.elementary.wingpanel (3.0.1) bionic; urgency=medium
+
+  * Release 3.0.1 (#415)
+  * Add initial support for Mutter 41 (#413)
+  * Add initial support for Mutter 40 (#407)
+
+ -- elementary, Inc. <builds@elementary.io>  Mon, 27 Sep 2021 20:33:11 +0000
+
 io.elementary.wingpanel (3.0.0) bionic; urgency=medium
 
   * Release 3.0.0 (#400)
