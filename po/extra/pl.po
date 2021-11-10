@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 00:25+0000\n"
-"PO-Revision-Date: 2021-09-27 14:35+0000\n"
-"Last-Translator: Marcin Serwin <marcin.serwin0@protonmail.com>\n"
+"PO-Revision-Date: 2021-11-10 16:21+0000\n"
+"Last-Translator: DarkKnightComes <darkknightcomes@gmail.com>\n"
 "Language-Team: Polish <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/pl/>\n"
 "Language: pl\n"
@@ -26,7 +26,7 @@ msgstr "Wingpanel"
 
 #: data/wingpanel.desktop.in:4
 msgid "Top panel that holds indicators and the applications menu"
-msgstr ""
+msgstr "Górny panel, który przechowuje wskaźniki i menu aplikacji"
 
 #: data/wingpanel.desktop.in:6
 msgid "io.elementary.wingpanel"
