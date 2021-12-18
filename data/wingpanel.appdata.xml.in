@@ -11,7 +11,7 @@
     <p>The extensible top panel for Pantheon. Wingpanel is an empty container that accepts indicators as extensions, including the applications menu.</p>
   </description>
   <releases>
-    <release version="3.0.2" date="2021-12-17" urgency="medium">
+    <release version="3.0.2" date="2021-12-18" urgency="medium">
       <description>
         <p>Improvements:</p>
         <ul>
