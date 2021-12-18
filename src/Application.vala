@@ -82,6 +82,15 @@ public class Wingpanel.Application : Gtk.Application {
             IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.GREETER);
         } else {
             IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
+
+            var granite_settings = Granite.Settings.get_default ();
+            var gtk_settings = Gtk.Settings.get_default ();
+
+            gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
+
+            granite_settings.notify["prefers-color-scheme"].connect (() => {
+                gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
+            });
         }
 
         if (options.contains (OPEN_INDICATOR_ACTION_NAME)) {
