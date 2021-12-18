@@ -1,3 +1,12 @@
+io.elementary.wingpanel (3.0.2) bionic; urgency=medium
+
+  * Release 3.0.2 (#430)
+  * Application: Only load dark style preference in session (#428)
+  * Update README.md (#425)
+  * AppData: Remove desktop app type (#421)
+
+ -- elementary, Inc. <builds@elementary.io>  Sat, 18 Dec 2021 19:33:45 +0000
+
 io.elementary.wingpanel (3.0.1) bionic; urgency=medium
 
   * Release 3.0.1 (#415)
