@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 00:25+0000\n"
-"PO-Revision-Date: 2020-01-03 22:07+0000\n"
-"Last-Translator: Jaimie85 <alsemgeest@gmail.com>\n"
+"PO-Revision-Date: 2022-01-15 17:43+0000\n"
+"Last-Translator: Dennis ten Hoove <dennistenhoove@protonmail.com>\n"
 "Language-Team: Dutch <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/nl/>\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: data/wingpanel.desktop.in:3
 msgid "Wingpanel"
@@ -25,7 +25,7 @@ msgstr "Vleugelpaneel"
 
 #: data/wingpanel.desktop.in:4
 msgid "Top panel that holds indicators and the applications menu"
-msgstr "Bovenste paneel met de indicatoren en het toepassingen menu"
+msgstr "Bovenste paneel met de indicatoren en het applicatiemenu"
 
 #: data/wingpanel.desktop.in:6
 msgid "io.elementary.wingpanel"
