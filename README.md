@@ -26,3 +26,7 @@ To install, use `ninja install` then execute with `wingpanel`
 
     sudo ninja install
     wingpanel
+
+## Preventing Wingpanel from restarting, e.g. for development
+
+Wingpanel is started automatically on elementary OS with `gnome-session` autostarts. If you kill the `io.elementary.wingpanel` process twice within 60 seconds, it will keep `gnome-session` from restarting it until you log out or reboot.
