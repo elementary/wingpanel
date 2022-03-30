@@ -8,21 +8,24 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-17 00:25+0000\n"
-"PO-Revision-Date: 2019-05-12 13:36-0700\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-03-30 19:26+0000\n"
+"Last-Translator: Aga Ismael <agaesmaeel@gmail.com>\n"
+"Language-Team: Sorani <https://l10n.elementary.io/projects/wingpanel/"
+"wingpanel-extra/ckb/>\n"
 "Language: ckb\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: data/wingpanel.desktop.in:3
 msgid "Wingpanel"
-msgstr ""
+msgstr "وینگپانێڵ"
 
 #: data/wingpanel.desktop.in:4
 msgid "Top panel that holds indicators and the applications menu"
-msgstr ""
+msgstr "پانێڵی سەرەوە کە پێکدێت لە لیستی نەرمەکاڵاکان و ئامرازە دەرخەرەکان"
 
 #: data/wingpanel.desktop.in:6
 msgid "io.elementary.wingpanel"
