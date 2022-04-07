@@ -76,7 +76,12 @@ namespace Wingpanel.Services {
 
             Bus.watch_name (BusType.SESSION, DBUS_NAME, BusNameWatcherFlags.NONE,
                 () => connect_dbus (),
-                () => bus = null);
+                () => {
+                    bus = null;
+                    // If the Gala bus is unavailable or vanishes, fall back to maximized style,
+                    // as this is most visible on all backgrounds
+                    background_state_changed (BackgroundState.MAXIMIZED, 0);
+                });
         }
 
         public void remember_window () {
