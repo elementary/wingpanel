@@ -28,9 +28,9 @@ gmodule_dep = dependency('gmodule-2.0')
 # GDK X11 dep is for detecting whether we're on Wayland or not ONLY, we don't actually have
 # a hard X11 dependency here
 gdk_x11_dep = dependency('gdk-x11-3.0')
-gtk_dep = dependency('gtk+-3.0', version: '>=3.10')
+gtk_dep = dependency('gtk4')
 gee_dep = dependency('gee-0.8')
-granite_dep = dependency('granite', version: '>=5.4.0')
+granite_dep = dependency('granite-7')
 
 subdir('data')
 subdir('lib')
