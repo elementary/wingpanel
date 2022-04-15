@@ -22,7 +22,7 @@
  * and how to make use of some useful helper widgets.
  */
 public class Sample.Indicator : Wingpanel.Indicator {
-    /* Our display widget, a Gtk.Image */
+    /* Our display widget, a Gtk.Overlay */
     private Gtk.Overlay display_widget;
 
     /* The main widget that is displayed in the popover */
