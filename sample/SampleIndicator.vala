@@ -22,8 +22,8 @@
  * and how to make use of some useful helper widgets.
  */
 public class Sample.Indicator : Wingpanel.Indicator {
-    /* Our display widget, a composited icon */
-    private Wingpanel.Widgets.OverlayIcon display_widget;
+    /* Our display widget, a Gtk.Image */
+    private Gtk.Overlay display_widget;
 
     /* The main widget that is displayed in the popover */
     private Gtk.Grid main_widget;
@@ -36,17 +36,33 @@ public class Sample.Indicator : Wingpanel.Indicator {
     }
 
     construct {
+        var main_image = new Gtk.Image () {
+            icon_name = "dialog-information-symbolic",
+            pixel_size = 24
+        };
+
+        var overlay_image = new Gtk.Image () {
+            pixel_size = 24
+        };
+
         /* Create a new composited icon */
-        display_widget = new Wingpanel.Widgets.OverlayIcon ("dialog-information-symbolic");
+        display_widget = new Gtk.Overlay ();
+        display_widget.add (main_image);
+        display_widget.add_overlay (overlay_image);
+
+        var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
+            margin_top = 3,
+            margin_bottom = 3
+        };
 
         var hide_button = new Gtk.ModelButton ();
         hide_button.text = _("Hide me!");
 
-        var compositing_switch = new Wingpanel.Widgets.Switch (_("Composited Icon"));
+        var compositing_switch = new Granite.SwitchModelButton (_("Composited Icon"));
 
         main_widget = new Gtk.Grid ();
         main_widget.attach (hide_button, 0, 0);
-        main_widget.attach (new Wingpanel.Widgets.Separator (), 0, 1);
+        main_widget.attach (separator, 0, 1);
         main_widget.attach (compositing_switch, 0, 2);
 
         /* Indicator should be visible at startup */
@@ -63,7 +79,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
         compositing_switch.notify["active"].connect (() => {
             /* If the switch is enabled set the icon name of the icon that should be drawn on top of the other one, if not hide the top icon. */
-            display_widget.set_overlay_icon_name (compositing_switch.active ? "network-vpn-lock-symbolic" : "");
+            overlay_image.icon_name = compositing_switch.active ? "network-vpn-lock-symbolic" : "";
         });
     }
 
