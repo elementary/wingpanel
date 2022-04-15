@@ -2,7 +2,6 @@
     background-color: transparent;
     transition: all 100ms ease-in-out;
     margin-bottom: 0;
-    -GtkWidget-window-dragging: false;
 }
 
 .panel.maximized {
