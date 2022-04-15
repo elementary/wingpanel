@@ -6,16 +6,16 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
+
     container:
       image: elementary/docker:next-unstable
-    
+
     steps:
     - uses: actions/checkout@v1
     - name: Install Dependencies
       run: |
         apt update
-        apt install -y libgee-0.8-dev libgirepository1.0-dev libglib2.0-dev libgranite-7-dev libgtk4-dev meson valac
+        apt install -y libgala-dev libgee-0.8-dev libgirepository1.0-dev libglib2.0-dev libgranite-7-dev libgtk4-dev meson valac
     - name: Build
       env:
         DESTDIR: out
@@ -27,10 +27,10 @@ jobs:
   lint:
 
     runs-on: ubuntu-latest
-    
+
     container:
       image: valalang/lint
-      
+
     steps:
     - uses: actions/checkout@v1
     - name: Lint

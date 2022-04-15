@@ -17,13 +17,29 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
+public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.Widget {
     private Gee.List<IndicatorEntry> sorted_items;
     private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
     private uint apply_new_order_idle_id = 0;
 
+    private Gtk.PopoverMenuBar menu_bar;
+
     public IndicatorMenuBar () {
         sorted_items = new Gee.ArrayList<IndicatorEntry> ();
+    }
+
+    static construct {
+        set_layout_manager_type (typeof (Gtk.BinLayout));
+    }
+
+    construct {
+        menu_bar = new Gtk.PopoverMenuBar.from_model (null);
+
+        menu_bar.set_parent (this);
+    }
+
+    ~IndicatorMenuBar () {
+        get_first_child ().unparent ();
     }
 
     public void insert_sorted (IndicatorEntry item) {
@@ -41,14 +57,18 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
         apply_new_order ();
     }
 
-    public override void remove (Gtk.Widget widget) {
+    public void add (Gtk.Widget widget, string id) {
+        menu_bar.add_child (widget, id);
+    }
+
+    public void remove (Gtk.Widget widget) {
         var indicator_widget = widget as IndicatorEntry;
 
         if (indicator_widget != null) {
             sorted_items.remove (indicator_widget);
         }
 
-        base.remove (widget);
+        menu_bar.remove_child (widget);
     }
 
     public void apply_new_order () {
@@ -65,17 +85,17 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
     }
 
     private void clear () {
-        var children = this.get_children ();
-
-        foreach (var child in children) {
-            base.remove (child);
+        var child = get_first_child ();
+        while (child != null) {
+            menu_bar.remove_child (child);
+            child = child.get_next_sibling ();
         }
     }
 
     private void append_all_items () {
         foreach (var widget in sorted_items) {
             if (widget.base_indicator.visible) {
-                this.append (widget);
+                menu_bar.add_child (widget, widget.base_indicator.code_name);
             }
         }
     }

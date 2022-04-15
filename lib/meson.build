@@ -22,7 +22,6 @@ libwingpanel_deps = [
 libwingpanel_lib = library('wingpanel',
     'Indicator.vala',
     'IndicatorManager.vala',
-    'Widgets/OverlayIcon.vala',
     config_header,
     dependencies: [libwingpanel_deps, config_vapi],
     vala_header: 'wingpanel.h',

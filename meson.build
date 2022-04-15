@@ -25,9 +25,6 @@ glib_dep = dependency('glib-2.0', version: '>=2.32')
 gio_dep = dependency('gio-2.0')
 gio_unix_dep = dependency('gio-unix-2.0')
 gmodule_dep = dependency('gmodule-2.0')
-# GDK X11 dep is for detecting whether we're on Wayland or not ONLY, we don't actually have
-# a hard X11 dependency here
-gdk_x11_dep = dependency('gdk-x11-3.0')
 gtk_dep = dependency('gtk4')
 gee_dep = dependency('gee-0.8')
 granite_dep = dependency('granite-7')
@@ -36,14 +33,14 @@ subdir('data')
 subdir('lib')
 subdir('schemas')
 subdir('src')
-subdir('wingpanel-interface')
+#subdir('wingpanel-interface')
 if get_option('example')
     subdir('sample')
 endif
 subdir('po')
-vapigen = find_program('vapigen', required: false)
-if vapigen.found()
-	subdir('vapi')
-endif
+# vapigen = find_program('vapigen', required: false)
+# if vapigen.found()
+# 	subdir('vapi')
+# endif
 
 meson.add_install_script('meson/post_install.py')

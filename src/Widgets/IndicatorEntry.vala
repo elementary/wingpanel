@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
+public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
@@ -44,6 +44,10 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         );
     }
 
+    static construct {
+        set_layout_manager_type (typeof (Gtk.BinLayout));
+    }
+
     construct {
         can_focus = false;
         display_widget = base_indicator.get_display_widget ();
@@ -59,9 +63,9 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         display_widget.margin_end = 4;
 
         revealer = new Gtk.Revealer ();
-        revealer.add (display_widget);
+        revealer.child = display_widget;
 
-        add (revealer);
+        revealer.set_parent (this);
 
         if (base_indicator.visible) {
             popover_manager.register_indicator (this);
@@ -91,37 +95,42 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
             }
         });
 
-        add_events (Gdk.EventMask.SCROLL_MASK);
+        // TODO: Hook up event controllers
+        // add_events (Gdk.EventMask.SCROLL_MASK);
 
-        scroll_event.connect ((e) => {
-            display_widget.scroll_event (e);
+        // scroll_event.connect ((e) => {
+        //     display_widget.scroll_event (e);
 
-            return Gdk.EVENT_PROPAGATE;
-        });
+        //     return Gdk.EVENT_PROPAGATE;
+        // });
 
-        touch_event.connect ((e) => {
-            if (e.type == Gdk.EventType.TOUCH_BEGIN) {
-                popover_manager.current_indicator = this;
-                return Gdk.EVENT_STOP;
-            }
+        // touch_event.connect ((e) => {
+        //     if (e.type == Gdk.EventType.TOUCH_BEGIN) {
+        //         popover_manager.current_indicator = this;
+        //         return Gdk.EVENT_STOP;
+        //     }
 
-            return Gdk.EVENT_PROPAGATE;
-        });
+        //     return Gdk.EVENT_PROPAGATE;
+        // });
 
-        button_press_event.connect ((e) => {
-            if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
-                && e.type == Gdk.EventType.BUTTON_PRESS) {
-                popover_manager.current_indicator = this;
-                return Gdk.EVENT_STOP;
-            }
+        // button_press_event.connect ((e) => {
+        //     if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
+        //         && e.type == Gdk.EventType.BUTTON_PRESS) {
+        //         popover_manager.current_indicator = this;
+        //         return Gdk.EVENT_STOP;
+        //     }
 
-            /* Call button press on the indicator display widget */
-            display_widget.button_press_event (e);
+        //     /* Call button press on the indicator display widget */
+        //     display_widget.button_press_event (e);
 
-            return Gdk.EVENT_STOP;
-        });
+        //     return Gdk.EVENT_STOP;
+        // });
 
         set_reveal (base_indicator.visible);
+    }
+
+    ~IndicatorEntry() {
+        get_first_child ().unparent ();
     }
 
     private void indicator_unmapped () {

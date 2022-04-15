@@ -36,7 +36,7 @@ public class Wingpanel.Application : Gtk.Application {
 
     construct {
         flags = ApplicationFlags.HANDLES_COMMAND_LINE;
-        application_id = "org.elementary.wingpanel";
+        application_id = "io.elementary.wingpanel";
 
         add_main_option_entries (OPTIONS);
 
@@ -112,7 +112,7 @@ public class Wingpanel.Application : Gtk.Application {
         base.startup ();
 
         panel_window = new PanelWindow (this);
-        panel_window.show_all ();
+        panel_window.present ();
 
         register_actions ();
     }
