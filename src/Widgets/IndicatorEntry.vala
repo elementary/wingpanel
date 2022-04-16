@@ -21,7 +21,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
-    public IndicatorMenuBar? menu_bar;
     public Gtk.Widget display_widget { get; private set; }
 
     private Gtk.Widget _indicator_widget = null;
@@ -72,23 +71,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         });
 
         base_indicator.notify["visible"].connect (() => {
-            if (menu_bar != null) {
-                /* order will be changed so close all open popovers */
-                popover_manager.close ();
-
-                if (base_indicator.visible) {
-                    popover_manager.register_indicator (this);
-                    menu_bar.apply_new_order ();
-                    set_reveal (base_indicator.visible);
-                } else {
-                    set_reveal (base_indicator.visible);
-                    popover_manager.unregister_indicator (this);
-                    // reorder indicators when indicator is invisible
-                    display_widget.unmap.connect (indicator_unmapped);
-                }
-            } else {
-                set_reveal (base_indicator.visible);
-            }
+            set_reveal (base_indicator.visible);
         });
 
         add_events (Gdk.EventMask.SCROLL_MASK);
@@ -122,11 +105,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         });
 
         set_reveal (base_indicator.visible);
-    }
-
-    private void indicator_unmapped () {
-        base_indicator.get_display_widget ().unmap.disconnect (indicator_unmapped);
-        menu_bar.apply_new_order ();
     }
 
     public void set_transition_type (Gtk.RevealerTransitionType transition_type) {

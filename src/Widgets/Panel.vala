@@ -20,9 +20,13 @@
 public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     public Services.PopoverManager popover_manager { get; construct; }
 
-    private IndicatorMenuBar right_menubar;
+    private Gtk.MenuBar right_menubar;
     private Gtk.MenuBar left_menubar;
     private Gtk.MenuBar center_menubar;
+
+    private Gee.List<IndicatorEntry> sorted_items;
+    private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
+    private uint apply_new_order_idle_id = 0;
 
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
@@ -44,6 +48,8 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         vexpand = true;
         valign = Gtk.Align.START;
 
+        sorted_items = new Gee.ArrayList<IndicatorEntry> ();
+
         left_menubar = new Gtk.MenuBar () {
             can_focus = true,
             halign = Gtk.Align.START
@@ -55,7 +61,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         };
         center_menubar.get_style_context ().add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        right_menubar = new IndicatorMenuBar () {
+        right_menubar = new Gtk.MenuBar () {
             can_focus = true,
             halign = Gtk.Align.END
         };
@@ -83,6 +89,14 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         style_context.add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
+
+        right_menubar.remove.connect ((widget) => {
+            var indicator_widget = widget as IndicatorEntry;
+
+            if (indicator_widget != null) {
+                sorted_items.remove (indicator_widget);
+            }
+        });
     }
 
     public override bool button_press_event (Gdk.EventButton event) {
@@ -257,11 +271,42 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
                 break;
             default:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_LEFT);
-                right_menubar.insert_sorted (indicator_entry);
+                insert_sorted (indicator_entry);
                 break;
         }
 
         indicator_entry.show_all ();
+    }
+
+    private void insert_sorted (IndicatorEntry item) {
+        foreach (var indicator in sorted_items) {
+            if (item.base_indicator.code_name == indicator.base_indicator.code_name) {
+                return; /* item already added */
+            }
+        }
+
+        sorted_items.add (item);
+        sorted_items.sort (sorter.compare_func);
+
+        if (apply_new_order_idle_id > 0) {
+            GLib.Source.remove (apply_new_order_idle_id);
+            apply_new_order_idle_id = 0;
+        }
+
+        apply_new_order_idle_id = GLib.Idle.add_full (GLib.Priority.LOW, () => {
+            foreach (unowned var child in right_menubar.get_children ()) {
+                right_menubar.remove (child);
+            }
+
+            foreach (var widget in sorted_items) {
+                if (widget.base_indicator.visible) {
+                    right_menubar.append (widget);
+                }
+            }
+
+            apply_new_order_idle_id = 0;
+            return false;
+        });
     }
 
     private void remove_indicator (Indicator indicator) {
