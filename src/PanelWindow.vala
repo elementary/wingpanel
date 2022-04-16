@@ -40,12 +40,11 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         // monitor_number = screen.get_primary_monitor ();
 
-        add_css_class (Widgets.StyleClass.PANEL);
-
         var panel_provider = new Gtk.CssProvider ();
         panel_provider.load_from_resource ("io/elementary/wingpanel/panel.css");
 
         var style_context = get_style_context ();
+        style_context.add_class (Widgets.StyleClass.PANEL);
         style_context.add_provider (panel_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         var app_provider = new Gtk.CssProvider ();
