@@ -126,7 +126,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
         set_reveal (base_indicator.visible);
     }
 
-    ~IndicatorEntry() {
+    ~IndicatorEntry () {
         get_first_child ().unparent ();
     }
 
