@@ -49,11 +49,14 @@ public class Wingpanel.Services.PopoverManager : Object {
 
             if (_current_indicator != null) {
                 popover.set_content (_current_indicator.indicator_widget);
+                if (popover.get_parent () != null) {
+                    popover.unparent ();
+                }
+
                 popover.set_parent (_current_indicator);
                 update_has_tooltip (_current_indicator.display_widget, false);
-                owner.set_expanded (true);
+                // owner.set_expanded (true);
                 // make_modal (popover, true);
-                owner.present ();
                 popover.popup ();
                 _current_indicator.base_indicator.opened ();
             } else {
@@ -83,15 +86,9 @@ public class Wingpanel.Services.PopoverManager : Object {
         //     return Gdk.EVENT_PROPAGATE;
         // });
 
-        // TODO: Probably deletable
-        // popover.closed.connect (() => {
-        //     make_modal (popover, false);
-        // });
-        // popover.unmap.connect (() => {
-        //     if (!grabbed) {
-        //         owner.set_expanded (false);
-        //     }
-        // });
+        popover.closed.connect (() => {
+            current_indicator = null;
+        });
 
         // TODO: Event controller
         // owner.focus_out_event.connect ((e) => {

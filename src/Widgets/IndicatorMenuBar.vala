@@ -17,29 +17,13 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.Widget {
+public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.Box {
     private Gee.List<IndicatorEntry> sorted_items;
     private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
     private uint apply_new_order_idle_id = 0;
 
-    private Gtk.PopoverMenuBar menu_bar;
-
-    public IndicatorMenuBar () {
-        sorted_items = new Gee.ArrayList<IndicatorEntry> ();
-    }
-
-    static construct {
-        set_layout_manager_type (typeof (Gtk.BinLayout));
-    }
-
     construct {
-        menu_bar = new Gtk.PopoverMenuBar.from_model (null);
-
-        menu_bar.set_parent (this);
-    }
-
-    ~IndicatorMenuBar () {
-        get_first_child ().unparent ();
+        sorted_items = new Gee.ArrayList<IndicatorEntry> ();
     }
 
     public void insert_sorted (IndicatorEntry item) {
@@ -57,18 +41,14 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.Widget {
         apply_new_order ();
     }
 
-    public void add (Gtk.Widget widget, string id) {
-        menu_bar.add_child (widget, id);
-    }
-
-    public void remove (Gtk.Widget widget) {
+    public void remove_indicator (Gtk.Widget widget) {
         var indicator_widget = widget as IndicatorEntry;
 
         if (indicator_widget != null) {
             sorted_items.remove (indicator_widget);
         }
 
-        menu_bar.remove_child (widget);
+        remove (widget);
     }
 
     public void apply_new_order () {
@@ -87,7 +67,7 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.Widget {
     private void clear () {
         var child = get_first_child ();
         while (child != null) {
-            menu_bar.remove_child (child);
+            remove (child);
             child = child.get_next_sibling ();
         }
     }
@@ -95,7 +75,7 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.Widget {
     private void append_all_items () {
         foreach (var widget in sorted_items) {
             if (widget.base_indicator.visible) {
-                menu_bar.add_child (widget, widget.base_indicator.code_name);
+                append (widget);
             }
         }
     }

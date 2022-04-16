@@ -177,11 +177,11 @@ public class Wingpanel.Widgets.Panel : Gtk.Widget {
         switch (indicator.code_name) {
             case Indicator.APP_LAUNCHER:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_RIGHT);
-                left_menubar.add (indicator_entry, indicator.code_name);
+                left_menubar.append (indicator_entry);
                 break;
             case Indicator.DATETIME:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_DOWN);
-                center_menubar.add (indicator_entry, indicator.code_name);
+                center_menubar.append (indicator_entry);
                 break;
             default:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_LEFT);
@@ -197,7 +197,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Widget {
     }
 
     private void remove_indicator_from_container (IndicatorMenuBar container, Indicator indicator) {
-        container.remove (indicator.get_display_widget ());
+        container.remove_indicator (indicator.get_display_widget ());
     }
 
     private void update_background (Services.BackgroundState state, uint animation_duration) {

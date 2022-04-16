@@ -49,7 +49,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
     }
 
     construct {
-        can_focus = false;
+        // can_focus = false;
         display_widget = base_indicator.get_display_widget ();
         halign = Gtk.Align.START;
         name = base_indicator.code_name + "/entry";
@@ -91,6 +91,13 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
                 set_reveal (base_indicator.visible);
             }
         });
+
+        var click_gesture = new Gtk.GestureClick ();
+        click_gesture.released.connect ((n, x, y) => {
+            popover_manager.current_indicator = this;
+        });
+
+        add_controller (click_gesture);
 
         // TODO: Hook up event controllers
         // add_events (Gdk.EventMask.SCROLL_MASK);
