@@ -55,9 +55,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
             return;
         }
 
-        display_widget.margin_start = 4;
-        display_widget.margin_end = 4;
-
         revealer = new Gtk.Revealer ();
         revealer.add (display_widget);
 
