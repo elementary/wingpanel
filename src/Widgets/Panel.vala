@@ -285,9 +285,15 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
             }
         }
 
+        item.menu_bar = right_menubar;
+
         sorted_items.add (item);
         sorted_items.sort (sorter.compare_func);
 
+        apply_new_order ();
+    }
+
+    private void apply_new_order () {
         if (apply_new_order_idle_id > 0) {
             GLib.Source.remove (apply_new_order_idle_id);
             apply_new_order_idle_id = 0;
@@ -313,6 +319,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         remove_indicator_from_container (left_menubar, indicator);
         remove_indicator_from_container (center_menubar, indicator);
         remove_indicator_from_container (right_menubar, indicator);
+        apply_new_order ();
     }
 
     private void remove_indicator_from_container (Gtk.Container container, Indicator indicator) {
