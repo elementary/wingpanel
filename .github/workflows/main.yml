@@ -20,7 +20,7 @@ jobs:
       env:
         DESTDIR: out
       run: |
-        meson build
+        meson build -Dexample=true
         ninja -C build
         ninja -C build install
 
