@@ -23,7 +23,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private Widgets.Panel panel;
     // private int monitor_number;
     private int monitor_width;
-    private int monitor_height;
     private int monitor_x;
     private int monitor_y;
     private int panel_height;
@@ -103,7 +102,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         }
 
         monitor_width = monitor_dimensions.width;
-        monitor_height = monitor_dimensions.height;
 
         this.set_size_request (monitor_width, -1);
 

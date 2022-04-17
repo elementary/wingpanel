@@ -92,8 +92,16 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
             }
         });
 
-        var click_gesture = new Gtk.GestureClick ();
+        var click_gesture = new Gtk.GestureClick () {
+            button = 0, // Listen for all mouse buttons
+        };
+
         click_gesture.released.connect ((n, x, y) => {
+            if (click_gesture.get_current_button () == Gdk.BUTTON_MIDDLE) {
+                base_indicator.middle_clicked ();
+                return;
+            }
+
             popover_manager.current_indicator = this;
         });
 
