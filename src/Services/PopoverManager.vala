@@ -58,8 +58,6 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.set_parent (_current_indicator);
                 update_has_tooltip (_current_indicator.display_widget, false);
                 Services.BackgroundManager.get_default ().remember_window ();
-                // owner.set_expanded (true);
-                // make_modal (popover, true);
                 popover.popup ();
                 _current_indicator.base_indicator.opened ();
             } else {
@@ -170,23 +168,6 @@ public class Wingpanel.Services.PopoverManager : Object {
             display_widget.has_tooltip = enable;
         }
     }
-
-    // private void make_modal (Gtk.Popover? pop, bool modal = true) {
-    //     if (pop == null || mousing) {
-    //         return;
-    //     }
-
-    //     if (modal && !grabbed) {
-    //         grabbed = true;
-    //         Gtk.grab_add (owner);
-    //         owner.set_focus (null);
-    //         pop.grab_focus ();
-    //     } else if (!modal && grabbed) {
-    //         grabbed = false;
-    //         Gtk.grab_remove (owner);
-    //         owner.grab_focus ();
-    //     }
-    // }
 
     public void close () {
         if (current_indicator != null) {
