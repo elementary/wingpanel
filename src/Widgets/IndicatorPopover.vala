@@ -24,8 +24,7 @@ public class Wingpanel.Widgets.IndicatorPopover : Gtk.Popover {
 
     construct {
         width_request = 256;
-        // TODO: See if we need the autohide behaviour here
-        // modal = false;
+        autohide = false;
         name = name + "/popover";
         position = Gtk.PositionType.BOTTOM;
 

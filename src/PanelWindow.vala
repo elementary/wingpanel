@@ -69,6 +69,12 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
         child = panel;
+
+        notify["is-active"].connect (() => {
+            if (!is_active) {
+                popover_manager.current_indicator = null;
+            }
+        });
     }
 
     class construct {
