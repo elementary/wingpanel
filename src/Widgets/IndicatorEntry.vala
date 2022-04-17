@@ -99,6 +99,15 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
 
         add_controller (click_gesture);
 
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (() => {
+            if (popover_manager.current_indicator != null && popover_manager.current_indicator != this) {
+                popover_manager.current_indicator = this;
+            }
+        });
+
+        add_controller (motion_controller);
+
         // TODO: Hook up event controllers
         // add_events (Gdk.EventMask.SCROLL_MASK);
 
