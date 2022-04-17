@@ -27,8 +27,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private int monitor_x;
     private int monitor_y;
     private int panel_height;
-    private bool expanded = false;
-    private int panel_displacement;
 
     public PanelWindow (Gtk.Application application) {
         Object (
@@ -77,29 +75,14 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         set_css_name ("menubar");
     }
 
-    private bool animation_step () {
-        if (panel_displacement <= panel_height * (-1)) {
-            return false;
-        }
-
-        panel_displacement--;
-
-        update_panel_dimensions ();
-
-        return true;
-    }
-
     private void on_realize () {
         update_panel_dimensions ();
 
         // Services.BackgroundManager.initialize (this.monitor_number, panel_height);
-
-        Timeout.add (300 / panel_height, animation_step);
     }
 
     private void update_panel_dimensions () {
-        // panel_height = panel.get_allocated_height ();
-        panel_height = 30;
+        panel_height = panel.get_allocated_height ();
 
         // monitor_number = screen.get_primary_monitor ();
         Gdk.Rectangle monitor_dimensions;
@@ -184,19 +167,4 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     //     Gdk.property_change (this.get_window (), Gdk.Atom.intern ("_NET_WM_STRUT_PARTIAL", false),
     //                          Gdk.Atom.intern ("CARDINAL", false), 32, Gdk.PropMode.REPLACE, (uint8[])struts, 12);
     // }
-
-    public void set_expanded (bool expand) {
-        if (expand && !this.expanded) {
-            Services.BackgroundManager.get_default ().remember_window ();
-
-            this.expanded = true;
-            this.set_size_request (monitor_width, monitor_height);
-        } else if (!expand) {
-            Services.BackgroundManager.get_default ().restore_window ();
-
-            this.expanded = false;
-            this.set_size_request (monitor_width, expanded ? monitor_height : -1);
-            // this.resize (monitor_width, expanded ? monitor_height : 1);
-        }
-    }
 }

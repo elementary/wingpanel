@@ -38,9 +38,11 @@ public class Wingpanel.Services.PopoverManager : Object {
             } else if (value == null && _current_indicator != null) { // Close requested
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = null;
+                Services.BackgroundManager.get_default ().restore_window ();
             } else if (_current_indicator.base_indicator.code_name == value.base_indicator.code_name) { // Close due to toggle
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = null;
+                Services.BackgroundManager.get_default ().restore_window ();
             } else { // Switch
                 update_has_tooltip (_current_indicator.display_widget);
                 _current_indicator.base_indicator.closed ();
@@ -55,6 +57,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 
                 popover.set_parent (_current_indicator);
                 update_has_tooltip (_current_indicator.display_widget, false);
+                Services.BackgroundManager.get_default ().remember_window ();
                 // owner.set_expanded (true);
                 // make_modal (popover, true);
                 popover.popup ();
