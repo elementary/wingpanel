@@ -74,71 +74,9 @@ public class Wingpanel.Services.PopoverManager : Object {
         this.owner = owner;
 
         popover = new Wingpanel.Widgets.IndicatorPopover ();
-
-        // TODO: Event controller
-        // popover.leave_notify_event.connect ((e) => {
-        //     Gtk.Allocation allocation;
-        //     popover.get_allocation (out allocation);
-
-        //     if (e.mode != Gdk.CrossingMode.NORMAL && e.subwindow == null) {
-        //         current_indicator = null;
-        //     }
-
-        //     return Gdk.EVENT_PROPAGATE;
-        // });
-
         popover.closed.connect (() => {
             current_indicator = null;
         });
-
-        // TODO: Event controller
-        // owner.focus_out_event.connect ((e) => {
-        //     if (current_indicator != null && e.window == null) {
-        //         current_indicator = null;
-        //     }
-
-        //     return Gdk.EVENT_PROPAGATE;
-        // });
-
-        // TODO: Probably deletable
-        // owner.button_press_event.connect ((w, e) => {
-        //     // "owner" is the invisible window that fills the screen when an indicator is open, if the event didn't hit
-        //     // that window directly, then it was probably in the popover, so propagate it.
-        //     if (e.window != owner.get_window ()) {
-        //         return Gdk.EVENT_PROPAGATE;
-        //     }
-
-        //     Gtk.Allocation allocation;
-        //     popover.get_allocation (out allocation);
-
-        //     Gtk.Allocation indicator_allocation;
-        //     current_indicator.get_allocation (out indicator_allocation);
-
-        //     Gtk.Allocation container_allocation;
-        //     current_indicator.get_parent ().get_allocation (out container_allocation);
-
-        //     var wingpanel_width = owner.get_allocated_width ();
-
-        //     allocation.x += indicator_allocation.x +
-        //                     container_allocation.x -
-        //                     ((allocation.width - indicator_allocation.width) / 2);
-
-        //     if (allocation.x < 0) {
-        //         allocation.x = 0;
-        //     }
-
-        //     if (allocation.x + allocation.width > wingpanel_width) {
-        //         allocation.x = wingpanel_width - allocation.width;
-        //     }
-
-        //     if ((e.x < allocation.x || e.x > allocation.x + allocation.width) || (e.y < allocation.y || e.y > allocation.y + allocation.height)) {
-        //         current_indicator = null;
-        //     }
-
-        //     return Gdk.EVENT_STOP;
-        // });
-
-        // owner.add_events (Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.BUTTON_PRESS_MASK);
     }
 
     public void set_popover_visible (string code_name, bool visible) {
@@ -187,24 +125,6 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
 
         registered_indicators.set (widg.base_indicator.code_name, widg);
-
-        // widg.enter_notify_event.connect ((w, e) => {
-        //     if (mousing) {
-        //         return Gdk.EVENT_PROPAGATE;
-        //     }
-
-        //     if (grabbed) {
-        //         if (!get_visible (widg) && e.mode != Gdk.CrossingMode.TOUCH_BEGIN) {
-        //             mousing = true;
-        //             current_indicator = widg;
-        //             mousing = false;
-        //         }
-
-        //         return Gdk.EVENT_STOP;
-        //     }
-
-        //     return Gdk.EVENT_PROPAGATE;
-        // });
 
         widg.notify["visible"].connect (() => {
             if (get_visible (widg)) {

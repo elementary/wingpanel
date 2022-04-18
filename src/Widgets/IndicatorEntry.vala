@@ -107,6 +107,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
 
         add_controller (click_gesture);
 
+        // Allows scrubbing between indicators by mousing over them
         var motion_controller = new Gtk.EventControllerMotion ();
         motion_controller.enter.connect (() => {
             if (popover_manager.current_indicator != null && popover_manager.current_indicator != this) {
@@ -123,28 +124,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
         //     display_widget.scroll_event (e);
 
         //     return Gdk.EVENT_PROPAGATE;
-        // });
-
-        // touch_event.connect ((e) => {
-        //     if (e.type == Gdk.EventType.TOUCH_BEGIN) {
-        //         popover_manager.current_indicator = this;
-        //         return Gdk.EVENT_STOP;
-        //     }
-
-        //     return Gdk.EVENT_PROPAGATE;
-        // });
-
-        // button_press_event.connect ((e) => {
-        //     if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
-        //         && e.type == Gdk.EventType.BUTTON_PRESS) {
-        //         popover_manager.current_indicator = this;
-        //         return Gdk.EVENT_STOP;
-        //     }
-
-        //     /* Call button press on the indicator display widget */
-        //     display_widget.button_press_event (e);
-
-        //     return Gdk.EVENT_STOP;
         // });
 
         set_reveal (base_indicator.visible);
