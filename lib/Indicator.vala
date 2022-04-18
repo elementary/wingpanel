@@ -72,11 +72,6 @@ public abstract class Wingpanel.Indicator : GLib.Object {
     public abstract void closed ();
 
     /**
-     * Called when the user has middle clicked on the indicator icon
-     */
-    public abstract void middle_clicked ();
-
-    /**
      * Request a popover closing.
      */
     public signal void close ();

@@ -97,12 +97,10 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
         };
 
         click_gesture.released.connect ((n, x, y) => {
-            if (click_gesture.get_current_button () == Gdk.BUTTON_MIDDLE) {
-                base_indicator.middle_clicked ();
-                return;
+            var button = click_gesture.get_current_button ();
+            if (button == Gdk.BUTTON_PRIMARY || button == Gdk.BUTTON_SECONDARY) {
+                popover_manager.current_indicator = this;
             }
-
-            popover_manager.current_indicator = this;
         });
 
         add_controller (click_gesture);

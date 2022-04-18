@@ -97,11 +97,6 @@ public class Sample.Indicator : Wingpanel.Indicator {
         /* Use this method to get some extra information while displaying the indicator */
     }
 
-    /* This method is called when the indicator icon is middle clicked */
-    public override void middle_clicked () {
-        /* Use this method to toggle the state of your indicator if it makes sense to do so */
-    }
-
     /* This method is called when the indicator popover closed */
     public override void closed () {
         /* Your stuff isn't shown anymore, now you can free some RAM, stop timers or anything else... */
