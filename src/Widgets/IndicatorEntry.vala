@@ -89,6 +89,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         });
 
         add_events (Gdk.EventMask.SCROLL_MASK);
+        add_events (Gdk.EventMask.SMOOTH_SCROLL_MASK);
 
         scroll_event.connect ((e) => {
             display_widget.scroll_event (e);
