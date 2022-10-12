@@ -17,7 +17,6 @@ libwingpanel_deps = [
     gmodule_dep,
     gee_dep,
     gtk_dep,
-    posix_dep,
 ]
 
 libwingpanel_lib = library('wingpanel',
@@ -28,7 +27,7 @@ libwingpanel_lib = library('wingpanel',
     'Widgets/Separator.vala',
     'Widgets/Switch.vala',
     config_header,
-    dependencies: [libwingpanel_deps, config_vapi],
+    dependencies: [libwingpanel_deps, posix_dep, config_vapi],
     vala_header: 'wingpanel.h',
     version: meson.project_version(),
     install: true,
