@@ -26,6 +26,7 @@ jobs:
         DESTDIR: out
       run: |
         meson build -Dexample=true
+        ninja -C build
         ninja -C build install
 
   lint:
