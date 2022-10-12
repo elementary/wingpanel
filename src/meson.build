@@ -16,8 +16,7 @@ wingpanel_files = files(
 wingpanel_deps = [
     libwingpanel_dep,
     granite_dep,
-    gdk_x11_dep,
-    posix_dep
+    gdk_x11_dep
 ]
 
 executable(meson.project_name(),
