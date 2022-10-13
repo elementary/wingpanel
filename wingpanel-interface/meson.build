@@ -84,7 +84,7 @@ shared_module(
     'BackgroundManager.vala',
     'FocusManager.vala',
     'Utils.vala',
-    dependencies: [gala_dep, granite_dep, mutter_dep, m_dep],
+    dependencies: [gala_dep, granite_dep, mutter_dep, m_dep, posix_dep],
     vala_args: vala_flags,
     c_args: c_flags,
     install_rpath: mutter_typelib_dir,
