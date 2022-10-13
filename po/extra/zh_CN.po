@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-17 00:25+0000\n"
+"POT-Creation-Date: 2022-10-13 16:27+0000\n"
 "PO-Revision-Date: 2021-11-01 08:22+0000\n"
 "Last-Translator: Yuchen Deng <loaden@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://l10n.elementary.io/projects/"
@@ -26,7 +26,3 @@ msgstr "Wingpanel"
 #: data/wingpanel.desktop.in:4
 msgid "Top panel that holds indicators and the applications menu"
 msgstr "包含指示器和应用程序菜单的顶部面板"
-
-#: data/wingpanel.desktop.in:6
-msgid "io.elementary.wingpanel"
-msgstr ""
