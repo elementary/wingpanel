@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-17 00:25+0000\n"
+"POT-Creation-Date: 2022-10-13 16:27+0000\n"
 "PO-Revision-Date: 2022-09-21 06:14+0000\n"
 "Last-Translator: Aga Ismael <agaesmaeel@gmail.com>\n"
 "Language-Team: Kurdish (Central) <https://l10n.elementary.io/projects/"
@@ -15,6 +15,6 @@ msgstr ""
 "X-Generator: Weblate 4.4.2\n"
 "X-Launchpad-Export-Date: 2017-03-24 05:38+0000\n"
 
-#: src/Application.vala:175
+#: src/Application.vala:184
 msgid "A super sexy space-saving top panel"
 msgstr "پانێڵێکی زۆر شیکی پارێزرەی بۆشایی سەرەوە"
