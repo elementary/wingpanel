@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wingpanel\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-17 00:25+0000\n"
+"POT-Creation-Date: 2022-10-13 16:27+0000\n"
 "PO-Revision-Date: 2018-10-18 10:30+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -16,6 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/Application.vala:175
+#: src/Application.vala:184
 msgid "A super sexy space-saving top panel"
 msgstr ""

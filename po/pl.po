@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-17 00:25+0000\n"
+"POT-Creation-Date: 2022-10-13 16:27+0000\n"
 "PO-Revision-Date: 2021-09-27 14:35+0000\n"
 "Last-Translator: Deleted User <noreply+917@weblate.org>\n"
 "Language-Team: Polish <https://l10n.elementary.io/projects/wingpanel/"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Generator: Weblate 4.4.2\n"
 "X-Launchpad-Export-Date: 2017-03-24 05:38+0000\n"
 
-#: src/Application.vala:175
+#: src/Application.vala:184
 msgid "A super sexy space-saving top panel"
 msgstr "Seksowny, oszczędzający miejsce panel górny"
 
