@@ -1,3 +1,25 @@
+io.elementary.wingpanel (3.0.3) bionic; urgency=medium
+
+  * Release 3.0.3 (#455)
+  * Update translation files
+  * Update translation template
+  * Update CI (#467)
+  * Meson: include Posix dep (#469)
+  * Delete meson.build.rej
+  * Listen to smooth scroll events (#466)
+  * Add support for Mutter 43 (#465)
+  * Create CONTRIBUTING.md (#461)
+  * Revert "Lib: Remove deprecated widgets" (#456)
+  * Synchronize the .vapi with Gala (#453)
+  * Lib: Remove deprecated widgets (#450)
+  * IndicatorEntry: Remove hardcoded margin
+  * Styles: fix CSS syntax, remove extra class
+  * Fallback to maximized style if Gala bus is unavailable (#445)
+  * Update mutter-clutter-9.deps (#435)
+  * Add support for Mutter 42 (#434)
+
+ -- elementary, Inc. <builds@elementary.io>  Wed, 19 Oct 2022 02:49:32 +0000
+
 io.elementary.wingpanel (3.0.2) bionic; urgency=medium
 
   * Release 3.0.2 (#430)
