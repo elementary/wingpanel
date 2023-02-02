@@ -28,6 +28,7 @@ gmodule_dep = dependency('gmodule-2.0')
 gtk_dep = dependency('gtk4')
 gee_dep = dependency('gee-0.8')
 granite_dep = dependency('granite-7')
+posix_dep = meson.get_compiler('vala').find_library('posix')
 
 subdir('data')
 subdir('lib')
