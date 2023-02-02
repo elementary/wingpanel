@@ -38,7 +38,7 @@ public class Wingpanel.Widgets.OverlayIcon : Gtk.Overlay {
         overlay_image.icon_size = 24;
         overlay_image.pixel_size = 24;
 
-        add (main_image);
+        child = main_image;
         add_overlay (overlay_image);
     }
 
@@ -46,16 +46,8 @@ public class Wingpanel.Widgets.OverlayIcon : Gtk.Overlay {
         main_image.set_from_pixbuf (pixbuf);
     }
 
-    public Gdk.Pixbuf? get_main_pixbuf () {
-        return main_image.get_pixbuf ();
-    }
-
     public void set_overlay_pixbuf (Gdk.Pixbuf? pixbuf) {
         overlay_image.set_from_pixbuf (pixbuf);
-    }
-
-    public Gdk.Pixbuf? get_overlay_pixbuf () {
-        return overlay_image.get_pixbuf ();
     }
 
     public void set_main_icon_name (string icon_name) {
