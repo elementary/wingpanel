@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-13 16:27+0000\n"
-"PO-Revision-Date: 2021-02-19 22:51+0000\n"
+"PO-Revision-Date: 2023-03-02 10:25+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://l10n.elementary.io/projects/"
 "wingpanel/wingpanel-extra/nb/>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: data/wingpanel.desktop.in:3
 msgid "Wingpanel"
-msgstr ""
+msgstr "Wingpanel"
 
 #: data/wingpanel.desktop.in:4
 msgid "Top panel that holds indicators and the applications menu"
