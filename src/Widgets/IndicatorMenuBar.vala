@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
+public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.Box {
     private Gee.List<IndicatorEntry> sorted_items;
     private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
     private uint apply_new_order_idle_id = 0;
 
-    public IndicatorMenuBar () {
+    construct {
         sorted_items = new Gee.ArrayList<IndicatorEntry> ();
     }
 
@@ -41,14 +41,14 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
         apply_new_order ();
     }
 
-    public override void remove (Gtk.Widget widget) {
+    public void remove_indicator (Gtk.Widget widget) {
         var indicator_widget = widget as IndicatorEntry;
 
         if (indicator_widget != null) {
             sorted_items.remove (indicator_widget);
         }
 
-        base.remove (widget);
+        remove (widget);
     }
 
     public void apply_new_order () {
@@ -65,17 +65,17 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
     }
 
     private void clear () {
-        var children = this.get_children ();
-
-        foreach (var child in children) {
-            base.remove (child);
+        var child = get_first_child ();
+        while (child != null) {
+            remove (child);
+            child = child.get_next_sibling ();
         }
     }
 
     private void append_all_items () {
         foreach (var widget in sorted_items) {
             if (widget.base_indicator.visible) {
-                this.append (widget);
+                append (widget);
             }
         }
     }

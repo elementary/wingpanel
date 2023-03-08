@@ -1,7 +1,7 @@
 project(
     'io.elementary.wingpanel',
     'c', 'vala',
-    version: '3.0.3',
+    version: '4.0.0',
 )
 
 add_project_arguments([
@@ -25,12 +25,9 @@ glib_dep = dependency('glib-2.0', version: '>=2.32')
 gio_dep = dependency('gio-2.0')
 gio_unix_dep = dependency('gio-unix-2.0')
 gmodule_dep = dependency('gmodule-2.0')
-# GDK X11 dep is for detecting whether we're on Wayland or not ONLY, we don't actually have
-# a hard X11 dependency here
-gdk_x11_dep = dependency('gdk-x11-3.0')
-gtk_dep = dependency('gtk+-3.0', version: '>=3.10')
+gtk_dep = dependency('gtk4')
 gee_dep = dependency('gee-0.8')
-granite_dep = dependency('granite', version: '>=5.4.0')
+granite_dep = dependency('granite-7')
 posix_dep = meson.get_compiler('vala').find_library('posix')
 
 subdir('data')
