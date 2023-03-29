@@ -17,11 +17,18 @@
  * Boston, MA 02110-1301 USA.
  */
 
+[DBus (name = "org.pantheon.gala")]
+public interface WMDBus : GLib.Object {
+    public abstract void offset_notifications (int32 offset) throws DBusError, Error;
+}
+
 public class Wingpanel.Services.PopoverManager : Object {
     private unowned Wingpanel.PanelWindow? owner;
 
     private bool grabbed = false; // whether the wingpanel grabbed focus
     private bool mousing = false;
+
+    private WMDBus? wm = null;
 
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
     private Wingpanel.Widgets.IndicatorPopover popover;
@@ -59,10 +66,12 @@ public class Wingpanel.Services.PopoverManager : Object {
                 owner.present ();
                 popover.popup ();
                 popover.show_all ();
+                offset_notifications (popover);
                 _current_indicator.base_indicator.opened ();
             } else {
                 update_has_tooltip (((Wingpanel.Widgets.IndicatorEntry)popover.get_relative_to ()).display_widget);
                 popover.popdown ();
+                offset_notifications ();
             }
         }
     }
@@ -71,6 +80,12 @@ public class Wingpanel.Services.PopoverManager : Object {
         registered_indicators = new Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> ();
 
         this.owner = owner;
+
+        try {
+            this.wm = Bus.get_proxy_sync (BusType.SESSION, "org.pantheon.gala", "/org/pantheon/gala");
+        } catch (Error e) {
+            warning ("Could not connect to dbus org.pantheon.gala");
+        }
 
         popover = new Wingpanel.Widgets.IndicatorPopover ();
 
@@ -237,5 +252,19 @@ public class Wingpanel.Services.PopoverManager : Object {
                 current_indicator = null;
             }
         });
+    }
+
+    private void offset_notifications(Wingpanel.Widgets.IndicatorPopover? popover = null) {
+        int offset = 0;
+        if (popover != null) {
+            int minimum_height, natural_height;
+            popover.get_preferred_height (out minimum_height, out natural_height);
+            offset = natural_height;
+        }
+        try {
+            wm.offset_notifications (offset);
+        } catch (Error e) {
+            warning ("Could not offset notifications: %s", e.message);
+        }
     }
 }
