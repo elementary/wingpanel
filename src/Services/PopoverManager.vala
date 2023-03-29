@@ -256,7 +256,10 @@ public class Wingpanel.Services.PopoverManager : Object {
 
     private void offset_notifications (Wingpanel.Widgets.IndicatorPopover? popover = null) {
         int offset = 0;
-        if (popover != null) {
+        if (popover != null
+            && current_indicator.base_indicator.code_name != Indicator.APP_LAUNCHER
+            && current_indicator.base_indicator.code_name != Indicator.DATETIME) {
+
             popover.get_preferred_height (null, out offset);
         }
 
