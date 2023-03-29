@@ -254,13 +254,12 @@ public class Wingpanel.Services.PopoverManager : Object {
         });
     }
 
-    private void offset_notifications(Wingpanel.Widgets.IndicatorPopover? popover = null) {
+    private void offset_notifications (Wingpanel.Widgets.IndicatorPopover? popover = null) {
         int offset = 0;
         if (popover != null) {
-            int minimum_height, natural_height;
-            popover.get_preferred_height (out minimum_height, out natural_height);
-            offset = natural_height;
+            popover.get_preferred_height (null, out offset);
         }
+
         try {
             wm.offset_notifications (offset);
         } catch (Error e) {
