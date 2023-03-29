@@ -19,7 +19,7 @@
 
 [DBus (name = "org.pantheon.gala")]
 public interface WMDBus : GLib.Object {
-    public abstract void offset_notifications (int32 offset) throws DBusError, Error;
+    public abstract async void offset_notifications (int32 offset) throws DBusError, Error;
 }
 
 public class Wingpanel.Services.PopoverManager : Object {
@@ -260,10 +260,12 @@ public class Wingpanel.Services.PopoverManager : Object {
             popover.get_preferred_height (null, out offset);
         }
 
-        try {
-            wm.offset_notifications (offset);
-        } catch (Error e) {
-            warning ("Could not offset notifications: %s", e.message);
-        }
+        wm.offset_notifications.begin (offset, (obj, res) => {
+            try {
+                wm.offset_notifications.end (res);
+            } catch (Error e) {
+                warning ("Could not offset notifications: %s", e.message);
+            }
+        });
     }
 }
