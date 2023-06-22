@@ -12,17 +12,20 @@ You'll need the following dependencies:
 * libglib2.0-dev
 * libgranite-dev >= 5.4.0
 * libgtk-3-dev
+* libmutter-10-dev
 * meson
-* libmutter-2-dev
 * valac
 
-Run `meson` to configure the build environment and then `ninja` to build
+You can install them using `./install_deps.sh`. (Also, this script is configuring the build environment and adds `build.sh` and `install.sh` scripts for better dev work):
 
-    meson build --prefix=/usr
-    cd build
-    ninja
+    chmod +x ./install_deps.sh
+    sudo ./install_deps.sh
 
-To install, use `ninja install` then execute with `io.elementary.wingpanel`
+After that, you can run `build.sh` to build:
 
-    sudo ninja install
+    sudo ./build.sh
+
+To install, use `install.sh` then execute with `io.elementary.wingpanel`:
+
+    sudo ./install.sh
     io.elementary.wingpanel
