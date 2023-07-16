@@ -141,7 +141,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     private bool on_key_pressed (uint keyval, uint keycode, Gdk.ModifierType state) {
-        warning ("Closing");
         if (keyval == Gdk.Key.Escape) {
             popover_manager.close ();
         }
