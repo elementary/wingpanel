@@ -140,7 +140,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private bool on_key_press_event (Gdk.EventKey event) {
         var key = Gdk.keyval_name (event.keyval).replace ("KP_", "");
-        if (key ==  "Escape") {
+        if (key == "Escape") {
             popover_manager.close ();
         }
 
