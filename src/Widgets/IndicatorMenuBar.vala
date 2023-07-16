@@ -54,7 +54,7 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
             sorted_items.remove (indicator_widget);
             sorted_visible_items.remove (indicator_widget);
         }
-        
+
         base.remove (widget);
     }
 }
