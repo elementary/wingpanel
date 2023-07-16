@@ -19,10 +19,12 @@
 
 public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
     private Gee.List<IndicatorEntry> sorted_items;
+    private Gee.List<IndicatorEntry> sorted_visible_items;
     private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
 
     construct {
         sorted_items = new Gee.ArrayList<IndicatorEntry> ();
+        sorted_visible_items = new Gee.ArrayList<IndicatorEntry> ();
     }
 
     public void insert_sorted (IndicatorEntry item) {
@@ -33,8 +35,17 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
             sorted_items.sort (sorter.compare_func);
         }
 
+        // sorted_visible_items tracks visible indicators
+        // because we can't rely on sorted_items.index_of to get indicator index
+        // because some indicators can be hidden and then sorted_items.index_of will be shifted
         if (item.base_indicator.visible) {
-            this.insert (item, sorted_items.index_of (item));
+            if (!(item in sorted_visible_items)) {
+                sorted_visible_items.add (item);
+                sorted_visible_items.sort (sorter.compare_func);
+            }
+            this.insert (item, sorted_visible_items.index_of (item));
+        } else if (item in sorted_visible_items) {
+            sorted_visible_items.remove (item);
         }
     }
 
