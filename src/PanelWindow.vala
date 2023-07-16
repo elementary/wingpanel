@@ -77,9 +77,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         application.set_accels_for_action ("app.cycle", {"<Control>Tab"});
         application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
-        key_press_event.connect (on_key_press_event);
-
         add (panel);
+
+        key_press_event.connect (on_key_press_event);
     }
 
     private bool animation_step () {
