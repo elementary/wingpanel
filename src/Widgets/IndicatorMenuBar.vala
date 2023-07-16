@@ -26,9 +26,9 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
     }
 
     public void insert_sorted (IndicatorEntry item) {
-        if (!(item in sorted_items)) {
-            item.menu_bar = this;
+        item.menu_bar = this;
 
+        if (!(item in sorted_items) && item.base_indicator.visible) {
             sorted_items.add (item);
             sorted_items.sort (sorter.compare_func);
         }
