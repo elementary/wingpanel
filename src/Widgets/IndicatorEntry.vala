@@ -75,7 +75,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
                 if (base_indicator.visible) {
                     popover_manager.register_indicator (this);
-                    menu_bar.apply_new_order ();
+                    menu_bar.insert_sorted (this);
                     set_reveal (base_indicator.visible);
                 } else {
                     set_reveal (base_indicator.visible);
@@ -124,7 +124,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
     private void indicator_unmapped () {
         base_indicator.get_display_widget ().unmap.disconnect (indicator_unmapped);
-        menu_bar.apply_new_order ();
+        menu_bar.remove (this);
     }
 
     public void set_transition_type (Gtk.RevealerTransitionType transition_type) {

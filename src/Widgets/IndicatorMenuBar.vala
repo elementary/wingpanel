@@ -20,25 +20,22 @@
 public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
     private Gee.List<IndicatorEntry> sorted_items;
     private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
-    private uint apply_new_order_idle_id = 0;
 
-    public IndicatorMenuBar () {
+    construct {
         sorted_items = new Gee.ArrayList<IndicatorEntry> ();
     }
 
     public void insert_sorted (IndicatorEntry item) {
-        foreach (var indicator in sorted_items) {
-            if (item.base_indicator.code_name == indicator.base_indicator.code_name) {
-                return; /* item already added */
-            }
+        if (!(item in sorted_items)) {
+            item.menu_bar = this;
+
+            sorted_items.add (item);
+            sorted_items.sort (sorter.compare_func);
         }
 
-        item.menu_bar = this;
-
-        sorted_items.add (item);
-        sorted_items.sort (sorter.compare_func);
-
-        apply_new_order ();
+        if (item.base_indicator.visible) {
+            this.insert (item, sorted_items.index_of (item));
+        }
     }
 
     public override void remove (Gtk.Widget widget) {
@@ -49,34 +46,5 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
         }
 
         base.remove (widget);
-    }
-
-    public void apply_new_order () {
-        if (apply_new_order_idle_id > 0) {
-            GLib.Source.remove (apply_new_order_idle_id);
-            apply_new_order_idle_id = 0;
-        }
-        apply_new_order_idle_id = GLib.Idle.add_full (GLib.Priority.LOW, () => {
-            clear ();
-            append_all_items ();
-            apply_new_order_idle_id = 0;
-            return false;
-        });
-    }
-
-    private void clear () {
-        var children = this.get_children ();
-
-        foreach (var child in children) {
-            base.remove (child);
-        }
-    }
-
-    private void append_all_items () {
-        foreach (var widget in sorted_items) {
-            if (widget.base_indicator.visible) {
-                this.append (widget);
-            }
-        }
     }
 }
