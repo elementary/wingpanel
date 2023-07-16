@@ -77,6 +77,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         application.set_accels_for_action ("app.cycle", {"<Control>Tab"});
         application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
+        key_press_event.connect (on_key_press_event);
+
         add (panel);
     }
 
@@ -134,6 +136,15 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         } else {
             this.set_visual (visual);
         }
+    }
+
+    private bool on_key_press_event (Gdk.EventKey event) {
+        var key = Gdk.keyval_name (event.keyval).replace ("KP_", "");
+        if (key ==  "Escape") {
+            popover_manager.close ();
+        }
+
+        return Gdk.EVENT_PROPAGATE;
     }
 
     private void update_struts () {
