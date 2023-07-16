@@ -44,8 +44,6 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
                 sorted_visible_items.sort (sorter.compare_func);
             }
             this.insert (item, sorted_visible_items.index_of (item));
-        } else if (item in sorted_visible_items) {
-            sorted_visible_items.remove (item);
         }
     }
 
@@ -54,8 +52,9 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
 
         if (indicator_widget != null) {
             sorted_items.remove (indicator_widget);
+            sorted_visible_items.remove (indicator_widget);
         }
-
+        
         base.remove (widget);
     }
 }
