@@ -21,6 +21,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     public Services.PopoverManager popover_manager;
 
     private Widgets.Panel panel;
+    private Gtk.EventControllerKey key_controller; // For keeping in memory
     private int monitor_number;
     private int monitor_width;
     private int monitor_height;
@@ -79,7 +80,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         add (panel);
 
-        key_press_event.connect (on_key_press_event);
+        key_controller = new Gtk.EventControllerKey (this);
+        key_controller.key_pressed.connect (on_key_pressed);
     }
 
     private bool animation_step () {
@@ -138,9 +140,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         }
     }
 
-    private bool on_key_press_event (Gdk.EventKey event) {
-        var key = Gdk.keyval_name (event.keyval).replace ("KP_", "");
-        if (key == "Escape") {
+    private bool on_key_pressed (uint keyval, uint keycode, Gdk.ModifierType state) {
+        warning ("Closing");
+        if (keyval == Gdk.Key.Escape) {
             popover_manager.close ();
         }
 
