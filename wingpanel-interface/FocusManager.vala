@@ -20,9 +20,9 @@
 public class WingpanelInterface.FocusManager : Object {
     private static FocusManager? instance = null;
 
-    private Meta.Workspace? current_workspace = null;
-    private Meta.Window? last_focused_window = null;
-    private Meta.Window? last_focused_dialog_window = null;
+    private unowned Meta.Workspace? current_workspace = null;
+    private unowned Meta.Window? last_focused_window = null;
+    private unowned Meta.Window? last_focused_dialog_window = null;
 
     public FocusManager () {
         unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
@@ -35,7 +35,7 @@ public class WingpanelInterface.FocusManager : Object {
 
     public void remember_focused_window () {
         var windows = current_workspace.list_windows ();
-        foreach (Meta.Window window in windows) {
+        foreach (unowned Meta.Window window in windows) {
             window_created (window);
             if (window.has_focus ()) {
                 last_focused_window = window;
@@ -46,7 +46,7 @@ public class WingpanelInterface.FocusManager : Object {
     }
 
     public void restore_focused_window () {
-        var display = Main.display;
+        unowned var display = Main.display;
         // when a dialog was opened give it focus
         if (last_focused_dialog_window != null) {
             last_focused_dialog_window.focus (display.get_current_time ());
@@ -60,7 +60,7 @@ public class WingpanelInterface.FocusManager : Object {
         }
 
         var windows = current_workspace.list_windows ();
-        foreach (Meta.Window window in windows) {
+        foreach (unowned Meta.Window window in windows) {
             window.focused.disconnect (window_focused);
             window.unmanaged.disconnect (window_unmanaged);
         }
@@ -88,8 +88,8 @@ public class WingpanelInterface.FocusManager : Object {
     }
 
     public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
-        var display = Main.display;
-        var window = display.get_focus_window ();
+        unowned var display = Main.display;
+        unowned var window = display.get_focus_window ();
         if (window == null || !get_can_grab_window (window, x, y)) {
             unowned Meta.Workspace workspace = display.get_workspace_manager ().get_active_workspace ();
             List<unowned Meta.Window>? windows = workspace.list_windows ();
@@ -130,7 +130,7 @@ public class WingpanelInterface.FocusManager : Object {
 
     private void update_current_workspace () {
         unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
-        var workspace = manager.get_workspace_by_index (manager.get_active_workspace_index ());
+        unowned var workspace = manager.get_workspace_by_index (manager.get_active_workspace_index ());
 
         if (workspace == null) {
             warning ("Cannot get active workspace");
