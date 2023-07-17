@@ -21,6 +21,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     public Services.PopoverManager popover_manager;
 
     private Widgets.Panel panel;
+    private Gtk.EventControllerKey key_controller; // For keeping in memory
     private int monitor_number;
     private int monitor_width;
     private int monitor_height;
@@ -78,6 +79,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
         add (panel);
+
+        key_controller = new Gtk.EventControllerKey (this);
+        key_controller.key_pressed.connect (on_key_pressed);
     }
 
     private bool animation_step () {
@@ -134,6 +138,14 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         } else {
             this.set_visual (visual);
         }
+    }
+
+    private bool on_key_pressed (uint keyval, uint keycode, Gdk.ModifierType state) {
+        if (keyval == Gdk.Key.Escape) {
+            popover_manager.close ();
+        }
+
+        return Gdk.EVENT_PROPAGATE;
     }
 
     private void update_struts () {
