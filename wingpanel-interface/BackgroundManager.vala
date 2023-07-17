@@ -41,7 +41,7 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     private ulong wallpaper_hook_id;
 
-    private Meta.Workspace? current_workspace = null;
+    private unowned Meta.Workspace? current_workspace = null;
 
     private BackgroundState current_state = BackgroundState.LIGHT;
 
@@ -86,7 +86,7 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     private void update_current_workspace () {
         unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
-        var workspace = manager.get_active_workspace ();
+        unowned var workspace = manager.get_active_workspace ();
 
         if (workspace == null) {
             warning ("Cannot get active workspace");
@@ -101,7 +101,7 @@ public class WingpanelInterface.BackgroundManager : Object {
 
         current_workspace = workspace;
 
-        foreach (Meta.Window window in current_workspace.list_windows ()) {
+        foreach (unowned Meta.Window window in current_workspace.list_windows ()) {
             if (window.is_on_primary_monitor ()) {
                 register_window (window);
             }
@@ -169,7 +169,7 @@ public class WingpanelInterface.BackgroundManager : Object {
     private void check_for_state_change (uint animation_duration) {
         bool has_maximized_window = false;
 
-        foreach (Meta.Window window in current_workspace.list_windows ()) {
+        foreach (unowned Meta.Window window in current_workspace.list_windows ()) {
             if (window.is_on_primary_monitor ()) {
                 if (!window.minimized && window.maximized_vertically) {
                     has_maximized_window = true;
