@@ -46,7 +46,7 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
             }
 
             if (item.base_indicator.visible) {
-                index += 1;
+                index++;
             }
         }
 
