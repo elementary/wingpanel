@@ -34,23 +34,19 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
         }
 
         if (item.base_indicator.visible) {
-            this.insert (item, get_index_for_visible (item));
-        }
-    }
+            var index = 0;
+            foreach (var i in sorted_items) {
+                if (i == item) {
+                    break;
+                }
 
-    private int get_index_for_visible (IndicatorEntry item_to_search) {
-        var index = 0;
-        foreach (var item in sorted_items) {
-            if (item == item_to_search) {
-                return index;
+                if (item.base_indicator.visible) {
+                    index++;
+                }
             }
 
-            if (item.base_indicator.visible) {
-                index++;
-            }
+            this.insert (item, index);
         }
-
-        return 0;
     }
 
     public override void remove (Gtk.Widget widget) {
