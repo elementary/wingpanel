@@ -27,7 +27,7 @@ public class WingpanelInterface.Main : Gala.Plugin {
     private const string DBUS_PATH = "/org/pantheon/gala/WingpanelInterface";
 
     public static Gala.WindowManager wm;
-    public static Meta.Display display;
+    public static unowned Meta.Display display;
 
     private DBusConnection? dbus_connection = null;
 
