@@ -2,6 +2,7 @@ project(
     'io.elementary.wingpanel',
     'c', 'vala',
     version: '3.0.3',
+    meson_version : '>= 0.57'
 )
 
 add_project_arguments([
@@ -47,4 +48,4 @@ if vapigen.found()
 	subdir('vapi')
 endif
 
-meson.add_install_script('meson/post_install.py')
+gnome.post_install(glib_compile_schemas: true)
