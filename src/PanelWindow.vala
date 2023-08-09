@@ -22,6 +22,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private Widgets.Panel panel;
     private Gtk.EventControllerKey key_controller; // For keeping in memory
+    private Gtk.Revealer revealer;
     private int monitor_number;
     private int monitor_width;
     private int monitor_height;
@@ -29,7 +30,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private int monitor_y;
     private int panel_height;
     private bool expanded = false;
-    private int panel_displacement;
 
     public PanelWindow (Gtk.Application application) {
         Object (
@@ -78,30 +78,26 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         application.set_accels_for_action ("app.cycle", {"<Control>Tab"});
         application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
-        add (panel);
+        revealer = new Gtk.Revealer () {
+            child = panel,
+            reveal_child = true,
+            transition_type = NONE
+        };
+
+        child = revealer;
 
         key_controller = new Gtk.EventControllerKey (this);
         key_controller.key_pressed.connect (on_key_pressed);
     }
 
-    private bool animation_step () {
-        if (panel_displacement <= panel_height * (-1)) {
-            return false;
-        }
-
-        panel_displacement--;
-
-        update_panel_dimensions ();
-
-        return true;
-    }
-
     private void on_realize () {
+        // realize isn't called when reveal_child is false, so we set true, then
+        // false, then true again to animate
+        revealer.reveal_child = false;
         update_panel_dimensions ();
-
         Services.BackgroundManager.initialize (this.monitor_number, panel_height);
-
-        Timeout.add (300 / panel_height, animation_step);
+        revealer.transition_type = SLIDE_DOWN;
+        revealer.reveal_child = true;
     }
 
     private void update_panel_dimensions () {
@@ -125,7 +121,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         monitor_x = monitor_dimensions.x;
         monitor_y = monitor_dimensions.y;
 
-        this.move (monitor_x, monitor_y - (panel_height + panel_displacement));
+        move (monitor_x, monitor_y);
 
         update_struts ();
     }
@@ -190,13 +186,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         if (no_monitor_left) {
             struts [0] = (monitor_x + monitor_width) * scale_factor;
             struts [4] = monitor_y * scale_factor;
-            struts [5] = (monitor_y - panel_displacement) * scale_factor - 1;
+            struts [5] = (monitor_y + panel_height) * scale_factor - 1;
         } else if (no_monitor_right) {
             struts [1] = (screen_width - monitor_x) * scale_factor;
             struts [6] = monitor_y * scale_factor;
-            struts [7] = (monitor_y - panel_displacement) * scale_factor - 1;
+            struts [7] = (monitor_y + panel_height) * scale_factor - 1;
         } else if (no_monitor_above) {
-            struts [2] = (monitor_y - panel_displacement) * scale_factor;
+            struts [2] = (monitor_y + panel_height) * scale_factor;
             struts [8] = monitor_x * scale_factor;
             struts [9] = (monitor_x + monitor_width) * scale_factor - 1;
         } else {
