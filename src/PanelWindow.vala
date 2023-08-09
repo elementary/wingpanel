@@ -116,7 +116,11 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         monitor_x = monitor_dimensions.x;
         monitor_y = monitor_dimensions.y;
 
+<<<<<<< HEAD
         move (monitor_x, monitor_y);
+=======
+        this.move (monitor_x, monitor_y);
+>>>>>>> ad0c314 (Clean up CSS and fix issues with shadows and struts)
 
         update_struts ();
     }
