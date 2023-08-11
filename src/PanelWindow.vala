@@ -46,7 +46,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         monitor_number = screen.get_primary_monitor ();
 
         var app_provider = new Gtk.CssProvider ();
-        app_provider.load_from_resource ("io/elementary/wingpanel/application.css");
+        app_provider.load_from_resource ("io/elementary/wingpanel/Application.css");
         Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), app_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         this.screen.size_changed.connect (update_panel_dimensions);
