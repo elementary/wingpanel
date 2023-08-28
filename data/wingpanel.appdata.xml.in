@@ -10,8 +10,9 @@
   <description>
     <p>The extensible top panel for Pantheon. Wingpanel is an empty container that accepts indicators as extensions, including the applications menu.</p>
   </description>
+
   <releases>
-    <release version="3.0.4" date="2023-18-25" urgency="medium">
+    <release version="3.0.4" date="2023-18-28" urgency="medium">
       <description>
         <p>Improvements:</p>
         <ul>
@@ -23,6 +24,7 @@
         <issue url="https://github.com/elementary/wingpanel/issues/106">Indicators re-animate when an icon is removed</issue>
       </issues>
     </release>
+
     <release version="3.0.3" date="2022-10-17" urgency="medium">
       <description>
         <p>Improvements:</p>
