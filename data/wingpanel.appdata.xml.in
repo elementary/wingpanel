@@ -16,6 +16,7 @@
       <description>
         <p>Improvements:</p>
         <ul>
+          <li>Always use elementary visual resources</li>
           <li>Esc to close popovers</li>
           <li>Updated translations</li>
         </ul>
