@@ -27,15 +27,12 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
 
-    private static Gtk.CssProvider resource_provider;
-
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
     }
 
-    static construct {
-        resource_provider = new Gtk.CssProvider ();
-        resource_provider.load_from_resource ("io/elementary/wingpanel/panel.css");
+    class construct {
+        set_css_name ("panel");
     }
 
     construct {
@@ -48,18 +45,15 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
             can_focus = true,
             halign = Gtk.Align.START
         };
-        left_menubar.get_style_context ().add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         center_menubar = new Gtk.MenuBar () {
             can_focus = true
         };
-        center_menubar.get_style_context ().add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         right_menubar = new IndicatorMenuBar () {
             can_focus = true,
             halign = Gtk.Align.END
         };
-        right_menubar.get_style_context ().add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         box.pack_start (left_menubar);
@@ -79,8 +73,6 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         });
 
         style_context = get_style_context ();
-        style_context.add_class (StyleClass.PANEL);
-        style_context.add_provider (resource_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
     }
@@ -290,7 +282,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
         string css = """
             .panel {
-                transition: all %ums ease-in-out;
+                transition: all %ums cubic-bezier(0.4, 0, 0.2, 1);
             }
         """.printf (animation_duration);
 
