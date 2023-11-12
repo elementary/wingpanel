@@ -32,7 +32,7 @@ public class Wingpanel.Application : Gtk.Application {
         { null }
     };
 
-    private PanelWindow? panel_window = null;
+    public PanelWindow? panel_window = null;
 
     construct {
         flags = ApplicationFlags.HANDLES_COMMAND_LINE;
@@ -120,6 +120,9 @@ public class Wingpanel.Application : Gtk.Application {
         panel_window.show_all ();
 
         register_actions ();
+
+        var menu_daemon = new MenuDaemon ();
+        menu_daemon.setup_dbus ();
     }
 
     protected override void activate () {
