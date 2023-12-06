@@ -45,7 +45,9 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
                 }
             }
 
-            this.insert (item, index);
+            if (item.get_parent () != this) {
+                this.insert (item, index);
+            }
         }
     }
 
