@@ -55,7 +55,8 @@ panel menubar {
     transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.composited-indicator > revealer image {
+.composited-indicator > revealer image,
+.composited-indicator > revealer spinner {
     -gtk-icon-shadow:
         0 0 2px alpha(black, 0.3),
         0 1px 2px alpha(black, 0.6);
@@ -72,7 +73,8 @@ panel menubar {
         0 1px 0 alpha(white, 0.25);
 }
 
-.color-light .composited-indicator > revealer image {
+.color-light .composited-indicator > revealer image,
+.color-light .composited-indicator > revealer spinner {
     -gtk-icon-shadow:
         0 0 2px alpha(white, 0.3),
         0 1px 0 alpha(white, 0.25);
@@ -88,7 +90,8 @@ panel menubar {
         0 1px 2px alpha(black, 0.3);
 }
 
-.translucent.color-dark .composited-indicator > revealer image {
+.translucent.color-dark .composited-indicator > revealer image,
+.translucent.color-dark .composited-indicator > revealer spinner {
     -gtk-icon-shadow:
         0 0 2px alpha(black, 0.15),
         0 1px 2px alpha(black, 0.3);
@@ -98,6 +101,7 @@ panel menubar {
     text-shadow: none;
 }
 
-.translucent.color-light .composited-indicator > revealer image {
+.translucent.color-light .composited-indicator > revealer image,
+.translucent.color-light .composited-indicator > revealer spinner {
     -gtk-icon-shadow: none;
 }
