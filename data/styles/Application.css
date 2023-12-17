@@ -1,0 +1,107 @@
+panel {
+    background-color: transparent;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 16px;
+}
+
+panel > box {
+    /*Don't transition shadow etc to avoid visual issues with struts*/
+    transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+panel.maximized {
+    background-color: #000;
+}
+
+panel.translucent > box {
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 4px;
+}
+
+panel.translucent.color-dark > box {
+    background-color: alpha(black, 0.4);
+    box-shadow:
+        0 1px 3px alpha(#000, 0.3),
+        0 1px 1px alpha(#000, 0.3);
+}
+
+panel.translucent.color-light > box {
+    background-color: alpha(white, 0.75);
+    box-shadow:
+        inset 0 -1px 0 0 alpha(white, 0.2),
+        inset 0 1px 0 0 alpha(white, 0.3),
+        inset 1px 0 0 0 alpha(white, 0.07),
+        inset -1px 0 0 0 alpha(white, 0.07),
+        0 1px 3px alpha(black, 0.16),
+        0 1px 1px alpha(black, 0.1);
+}
+
+panel menubar {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+}
+
+.composited-indicator {
+    padding: 0 6px;
+}
+
+.composited-indicator > revealer {
+    color: white;
+    font-weight: bold;
+    text-shadow:
+        0 0 2px alpha(black, 0.3),
+        0 1px 2px alpha(black, 0.6);
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.composited-indicator > revealer image,
+.composited-indicator > revealer spinner {
+    -gtk-icon-shadow:
+        0 0 2px alpha(black, 0.3),
+        0 1px 2px alpha(black, 0.6);
+    -gtk-icon-palette:
+        error @STRAWBERRY_300,
+        success @LIME_300,
+        warning mix(@BANANA_300, @BANANA_500, 0.5);
+}
+
+.color-light .composited-indicator > revealer {
+    color: alpha(black, 0.65);
+    text-shadow:
+        0 0 2px alpha(white, 0.3),
+        0 1px 0 alpha(white, 0.25);
+}
+
+.color-light .composited-indicator > revealer image,
+.color-light .composited-indicator > revealer spinner {
+    -gtk-icon-shadow:
+        0 0 2px alpha(white, 0.3),
+        0 1px 0 alpha(white, 0.25);
+    -gtk-icon-palette:
+        error @STRAWBERRY_700,
+        success mix(@LIME_700, @LIME_900, 0.5),
+        warning mix(@BANANA_700, @BANANA_900, 0.5);
+}
+
+.translucent.color-dark .composited-indicator > revealer {
+    text-shadow:
+        0 0 2px alpha(black, 0.15),
+        0 1px 2px alpha(black, 0.3);
+}
+
+.translucent.color-dark .composited-indicator > revealer image,
+.translucent.color-dark .composited-indicator > revealer spinner {
+    -gtk-icon-shadow:
+        0 0 2px alpha(black, 0.15),
+        0 1px 2px alpha(black, 0.3);
+}
+
+.translucent.color-light .composited-indicator > revealer {
+    text-shadow: none;
+}
+
+.translucent.color-light .composited-indicator > revealer image,
+.translucent.color-light .composited-indicator > revealer spinner {
+    -gtk-icon-shadow: none;
+}
