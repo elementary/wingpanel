@@ -315,24 +315,31 @@ namespace Wingpanel {
                 close_accellabel.accel_string = keybind_settings.get_strv ("close")[0];
             }
 
+            window_menu.popup_at_widget (((Application)GLib.Application.get_default ()).panel_window, CENTER, CENTER);
             // `opened` is used as workaround for https://github.com/elementary/gala/issues/1387
-            var opened = false;
-            Idle.add (() => {
-                window_menu.popup (null, null, (m, ref px, ref py, out push_in) => {
-                    var scale = m.scale_factor;
-                    px = x / scale;
-                    // Move the menu 1 pixel outside of the pointer or else it closes instantly
-                    // on the mouse up event
-                    py = (y / scale) + 1;
-                    push_in = true;
-                    opened = true;
-                }, Gdk.BUTTON_SECONDARY, Gdk.CURRENT_TIME);
+            // var opened = false;
+            // Idle.add (() => {
+            //     window_menu.popup (null, null, (m, ref px, ref py, out push_in) => {
+            //         var scale = m.scale_factor;
+            //         px = x / scale;
+            //         // Move the menu 1 pixel outside of the pointer or else it closes instantly
+            //         // on the mouse up event
+            //         py = (y / scale) + 1;
+            //         push_in = true;
+            //         opened = true;
+            //     }, Gdk.BUTTON_SECONDARY, Gdk.CURRENT_TIME);
 
-                return opened ? Source.REMOVE : Source.CONTINUE;
-            });
+            //     return opened ? Source.REMOVE : Source.CONTINUE;
+            // });
         }
 
         public void show_desktop_menu (int x, int y) throws DBusError, IOError {
+            // var popover = new Gtk.Popover (null) {
+            //     child = new Gtk.Label ("test"),
+            //     modal = true
+            // };
+            // popover.show_all ();((Application)GLib.Application.get_default ()).panel_window.child = popover;
+            // popover.popup ();
             if (desktop_menu == null) {
                 var change_wallpaper = new Gtk.MenuItem.with_label (_("Change Wallpaper…"));
                 change_wallpaper.activate.connect (() => {
@@ -393,14 +400,21 @@ namespace Wingpanel {
                 desktop_menu.show_all ();
             }
 
-            desktop_menu.popup (null, null, (m, ref px, ref py, out push_in) => {
-                var scale = m.scale_factor;
-                px = x / scale;
-                // Move the menu 1 pixel outside of the pointer or else it closes instantly
-                // on the mouse up event
-                py = (y / scale) + 1;
-                push_in = false;
-            }, Gdk.BUTTON_SECONDARY, Gdk.CURRENT_TIME);
+                // desktop_menu.popup (null, null, (m, ref px, ref py, out push_in) => {
+            //     var scale = m.scale_factor;
+            //     px = x / scale;
+            //     // Move the menu 1 pixel outside of the pointer or else it closes instantly
+            //     // on the mouse up event
+            //     py = (y / scale) + 1;
+            //     push_in = false;
+            // }, Gdk.BUTTON_SECONDARY, Gdk.CURRENT_TIME);
+            Gdk.Rectangle rect = {
+                0,
+                0,
+                x,
+                y
+            };
+            desktop_menu.popup_at_rect (((Application)GLib.Application.get_default ()).active_window.get_window (), rect, SOUTH_EAST, NORTH_WEST);
         }
     }
 }
