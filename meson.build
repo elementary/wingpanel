@@ -1,12 +1,12 @@
 project(
     'io.elementary.wingpanel',
     'c', 'vala',
-    version: '3.0.4',
-    meson_version : '>= 0.57'
+    version: '3.0.5',
+    meson_version : '>= 0.58.0'
 )
 
 add_project_arguments([
-        '--vapidir=' + join_paths(meson.source_root(), 'vapi'),
+        '--vapidir=' + join_paths(meson.project_source_root(), 'vapi'),
     ],
     language: 'vala',
 )
