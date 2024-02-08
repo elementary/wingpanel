@@ -44,7 +44,7 @@ public class WingpanelInterface.Main : Gala.Plugin {
                       BusNameOwnerFlags.NONE,
                       on_bus_aquired,
                       null,
-                      () => warning ("Aquirering \"%s\" failed.", DBUS_NAME));
+                      () => warning ("Acquiring \"%s\" failed.", DBUS_NAME));
     }
 
     public override void destroy () {
