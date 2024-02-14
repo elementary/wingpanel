@@ -20,6 +20,7 @@
 [DBus (name = "org.pantheon.gala.WingpanelInterface")]
 public class WingpanelInterface.DBusServer : Object {
     private BackgroundManager background_manager;
+    private FocusManager focus_manager;
 
     public signal void state_changed (BackgroundState state, uint animation_duration);
 
@@ -28,17 +29,19 @@ public class WingpanelInterface.DBusServer : Object {
         background_manager.state_changed.connect ((state, animation_duration) => {
             state_changed (state, animation_duration);
         });
+
+        focus_manager = new FocusManager ();
     }
 
     public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws GLib.Error {
-        return FocusManager.get_default ().begin_grab_focused_window (x, y, button, time, state);
+        return focus_manager.begin_grab_focused_window (x, y, button, time, state);
     }
 
     public void remember_focused_window () throws GLib.Error {
-        FocusManager.get_default ().remember_focused_window ();
+        focus_manager.remember_focused_window ();
     }
 
     public void restore_focused_window () throws GLib.Error {
-        FocusManager.get_default ().restore_focused_window ();
+        focus_manager.restore_focused_window ();
     }
 }

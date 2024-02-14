@@ -18,8 +18,6 @@
  */
 
 public class WingpanelInterface.FocusManager : Object {
-    private static FocusManager? instance = null;
-
     private unowned Meta.Workspace? current_workspace = null;
     private unowned Meta.Window? last_focused_window = null;
     private unowned Meta.Window? last_focused_dialog_window = null;
@@ -139,13 +137,5 @@ public class WingpanelInterface.FocusManager : Object {
         }
 
         current_workspace = workspace;
-    }
-
-    public static FocusManager get_default () {
-        if (instance == null) {
-            instance = new FocusManager ();
-        }
-
-        return instance;
     }
 }
