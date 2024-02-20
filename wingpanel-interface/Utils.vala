@@ -48,17 +48,18 @@ namespace WingpanelInterface.Utils {
 
     public async ColorInformation get_background_color_information (Gala.WindowManager wm, int monitor,
                                                                     int reference_x, int reference_y, int reference_width, int reference_height) throws DBusError {
-        var background = wm.background_group.get_child_at_index (monitor);
+        var bg_manager = (Gala.BackgroundManagerInterface) wm.background_group.get_child_at_index (monitor);
 
-        if (background == null) {
+        if (bg_manager == null) {
             throw new DBusError.INVALID_ARGS ("Invalid monitor requested: %i".printf (monitor));
         }
 
         var effect = new DummyOffscreenEffect ();
-        background.add_effect (effect);
+        unowned var newest_background_actor = bg_manager.newest_background_actor;
+        newest_background_actor.add_effect (effect);
 
-        var bg_actor_width = (int)background.width;
-        var bg_actor_height = (int)background.height;
+        var bg_actor_width = (int) newest_background_actor.width;
+        var bg_actor_height = (int) newest_background_actor.height;
 
         // A commit in mutter added some padding to offscreen textures, so we
         // need to avoid looking at the edges of the texture as it often has a
@@ -91,7 +92,7 @@ namespace WingpanelInterface.Utils {
 
         paint_signal_handler = effect.done_painting.connect (() => {
             SignalHandler.disconnect (effect, paint_signal_handler);
-            background.remove_effect (effect);
+            newest_background_actor.remove_effect (effect);
 
             var texture = (Cogl.Texture)effect.get_texture ();
             var texture_width = texture.get_width ();
@@ -211,7 +212,7 @@ namespace WingpanelInterface.Utils {
             get_background_color_information.callback ();
         });
 
-        background.queue_redraw ();
+        newest_background_actor.queue_redraw ();
 
         yield;
 
