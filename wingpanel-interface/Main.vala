@@ -42,7 +42,7 @@ public class WingpanelInterface.Main : Gala.Plugin {
         Bus.own_name (BusType.SESSION,
                       DBUS_NAME,
                       BusNameOwnerFlags.NONE,
-                      on_bus_aquired,
+                      on_bus_acquired,
                       null,
                       () => warning ("Acquiring \"%s\" failed.", DBUS_NAME));
     }
@@ -57,7 +57,7 @@ public class WingpanelInterface.Main : Gala.Plugin {
         }
     }
 
-    private void on_bus_aquired (DBusConnection connection) {
+    private void on_bus_acquired (DBusConnection connection) {
         dbus_connection = connection;
 
         try {
