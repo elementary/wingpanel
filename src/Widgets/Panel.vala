@@ -238,18 +238,27 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private void add_indicator (Indicator indicator) {
         var indicator_entry = new IndicatorEntry (indicator, popover_manager);
 
-        switch (indicator.code_name) {
-            case Indicator.APP_LAUNCHER:
-                indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_RIGHT);
-                left_menubar.add (indicator_entry);
-                break;
-            case Indicator.DATETIME:
-                indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_DOWN);
-                center_menubar.add (indicator_entry);
-                break;
-            default:
+        switch (indicator.position) {
+            case FORCE_RIGHT:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_LEFT);
                 right_menubar.insert_sorted (indicator_entry);
+                break;
+            default:
+                switch (indicator.code_name) {
+                    case Indicator.APP_LAUNCHER:
+                        indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_RIGHT);
+                        left_menubar.add (indicator_entry);
+                        break;
+                    case Indicator.DATETIME:
+                        indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_DOWN);
+                        center_menubar.add (indicator_entry);
+                        break;
+                    default:
+                        indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_LEFT);
+                        right_menubar.insert_sorted (indicator_entry);
+                        break;
+                }
+
                 break;
         }
 

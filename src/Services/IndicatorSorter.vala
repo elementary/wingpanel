@@ -57,6 +57,14 @@ public class Wingpanel.Services.IndicatorSorter : Object {
             return 1;
         }
 
+        if (a.base_indicator.position == FORCE_RIGHT && b.base_indicator.position == FORCE_RIGHT) {
+            return compare_entries_by_name (a, b).clamp(-1, 1);
+        } else if (a.base_indicator.position == FORCE_RIGHT) {
+            return 1;
+        } else if (b.base_indicator.position == FORCE_RIGHT) {
+            return -1;
+        }
+
         int order = get_order (a) - get_order (b);
 
         if (order == 0) {

@@ -18,6 +18,11 @@
  */
 
 public abstract class Wingpanel.Indicator : GLib.Object {
+    public enum Position {
+        DEFAULT,
+        FORCE_RIGHT
+    }
+
     public const string APP_LAUNCHER = "app-launcher";
     public const string SESSION = "session";
     public const string DATETIME = "datetime";
@@ -44,6 +49,11 @@ public abstract class Wingpanel.Indicator : GLib.Object {
      * Defines if the indicator display widget should be shown or not.
      */
     public bool visible { get; set; default = false; }
+
+    /**
+     * Can be set to force indicator to be on left or right.
+     */
+    public Position position { get; set; default = DEFAULT; }
 
     /**
      * Returns the display widget that will be displayed in the panel.

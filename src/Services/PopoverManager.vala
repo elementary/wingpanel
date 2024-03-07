@@ -50,7 +50,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                 _current_indicator = value;
             }
 
-            if (_current_indicator != null) {
+            if (_current_indicator != null && _current_indicator.indicator_widget != null) {
                 popover.set_content (_current_indicator.indicator_widget);
                 popover.relative_to = _current_indicator;
                 update_has_tooltip (_current_indicator.display_widget, false);
@@ -61,7 +61,11 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.show_all ();
                 _current_indicator.base_indicator.opened ();
             } else {
-                update_has_tooltip (((Wingpanel.Widgets.IndicatorEntry)popover.get_relative_to ()).display_widget);
+                unowned var popover_relative = (Wingpanel.Widgets.IndicatorEntry?) popover.get_relative_to ();
+                if (popover_relative != null) {
+                    update_has_tooltip (popover_relative.display_widget);
+                }
+
                 popover.popdown ();
             }
         }
@@ -116,11 +120,15 @@ public class Wingpanel.Services.PopoverManager : Object {
             Gtk.Allocation allocation;
             popover.get_allocation (out allocation);
 
-            Gtk.Allocation indicator_allocation;
-            current_indicator.get_allocation (out indicator_allocation);
+            Gtk.Allocation indicator_allocation = { 0, 0, 0, 0 };
+            if (current_indicator != null) {
+                current_indicator.get_allocation (out indicator_allocation);
+            }
 
-            Gtk.Allocation container_allocation;
-            current_indicator.get_parent ().get_allocation (out container_allocation);
+            Gtk.Allocation container_allocation = { 0, 0, 0, 0 };
+            if (current_indicator != null) {
+                current_indicator.get_parent ().get_allocation (out container_allocation);
+            }
 
             var wingpanel_width = owner.get_allocated_width ();
 

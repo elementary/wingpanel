@@ -24,8 +24,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
     public IndicatorMenuBar? menu_bar;
     public Gtk.Widget display_widget { get; private set; }
 
-    private Gtk.Widget _indicator_widget = null;
-    public unowned Gtk.Widget indicator_widget {
+    private Gtk.Widget? _indicator_widget = null;
+    public unowned Gtk.Widget? indicator_widget {
         get {
             if (_indicator_widget == null) {
                 _indicator_widget = base_indicator.get_widget ();
@@ -100,23 +100,26 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         touch_event.connect ((e) => {
             if (e.type == Gdk.EventType.TOUCH_BEGIN) {
                 popover_manager.current_indicator = this;
-                return Gdk.EVENT_STOP;
             }
 
             return Gdk.EVENT_PROPAGATE;
         });
 
         button_press_event.connect ((e) => {
-            if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
-                && e.type == Gdk.EventType.BUTTON_PRESS) {
+            if (e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY) {
                 popover_manager.current_indicator = this;
-                return Gdk.EVENT_STOP;
             }
 
             /* Call button press on the indicator display widget */
             display_widget.button_press_event (e);
 
-            return Gdk.EVENT_STOP;
+            return Gdk.EVENT_PROPAGATE;
+        });
+
+        button_release_event.connect ((e) => {
+            display_widget.button_release_event (e);
+
+            return Gdk.EVENT_PROPAGATE;
         });
 
         set_reveal (base_indicator.visible);
