@@ -208,8 +208,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             Services.BackgroundManager.get_default ().restore_window ();
 
             this.expanded = false;
-            this.set_size_request (monitor_width, expanded ? monitor_height : -1);
-            this.resize (monitor_width, expanded ? monitor_height : 1);
+            this.set_size_request (monitor_width, -1);
+            this.resize (monitor_width, 1);
         }
     }
 }
