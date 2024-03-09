@@ -18,6 +18,8 @@
  */
 
 public class Wingpanel.Services.PopoverManager : Object {
+    public signal void popover_changed ();
+
     private unowned Wingpanel.PanelWindow? owner;
 
     private bool grabbed = false; // whether the wingpanel grabbed focus
@@ -55,7 +57,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.relative_to = _current_indicator;
                 update_has_tooltip (_current_indicator.display_widget, false);
                 owner.set_expanded (true);
-                make_modal (popover, true);
+                make_modal (true);
                 owner.present ();
                 popover.popup ();
                 popover.show_all ();
@@ -89,8 +91,9 @@ public class Wingpanel.Services.PopoverManager : Object {
             return Gdk.EVENT_PROPAGATE;
         });
 
+        popover.size_allocate.connect (() => popover_changed ());
         popover.closed.connect (() => {
-            make_modal (popover, false);
+            make_modal (false);
         });
         popover.unmap.connect (() => {
             if (!grabbed) {
@@ -182,8 +185,8 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
     }
 
-    private void make_modal (Gtk.Popover? pop, bool modal = true) {
-        if (pop == null || pop.get_window () == null || mousing) {
+    private void make_modal (bool modal = true) {
+        if (popover == null || popover.get_window () == null || mousing) {
             return;
         }
 
@@ -191,7 +194,7 @@ public class Wingpanel.Services.PopoverManager : Object {
             grabbed = true;
             Gtk.grab_add (owner);
             owner.set_focus (null);
-            pop.grab_focus ();
+            popover.grab_focus ();
         } else if (!modal && grabbed) {
             grabbed = false;
             Gtk.grab_remove (owner);
