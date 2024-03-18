@@ -32,6 +32,7 @@ public abstract class Wingpanel.Indicator : GLib.Object {
     public const string NIGHT_LIGHT = "nightlight";
     public const string PRIVACY = "privacy";
     public const string ACCESSIBILITY = "a11y";
+    public const string QUICKSETTINGS = "quick-settings";
 
     /**
      * The unique name representing the indicator.

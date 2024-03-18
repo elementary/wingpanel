@@ -139,9 +139,8 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     public async void update_bk_color_info () {
         SourceFunc callback = update_bk_color_info.callback;
-        Gdk.Rectangle monitor_geometry;
 
-        Gdk.Screen.get_default ().get_monitor_geometry (monitor, out monitor_geometry);
+        var monitor_geometry = Main.display.get_monitor_geometry (monitor);
 
         Utils.get_background_color_information.begin (Main.wm, monitor, 0, 0, monitor_geometry.width, panel_height, (obj, res) => {
             try {

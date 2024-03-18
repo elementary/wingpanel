@@ -184,7 +184,3 @@ public class Wingpanel.Application : Gtk.Application {
         return new Wingpanel.Application ().run (args);
     }
 }
-
-#if TRANSLATION
-_("A super sexy space-saving top panel");
-#endif
