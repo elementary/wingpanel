@@ -5,7 +5,7 @@ Maintainer: elementary, Inc. <builds@elementary.io>
 Build-Depends: debhelper (>= 10.5.1),
                gettext,
                libgala-dev,
-               libmutter-13-dev | libmutter-12-dev | libmutter-11-dev | libmutter-10-dev,
+               libmutter-14-dev | libmutter-13-dev | libmutter-12-dev | libmutter-11-dev | libmutter-10-dev,
                libgee-0.8-dev,
                libgirepository1.0-dev,
                libglib2.0-dev (>= 2.32),
