@@ -110,6 +110,10 @@ public class WingpanelInterface.FocusManager : Object {
         }
 
         if (window != null) {
+
+#if HAS_MUTTER46
+            Graphene.Point pos_hint = {x, y};
+            window.begin_grab_op (Meta.GrabOp.MOVING, null, null, time, pos_hint);
 #if HAS_MUTTER44
             window.begin_grab_op (Meta.GrabOp.MOVING, null, null, time);
 #else
