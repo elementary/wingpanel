@@ -21,16 +21,6 @@ Architecture: any
 Depends: libwingpanel3 (= ${binary:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
-Recommends: wingpanel-indicator-a11y,
-            wingpanel-indicator-bluetooth,
-            wingpanel-indicator-datetime,
-            wingpanel-indicator-keyboard,
-            wingpanel-indicator-network,
-            wingpanel-indicator-nightlight,
-            wingpanel-indicator-notifications,
-            wingpanel-indicator-power,
-            wingpanel-indicator-session,
-            wingpanel-indicator-sound
 Replaces: wingpanel (<< 2.3.2)
 Breaks: wingpanel (<< 2.3.2)
 Provides: indicator-renderer
