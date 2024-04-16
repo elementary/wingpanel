@@ -81,6 +81,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         key_controller = new Gtk.EventControllerKey (this);
         key_controller.key_pressed.connect (on_key_pressed);
+
+        if (!Utils.is_wayland ()) {
+            panel.size_allocate.connect (update_panel_dimensions);
+        }
     }
 
     private void on_realize () {
