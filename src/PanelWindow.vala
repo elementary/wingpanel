@@ -82,7 +82,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         key_controller = new Gtk.EventControllerKey (this);
         key_controller.key_pressed.connect (on_key_pressed);
 
-        panel.size_allocate.connect (update_panel_dimensions);
+        if (!Utils.is_wayland ()) {
+            panel.size_allocate.connect (update_panel_dimensions);
+        }
     }
 
     private void on_realize () {
@@ -208,8 +210,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             Services.BackgroundManager.get_default ().restore_window ();
 
             this.expanded = false;
-            this.set_size_request (monitor_width, expanded ? monitor_height : -1);
-            this.resize (monitor_width, expanded ? monitor_height : 1);
+            this.set_size_request (monitor_width, -1);
+            this.resize (monitor_width, 1);
         }
     }
 }
