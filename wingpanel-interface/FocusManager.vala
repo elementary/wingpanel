@@ -18,9 +18,9 @@
  */
 
 public class WingpanelInterface.FocusManager : Object {
-    private unowned Meta.Workspace? current_workspace = null;
-    private unowned Meta.Window? last_focused_window = null;
-    private unowned Meta.Window? last_focused_dialog_window = null;
+    private Meta.Workspace? current_workspace = null;
+    private Meta.Window? last_focused_window = null;
+    private Meta.Window? last_focused_dialog_window = null;
 
     public FocusManager () {
         unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
@@ -83,6 +83,10 @@ public class WingpanelInterface.FocusManager : Object {
     void window_unmanaged (Meta.Window window) {
         window.focused.disconnect (window_focused);
         window.unmanaged.disconnect (window_unmanaged);
+
+        if (last_focused_window == window) {
+            last_focused_window = null;
+        }
     }
 
     public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
