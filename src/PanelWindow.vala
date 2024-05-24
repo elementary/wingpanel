@@ -86,7 +86,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         key_controller = new Gtk.EventControllerKey (this);
         key_controller.key_pressed.connect (on_key_pressed);
 
-        gesture_controller = new Gtk.GestureMultiPress (this);
+        gesture_controller = new Gtk.GestureMultiPress (this) {
+            propagation_phase = CAPTURE
+        };
+
         gesture_controller.pressed.connect (() => {
             if (desktop_panel != null) {
                 desktop_panel.focus ();
