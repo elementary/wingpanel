@@ -31,6 +31,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private int panel_height;
     private bool expanded = false;
 
+    private Pantheon.Desktop.Shell? desktop_shell;
+    private Pantheon.Desktop.Panel? desktop_panel;
+
     public PanelWindow (Gtk.Application application) {
         Object (
             application: application,
@@ -95,6 +98,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         Services.BackgroundManager.initialize (this.monitor_number, panel_height);
         revealer.transition_type = SLIDE_DOWN;
         revealer.reveal_child = true;
+
+        init_wl ();
     }
 
     private void update_panel_dimensions () {
@@ -212,6 +217,37 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             this.expanded = false;
             this.set_size_request (monitor_width, -1);
             this.resize (monitor_width, 1);
+        }
+    }
+
+    public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
+        if (@interface == "io_elementary_pantheon_shell_v1") {
+            desktop_shell = wl_registry.bind<Pantheon.Desktop.Shell> (name, ref Pantheon.Desktop.Shell.iface, uint32.min (version, 1));
+            unowned var window = get_window ();
+            if (window is Gdk.Wayland.Window) {
+                unowned var wl_surface = ((Gdk.Wayland.Window) window).get_wl_surface ();
+                desktop_panel = desktop_shell.get_panel (wl_surface);
+                desktop_panel.set_anchor (BOTTOM);
+                desktop_panel.set_hide_mode (NEVER);
+            }
+        }
+    }
+
+    private static Wl.RegistryListener registry_listener;
+    private void init_wl () {
+        registry_listener.global = registry_handle_global;
+        unowned var display = Gdk.Display.get_default ();
+        if (display is Gdk.Wayland.Display) {
+            unowned var wl_display = ((Gdk.Wayland.Display) display).get_wl_display ();
+            var wl_registry = wl_display.get_registry ();
+            wl_registry.add_listener (
+                registry_listener,
+                this
+            );
+
+            if (wl_display.roundtrip () < 0) {
+                return;
+            }
         }
     }
 }
