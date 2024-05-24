@@ -22,6 +22,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private Widgets.Panel panel;
     private Gtk.EventControllerKey key_controller; // For keeping in memory
+    private Gtk.GestureMultiPress gesture_controller; // For keeping in memory
     private Gtk.Revealer revealer;
     private int monitor_number;
     private int monitor_width;
@@ -85,6 +86,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         key_controller = new Gtk.EventControllerKey (this);
         key_controller.key_pressed.connect (on_key_pressed);
 
+        gesture_controller = new Gtk.GestureMultiPress (this);
+        gesture_controller.pressed.connect (() => {
+            if (desktop_panel != null) {
+                desktop_panel.focus ();
+            }
+        });
+
         if (!Utils.is_wayland ()) {
             panel.size_allocate.connect (update_panel_dimensions);
         }
@@ -99,7 +107,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         revealer.transition_type = SLIDE_DOWN;
         revealer.reveal_child = true;
 
-        init_wl ();
+        // We have to wrap in Idle otherwise the Meta.Window of the WaylandSurface in Gala is still null
+        Idle.add_once (init_wl);
     }
 
     private void update_panel_dimensions () {
@@ -227,8 +236,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             if (window is Gdk.Wayland.Window) {
                 unowned var wl_surface = ((Gdk.Wayland.Window) window).get_wl_surface ();
                 desktop_panel = desktop_shell.get_panel (wl_surface);
-                desktop_panel.set_anchor (BOTTOM);
+                desktop_panel.set_anchor (TOP);
                 desktop_panel.set_hide_mode (NEVER);
+                desktop_panel.set_size (-1, get_allocated_height ());
             }
         }
     }
