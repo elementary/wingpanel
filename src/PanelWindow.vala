@@ -232,6 +232,14 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         }
     }
 
+    public void toggle_indicator (string name) {
+        popover_manager.toggle_popover_visible (name);
+
+        if (desktop_panel != null) {
+            desktop_panel.focus ();
+        }
+    }
+
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
         if (@interface == "io_elementary_pantheon_shell_v1") {
             desktop_shell = wl_registry.bind<Pantheon.Desktop.Shell> (name, ref Pantheon.Desktop.Shell.iface, uint32.min (version, 1));
