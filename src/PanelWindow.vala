@@ -120,9 +120,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         monitor_number = screen.get_primary_monitor ();
         Gdk.Rectangle monitor_dimensions;
         if (Utils.is_wayland ()) {
-            // TODO: Wayland doesn't have a concept of a primary monitor and so the GDK
-            // call doesn't work, so we need to write some kind of WM interface to get this
-            monitor_dimensions = get_display ().get_monitor (0).get_geometry ();
+            // We just use our monitor because Gala makes sure we are always on the primary one
+            monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
         } else {
             monitor_dimensions = get_display ().get_primary_monitor ().get_geometry ();
         }
@@ -250,6 +249,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 desktop_panel.set_anchor (TOP);
                 desktop_panel.set_hide_mode (NEVER);
                 desktop_panel.set_size (-1, get_allocated_height ());
+
+                Idle.add_once (update_panel_dimensions); // Update again since we now can be 100% sure that we are on the primary monitor
             }
         }
     }
