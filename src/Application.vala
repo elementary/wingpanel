@@ -161,7 +161,7 @@ public class Wingpanel.Application : Gtk.Application {
                 return;
             }
 
-            panel_window.popover_manager.toggle_popover_visible (parameter.get_string ());
+            panel_window.toggle_indicator (parameter.get_string ());
         });
 
         this.add_action (list_indicators_action);

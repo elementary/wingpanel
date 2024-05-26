@@ -22,6 +22,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private Widgets.Panel panel;
     private Gtk.EventControllerKey key_controller; // For keeping in memory
+    private Gtk.GestureMultiPress gesture_controller; // For keeping in memory
     private Gtk.Revealer revealer;
     private int monitor_number;
     private int monitor_width;
@@ -30,6 +31,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private int monitor_y;
     private int panel_height;
     private bool expanded = false;
+
+    private Pantheon.Desktop.Shell? desktop_shell;
+    private Pantheon.Desktop.Panel? desktop_panel;
 
     public PanelWindow (Gtk.Application application) {
         Object (
@@ -82,6 +86,16 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         key_controller = new Gtk.EventControllerKey (this);
         key_controller.key_pressed.connect (on_key_pressed);
 
+        gesture_controller = new Gtk.GestureMultiPress (this) {
+            propagation_phase = CAPTURE
+        };
+
+        gesture_controller.pressed.connect (() => {
+            if (desktop_panel != null) {
+                desktop_panel.focus ();
+            }
+        });
+
         if (!Utils.is_wayland ()) {
             panel.size_allocate.connect (update_panel_dimensions);
         }
@@ -95,6 +109,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         Services.BackgroundManager.initialize (this.monitor_number, panel_height);
         revealer.transition_type = SLIDE_DOWN;
         revealer.reveal_child = true;
+
+        // We have to wrap in Idle otherwise the Meta.Window of the WaylandSurface in Gala is still null
+        Idle.add_once (init_wl);
     }
 
     private void update_panel_dimensions () {
@@ -103,9 +120,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         monitor_number = screen.get_primary_monitor ();
         Gdk.Rectangle monitor_dimensions;
         if (Utils.is_wayland ()) {
-            // TODO: Wayland doesn't have a concept of a primary monitor and so the GDK
-            // call doesn't work, so we need to write some kind of WM interface to get this
-            monitor_dimensions = get_display ().get_monitor (0).get_geometry ();
+            // We just use our monitor because Gala makes sure we are always on the primary one
+            monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
         } else {
             monitor_dimensions = get_display ().get_primary_monitor ().get_geometry ();
         }
@@ -212,6 +228,48 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             this.expanded = false;
             this.set_size_request (monitor_width, -1);
             this.resize (monitor_width, 1);
+        }
+    }
+
+    public void toggle_indicator (string name) {
+        popover_manager.toggle_popover_visible (name);
+
+        if (desktop_panel != null) {
+            desktop_panel.focus ();
+        }
+    }
+
+    public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
+        if (@interface == "io_elementary_pantheon_shell_v1") {
+            desktop_shell = wl_registry.bind<Pantheon.Desktop.Shell> (name, ref Pantheon.Desktop.Shell.iface, uint32.min (version, 1));
+            unowned var window = get_window ();
+            if (window is Gdk.Wayland.Window) {
+                unowned var wl_surface = ((Gdk.Wayland.Window) window).get_wl_surface ();
+                desktop_panel = desktop_shell.get_panel (wl_surface);
+                desktop_panel.set_anchor (TOP);
+                desktop_panel.set_hide_mode (NEVER);
+                desktop_panel.set_size (-1, get_allocated_height ());
+
+                Idle.add_once (update_panel_dimensions); // Update again since we now can be 100% sure that we are on the primary monitor
+            }
+        }
+    }
+
+    private static Wl.RegistryListener registry_listener;
+    private void init_wl () {
+        registry_listener.global = registry_handle_global;
+        unowned var display = Gdk.Display.get_default ();
+        if (display is Gdk.Wayland.Display) {
+            unowned var wl_display = ((Gdk.Wayland.Display) display).get_wl_display ();
+            var wl_registry = wl_display.get_registry ();
+            wl_registry.add_listener (
+                registry_listener,
+                this
+            );
+
+            if (wl_display.roundtrip () < 0) {
+                return;
+            }
         }
     }
 }
