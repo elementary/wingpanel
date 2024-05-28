@@ -96,15 +96,16 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             }
         });
 
-        if (!Utils.is_wayland ()) {
-            panel.size_allocate.connect (update_panel_dimensions);
-        }
+        panel.size_allocate.connect (update_panel_dimensions);
     }
 
     private void on_realize () {
         // realize isn't called when reveal_child is false, so we set true, then
-        // false, then true again to animate
-        revealer.reveal_child = false;
+        // false, then true again to animate. On wayland we are animated in by gala
+        // so we just want the revealer to always reveal.
+        if (!Utils.is_wayland ()) {
+            revealer.reveal_child = false;
+        }
         update_panel_dimensions ();
         Services.BackgroundManager.initialize (this.monitor_number, panel_height);
         revealer.transition_type = SLIDE_DOWN;
