@@ -123,6 +123,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         if (Utils.is_wayland ()) {
             // We just use our monitor because Gala makes sure we are always on the primary one
             monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
+            monitor_dimensions.width /= get_scale_factor ();
+            monitor_dimensions.height /= get_scale_factor ();
+            monitor_dimensions.x /= get_scale_factor ();
+            monitor_dimensions.y /= get_scale_factor ();
         } else {
             monitor_dimensions = get_display ().get_primary_monitor ().get_geometry ();
         }
