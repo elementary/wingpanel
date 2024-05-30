@@ -249,7 +249,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 desktop_panel = desktop_shell.get_panel (wl_surface);
                 desktop_panel.set_anchor (TOP);
                 desktop_panel.set_hide_mode (NEVER);
-                desktop_panel.set_size (-1, get_allocated_height ());
+                desktop_panel.set_size (-1, get_allocated_height () * get_scale_factor ());
 
                 Idle.add_once (update_panel_dimensions); // Update again since we now can be 100% sure that we are on the primary monitor
             }
