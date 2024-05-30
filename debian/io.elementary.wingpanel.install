@@ -1,4 +1,3 @@
-etc/xdg/autostart
 usr/bin
 usr/lib/*/gala/plugins/lib*.so
 usr/share/applications
