@@ -222,6 +222,11 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     public void set_expanded (bool expand) {
+        // This is a workaround for X11
+        if (Utils.is_wayland ()) {
+            return;
+        }
+
         if (expand && !this.expanded) {
             Services.BackgroundManager.get_default ().remember_window ();
 

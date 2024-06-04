@@ -57,6 +57,8 @@ public class Wingpanel.Services.PopoverManager : Object {
                 owner.set_expanded (true);
                 make_modal (popover, true);
                 owner.present ();
+                popover.constrain_to = NONE;
+                popover.position = BOTTOM;
                 popover.popup ();
                 popover.show_all ();
                 _current_indicator.base_indicator.opened ();
