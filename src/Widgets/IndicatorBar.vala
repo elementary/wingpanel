@@ -17,16 +17,18 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
+public class Wingpanel.Widgets.IndicatorBar : Gtk.Box {
     private Gee.List<IndicatorEntry> sorted_items;
     private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
 
     construct {
         sorted_items = new Gee.ArrayList<IndicatorEntry> ();
+
+        spacing = 6;
     }
 
     public void insert_sorted (IndicatorEntry item) {
-        item.menu_bar = this;
+        item.indicator_bar = this;
 
         if (!(item in sorted_items)) {
             sorted_items.add (item);
@@ -46,18 +48,18 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
             }
 
             if (item.get_parent () != this) {
-                this.insert (item, index);
+                add (item);
+                reorder_child (item, index);
             }
         }
     }
 
-    public override void remove (Gtk.Widget widget) {
-        var indicator_widget = widget as IndicatorEntry;
-
-        if (indicator_widget != null) {
-            sorted_items.remove (indicator_widget);
+    public void remove_indicator (Indicator indicator) {
+        foreach (var entry in sorted_items) {
+            if (entry.base_indicator.code_name == indicator.code_name) {
+                sorted_items.remove (entry);
+                remove (entry);
+            }
         }
-
-        base.remove (widget);
     }
 }

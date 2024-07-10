@@ -20,9 +20,9 @@
 public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     public Services.PopoverManager popover_manager { get; construct; }
 
-    private IndicatorMenuBar right_menubar;
-    private Gtk.MenuBar left_menubar;
-    private Gtk.MenuBar center_menubar;
+    private IndicatorBar right_menubar;
+    private IndicatorBar left_menubar;
+    private IndicatorBar center_menubar;
 
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
@@ -39,20 +39,16 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         height_request = 30;
         hexpand = true;
         vexpand = true;
-        valign = Gtk.Align.START;
+        valign = START;
 
-        left_menubar = new Gtk.MenuBar () {
-            can_focus = true,
-            halign = Gtk.Align.START
+        left_menubar = new IndicatorBar () {
+            halign = START
         };
 
-        center_menubar = new Gtk.MenuBar () {
-            can_focus = true
-        };
+        center_menubar = new IndicatorBar ();
 
-        right_menubar = new IndicatorMenuBar () {
-            can_focus = true,
-            halign = Gtk.Align.END
+        right_menubar = new IndicatorBar () {
+            halign = END
         };
 
         var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -78,6 +74,10 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     }
 
     public override bool button_press_event (Gdk.EventButton event) {
+        if (Utils.is_wayland ()) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
         if (event.button != Gdk.BUTTON_PRIMARY) {
             return Gdk.EVENT_PROPAGATE;
         }
@@ -257,21 +257,9 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     }
 
     private void remove_indicator (Indicator indicator) {
-        remove_indicator_from_container (left_menubar, indicator);
-        remove_indicator_from_container (center_menubar, indicator);
-        remove_indicator_from_container (right_menubar, indicator);
-    }
-
-    private void remove_indicator_from_container (Gtk.Container container, Indicator indicator) {
-        foreach (unowned Gtk.Widget child in container.get_children ()) {
-            unowned IndicatorEntry? entry = (child as IndicatorEntry);
-
-            if (entry != null && entry.base_indicator == indicator) {
-                container.remove (child);
-
-                return;
-            }
-        }
+        left_menubar.remove_indicator (indicator);
+        center_menubar.remove_indicator (indicator);
+        right_menubar.remove_indicator (indicator);
     }
 
     private void update_background (Services.BackgroundState state, uint animation_duration) {
