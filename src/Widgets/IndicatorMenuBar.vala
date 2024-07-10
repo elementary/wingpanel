@@ -34,31 +34,29 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.Box {
         }
 
         if (item.base_indicator.visible) {
-            var index = 0;
+            Gtk.Widget? previous = null;
             foreach (var i in sorted_items) {
                 if (i == item) {
                     break;
                 }
 
                 if (i.base_indicator.visible) {
-                    index++;
+                    previous = i;
                 }
             }
 
             if (item.get_parent () != this) {
-                add (item);
-                reorder_child (item, index);
+                insert_child_after (item, previous);
             }
         }
     }
 
-    public override void remove (Gtk.Widget widget) {
-        var indicator_widget = widget as IndicatorEntry;
-
-        if (indicator_widget != null) {
-            sorted_items.remove (indicator_widget);
+    public void remove_indicator (Indicator indicator) {
+        foreach (var entry in sorted_items) {
+            if (entry.base_indicator == indicator) {
+                sorted_items.remove (entry);
+                remove (entry);
+            }
         }
-
-        base.remove (widget);
     }
 }

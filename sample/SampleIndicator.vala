@@ -47,7 +47,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
         /* Create a new composited icon */
         display_widget = new Gtk.Overlay ();
-        display_widget.add (main_image);
+        display_widget.set_child (main_image);
         display_widget.add_overlay (overlay_image);
 
         var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
@@ -55,8 +55,8 @@ public class Sample.Indicator : Wingpanel.Indicator {
             margin_bottom = 3
         };
 
-        var hide_button = new Gtk.ModelButton ();
-        hide_button.text = _("Hide me!");
+        var hide_button = new Gtk.Button ();
+        hide_button.label = _("Hide me!");
 
         var compositing_switch = new Granite.SwitchModelButton (_("Composited Icon"));
 

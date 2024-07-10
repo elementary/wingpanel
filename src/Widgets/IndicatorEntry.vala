@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
+public class Wingpanel.Widgets.IndicatorEntry : Gtk.Box {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
@@ -37,7 +37,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
 
     private Gtk.Revealer revealer;
 
-    private Gtk.GestureMultiPress gesture_press;
+    private Gtk.GestureClick gesture_press;
 
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
         Object (
@@ -56,12 +56,14 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
             return;
         }
 
-        revealer = new Gtk.Revealer ();
-        revealer.add (display_widget);
+        revealer = new Gtk.Revealer () {
+            child = display_widget
+        };
 
-        add (revealer);
+        append (revealer);
 
         if (base_indicator.visible) {
+            warning ("REGISTER IN ENTRY");
             popover_manager.register_indicator (this);
         }
 
@@ -89,19 +91,21 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
             }
         });
 
-        gesture_press = new Gtk.GestureMultiPress (this);
+        gesture_press = new Gtk.GestureClick ();
         gesture_press.pressed.connect ((n_press) => {
             popover_manager.current_indicator = this;
+            warning ("PRESS");
         });
+        add_controller (gesture_press);
 
-        add_events (Gdk.EventMask.SCROLL_MASK);
-        add_events (Gdk.EventMask.SMOOTH_SCROLL_MASK);
-
-        scroll_event.connect ((e) => {
-            display_widget.scroll_event (e);
-
-            return Gdk.EVENT_PROPAGATE;
+        var motion_controller = new Gtk.EventControllerMotion ();
+        motion_controller.enter.connect (() => {
+            if (popover_manager.current_indicator != null) {
+                popover_manager.current_indicator = this;
+            }
+            warning ("ENTER");
         });
+        add_controller (motion_controller);
 
         set_reveal (base_indicator.visible);
     }
