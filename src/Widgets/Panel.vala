@@ -21,8 +21,8 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     public Services.PopoverManager popover_manager { get; construct; }
 
     private IndicatorMenuBar right_menubar;
-    private Gtk.MenuBar left_menubar;
-    private Gtk.MenuBar center_menubar;
+    private IndicatorMenuBar left_menubar;
+    private IndicatorMenuBar center_menubar;
 
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
@@ -41,17 +41,13 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         vexpand = true;
         valign = Gtk.Align.START;
 
-        left_menubar = new Gtk.MenuBar () {
-            can_focus = true,
+        left_menubar = new IndicatorMenuBar () {
             halign = Gtk.Align.START
         };
 
-        center_menubar = new Gtk.MenuBar () {
-            can_focus = true
-        };
+        center_menubar = new IndicatorMenuBar ();;
 
         right_menubar = new IndicatorMenuBar () {
-            can_focus = true,
             halign = Gtk.Align.END
         };
 
@@ -78,6 +74,10 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     }
 
     public override bool button_press_event (Gdk.EventButton event) {
+        if (Utils.is_wayland ()) {
+            return Gdk.EVENT_PROPAGATE;
+        }
+
         if (event.button != Gdk.BUTTON_PRIMARY) {
             return Gdk.EVENT_PROPAGATE;
         }

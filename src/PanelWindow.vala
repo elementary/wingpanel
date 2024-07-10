@@ -134,7 +134,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         monitor_width = monitor_dimensions.width;
         monitor_height = monitor_dimensions.height;
 
-        this.set_size_request (monitor_width, (popover_manager.current_indicator != null ? monitor_height : -1));
+        this.set_size_request (monitor_width, -1);
 
         monitor_x = monitor_dimensions.x;
         monitor_y = monitor_dimensions.y;

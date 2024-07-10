@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
+public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
@@ -37,6 +37,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
     private Gtk.Revealer revealer;
 
+    private Gtk.GestureMultiPress gesture_press;
+
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
         Object (
             base_indicator: base_indicator,
@@ -45,7 +47,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
     }
 
     construct {
-        can_focus = false;
         display_widget = base_indicator.get_display_widget ();
         halign = Gtk.Align.START;
         name = base_indicator.code_name + "/entry";
@@ -88,6 +89,11 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
             }
         });
 
+        gesture_press = new Gtk.GestureMultiPress (this);
+        gesture_press.pressed.connect ((n_press) => {
+            popover_manager.current_indicator = this;
+        });
+
         add_events (Gdk.EventMask.SCROLL_MASK);
         add_events (Gdk.EventMask.SMOOTH_SCROLL_MASK);
 
@@ -95,28 +101,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
             display_widget.scroll_event (e);
 
             return Gdk.EVENT_PROPAGATE;
-        });
-
-        touch_event.connect ((e) => {
-            if (e.type == Gdk.EventType.TOUCH_BEGIN) {
-                popover_manager.current_indicator = this;
-                return Gdk.EVENT_STOP;
-            }
-
-            return Gdk.EVENT_PROPAGATE;
-        });
-
-        button_press_event.connect ((e) => {
-            if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
-                && e.type == Gdk.EventType.BUTTON_PRESS) {
-                popover_manager.current_indicator = this;
-                return Gdk.EVENT_STOP;
-            }
-
-            /* Call button press on the indicator display widget */
-            display_widget.button_press_event (e);
-
-            return Gdk.EVENT_STOP;
         });
 
         set_reveal (base_indicator.visible);

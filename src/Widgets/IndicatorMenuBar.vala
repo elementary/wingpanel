@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
+public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.Box {
     private Gee.List<IndicatorEntry> sorted_items;
     private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
 
@@ -46,7 +46,8 @@ public class Wingpanel.Widgets.IndicatorMenuBar : Gtk.MenuBar {
             }
 
             if (item.get_parent () != this) {
-                this.insert (item, index);
+                add (item);
+                reorder_child (item, index);
             }
         }
     }
