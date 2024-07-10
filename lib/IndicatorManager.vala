@@ -143,6 +143,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
     }
 
     private void load (string path) {
+        warning ("LOAD: %s", path);
         if (!Module.supported ()) {
             error ("Wingpanel is not supported by this system!");
         }
@@ -172,6 +173,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
         void* function;
 
         if (!module.symbol ("get_indicator", out function)) {
+            warning ("SYMBOL NOT FOUND");
             return;
         }
 
@@ -186,9 +188,10 @@ public class Wingpanel.IndicatorManager : GLib.Object {
 
         if (indicator == null) {
             debug ("Unknown plugin type for %s or indicator is hidden on this server!", path);
-
+            warning ("INDICATOR IS NULL");
             return;
         }
+        warning ("REGISTER");
 
         module.make_resident ();
         register_indicator (path, indicator);
@@ -327,7 +330,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
      * @param indicator The indicator.
      */
     public void register_indicator (string path, Wingpanel.Indicator indicator) {
-        debug ("%s registered", indicator.code_name);
+        warning ("%s registered", indicator.code_name);
 
         var deregister_map = new Gee.HashMap<string, Wingpanel.Indicator> ();
         indicators.@foreach ((entry) => {
@@ -347,6 +350,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
         indicators.@set (path, indicator);
 
         indicator_added (indicator);
+        warning ("INDICATOR ADDED");
     }
 
     /**

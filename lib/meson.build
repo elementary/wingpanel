@@ -1,4 +1,4 @@
-indicators_dir = join_paths(get_option('prefix'), get_option('libdir'), 'wingpanel')
+indicators_dir = join_paths(get_option('prefix'), get_option('libdir'), 'wingpanel-4')
 
 config_vapi = meson.get_compiler('vala').find_library('config', dirs: meson.current_source_dir())
 
@@ -19,13 +19,11 @@ libwingpanel_deps = [
     gtk_dep,
 ]
 
-libwingpanel_lib = library('wingpanel',
+libwingpanel_lib = library('wingpanel-4',
     'Indicator.vala',
     'IndicatorManager.vala',
-    'Widgets/Container.vala',
-    'Widgets/OverlayIcon.vala',
-    'Widgets/Separator.vala',
-    'Widgets/Switch.vala',
+    # 'Widgets/Container.vala',
+    # 'Widgets/OverlayIcon.vala',
     config_header,
     dependencies: [libwingpanel_deps, config_vapi],
     vala_header: 'wingpanel.h',
@@ -37,7 +35,7 @@ libwingpanel_lib = library('wingpanel',
 pkg.generate(
     libwingpanel_lib,
     filebase: 'wingpanel',
-    name: 'Wingpanel',
+    name: 'Wingpanel-4',
     description: 'Wingpanel Indicators API',
     version: meson.project_version(),
     subdirs: 'wingpanel',
