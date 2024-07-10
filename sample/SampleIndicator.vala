@@ -50,6 +50,12 @@ public class Sample.Indicator : Wingpanel.Indicator {
         display_widget.set_child (main_image);
         display_widget.add_overlay (overlay_image);
 
+        var scroll = new Gtk.EventControllerScroll (NONE);
+        main_image.add_controller (scroll);
+        scroll.scroll.connect (() => {
+            warning ("SCROLL");
+        });
+
         var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
             margin_top = 3,
             margin_bottom = 3
