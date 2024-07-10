@@ -42,7 +42,6 @@ public class Wingpanel.Services.PopoverManager : Object {
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = null;
             } else if (_current_indicator.base_indicator.code_name == value.base_indicator.code_name) { // Close due to toggle
-                return;
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = null;
             } else { // Switch
@@ -119,29 +118,10 @@ public class Wingpanel.Services.PopoverManager : Object {
 
     public void register_indicator (Wingpanel.Widgets.IndicatorEntry? widg) {
         if (registered_indicators.has_key (widg.base_indicator.code_name)) {
-            warning ("HAS KEy: %s", widg.base_indicator.code_name);
             return;
         }
-        warning ("Register indicator: %s", widg.base_indicator.code_name);
+
         registered_indicators.set (widg.base_indicator.code_name, widg);
-
-        //  widg.enter_notify_event.connect ((w, e) => {
-        //      if (mousing) {
-        //          return Gdk.EVENT_PROPAGATE;
-        //      }
-
-        //      if (grabbed) {
-        //          if (!get_visible (widg) && e.mode != Gdk.CrossingMode.TOUCH_BEGIN) {
-        //              mousing = true;
-        //              current_indicator = widg;
-        //              mousing = false;
-        //          }
-
-        //          return Gdk.EVENT_STOP;
-        //      }
-
-        //      return Gdk.EVENT_PROPAGATE;
-        //  });
 
         widg.notify["visible"].connect (() => {
             if (mousing || grabbed) {

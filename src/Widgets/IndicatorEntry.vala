@@ -37,8 +37,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Box {
 
     private Gtk.Revealer revealer;
 
-    private Gtk.GestureClick gesture_press;
-
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
         Object (
             base_indicator: base_indicator,
@@ -91,19 +89,17 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Box {
             }
         });
 
-        gesture_press = new Gtk.GestureClick ();
+        var gesture_press = new Gtk.GestureClick ();
         gesture_press.pressed.connect ((n_press) => {
             popover_manager.current_indicator = this;
-            warning ("PRESS");
         });
         add_controller (gesture_press);
 
         var motion_controller = new Gtk.EventControllerMotion ();
         motion_controller.enter.connect (() => {
-            if (popover_manager.current_indicator != null) {
+            if (popover_manager.current_indicator != null && popover_manager.current_indicator != this) {
                 popover_manager.current_indicator = this;
             }
-            warning ("ENTER");
         });
         add_controller (motion_controller);
 
