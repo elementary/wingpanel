@@ -33,7 +33,7 @@ public class Wingpanel.Widgets.IndicatorPopover : Gtk.Popover {
             margin_bottom = 3
         };
 
-        add (container);
+        child = container;
     }
 
     public void set_content (Gtk.Widget? content) {
