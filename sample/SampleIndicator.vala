@@ -46,8 +46,9 @@ public class Sample.Indicator : Wingpanel.Indicator {
         };
 
         /* Create a new composited icon */
-        display_widget = new Gtk.Overlay ();
-        display_widget.add (main_image);
+        display_widget = new Gtk.Overlay () {
+            child = main_image
+        };
         display_widget.add_overlay (overlay_image);
 
         var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL) {
