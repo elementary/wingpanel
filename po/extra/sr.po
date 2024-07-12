@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 16:27+0000\n"
+"POT-Creation-Date: 2024-07-12 17:01+0000\n"
 "PO-Revision-Date: 2020-12-19 12:16+0000\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <https://l10n.elementary.io/projects/wingpanel/"
@@ -16,17 +16,59 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 3.9.1\n"
 
-#: data/wingpanel.desktop.in:3
+#: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
 msgstr "Вингпанел"
 
-#: data/wingpanel.desktop.in:4
+#: data/wingpanel.desktop.in:4 data/wingpanel.metainfo.xml.in:9
 msgid "Top panel that holds indicators and the applications menu"
 msgstr "Горњи панел који држи указиваче и изборник програма"
+
+#: data/wingpanel.metainfo.xml.in:11
+msgid ""
+"The extensible top panel for Pantheon. Wingpanel is an empty container that "
+"accepts indicators as extensions, including the applications menu."
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:33
+msgid "elementary, Inc."
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:53
+#: data/wingpanel.metainfo.xml.in:67 data/wingpanel.metainfo.xml.in:78
+#: data/wingpanel.metainfo.xml.in:88
+msgid "Improvements:"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:57
+#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:81
+#: data/wingpanel.metainfo.xml.in:90
+msgid "Updated translations"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:55
+msgid "Always use elementary visual resources"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:56
+msgid "Esc to close popovers"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:69
+msgid "Fallback to maximized style if window manager is unavailable"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:70
+msgid "Listen to smooth scoll events"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:80
+msgid "Fix startup delay on the greeter"
+msgstr ""
 
 #~ msgid "io.elementary.wingpanel"
 #~ msgstr "io.elementary.wingpanel"
