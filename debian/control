@@ -18,7 +18,8 @@ Homepage: https://github.com/elementary/wingpanel
 
 Package: io.elementary.wingpanel
 Architecture: any
-Depends: libwingpanel3 (= ${binary:Version}),
+Depends: gala (>= 8.0.0),
+         libwingpanel3 (= ${binary:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
 Replaces: wingpanel (<< 2.3.2)
