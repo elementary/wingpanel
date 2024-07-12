@@ -96,15 +96,7 @@
       </description>
     </release>
 
-    <release version="3.0.1" date="2021-09-27" urgency="medium">
-      <description>
-        <p>Improvements:</p>
-        <ul>
-          <li>Updated translations</li>
-        </ul>
-      </description>
-    </release>
-
+    <release version="3.0.1" date="2021-09-27" />
     <release version="3.0.0" date="2021-07-13" />
     <release version="2.3.2" date="2020-06-19" />
     <release version="2.3.1" date="2020-04-05" />
