@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2015–2021 elementary, Inc. <contact@elementary.io> -->
+<component>
+  <id>io.elementary.wingpanel</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+
+  <name>Wingpanel</name>
+  <summary>Top panel that holds indicators and the applications menu</summary>
+  <description>
+    <p>The extensible top panel for Pantheon. Wingpanel is an empty container that accepts indicators as extensions, including the applications menu.</p>
+  </description>
+  <compulsory_for_desktop>Pantheon</compulsory_for_desktop>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/elementary/wingpanel/3.0.5/data/screenshot.png</image>
+    </screenshot>
+  </screenshots>
+
+  <provides>
+    <binary>io.elementary.wingpanel</binary>
+  </provides>
+
+
+  <url type="homepage">https://elementary.io/</url>
+  <url type="bugtracker">https://github.com/elementary/wingpanel/issues</url>
+  <url type="donation">https://elementary.io/get-involved#funding</url>
+  <url type="help">https://elementaryos.stackexchange.com/questions/tagged/wingpanel</url>
+  <url type="translate">https://l10n.elementary.io/projects/wingpanel</url>
+
+  <developer id="org.elementaryos">
+    <name>elementary, Inc.</name>
+  </developer>
+  <project_group>elementary</project_group>
+  <update_contact>contact_AT_elementary.io</update_contact>
+
+  <releases>
+    <release version="3.0.5" date="2023-09-13" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+      <issues>
+        <issue url="https://github.com/elementary/wingpanel/issues/502">The WiFi indicator keeps moving over to the left side next to the calendar and time</issue>
+      </issues>
+    </release>
+
+    <release version="3.0.4" date="2023-08-28" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Always use elementary visual resources</li>
+          <li>Esc to close popovers</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+      <issues>
+        <issue url="https://github.com/elementary/wingpanel/issues/106">Indicators re-animate when an icon is removed</issue>
+      </issues>
+    </release>
+
+    <release version="3.0.3" date="2022-10-17" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Fallback to maximized style if window manager is unavailable</li>
+          <li>Listen to smooth scoll events</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+
+    <release version="3.0.2" date="2021-12-18" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Fix startup delay on the greeter</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+
+    <release version="3.0.1" date="2021-09-27" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+
+    <release version="3.0.0" date="2021-07-13" />
+    <release version="2.3.2" date="2020-06-19" />
+    <release version="2.3.1" date="2020-04-05" />
+    <release version="2.3.0" date="2020-03-02" />
+    <release version="2.2.6" date="2019-10-31" />
+  </releases>
+</component>
