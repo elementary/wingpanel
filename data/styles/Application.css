@@ -36,27 +36,18 @@ panel.translucent.color-light > box {
         0 1px 1px alpha(black, 0.1);
 }
 
-panel menubar {
-    background: transparent;
-    box-shadow: none;
-    border: none;
-}
-
 .composited-indicator {
-    padding: 0 6px;
-}
-
-.composited-indicator > revealer {
     color: white;
     font-weight: bold;
+    padding: 0 6px;
     text-shadow:
         0 0 2px alpha(black, 0.3),
         0 1px 2px alpha(black, 0.6);
     transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.composited-indicator > revealer image,
-.composited-indicator > revealer spinner {
+.composited-indicator image,
+.composited-indicator spinner {
     -gtk-icon-shadow:
         0 0 2px alpha(black, 0.3),
         0 1px 2px alpha(black, 0.6);
@@ -66,15 +57,15 @@ panel menubar {
         warning mix(@BANANA_300, @BANANA_500, 0.5);
 }
 
-.color-light .composited-indicator > revealer {
+.color-light .composited-indicator {
     color: alpha(black, 0.65);
     text-shadow:
         0 0 2px alpha(white, 0.3),
         0 1px 0 alpha(white, 0.25);
 }
 
-.color-light .composited-indicator > revealer image,
-.color-light .composited-indicator > revealer spinner {
+.color-light .composited-indicator image,
+.color-light .composited-indicator spinner {
     -gtk-icon-shadow:
         0 0 2px alpha(white, 0.3),
         0 1px 0 alpha(white, 0.25);
@@ -84,24 +75,24 @@ panel menubar {
         warning mix(@BANANA_700, @BANANA_900, 0.5);
 }
 
-.translucent.color-dark .composited-indicator > revealer {
+.translucent.color-dark .composited-indicator {
     text-shadow:
         0 0 2px alpha(black, 0.15),
         0 1px 2px alpha(black, 0.3);
 }
 
-.translucent.color-dark .composited-indicator > revealer image,
-.translucent.color-dark .composited-indicator > revealer spinner {
+.translucent.color-dark .composited-indicator image,
+.translucent.color-dark .composited-indicator spinner {
     -gtk-icon-shadow:
         0 0 2px alpha(black, 0.15),
         0 1px 2px alpha(black, 0.3);
 }
 
-.translucent.color-light .composited-indicator > revealer {
+.translucent.color-light .composited-indicator {
     text-shadow: none;
 }
 
-.translucent.color-light .composited-indicator > revealer image,
-.translucent.color-light .composited-indicator > revealer spinner {
+.translucent.color-light .composited-indicator image,
+.translucent.color-light .composited-indicator spinner {
     -gtk-icon-shadow: none;
 }

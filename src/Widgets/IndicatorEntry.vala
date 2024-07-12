@@ -49,13 +49,13 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
         display_widget = base_indicator.get_display_widget ();
         halign = Gtk.Align.START;
         name = base_indicator.code_name + "/entry";
-        get_style_context ().add_class ("composited-indicator");
 
         if (display_widget == null) {
             return;
         }
 
         revealer = new Gtk.Revealer ();
+        revealer.get_style_context ().add_class ("composited-indicator");
         revealer.add (display_widget);
 
         add (revealer);

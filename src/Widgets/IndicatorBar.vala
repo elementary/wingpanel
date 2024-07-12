@@ -23,8 +23,6 @@ public class Wingpanel.Widgets.IndicatorBar : Gtk.Box {
 
     construct {
         sorted_items = new Gee.ArrayList<IndicatorEntry> ();
-
-        spacing = 6;
     }
 
     public void insert_sorted (IndicatorEntry item) {
