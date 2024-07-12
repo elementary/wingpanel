@@ -1,5 +1,5 @@
-lib/Indicator.vala
 lib/IndicatorManager.vala
+lib/Indicator.vala
 lib/Widgets/Container.vala
 lib/Widgets/OverlayIcon.vala
 lib/Widgets/Separator.vala
@@ -9,7 +9,7 @@ src/PanelWindow.vala
 src/Services/BackgroundManager.vala
 src/Services/IndicatorSorter.vala
 src/Services/PopoverManager.vala
+src/Widgets/IndicatorBar.vala
 src/Widgets/IndicatorEntry.vala
-src/Widgets/IndicatorMenuBar.vala
 src/Widgets/IndicatorPopover.vala
 src/Widgets/Panel.vala
