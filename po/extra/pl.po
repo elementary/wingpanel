@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-12 17:01+0000\n"
-"PO-Revision-Date: 2024-07-21 09:16+0000\n"
+"PO-Revision-Date: 2024-07-22 13:16+0000\n"
 "Last-Translator: Marcin Serwin <marcin.serwin0@protonmail.com>\n"
 "Language-Team: Polish <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/pl/>\n"
@@ -33,6 +33,8 @@ msgid ""
 "The extensible top panel for Pantheon. Wingpanel is an empty container that "
 "accepts indicators as extensions, including the applications menu."
 msgstr ""
+"Rozszerzalny panel górny dla Pantheonu. Wingpanel jest pustym kontenerem "
+"który akceptuje indykatory jako rozszerzenia, włączająć w to menu aplikacji."
 
 #: data/wingpanel.metainfo.xml.in:33
 msgid "elementary, Inc."
@@ -42,30 +44,31 @@ msgstr "elementary, Inc."
 #: data/wingpanel.metainfo.xml.in:67 data/wingpanel.metainfo.xml.in:78
 #: data/wingpanel.metainfo.xml.in:88
 msgid "Improvements:"
-msgstr ""
+msgstr "Ulepszenia:"
 
 #: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:57
 #: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:81
 #: data/wingpanel.metainfo.xml.in:90
 msgid "Updated translations"
-msgstr ""
+msgstr "Zaktualizowano tłumaczenia"
 
 #: data/wingpanel.metainfo.xml.in:55
 msgid "Always use elementary visual resources"
-msgstr ""
+msgstr "Zawsze używane są zasoby wizualne elementary"
 
 #: data/wingpanel.metainfo.xml.in:56
 msgid "Esc to close popovers"
-msgstr ""
+msgstr "Naciśnij Esc aby zamknąć dymki"
 
 #: data/wingpanel.metainfo.xml.in:69
 msgid "Fallback to maximized style if window manager is unavailable"
 msgstr ""
+"Przechodzenie w tryb zmaksymalizowany gdy menadżer okien jest niedostępny"
 
 #: data/wingpanel.metainfo.xml.in:70
 msgid "Listen to smooth scoll events"
-msgstr ""
+msgstr "Nasłuchiwanie wydarzeń gładkiego przewijania"
 
 #: data/wingpanel.metainfo.xml.in:80
 msgid "Fix startup delay on the greeter"
-msgstr ""
+msgstr "Naprawiono opóźnienie startu przy powitaniu"
