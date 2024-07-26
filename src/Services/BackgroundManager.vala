@@ -27,41 +27,39 @@ namespace Wingpanel.Services {
     }
 
     [DBus (name = "org.pantheon.gala.WingpanelInterface")]
-    public interface InterfaceBus : Object {
-        public signal void state_changed (BackgroundState state, uint animation_duration);
-
-        public abstract void initialize (int monitor, int panel_height) throws GLib.Error;
+    public interface WingpanelInterfaceBus : Object {
+        public abstract void initialize () throws GLib.Error;
         public abstract void remember_focused_window () throws GLib.Error;
         public abstract void restore_focused_window () throws GLib.Error;
         public abstract bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws GLib.Error;
     }
 
+    [DBus (name = "io.elementary.gala.BackgroundStateManager")]
+    public interface BackgroundStateManagerBus : Object {
+        public signal void state_changed (BackgroundState state, uint animation_duration);
+
+        public abstract void initialize (int panel_height) throws GLib.Error;
+    }
+
     public class BackgroundManager : Object {
-        private const string DBUS_NAME = "org.pantheon.gala.WingpanelInterface";
-        private const string DBUS_PATH = "/org/pantheon/gala/WingpanelInterface";
+        private const string WINGPANEL_INTERFACE_DBUS_NAME = "org.pantheon.gala.WingpanelInterface";
+        private const string WINGPANEL_INTERFACE_DBUS_PATH = "/org/pantheon/gala/WingpanelInterface";
+        private const string BG_STATE_MANAGER_DBUS_NAME = "io.elementary.gala.BackgroundStateManager";
+        private const string BG_STATE_MANAGER_DBUS_PATH = "/io/elementary/gala/BackgroundStateManager";
 
         private static BackgroundManager? instance = null;
+        private static int panel_height;
 
-        private InterfaceBus? bus = null;
+        private WingpanelInterfaceBus? wingpanel_interface = null;
+        private BackgroundStateManagerBus? bg_state_manager = null;
 
         private BackgroundState current_state = BackgroundState.LIGHT;
         private bool use_transparency = true;
 
-        private bool bus_available {
-            get {
-                return bus != null;
-            }
-        }
-
-        private int monitor;
-        private int panel_height;
-
         public signal void background_state_changed (BackgroundState state, uint animation_duration);
 
-        public static void initialize (int monitor, int panel_height) {
-            var manager = BackgroundManager.get_default ();
-            manager.monitor = monitor;
-            manager.panel_height = panel_height;
+        public static void initialize (int panel_height) {
+            BackgroundManager.panel_height = panel_height;
         }
 
         private BackgroundManager () {
@@ -74,43 +72,56 @@ namespace Wingpanel.Services {
 
             use_transparency = panel_settings.get_boolean ("use-transparency");
 
-            Bus.watch_name (BusType.SESSION, DBUS_NAME, BusNameWatcherFlags.NONE,
-                () => connect_dbus (),
+            Bus.watch_name (BusType.SESSION, WINGPANEL_INTERFACE_DBUS_NAME, BusNameWatcherFlags.NONE,
+                connect_wingpanel_interface,
                 () => {
-                    bus = null;
+                    wingpanel_interface = null;
+                }
+            );
+
+            Bus.watch_name (BusType.SESSION, BG_STATE_MANAGER_DBUS_NAME, BusNameWatcherFlags.NONE,
+                connect_bg_state_manager,
+                () => {
+                    bg_state_manager = null;
                     // If the Gala bus is unavailable or vanishes, fall back to maximized style,
                     // as this is most visible on all backgrounds
                     background_state_changed (BackgroundState.MAXIMIZED, 0);
-                });
+                }
+            );
+
         }
 
         public void remember_window () {
-            if (!bus_available) {
+            if (wingpanel_interface == null) {
                 return;
             }
 
             try {
-                bus.remember_focused_window ();
+                wingpanel_interface.remember_focused_window ();
             } catch (Error e) {
                 warning ("Remembering focused window failed: %s", e.message);
             }
         }
 
         public void restore_window () {
-            if (!bus_available) {
+            if (wingpanel_interface == null) {
                 return;
             }
 
             try {
-                bus.restore_focused_window ();
+                wingpanel_interface.restore_focused_window ();
             } catch (Error e) {
                 warning ("Restoring last focused window failed: %s", e.message);
             }
         }
 
         public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
+            if (wingpanel_interface == null) {
+                return false;
+            }
+
             try {
-                return bus.begin_grab_focused_window (x, y, button, time, state);
+                return wingpanel_interface.begin_grab_focused_window (x, y, button, time, state);
             } catch (Error e) {
                 warning ("Grabbing focused window failed: %s", e.message);
             }
@@ -118,22 +129,38 @@ namespace Wingpanel.Services {
             return false;
         }
 
-        private bool connect_dbus () {
+        private void connect_wingpanel_interface () {
             try {
-                bus = Bus.get_proxy_sync (BusType.SESSION, DBUS_NAME, DBUS_PATH);
-                bus.initialize (monitor, panel_height);
+                wingpanel_interface = Bus.get_proxy_sync (
+                    BusType.SESSION,
+                    WINGPANEL_INTERFACE_DBUS_NAME,
+                    WINGPANEL_INTERFACE_DBUS_PATH
+                );
+                wingpanel_interface.initialize ();
             } catch (Error e) {
-                warning ("Connecting to \"%s\" failed: %s", DBUS_NAME, e.message);
-                return false;
+                warning ("Connecting to \"%s\" failed: %s", WINGPANEL_INTERFACE_DBUS_NAME, e.message);
+            }
+        }
+
+        private void connect_bg_state_manager () {
+            try {
+                bg_state_manager = Bus.get_proxy_sync (
+                    BusType.SESSION,
+                    BG_STATE_MANAGER_DBUS_NAME,
+                    BG_STATE_MANAGER_DBUS_PATH
+                );
+                bg_state_manager.initialize (panel_height);
+            } catch (Error e) {
+                warning ("Connecting to \"%s\" failed: %s", BG_STATE_MANAGER_DBUS_NAME, e.message);
+                return;
             }
 
-            bus.state_changed.connect ((state, animation_duration) => {
+            bg_state_manager.state_changed.connect ((state, animation_duration) => {
                 current_state = state;
                 state_updated (animation_duration);
             });
 
             state_updated ();
-            return true;
         }
 
         private void state_updated (uint animation_duration = 0) {

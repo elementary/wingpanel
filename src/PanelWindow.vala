@@ -107,7 +107,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             revealer.reveal_child = false;
         }
         update_panel_dimensions ();
-        Services.BackgroundManager.initialize (this.monitor_number, panel_height);
+        Services.BackgroundManager.initialize (panel_height);
         revealer.transition_type = SLIDE_DOWN;
         revealer.reveal_child = true;
 

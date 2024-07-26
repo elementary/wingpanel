@@ -19,17 +19,9 @@
 
 [DBus (name = "org.pantheon.gala.WingpanelInterface")]
 public class WingpanelInterface.DBusServer : Object {
-    private BackgroundManager background_manager;
     private FocusManager focus_manager;
 
-    public signal void state_changed (BackgroundState state, uint animation_duration);
-
-    public void initialize (int monitor, int panel_height) throws GLib.Error {
-        background_manager = new BackgroundManager (monitor, panel_height);
-        background_manager.state_changed.connect ((state, animation_duration) => {
-            state_changed (state, animation_duration);
-        });
-
+    public void initialize () throws GLib.Error {
         focus_manager = new FocusManager ();
     }
 
