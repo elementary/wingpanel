@@ -36,6 +36,19 @@
   <update_contact>contact_AT_elementary.io</update_contact>
 
   <releases>
+    <release version="8.0.0" date="2024-07-12" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+      <issues>
+        <issue url="https://github.com/elementary/wingpanel/issues/408">Wingpanel has top gap when apps are snapped to left-half/right-half</issue>
+        <issue url="https://github.com/elementary/wingpanel/issues/515">wayland: Opening multitasking view breaks gala</issue>
+      </issues>
+    </release>
+
     <release version="3.0.5" date="2023-09-13" urgency="medium">
       <description>
         <p>Improvements:</p>
@@ -83,15 +96,7 @@
       </description>
     </release>
 
-    <release version="3.0.1" date="2021-09-27" urgency="medium">
-      <description>
-        <p>Improvements:</p>
-        <ul>
-          <li>Updated translations</li>
-        </ul>
-      </description>
-    </release>
-
+    <release version="3.0.1" date="2021-09-27" />
     <release version="3.0.0" date="2021-07-13" />
     <release version="2.3.2" date="2020-06-19" />
     <release version="2.3.1" date="2020-04-05" />
