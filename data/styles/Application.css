@@ -57,6 +57,17 @@ panel.translucent.color-light > box {
         warning mix(@BANANA_300, @BANANA_500, 0.5);
 }
 
+/*FIXME: Replace with border-spacing in GTK4*/
+.composited-indicator image + label,
+.composited-indicator image + revealer {
+    padding-left: 0.5em;
+}
+
+.composited-indicator:dir(rtl) image + label,
+.composited-indicator:dir(rtl) image + revealer {
+    padding-right: 0.5em;
+}
+
 .color-light .composited-indicator {
     color: alpha(black, 0.65);
     text-shadow:
