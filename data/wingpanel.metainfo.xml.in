@@ -46,6 +46,7 @@
       <issues>
         <issue url="https://github.com/elementary/wingpanel/issues/408">Wingpanel has top gap when apps are snapped to left-half/right-half</issue>
         <issue url="https://github.com/elementary/wingpanel/issues/515">wayland: Opening multitasking view breaks gala</issue>
+        <issue url="https://github.com/elementary/wingpanel/issues/550">Text padding is gone</issue>
       </issues>
     </release>
 
