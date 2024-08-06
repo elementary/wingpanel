@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 16:27+0000\n"
-"PO-Revision-Date: 2019-10-30 23:23+0000\n"
+"POT-Creation-Date: 2024-07-12 17:01+0000\n"
+"PO-Revision-Date: 2024-07-13 19:16+0000\n"
 "Last-Translator: David M <rbndavid@gmail.com>\n"
 "Language-Team: Catalan <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/ca/>\n"
@@ -17,15 +17,60 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.7.1\n"
+"X-Generator: Weblate 5.6.2\n"
 
-#: data/wingpanel.desktop.in:3
+#: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
 msgstr "Wingpanel"
 
-#: data/wingpanel.desktop.in:4
+#: data/wingpanel.desktop.in:4 data/wingpanel.metainfo.xml.in:9
 msgid "Top panel that holds indicators and the applications menu"
 msgstr "Plafó superior que conté indicadors i el menú d'aplicacions"
+
+#: data/wingpanel.metainfo.xml.in:11
+msgid ""
+"The extensible top panel for Pantheon. Wingpanel is an empty container that "
+"accepts indicators as extensions, including the applications menu."
+msgstr ""
+"El plafó superior extensible per al Pantheon. Wingpanel és un contenidor "
+"buit que accepta indicadors com a extensions, inclòs el menú d'aplicacions."
+
+#: data/wingpanel.metainfo.xml.in:33
+msgid "elementary, Inc."
+msgstr "elementary, Inc."
+
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:53
+#: data/wingpanel.metainfo.xml.in:67 data/wingpanel.metainfo.xml.in:78
+#: data/wingpanel.metainfo.xml.in:88
+msgid "Improvements:"
+msgstr "Millores:"
+
+#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:57
+#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:81
+#: data/wingpanel.metainfo.xml.in:90
+msgid "Updated translations"
+msgstr "Traduccions actualitzades"
+
+#: data/wingpanel.metainfo.xml.in:55
+msgid "Always use elementary visual resources"
+msgstr "Ús sempre de recursos visuals d'elementary"
+
+#: data/wingpanel.metainfo.xml.in:56
+msgid "Esc to close popovers"
+msgstr "Esc per tancar diàlegs emergents"
+
+#: data/wingpanel.metainfo.xml.in:69
+msgid "Fallback to maximized style if window manager is unavailable"
+msgstr ""
+"Torna a l'estil maximitzat si el gestor de finestres no està disponible."
+
+#: data/wingpanel.metainfo.xml.in:70
+msgid "Listen to smooth scoll events"
+msgstr "Escolteu els esdeveniments de desplaçament suau."
+
+#: data/wingpanel.metainfo.xml.in:80
+msgid "Fix startup delay on the greeter"
+msgstr "Correcció del retard d'inici del missatge de benvinguda"
 
 #~ msgid "io.elementary.wingpanel"
 #~ msgstr "io.elementary.wingpanel"

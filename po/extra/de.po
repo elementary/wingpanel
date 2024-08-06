@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 16:27+0000\n"
+"POT-Creation-Date: 2024-07-12 17:01+0000\n"
 "PO-Revision-Date: 2021-07-21 03:37+0000\n"
 "Last-Translator: supaeasy <ismo+github@wolffson.ch>\n"
 "Language-Team: German <https://l10n.elementary.io/projects/wingpanel/"
@@ -19,10 +19,52 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.4.2\n"
 
-#: data/wingpanel.desktop.in:3
+#: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
 msgstr "Wingpanel"
 
-#: data/wingpanel.desktop.in:4
+#: data/wingpanel.desktop.in:4 data/wingpanel.metainfo.xml.in:9
 msgid "Top panel that holds indicators and the applications menu"
 msgstr "Oberes Panel, das die Anzeigen und das Anwendungsmenü enthält"
+
+#: data/wingpanel.metainfo.xml.in:11
+msgid ""
+"The extensible top panel for Pantheon. Wingpanel is an empty container that "
+"accepts indicators as extensions, including the applications menu."
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:33
+msgid "elementary, Inc."
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:53
+#: data/wingpanel.metainfo.xml.in:67 data/wingpanel.metainfo.xml.in:78
+#: data/wingpanel.metainfo.xml.in:88
+msgid "Improvements:"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:57
+#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:81
+#: data/wingpanel.metainfo.xml.in:90
+msgid "Updated translations"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:55
+msgid "Always use elementary visual resources"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:56
+msgid "Esc to close popovers"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:69
+msgid "Fallback to maximized style if window manager is unavailable"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:70
+msgid "Listen to smooth scoll events"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:80
+msgid "Fix startup delay on the greeter"
+msgstr ""
