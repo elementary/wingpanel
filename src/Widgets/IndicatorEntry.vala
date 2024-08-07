@@ -37,6 +37,9 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
 
     private Gtk.Revealer revealer;
 
+    private Gtk.GestureMultiPress gesture_controller;
+    private Gtk.EventControllerMotion motion_controller;
+
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
         Object (
             base_indicator: base_indicator,
@@ -54,9 +57,10 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
             return;
         }
 
-        revealer = new Gtk.Revealer ();
+        revealer = new Gtk.Revealer () {
+            child = display_widget
+        };
         revealer.get_style_context ().add_class ("composited-indicator");
-        revealer.add (display_widget);
 
         add (revealer);
 
@@ -97,26 +101,20 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
             return Gdk.EVENT_PROPAGATE;
         });
 
-        touch_event.connect ((e) => {
-            if (e.type == Gdk.EventType.TOUCH_BEGIN) {
+        button_press_event.connect ((e) => display_widget.button_press_event (e));
+
+        gesture_controller = new Gtk.GestureMultiPress (this);
+        gesture_controller.pressed.connect (() => popover_manager.current_indicator = this);
+
+        motion_controller = new Gtk.EventControllerMotion (this) {
+            propagation_phase = CAPTURE
+        };
+
+        motion_controller.enter.connect (() => {
+            // If something is open and it's not us, open us. This implements the scrubbing behavior
+            if (popover_manager.current_indicator != null && !popover_manager.get_visible (this)) {
                 popover_manager.current_indicator = this;
-                return Gdk.EVENT_STOP;
             }
-
-            return Gdk.EVENT_PROPAGATE;
-        });
-
-        button_press_event.connect ((e) => {
-            if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
-                && e.type == Gdk.EventType.BUTTON_PRESS) {
-                popover_manager.current_indicator = this;
-                return Gdk.EVENT_STOP;
-            }
-
-            /* Call button press on the indicator display widget */
-            display_widget.button_press_event (e);
-
-            return Gdk.EVENT_STOP;
         });
 
         set_reveal (base_indicator.visible);

@@ -73,42 +73,6 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
     }
 
-    public override bool button_press_event (Gdk.EventButton event) {
-        if (Utils.is_wayland ()) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
-        if (event.button != Gdk.BUTTON_PRIMARY) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
-        var window = get_window ();
-        if (window == null) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
-        // Grabbing with touchscreen on X does not work unfortunately
-        if (event.device.get_source () == Gdk.InputSource.TOUCHSCREEN) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
-        uint32 time = event.time;
-
-        window.get_display ().get_default_seat ().ungrab ();
-
-        Gdk.ModifierType state;
-        event.get_state (out state);
-
-        popover_manager.close ();
-
-        var scale_factor = this.get_scale_factor ();
-        var x = (int)event.x_root * scale_factor;
-        var y = (int)event.y_root * scale_factor;
-
-        var background_manager = Services.BackgroundManager.get_default ();
-        return background_manager.begin_grab_focused_window (x, y, (int)event.button, time, state);
-    }
-
     public void cycle (bool forward) {
         var current = popover_manager.current_indicator;
         if (current == null) {
