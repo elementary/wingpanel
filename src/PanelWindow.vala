@@ -108,9 +108,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private void update_panel_dimensions () {
         panel_height = panel.get_allocated_height ();
 
-        Gdk.Rectangle monitor_dimensions;
         // We just use our monitor because Gala makes sure we are always on the primary one
-        monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
+        var monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
         monitor_dimensions.width /= get_scale_factor ();
         monitor_dimensions.height /= get_scale_factor ();
         monitor_dimensions.x /= get_scale_factor ();
