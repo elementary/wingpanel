@@ -46,12 +46,14 @@ namespace WingpanelInterface.Utils {
         double mean_acutance;
     }
 
-    public async ColorInformation get_background_color_information (Gala.WindowManager wm, int monitor,
-                                                                    int reference_x, int reference_y, int reference_width, int reference_height) throws DBusError {
-        var bg_manager = (Gala.BackgroundManagerInterface) wm.background_group.get_child_at_index (monitor);
+    public async ColorInformation get_background_color_information (Gala.WindowManager wm, int panel_height) throws DBusError {
+        var primary = Main.display.get_primary_monitor ();
+        var geometry = Main.display.get_monitor_geometry (primary);
+
+        var bg_manager = (Gala.BackgroundManagerInterface) wm.background_group.get_child_at_index (primary);
 
         if (bg_manager == null) {
-            throw new DBusError.INVALID_ARGS ("Invalid monitor requested: %i".printf (monitor));
+            throw new DBusError.INVALID_ARGS ("Couldn't get BackgroundManagerInterface on monitor %i".printf (primary));
         }
 
         var effect = new DummyOffscreenEffect ();
@@ -66,25 +68,18 @@ namespace WingpanelInterface.Utils {
         // black border. The commit specifies that up to 1.75px around each side
         // could now be padding, so cut off 2px from left and top if necessary
         // (https://gitlab.gnome.org/GNOME/mutter/commit/8655bc5d8de6a969e0ca83eff8e450f62d28fbee)
-        int x_start = reference_x;
-        if (x_start < 2) {
-            x_start = 2;
-        }
-
-        int y_start = reference_y;
-        if (y_start < 2) {
-            y_start = 2;
-        }
+        int x_start = 2;
+        int y_start = 2;
 
         // For the same reason as above, we need to not use the bottom and right
         // 2px of the texture. However, if the caller has specified an area of
         // interest that already misses these parts, use that instead, otherwise
         // chop 2px
-        int width = int.min (bg_actor_width - 2 - reference_x, reference_width);
-        int height = int.min (bg_actor_height - 2 - reference_y, reference_height);
+        int width = int.min (bg_actor_width - 2, geometry.width);
+        int height = int.min (bg_actor_height - 2, panel_height);
 
         if (x_start > bg_actor_width || y_start > bg_actor_height || width <= 0 || height <= 0) {
-            throw new DBusError.INVALID_ARGS ("Invalid rectangle specified: %i, %i, %i, %i".printf (x_start, y_start, width, height));
+            throw new DBusError.INVALID_ARGS ("Got invalid rectangle: %i, %i, %i, %i".printf (x_start, y_start, width, height));
         }
 
         double mean_acutance = 0, variance = 0, mean = 0, r_total = 0, g_total = 0, b_total = 0;

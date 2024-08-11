@@ -24,8 +24,8 @@ public class WingpanelInterface.DBusServer : Object {
 
     public signal void state_changed (BackgroundState state, uint animation_duration);
 
-    public void initialize (int monitor, int panel_height) throws GLib.Error {
-        background_manager = new BackgroundManager (monitor, panel_height);
+    public void initialize (int panel_height) throws GLib.Error {
+        background_manager = new BackgroundManager (panel_height);
         background_manager.state_changed.connect ((state, animation_duration) => {
             state_changed (state, animation_duration);
         });
