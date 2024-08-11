@@ -24,7 +24,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private Gtk.EventControllerKey key_controller; // For keeping in memory
     private Gtk.GestureMultiPress gesture_controller; // For keeping in memory
     private Gtk.Revealer revealer;
-    private int monitor_number;
     private int monitor_width;
     private int monitor_height;
     private int panel_height;
@@ -43,8 +42,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             skip_taskbar_hint: true,
             vexpand: false
         );
-
-        monitor_number = screen.get_primary_monitor ();
 
         var app_provider = new Gtk.CssProvider ();
         app_provider.load_from_resource ("io/elementary/wingpanel/Application.css");
@@ -98,7 +95,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private void on_realize () {
         update_panel_dimensions ();
-        Services.BackgroundManager.initialize (this.monitor_number, panel_height);
+        Services.BackgroundManager.initialize (panel_height);
 
         if (Utils.is_wayland ()) {
             // We have to wrap in Idle otherwise the Meta.Window of the WaylandSurface in Gala is still null
@@ -111,18 +108,12 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private void update_panel_dimensions () {
         panel_height = panel.get_allocated_height ();
 
-        monitor_number = screen.get_primary_monitor ();
-        Gdk.Rectangle monitor_dimensions;
-        if (Utils.is_wayland ()) {
-            // We just use our monitor because Gala makes sure we are always on the primary one
-            monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
-            monitor_dimensions.width /= get_scale_factor ();
-            monitor_dimensions.height /= get_scale_factor ();
-            monitor_dimensions.x /= get_scale_factor ();
-            monitor_dimensions.y /= get_scale_factor ();
-        } else {
-            monitor_dimensions = get_display ().get_primary_monitor ().get_geometry ();
-        }
+        // We just use our monitor because Gala makes sure we are always on the primary one
+        var monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
+        monitor_dimensions.width /= get_scale_factor ();
+        monitor_dimensions.height /= get_scale_factor ();
+        monitor_dimensions.x /= get_scale_factor ();
+        monitor_dimensions.y /= get_scale_factor ();
 
         monitor_width = monitor_dimensions.width;
         monitor_height = monitor_dimensions.height;

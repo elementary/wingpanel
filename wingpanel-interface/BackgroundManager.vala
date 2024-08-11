@@ -36,7 +36,6 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     public signal void state_changed (BackgroundState state, uint animation_duration);
 
-    public int monitor { private get; construct; }
     public int panel_height { private get; construct; }
 
     private ulong wallpaper_hook_id;
@@ -47,8 +46,8 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     private Utils.ColorInformation? bk_color_info = null;
 
-    public BackgroundManager (int monitor, int panel_height) {
-        Object (monitor : monitor, panel_height: panel_height);
+    public BackgroundManager (int panel_height) {
+        Object (panel_height: panel_height);
 
         connect_signals ();
         update_bk_color_info.begin ((obj, res) => {
@@ -140,9 +139,7 @@ public class WingpanelInterface.BackgroundManager : Object {
     public async void update_bk_color_info () {
         SourceFunc callback = update_bk_color_info.callback;
 
-        var monitor_geometry = Main.display.get_monitor_geometry (monitor);
-
-        Utils.get_background_color_information.begin (Main.wm, monitor, 0, 0, monitor_geometry.width, panel_height, (obj, res) => {
+        Utils.get_background_color_information.begin (Main.wm, panel_height, (obj, res) => {
             try {
                 bk_color_info = Utils.get_background_color_information.end (res);
             } catch (Error e) {
