@@ -19,6 +19,6 @@
 
 namespace Wingpanel.Utils {
     public static bool is_wayland () {
-        return !(Gdk.Display.get_default () is Gdk.X11.Display);
+        return Gdk.Display.get_default () is Gdk.Wayland.Display;
     }
 }

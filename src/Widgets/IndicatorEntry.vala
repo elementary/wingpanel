@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
+public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
-    public IndicatorMenuBar? menu_bar;
+    public IndicatorBar? indicator_bar;
     public Gtk.Widget display_widget { get; private set; }
 
     private Gtk.Widget _indicator_widget = null;
@@ -49,13 +49,13 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         display_widget = base_indicator.get_display_widget ();
         halign = Gtk.Align.START;
         name = base_indicator.code_name + "/entry";
-        get_style_context ().add_class ("composited-indicator");
 
         if (display_widget == null) {
             return;
         }
 
         revealer = new Gtk.Revealer ();
+        revealer.get_style_context ().add_class ("composited-indicator");
         revealer.add (display_widget);
 
         add (revealer);
@@ -69,13 +69,13 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         });
 
         base_indicator.notify["visible"].connect (() => {
-            if (menu_bar != null) {
+            if (indicator_bar != null) {
                 /* order will be changed so close all open popovers */
                 popover_manager.close ();
 
                 if (base_indicator.visible) {
                     popover_manager.register_indicator (this);
-                    menu_bar.insert_sorted (this);
+                    indicator_bar.insert_sorted (this);
                     set_reveal (base_indicator.visible);
                 } else {
                     set_reveal (base_indicator.visible);
@@ -124,7 +124,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
     private void indicator_unmapped () {
         base_indicator.get_display_widget ().unmap.disconnect (indicator_unmapped);
-        menu_bar.remove (this);
+        indicator_bar.remove (this);
     }
 
     public void set_transition_type (Gtk.RevealerTransitionType transition_type) {
