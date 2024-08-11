@@ -17,6 +17,7 @@ wingpanel_deps = [
     granite_dep,
     gdk_wl_dep,
     gdk_x11_dep,
+    x11_dep,
     posix_dep,
     wl_client_dep,
     pantheon_desktop_shell_dep
