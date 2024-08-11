@@ -176,7 +176,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         if (display is Gdk.X11.Display) {
             unowned var xdisplay = ((Gdk.X11.Display) display).get_xdisplay ();
 
-            var window  = ((Gdk.X11.Window) get_window ()).get_xid ();
+            var window = ((Gdk.X11.Window) get_window ()).get_xid ();
 
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
