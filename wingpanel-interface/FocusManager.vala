@@ -116,8 +116,9 @@ public class WingpanelInterface.FocusManager : Object {
         if (window != null) {
 
 #if HAS_MUTTER46
-            Graphene.Point pos_hint = {x, y};
-            window.begin_grab_op (Meta.GrabOp.MOVING, null, null, time, pos_hint);
+            Graphene.Point pos_hint = { x, y };
+            var device = Clutter.get_default_backend ().get_default_seat ().get_pointer ();
+            window.begin_grab_op (Meta.GrabOp.MOVING, device, null, time, pos_hint);
 #elif HAS_MUTTER44
             window.begin_grab_op (Meta.GrabOp.MOVING, null, null, time);
 #else

@@ -74,10 +74,6 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     }
 
     public override bool button_press_event (Gdk.EventButton event) {
-        if (Utils.is_wayland ()) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
         if (event.button != Gdk.BUTTON_PRIMARY) {
             return Gdk.EVENT_PROPAGATE;
         }
