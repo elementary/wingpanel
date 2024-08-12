@@ -33,8 +33,8 @@ public class WingpanelInterface.DBusServer : Object {
         focus_manager = new FocusManager ();
     }
 
-    public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws GLib.Error {
-        return focus_manager.begin_grab_focused_window (x, y, button, time, state);
+    public bool begin_grab_focused_window (int x, int y) throws GLib.Error {
+        return focus_manager.begin_grab_focused_window (x, y);
     }
 
     public void remember_focused_window () throws GLib.Error {

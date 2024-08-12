@@ -89,7 +89,7 @@ public class WingpanelInterface.FocusManager : Object {
         }
     }
 
-    public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
+    public bool begin_grab_focused_window (int x, int y) {
         unowned var display = Main.display;
         unowned var window = display.get_focus_window ();
         if (window == null || !get_can_grab_window (window, x, y)) {
