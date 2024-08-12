@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-12 17:01+0000\n"
-"PO-Revision-Date: 2024-07-23 15:16+0000\n"
-"Last-Translator: TomiOhl <ohlslager.tom@gmail.com>\n"
+"PO-Revision-Date: 2024-08-07 00:16+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Hungarian <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/hu/>\n"
 "Language: hu\n"
@@ -34,6 +34,8 @@ msgid ""
 "The extensible top panel for Pantheon. Wingpanel is an empty container that "
 "accepts indicators as extensions, including the applications menu."
 msgstr ""
+"A Pantheon bővíthető felső panele. A Felső állapotsor egy üres panel, ami "
+"indikátorokat fogad be bővítményként, beleértve az alkalmazásmenüt."
 
 #: data/wingpanel.metainfo.xml.in:33
 msgid "elementary, Inc."
@@ -43,21 +45,21 @@ msgstr "elementary, Inc."
 #: data/wingpanel.metainfo.xml.in:67 data/wingpanel.metainfo.xml.in:78
 #: data/wingpanel.metainfo.xml.in:88
 msgid "Improvements:"
-msgstr ""
+msgstr "Javítások:"
 
 #: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:57
 #: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:81
 #: data/wingpanel.metainfo.xml.in:90
 msgid "Updated translations"
-msgstr ""
+msgstr "Frissített fordítások"
 
 #: data/wingpanel.metainfo.xml.in:55
 msgid "Always use elementary visual resources"
-msgstr ""
+msgstr "Mindig elementary forrásokat használjon"
 
 #: data/wingpanel.metainfo.xml.in:56
 msgid "Esc to close popovers"
-msgstr ""
+msgstr "Felugró ablakok bezárása az escape billentyűvel"
 
 #: data/wingpanel.metainfo.xml.in:69
 msgid "Fallback to maximized style if window manager is unavailable"
