@@ -97,7 +97,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         update_panel_dimensions ();
         Services.BackgroundManager.initialize (panel_height);
 
-        if (Utils.is_wayland ()) {
+        if (Gdk.Display.get_default () is Gdk.Wayland.Display) {
             // We have to wrap in Idle otherwise the Meta.Window of the WaylandSurface in Gala is still null
             Idle.add_once (init_wl);
         } else {
