@@ -114,16 +114,34 @@ public class WingpanelInterface.FocusManager : Object {
         }
 
         if (window != null) {
+            unowned var wm = Main.wm;
+            unowned var stage = wm.stage;
 
-#if HAS_MUTTER46
-            Graphene.Point pos_hint = { x, y };
-            var device = Clutter.get_default_backend ().get_default_seat ().get_pointer ();
-            window.begin_grab_op (Meta.GrabOp.MOVING, device, null, time, pos_hint);
-#elif HAS_MUTTER44
-            window.begin_grab_op (Meta.GrabOp.MOVING, null, null, time);
-#else
-            display.begin_grab_op (window, Meta.GrabOp.MOVING, false, true, button, state, time, x, y);
-#endif
+            var proxy = wm.push_modal (stage);
+
+            ulong handler = 0;
+            handler = stage.captured_event.connect ((event) => {
+                if (event.get_type () == LEAVE) {
+                    /* We get leave emitted when beginning a grab op, so we have
+                    to filter it in order to avoid disconnecting and popping twice */
+                    return Clutter.EVENT_PROPAGATE;
+                }
+
+                if (event.get_device_type () == POINTER_DEVICE) {
+                    window.begin_grab_op (
+                        Meta.GrabOp.MOVING,
+                        event.get_device (),
+                        event.get_event_sequence (),
+                        event.get_time (),
+                        { x, y }
+                    );
+                }
+
+                wm.pop_modal (proxy);
+                stage.disconnect (handler);
+
+                return Clutter.EVENT_PROPAGATE;
+            });
             return true;
         }
 
