@@ -27,8 +27,6 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
 
-    private Gtk.GestureDrag drag_gesture;
-
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
     }
@@ -74,11 +72,13 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
 
-        drag_gesture = new Gtk.GestureDrag (this);
-        drag_gesture.drag_begin.connect (on_drag_begin);
+        button_press_event.connect ((event) => {
+            begin_drag (event.x_root, event.y_root);
+            return Gdk.EVENT_PROPAGATE;
+        });
     }
 
-    private void on_drag_begin (double x, double y) {
+    private void begin_drag (double x, double y) {
         var window = get_window ();
         if (window == null) {
             return;
