@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-14 03:53+0000\n"
-"PO-Revision-Date: 2024-08-07 00:16+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2024-08-15 04:16+0000\n"
+"Last-Translator: TomiOhl <ohlslager.tom@gmail.com>\n"
 "Language-Team: Hungarian <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/hu/>\n"
 "Language: hu\n"
@@ -63,12 +63,12 @@ msgstr "Felugró ablakok bezárása az escape billentyűvel"
 
 #: data/wingpanel.metainfo.xml.in:84
 msgid "Fallback to maximized style if window manager is unavailable"
-msgstr ""
+msgstr "Visszaállás teljes méretre, ha az ablakkezelő nem érhető el"
 
 #: data/wingpanel.metainfo.xml.in:85
 msgid "Listen to smooth scroll events"
-msgstr ""
+msgstr "Folyamatos görgetési eseményekre való figyelés"
 
 #: data/wingpanel.metainfo.xml.in:95
 msgid "Fix startup delay on the greeter"
-msgstr ""
+msgstr "A bejelentkezőképernyőn való indítási késleltetés javítva"
