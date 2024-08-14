@@ -89,12 +89,8 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
         popover_manager.close ();
 
-        var scale_factor = this.get_scale_factor ();
-        var x = (int)event.x_root * scale_factor;
-        var y = (int)event.y_root * scale_factor;
-
         var background_manager = Services.BackgroundManager.get_default ();
-        return background_manager.begin_grab_focused_window (x, y);
+        return background_manager.begin_grab_focused_window ((int) event.x_root, (int) event.y_root);
     }
 
     public void cycle (bool forward) {
