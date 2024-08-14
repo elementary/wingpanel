@@ -127,7 +127,7 @@ public class WingpanelInterface.FocusManager : Object {
                     return Clutter.EVENT_PROPAGATE;
                 }
 
-                if (event.get_device_type () == POINTER_DEVICE) {
+                if (event.get_type () == MOTION || event.get_type () == TOUCH_UPDATE) {
                     window.begin_grab_op (
                         Meta.GrabOp.MOVING,
                         event.get_device (),

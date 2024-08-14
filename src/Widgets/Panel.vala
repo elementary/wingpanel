@@ -27,6 +27,8 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
 
+    private Gtk.GestureDrag drag_gesture;
+
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
     }
@@ -71,26 +73,23 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         style_context = get_style_context ();
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
+
+        drag_gesture = new Gtk.GestureDrag (this);
+        drag_gesture.drag_begin.connect (on_drag_begin);
     }
 
-    public override bool button_press_event (Gdk.EventButton event) {
-        if (event.button != Gdk.BUTTON_PRIMARY) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
+    private void on_drag_begin (double x, double y) {
         var window = get_window ();
         if (window == null) {
-            return Gdk.EVENT_PROPAGATE;
+            return;
         }
 
-        if (!(Gdk.Display.get_default () is Gdk.Wayland.Display)) {
-            window.get_display ().get_default_seat ().ungrab ();
-        }
+        window.get_display ().get_default_seat ().ungrab ();
 
         popover_manager.close ();
 
         var background_manager = Services.BackgroundManager.get_default ();
-        return background_manager.begin_grab_focused_window ((int) event.x_root, (int) event.y_root);
+        background_manager.begin_grab_focused_window ((int) x, (int) y);
     }
 
     public void cycle (bool forward) {
