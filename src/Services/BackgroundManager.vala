@@ -33,7 +33,7 @@ namespace Wingpanel.Services {
         public abstract void initialize (int panel_height) throws GLib.Error;
         public abstract void remember_focused_window () throws GLib.Error;
         public abstract void restore_focused_window () throws GLib.Error;
-        public abstract bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws GLib.Error;
+        public abstract bool begin_grab_focused_window (int x, int y) throws GLib.Error;
     }
 
     public class BackgroundManager : Object {
@@ -106,9 +106,9 @@ namespace Wingpanel.Services {
             }
         }
 
-        public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
+        public bool begin_grab_focused_window (int x, int y) {
             try {
-                return bus.begin_grab_focused_window (x, y, button, time, state);
+                return bus.begin_grab_focused_window (x, y);
             } catch (Error e) {
                 warning ("Grabbing focused window failed: %s", e.message);
             }

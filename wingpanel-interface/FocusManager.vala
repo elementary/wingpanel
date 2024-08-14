@@ -89,7 +89,7 @@ public class WingpanelInterface.FocusManager : Object {
         }
     }
 
-    public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
+    public bool begin_grab_focused_window (int x, int y) {
         unowned var display = Main.display;
         unowned var window = display.get_focus_window ();
         if (window == null || !get_can_grab_window (window, x, y)) {
@@ -114,15 +114,34 @@ public class WingpanelInterface.FocusManager : Object {
         }
 
         if (window != null) {
+            unowned var wm = Main.wm;
+            unowned var stage = wm.stage;
 
-#if HAS_MUTTER46
-            Graphene.Point pos_hint = {x, y};
-            window.begin_grab_op (Meta.GrabOp.MOVING, null, null, time, pos_hint);
-#elif HAS_MUTTER44
-            window.begin_grab_op (Meta.GrabOp.MOVING, null, null, time);
-#else
-            display.begin_grab_op (window, Meta.GrabOp.MOVING, false, true, button, state, time, x, y);
-#endif
+            var proxy = wm.push_modal (stage);
+
+            ulong handler = 0;
+            handler = stage.captured_event.connect ((event) => {
+                if (event.get_type () == LEAVE) {
+                    /* We get leave emitted when beginning a grab op, so we have
+                    to filter it in order to avoid disconnecting and popping twice */
+                    return Clutter.EVENT_PROPAGATE;
+                }
+
+                if (event.get_type () == MOTION || event.get_type () == TOUCH_UPDATE) {
+                    window.begin_grab_op (
+                        Meta.GrabOp.MOVING,
+                        event.get_device (),
+                        event.get_event_sequence (),
+                        event.get_time (),
+                        { x, y }
+                    );
+                }
+
+                wm.pop_modal (proxy);
+                stage.disconnect (handler);
+
+                return Clutter.EVENT_PROPAGATE;
+            });
             return true;
         }
 

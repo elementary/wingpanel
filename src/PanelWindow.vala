@@ -22,7 +22,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private Widgets.Panel panel;
     private Gtk.EventControllerKey key_controller; // For keeping in memory
-    private Gtk.GestureMultiPress gesture_controller; // For keeping in memory
     private Gtk.Revealer revealer;
     private int monitor_width;
     private int monitor_height;
@@ -80,16 +79,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         key_controller = new Gtk.EventControllerKey (this);
         key_controller.key_pressed.connect (on_key_pressed);
 
-        gesture_controller = new Gtk.GestureMultiPress (this) {
-            propagation_phase = CAPTURE
-        };
-
-        gesture_controller.pressed.connect (() => {
-            if (desktop_panel != null) {
-                desktop_panel.focus ();
-            }
-        });
-
         panel.size_allocate.connect (update_panel_dimensions);
     }
 
@@ -97,7 +86,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         update_panel_dimensions ();
         Services.BackgroundManager.initialize (panel_height);
 
-        if (Utils.is_wayland ()) {
+        if (Gdk.Display.get_default () is Gdk.Wayland.Display) {
             // We have to wrap in Idle otherwise the Meta.Window of the WaylandSurface in Gala is still null
             Idle.add_once (init_wl);
         } else {
@@ -141,6 +130,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
             this.expanded = true;
             this.set_size_request (monitor_width, monitor_height);
+
+            desktop_panel.focus ();
         } else if (!expand) {
             Services.BackgroundManager.get_default ().restore_window ();
 
