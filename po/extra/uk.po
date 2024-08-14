@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-12 17:01+0000\n"
+"POT-Creation-Date: 2024-08-14 03:53+0000\n"
 "PO-Revision-Date: 2024-07-21 09:16+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://l10n.elementary.io/projects/wingpanel/"
@@ -40,35 +40,37 @@ msgstr ""
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:53
-#: data/wingpanel.metainfo.xml.in:67 data/wingpanel.metainfo.xml.in:78
-#: data/wingpanel.metainfo.xml.in:88
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:56
+#: data/wingpanel.metainfo.xml.in:68 data/wingpanel.metainfo.xml.in:82
+#: data/wingpanel.metainfo.xml.in:93
 msgid "Improvements:"
 msgstr "Удосконалення:"
 
-#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:57
-#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:81
-#: data/wingpanel.metainfo.xml.in:90
+#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:58
+#: data/wingpanel.metainfo.xml.in:72 data/wingpanel.metainfo.xml.in:86
+#: data/wingpanel.metainfo.xml.in:96
 msgid "Updated translations"
 msgstr "Оновлено переклади"
 
-#: data/wingpanel.metainfo.xml.in:55
+#: data/wingpanel.metainfo.xml.in:70
 msgid "Always use elementary visual resources"
 msgstr "Завжди використовувати візуальні ресурси elementary"
 
-#: data/wingpanel.metainfo.xml.in:56
+#: data/wingpanel.metainfo.xml.in:71
 msgid "Esc to close popovers"
 msgstr "Закриття спливних вікон за натисканням клавіші Esc"
 
-#: data/wingpanel.metainfo.xml.in:69
+#: data/wingpanel.metainfo.xml.in:84
 msgid "Fallback to maximized style if window manager is unavailable"
 msgstr "Перехід до розгорнутого стилю, якщо віконний менеджер недоступний"
 
-#: data/wingpanel.metainfo.xml.in:70
-msgid "Listen to smooth scoll events"
+#: data/wingpanel.metainfo.xml.in:85
+#, fuzzy
+#| msgid "Listen to smooth scoll events"
+msgid "Listen to smooth scroll events"
 msgstr "Відстежування плавних подій гортання"
 
-#: data/wingpanel.metainfo.xml.in:80
+#: data/wingpanel.metainfo.xml.in:95
 msgid "Fix startup delay on the greeter"
 msgstr "Виправлено затримку запуску привітання"
 
