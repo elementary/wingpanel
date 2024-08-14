@@ -67,20 +67,17 @@ public class WingpanelInterface.BackgroundManager : Object {
             update_current_workspace ();
         });
 
-        var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
-
-        wallpaper_hook_id = GLib.Signal.add_emission_hook (signal_id, 0, (ihint, param_values) => {
-            update_bk_color_info.begin ((obj, res) => {
-                update_bk_color_info.end (res);
-                check_for_state_change (WALLPAPER_TRANSITION_DURATION);
-            });
-
-            return true;
-#if VALA_0_42
+        Main.wm.background_group.changed.connect ((monitor_index) => {
+            var primary = Main.display.get_primary_monitor ();
+            warning ("Updated monitor %i / %i", monitor_index, primary);
+            if (monitor_index == primary) {
+                warning ("Updating info");
+                update_bk_color_info.begin ((obj, res) => {
+                    update_bk_color_info.end (res);
+                    check_for_state_change (WALLPAPER_TRANSITION_DURATION);
+                });
+            }
         });
-#else
-        }, null);
-#endif
     }
 
     private void update_current_workspace () {
