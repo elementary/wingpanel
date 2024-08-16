@@ -137,7 +137,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             this.expanded = true;
             this.set_size_request (monitor_width, monitor_height);
 
-            desktop_panel.focus ();
+            if (desktop_panel != null) {
+                desktop_panel.focus ();
+            }
         } else if (!expand) {
             Services.BackgroundManager.get_default ().restore_window ();
 
