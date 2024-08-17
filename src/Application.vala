@@ -39,40 +39,6 @@ public class Wingpanel.Application : Gtk.Application {
         application_id = "org.elementary.wingpanel";
 
         add_main_option_entries (OPTIONS);
-
-        register_with_session.begin ((obj, res) => {
-            bool success = register_with_session.end (res);
-            if (!success) {
-                warning ("Failed to register with Session manager");
-            }
-        });
-    }
-
-    private async bool register_with_session () {
-        var sclient = yield SessionManager.register_with_session ("io.elementary.wingpanel");
-        if (sclient == null) {
-            return false;
-        }
-
-        sclient.query_end_session.connect ((flags) => session_respond (sclient, flags));
-        sclient.end_session.connect ((flags) => session_respond (sclient, flags));
-        sclient.stop.connect (session_stop);
-
-        return true;
-    }
-
-    private void session_respond (SessionManager.SessionClient sclient, uint flags) {
-        try {
-            sclient.end_session_response (true, "");
-        } catch (Error e) {
-            warning ("Unable to respond to session manager: %s", e.message);
-        }
-    }
-
-    private void session_stop () {
-        if (panel_window != null) {
-            panel_window.destroy ();
-        }
     }
 
     protected override int command_line (ApplicationCommandLine command_line) {
