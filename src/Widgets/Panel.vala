@@ -18,6 +18,8 @@
  */
 
 public class Wingpanel.Widgets.Panel : Gtk.EventBox {
+    private static Settings panel_settings = new Settings ("io.elementary.desktop.wingpanel");
+
     public Services.PopoverManager popover_manager { get; construct; }
 
     private IndicatorBar right_menubar;
@@ -83,6 +85,10 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         scroll_controller = new Gtk.EventControllerScroll (this, BOTH_AXES);
         scroll_controller.scroll_end.connect (() => current_scroll_delta = 0);
         scroll_controller.scroll.connect ((dx, dy) => {
+            if (!panel_settings.get_boolean ("scroll-to-switch-workspaces")) {
+                return;
+            }
+
             if (current_scroll_delta == 0) {
                 Services.WMDBus.switch_workspace.begin (dx < 0 || dy < 0);
             }
