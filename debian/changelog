@@ -1,3 +1,9 @@
+io.elementary.wingpanel (8.0.0) noble; urgency=medium
+
+  * Release 8.0.0
+
+ -- Danielle Foré <danielle@elementary.io>  Wed, 21 Aug 2024 11:06:31 -0700
+
 io.elementary.wingpanel (3.0.5) jammy; urgency=medium
 
   * New upstream release
