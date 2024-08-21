@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-14 03:53+0000\n"
-"PO-Revision-Date: 2024-07-18 16:59+0000\n"
+"PO-Revision-Date: 2024-08-19 05:16+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/he/>\n"
@@ -64,8 +64,6 @@ msgid "Fallback to maximized style if window manager is unavailable"
 msgstr "נסיגה למצב המוגדל אם אין מנהל חלונות"
 
 #: data/wingpanel.metainfo.xml.in:85
-#, fuzzy
-#| msgid "Listen to smooth scoll events"
 msgid "Listen to smooth scroll events"
 msgstr "האזנה לאירועי גלילה חלקה"
 
