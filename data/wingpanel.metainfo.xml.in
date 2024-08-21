@@ -14,7 +14,7 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/elementary/wingpanel/3.0.5/data/screenshot.png</image>
+      <image>https://raw.githubusercontent.com/elementary/wingpanel/8.0.0/data/screenshot.png</image>
     </screenshot>
   </screenshots>
 
@@ -36,7 +36,7 @@
   <update_contact>contact_AT_elementary.io</update_contact>
 
   <releases>
-    <release version="8.0.0" date="2024-07-12" urgency="medium">
+    <release version="8.0.0" date="2024-08-21" urgency="medium">
       <description>
         <p>Improvements:</p>
         <ul>

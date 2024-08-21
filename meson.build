@@ -1,7 +1,7 @@
 project(
     'io.elementary.wingpanel',
     'c', 'vala',
-    version: '3.0.5',
+    version: '8.0.0',
     meson_version : '>= 0.58.0'
 )
 
