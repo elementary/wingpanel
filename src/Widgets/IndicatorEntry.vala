@@ -92,9 +92,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
         add_events (Gdk.EventMask.SMOOTH_SCROLL_MASK);
 
         scroll_event.connect ((e) => {
-            display_widget.scroll_event (e);
-
-            return Gdk.EVENT_PROPAGATE;
+            return display_widget.scroll_event (e);
         });
 
         touch_event.connect ((e) => {

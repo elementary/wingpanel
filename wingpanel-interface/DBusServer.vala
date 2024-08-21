@@ -24,8 +24,8 @@ public class WingpanelInterface.DBusServer : Object {
 
     public signal void state_changed (BackgroundState state, uint animation_duration);
 
-    public void initialize (int monitor, int panel_height) throws GLib.Error {
-        background_manager = new BackgroundManager (monitor, panel_height);
+    public void initialize (int panel_height) throws GLib.Error {
+        background_manager = new BackgroundManager (panel_height);
         background_manager.state_changed.connect ((state, animation_duration) => {
             state_changed (state, animation_duration);
         });
@@ -33,8 +33,8 @@ public class WingpanelInterface.DBusServer : Object {
         focus_manager = new FocusManager ();
     }
 
-    public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws GLib.Error {
-        return focus_manager.begin_grab_focused_window (x, y, button, time, state);
+    public bool begin_grab_focused_window (int x, int y) throws GLib.Error {
+        return focus_manager.begin_grab_focused_window (x, y);
     }
 
     public void remember_focused_window () throws GLib.Error {

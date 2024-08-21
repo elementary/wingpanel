@@ -18,6 +18,8 @@
  */
 
 public class Wingpanel.Widgets.Panel : Gtk.EventBox {
+    private static Settings panel_settings = new Settings ("io.elementary.desktop.wingpanel");
+
     public Services.PopoverManager popover_manager { get; construct; }
 
     private IndicatorBar right_menubar;
@@ -26,6 +28,9 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
+
+    private Gtk.EventControllerScroll scroll_controller;
+    private double current_scroll_delta = 0;
 
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
@@ -71,42 +76,43 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         style_context = get_style_context ();
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
+
+        button_press_event.connect ((event) => {
+            begin_drag (event.x_root, event.y_root);
+            return Gdk.EVENT_PROPAGATE;
+        });
+
+        scroll_controller = new Gtk.EventControllerScroll (this, BOTH_AXES);
+        scroll_controller.scroll_end.connect (() => current_scroll_delta = 0);
+        scroll_controller.scroll.connect ((dx, dy) => {
+            if (!panel_settings.get_boolean ("scroll-to-switch-workspaces")) {
+                return;
+            }
+
+            if (current_scroll_delta == 0) {
+                Services.WMDBus.switch_workspace.begin (dx < 0 || dy < 0);
+            }
+
+            current_scroll_delta += dx + dy;
+
+            if (current_scroll_delta.abs () > 10) { //TODO: Check whether 10 is good here.
+                current_scroll_delta = 0;
+            }
+        });
     }
 
-    public override bool button_press_event (Gdk.EventButton event) {
-        if (Utils.is_wayland ()) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
-        if (event.button != Gdk.BUTTON_PRIMARY) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
+    private void begin_drag (double x, double y) {
         var window = get_window ();
         if (window == null) {
-            return Gdk.EVENT_PROPAGATE;
+            return;
         }
-
-        // Grabbing with touchscreen on X does not work unfortunately
-        if (event.device.get_source () == Gdk.InputSource.TOUCHSCREEN) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
-        uint32 time = event.time;
 
         window.get_display ().get_default_seat ().ungrab ();
 
-        Gdk.ModifierType state;
-        event.get_state (out state);
-
         popover_manager.close ();
 
-        var scale_factor = this.get_scale_factor ();
-        var x = (int)event.x_root * scale_factor;
-        var y = (int)event.y_root * scale_factor;
-
         var background_manager = Services.BackgroundManager.get_default ();
-        return background_manager.begin_grab_focused_window (x, y, (int)event.button, time, state);
+        background_manager.begin_grab_focused_window ((int) x, (int) y);
     }
 
     public void cycle (bool forward) {
