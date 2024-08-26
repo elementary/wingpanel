@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-14 03:53+0000\n"
-"PO-Revision-Date: 2024-07-23 15:16+0000\n"
+"PO-Revision-Date: 2024-08-27 08:16+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/fr/>\n"
@@ -68,8 +68,6 @@ msgstr ""
 "fenêtres n'est pas disponible"
 
 #: data/wingpanel.metainfo.xml.in:85
-#, fuzzy
-#| msgid "Listen to smooth scoll events"
 msgid "Listen to smooth scroll events"
 msgstr "Écoute des événements de défilement doux"
 
