@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-12 17:01+0000\n"
-"PO-Revision-Date: 2024-07-13 19:16+0000\n"
+"POT-Creation-Date: 2024-08-14 03:53+0000\n"
+"PO-Revision-Date: 2024-08-16 14:16+0000\n"
 "Last-Translator: Italo Felipe Capasso Ballesteros <edwood.grant@gmail.com>\n"
 "Language-Team: Spanish <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/es/>\n"
@@ -39,37 +39,37 @@ msgstr ""
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:53
-#: data/wingpanel.metainfo.xml.in:67 data/wingpanel.metainfo.xml.in:78
-#: data/wingpanel.metainfo.xml.in:88
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:56
+#: data/wingpanel.metainfo.xml.in:68 data/wingpanel.metainfo.xml.in:82
+#: data/wingpanel.metainfo.xml.in:93
 msgid "Improvements:"
 msgstr "Mejoras:"
 
-#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:57
-#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:81
-#: data/wingpanel.metainfo.xml.in:90
+#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:58
+#: data/wingpanel.metainfo.xml.in:72 data/wingpanel.metainfo.xml.in:86
+#: data/wingpanel.metainfo.xml.in:96
 msgid "Updated translations"
 msgstr "Traducciones actualizadas"
 
-#: data/wingpanel.metainfo.xml.in:55
+#: data/wingpanel.metainfo.xml.in:70
 msgid "Always use elementary visual resources"
 msgstr "Ahora siempre se utilizan los recursos visuales de elementary"
 
-#: data/wingpanel.metainfo.xml.in:56
+#: data/wingpanel.metainfo.xml.in:71
 msgid "Esc to close popovers"
 msgstr "Se puede presionar Esc para cerrar los mensajes emergentes"
 
-#: data/wingpanel.metainfo.xml.in:69
+#: data/wingpanel.metainfo.xml.in:84
 msgid "Fallback to maximized style if window manager is unavailable"
 msgstr ""
 "Ahora se recurre a un estilo maximizado alternativo si el gestor de ventanas "
 "no está disponible"
 
-#: data/wingpanel.metainfo.xml.in:70
-msgid "Listen to smooth scoll events"
+#: data/wingpanel.metainfo.xml.in:85
+msgid "Listen to smooth scroll events"
 msgstr "Ahora se pueden escuchar los eventos de desplazamiento suave"
 
-#: data/wingpanel.metainfo.xml.in:80
+#: data/wingpanel.metainfo.xml.in:95
 msgid "Fix startup delay on the greeter"
 msgstr ""
 "Se corrigió una demora de lanzamiento en la pantalla de inicio de sesión"

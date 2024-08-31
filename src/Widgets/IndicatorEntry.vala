@@ -96,15 +96,16 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
         add_events (Gdk.EventMask.SMOOTH_SCROLL_MASK);
 
         scroll_event.connect ((e) => {
-            display_widget.scroll_event (e);
-
-            return Gdk.EVENT_PROPAGATE;
+            return display_widget.scroll_event (e);
         });
 
         button_press_event.connect ((e) => display_widget.button_press_event (e));
 
         gesture_controller = new Gtk.GestureMultiPress (this);
-        gesture_controller.pressed.connect (() => popover_manager.current_indicator = this);
+        gesture_controller.pressed.connect (() => {
+            popover_manager.current_indicator = this;
+            gesture_controller.set_state (CLAIMED);
+        });
 
         motion_controller = new Gtk.EventControllerMotion (this) {
             propagation_phase = CAPTURE

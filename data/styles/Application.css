@@ -1,10 +1,11 @@
 panel {
     background-color: transparent;
     transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-    min-height: 16px;
 }
 
 panel > box {
+    /* Keep in sync with Panel.vala height request */
+    min-height: 30px;
     /*Don't transition shadow etc to avoid visual issues with struts*/
     transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -55,6 +56,17 @@ panel.translucent.color-light > box {
         error @STRAWBERRY_300,
         success @LIME_300,
         warning mix(@BANANA_300, @BANANA_500, 0.5);
+}
+
+/*FIXME: Replace with border-spacing in GTK4*/
+.composited-indicator image + label,
+.composited-indicator image + revealer {
+    padding-left: 0.5em;
+}
+
+.composited-indicator:dir(rtl) image + label,
+.composited-indicator:dir(rtl) image + revealer {
+    padding-right: 0.5em;
 }
 
 .color-light .composited-indicator {

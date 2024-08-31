@@ -85,6 +85,7 @@ public class Wingpanel.Services.PopoverManager : Object {
         });
 
         popover.closed.connect (() => {
+            current_indicator = null;
             make_modal (popover, false);
         });
         popover.unmap.connect (() => {

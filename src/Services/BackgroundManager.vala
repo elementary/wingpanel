@@ -30,10 +30,10 @@ namespace Wingpanel.Services {
     public interface InterfaceBus : Object {
         public signal void state_changed (BackgroundState state, uint animation_duration);
 
-        public abstract void initialize (int monitor, int panel_height) throws GLib.Error;
+        public abstract void initialize (int panel_height) throws GLib.Error;
         public abstract void remember_focused_window () throws GLib.Error;
         public abstract void restore_focused_window () throws GLib.Error;
-        public abstract bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) throws GLib.Error;
+        public abstract bool begin_grab_focused_window (int x, int y) throws GLib.Error;
     }
 
     public class BackgroundManager : Object {
@@ -53,14 +53,12 @@ namespace Wingpanel.Services {
             }
         }
 
-        private int monitor;
         private int panel_height;
 
         public signal void background_state_changed (BackgroundState state, uint animation_duration);
 
-        public static void initialize (int monitor, int panel_height) {
+        public static void initialize (int panel_height) {
             var manager = BackgroundManager.get_default ();
-            manager.monitor = monitor;
             manager.panel_height = panel_height;
         }
 
@@ -108,9 +106,9 @@ namespace Wingpanel.Services {
             }
         }
 
-        public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
+        public bool begin_grab_focused_window (int x, int y) {
             try {
-                return bus.begin_grab_focused_window (x, y, button, time, state);
+                return bus.begin_grab_focused_window (x, y);
             } catch (Error e) {
                 warning ("Grabbing focused window failed: %s", e.message);
             }
@@ -121,7 +119,7 @@ namespace Wingpanel.Services {
         private bool connect_dbus () {
             try {
                 bus = Bus.get_proxy_sync (BusType.SESSION, DBUS_NAME, DBUS_PATH);
-                bus.initialize (monitor, panel_height);
+                bus.initialize (panel_height);
             } catch (Error e) {
                 warning ("Connecting to \"%s\" failed: %s", DBUS_NAME, e.message);
                 return false;

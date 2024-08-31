@@ -14,7 +14,7 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/elementary/wingpanel/3.0.5/data/screenshot.png</image>
+      <image>https://raw.githubusercontent.com/elementary/wingpanel/8.0.0/data/screenshot.png</image>
     </screenshot>
   </screenshots>
 
@@ -36,7 +36,7 @@
   <update_contact>contact_AT_elementary.io</update_contact>
 
   <releases>
-    <release version="8.0.0" date="2024-07-12" urgency="medium">
+    <release version="8.0.0" date="2024-08-21" urgency="medium">
       <description>
         <p>Improvements:</p>
         <ul>
@@ -46,6 +46,10 @@
       <issues>
         <issue url="https://github.com/elementary/wingpanel/issues/408">Wingpanel has top gap when apps are snapped to left-half/right-half</issue>
         <issue url="https://github.com/elementary/wingpanel/issues/515">wayland: Opening multitasking view breaks gala</issue>
+        <issue url="https://github.com/elementary/wingpanel/issues/519">Blocking input after chaning style in settings opened from wingpanel</issue>
+        <issue url="https://github.com/elementary/wingpanel/issues/524">Mouse wheel scroll when hovering wingpanel switches workspaces</issue>
+        <issue url="https://github.com/elementary/wingpanel/issues/530">does not follow accent color in X session</issue>
+        <issue url="https://github.com/elementary/wingpanel/issues/550">Text padding is gone</issue>
       </issues>
     </release>
 
@@ -80,7 +84,7 @@
         <p>Improvements:</p>
         <ul>
           <li>Fallback to maximized style if window manager is unavailable</li>
-          <li>Listen to smooth scoll events</li>
+          <li>Listen to smooth scroll events</li>
           <li>Updated translations</li>
         </ul>
       </description>
