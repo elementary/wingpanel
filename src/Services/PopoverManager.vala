@@ -72,6 +72,10 @@ public class Wingpanel.Services.PopoverManager : Object {
 
         popover.closed.connect (() => {
             current_indicator = null;
+
+            // We have to wait for unmap otherwise the popover is confined to the panel space
+            // on X. But we also can't just connect to it because unmap gets emitted when repositioning
+            // for some reason.
             ulong handler_id = 0;
             handler_id = popover.unmap.connect (() => {
                 owner.set_expanded (false);
