@@ -100,7 +100,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         // We just use our monitor because Gala makes sure we are always on the primary one
         var monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
 
-        if (!Services.DisplayConfig.is_logical_layout ()) {
+        if (!Services.DisplayConfig.is_logical_layout () && Gdk.Display.get_default () is Gdk.Wayland.Display) {
             monitor_dimensions.width /= get_scale_factor ();
             monitor_dimensions.height /= get_scale_factor ();
             monitor_dimensions.x /= get_scale_factor ();
@@ -159,7 +159,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     private int get_actual_height () {
-        if (!Services.DisplayConfig.is_logical_layout ()) {
+        if (!Services.DisplayConfig.is_logical_layout () && Gdk.Display.get_default () is Gdk.Wayland.Display) {
             return get_allocated_height () * get_scale_factor ();
         }
 
