@@ -22,6 +22,8 @@ public class Wingpanel.Services.PopoverManager : Object {
 
     private bool grabbed = false; // whether the wingpanel grabbed focus
 
+    private Gtk.GestureMultiPress owner_gesture_controller;
+
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
     private Wingpanel.Widgets.IndicatorPopover popover;
     private Wingpanel.Widgets.IndicatorEntry? _current_indicator = null;
@@ -102,44 +104,13 @@ public class Wingpanel.Services.PopoverManager : Object {
             return Gdk.EVENT_PROPAGATE;
         });
 
-        owner.button_press_event.connect ((w, e) => {
-            // "owner" is the invisible window that fills the screen when an indicator is open, if the event didn't hit
-            // that window directly, then it was probably in the popover, so propagate it.
-            if (e.window != owner.get_window ()) {
-                return Gdk.EVENT_PROPAGATE;
-            }
+        owner_gesture_controller = new Gtk.GestureMultiPress (owner) {
+            window = owner.get_window ()
+        };
+        owner_gesture_controller.pressed.connect (() => current_indicator = null);
 
-            Gtk.Allocation allocation;
-            popover.get_allocation (out allocation);
-
-            Gtk.Allocation indicator_allocation;
-            current_indicator.get_allocation (out indicator_allocation);
-
-            Gtk.Allocation container_allocation;
-            current_indicator.get_parent ().get_allocation (out container_allocation);
-
-            var wingpanel_width = owner.get_allocated_width ();
-
-            allocation.x += indicator_allocation.x +
-                            container_allocation.x -
-                            ((allocation.width - indicator_allocation.width) / 2);
-
-            if (allocation.x < 0) {
-                allocation.x = 0;
-            }
-
-            if (allocation.x + allocation.width > wingpanel_width) {
-                allocation.x = wingpanel_width - allocation.width;
-            }
-
-            if ((e.x < allocation.x || e.x > allocation.x + allocation.width) || (e.y < allocation.y || e.y > allocation.y + allocation.height)) {
-                current_indicator = null;
-            }
-
-            return Gdk.EVENT_STOP;
-        });
-
-        owner.add_events (Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.BUTTON_PRESS_MASK);
+        //Replace with EventController propagation limit SAME_NATIVE in GTK 4
+        owner.realize.connect (() => owner_gesture_controller.window = owner.get_window ());
     }
 
     public void set_popover_visible (string code_name, bool visible) {
