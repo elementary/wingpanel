@@ -29,6 +29,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
 
+    private Gtk.GestureMultiPress gesture_controller;
     private Gtk.EventControllerScroll scroll_controller;
     private double current_scroll_delta = 0;
 
@@ -77,9 +78,11 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
 
-        button_press_event.connect ((event) => {
-            begin_drag (event.x_root, event.y_root);
-            return Gdk.EVENT_PROPAGATE;
+        gesture_controller = new Gtk.GestureMultiPress (this);
+        gesture_controller.pressed.connect ((n_press, x, y) => {
+            begin_drag (x, y);
+            gesture_controller.set_state (CLAIMED);
+            gesture_controller.reset ();
         });
 
         scroll_controller = new Gtk.EventControllerScroll (this, BOTH_AXES);
