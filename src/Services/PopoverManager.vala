@@ -21,7 +21,6 @@ public class Wingpanel.Services.PopoverManager : Object {
     private unowned Wingpanel.PanelWindow? owner;
 
     private bool grabbed = false; // whether the wingpanel grabbed focus
-    private bool mousing = false;
 
     private Gtk.GestureMultiPress owner_gesture_controller;
 
@@ -98,10 +97,6 @@ public class Wingpanel.Services.PopoverManager : Object {
         });
 
         owner.focus_out_event.connect ((e) => {
-            if (mousing) {
-                return Gdk.EVENT_PROPAGATE;
-            }
-
             if (current_indicator != null && e.window == null) {
                 current_indicator = null;
             }
@@ -147,7 +142,7 @@ public class Wingpanel.Services.PopoverManager : Object {
     }
 
     private void make_modal (Gtk.Popover? pop, bool modal = true) {
-        if (pop == null || pop.get_window () == null || mousing) {
+        if (pop == null || pop.get_window () == null) {
             return;
         }
 
@@ -182,26 +177,8 @@ public class Wingpanel.Services.PopoverManager : Object {
 
         registered_indicators.set (widg.base_indicator.code_name, widg);
 
-        widg.enter_notify_event.connect ((w, e) => {
-            if (mousing) {
-                return Gdk.EVENT_PROPAGATE;
-            }
-
-            if (grabbed) {
-                if (!get_visible (widg) && e.mode != Gdk.CrossingMode.TOUCH_BEGIN) {
-                    mousing = true;
-                    current_indicator = widg;
-                    mousing = false;
-                }
-
-                return Gdk.EVENT_STOP;
-            }
-
-            return Gdk.EVENT_PROPAGATE;
-        });
-
         widg.notify["visible"].connect (() => {
-            if (mousing || grabbed) {
+            if (grabbed) {
                 return;
             }
 
