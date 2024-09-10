@@ -121,7 +121,7 @@ public class WingpanelInterface.FocusManager : Object {
 
             ulong handler = 0;
             handler = stage.captured_event.connect ((event) => {
-                if (event.get_type () == LEAVE) {
+                if (event.get_type () == LEAVE || event.get_type () == ENTER) { // We need to filter ENTER for X because reasons I don't understand :( (I think something with pushing modal)
                     /* We get leave emitted when beginning a grab op, so we have
                     to filter it in order to avoid disconnecting and popping twice */
                     return Clutter.EVENT_PROPAGATE;
