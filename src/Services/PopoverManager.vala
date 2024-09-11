@@ -20,8 +20,6 @@
 public class Wingpanel.Services.PopoverManager : Object {
     private unowned Wingpanel.PanelWindow? owner;
 
-    private bool grabbed = false; // whether the wingpanel grabbed focus
-
     private Gtk.GestureMultiPress owner_gesture_controller;
 
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
@@ -56,7 +54,6 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.relative_to = _current_indicator;
                 update_has_tooltip (_current_indicator.display_widget, false);
                 owner.set_expanded (true);
-                make_modal (popover, true);
                 owner.present ();
                 popover.popup ();
                 popover.show_all ();
@@ -75,33 +72,17 @@ public class Wingpanel.Services.PopoverManager : Object {
 
         popover = new Wingpanel.Widgets.IndicatorPopover ();
 
-        popover.leave_notify_event.connect ((e) => {
-            Gtk.Allocation allocation;
-            popover.get_allocation (out allocation);
-
-            if (e.mode != Gdk.CrossingMode.NORMAL && e.subwindow == null) {
-                current_indicator = null;
-            }
-
-            return Gdk.EVENT_PROPAGATE;
-        });
-
         popover.closed.connect (() => {
             current_indicator = null;
-            make_modal (popover, false);
-        });
-        popover.unmap.connect (() => {
-            if (!grabbed) {
+
+            // We have to wait for unmap otherwise the popover is confined to the panel space
+            // on X. But we also can't just connect to it because unmap gets emitted when repositioning
+            // for some reason.
+            ulong handler_id = 0;
+            handler_id = popover.unmap.connect (() => {
                 owner.set_expanded (false);
-            }
-        });
-
-        owner.focus_out_event.connect ((e) => {
-            if (current_indicator != null && e.window == null) {
-                current_indicator = null;
-            }
-
-            return Gdk.EVENT_PROPAGATE;
+                popover.disconnect (handler_id);
+            });
         });
 
         owner_gesture_controller = new Gtk.GestureMultiPress (owner) {
@@ -141,23 +122,6 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
     }
 
-    private void make_modal (Gtk.Popover? pop, bool modal = true) {
-        if (pop == null || pop.get_window () == null) {
-            return;
-        }
-
-        if (modal && !grabbed) {
-            grabbed = true;
-            Gtk.grab_add (owner);
-            owner.set_focus (null);
-            pop.grab_focus ();
-        } else if (!modal && grabbed) {
-            grabbed = false;
-            Gtk.grab_remove (owner);
-            owner.grab_focus ();
-        }
-    }
-
     public void close () {
         if (current_indicator != null) {
             current_indicator = null;
@@ -176,15 +140,5 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
 
         registered_indicators.set (widg.base_indicator.code_name, widg);
-
-        widg.notify["visible"].connect (() => {
-            if (grabbed) {
-                return;
-            }
-
-            if (get_visible (widg)) {
-                current_indicator = null;
-            }
-        });
     }
 }
