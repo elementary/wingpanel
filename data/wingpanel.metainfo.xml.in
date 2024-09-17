@@ -36,6 +36,19 @@
   <update_contact>contact_AT_elementary.io</update_contact>
 
   <releases>
+    <release version="8.0.1" date="2024-09-16" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Fix incorrect scale factor in some sessions</li>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+      <issues>
+        <issue url="https://github.com/elementary/wingpanel/issues/552">Wingpanel changes size when using certain wallpapers</issue>
+      </issues>
+    </release>
+
     <release version="8.0.0" date="2024-08-21" urgency="medium">
       <description>
         <p>Improvements:</p>
@@ -90,16 +103,7 @@
       </description>
     </release>
 
-    <release version="3.0.2" date="2021-12-18" urgency="medium">
-      <description>
-        <p>Improvements:</p>
-        <ul>
-          <li>Fix startup delay on the greeter</li>
-          <li>Updated translations</li>
-        </ul>
-      </description>
-    </release>
-
+    <release version="3.0.2" date="2021-12-18" />
     <release version="3.0.1" date="2021-09-27" />
     <release version="3.0.0" date="2021-07-13" />
     <release version="2.3.2" date="2020-06-19" />
