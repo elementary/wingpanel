@@ -34,24 +34,14 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     public PanelWindow (Gtk.Application application) {
         Object (
             application: application,
-            //  app_paintable: true,
             decorated: false,
             resizable: false,
-            //  skip_pager_hint: true,
-            //  skip_taskbar_hint: true,
             vexpand: false
         );
 
         var app_provider = new Gtk.CssProvider ();
         app_provider.load_from_resource ("io/elementary/wingpanel/Application.css");
         Gtk.StyleContext.add_provider_for_display (Gdk.Display.get_default (), app_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-        //  var display = Gdk.Display.get_default ();
-        //  display.size_changed.connect (update_panel_dimensions);
-        //  display.monitors_changed.connect (update_panel_dimensions);
-        //  display.screen_changed.connect (update_visual);
-
-        update_visual ();
 
         popover_manager = new Services.PopoverManager (this);
 
@@ -81,7 +71,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         ((Gtk.Widget) this).add_controller (key_controller);
         key_controller.key_pressed.connect (on_key_pressed);
 
-        //  panel.size_allocate.connect (update_panel_dimensions);
+        panel.map.connect (update_panel_dimensions);
     }
 
     private void on_realize () {
@@ -89,7 +79,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         Services.BackgroundManager.initialize (panel_height);
 
         if (Gdk.Display.get_default () is Gdk.Wayland.Display) {
-            // We have to wrap in Idle otherwise the Meta.Window of the WaylandSurface in Gala is still null
             init_wl ();
         } else {
             init_x ();
@@ -115,16 +104,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         this.set_size_request (monitor_width, (popover_manager.current_indicator != null ? monitor_height : -1));
     }
 
-    private void update_visual () {
-        //  var visual = this.screen.get_rgba_visual ();
-
-        //  if (visual == null) {
-        //      warning ("Compositing not available, things will Look Bad (TM)");
-        //  } else {
-        //      this.set_visual (visual);
-        //  }
-    }
-
     private bool on_key_pressed (uint keyval, uint keycode, Gdk.ModifierType state) {
         if (keyval == Gdk.Key.Escape) {
             popover_manager.close ();
@@ -134,6 +113,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     public void set_expanded (bool expand) {
+        if (Gdk.Display.get_default () is Gdk.Wayland.Display) {
+            return;
+        }
+
         if (expand && !this.expanded) {
             Services.BackgroundManager.get_default ().remember_window ();
 

@@ -54,8 +54,8 @@ public class Wingpanel.Services.PopoverManager : Object {
             if (_current_indicator != null) {
                 popover.set_content (_current_indicator.indicator_widget);
                 update_has_tooltip (_current_indicator.display_widget, false);
-                //  owner.set_expanded (true);
-                //  owner.present ();
+                owner.set_expanded (true);
+                owner.present ();
                 popover.set_parent (_current_indicator);
                 popover.popup ();
                 _current_indicator.base_indicator.opened ();
