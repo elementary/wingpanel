@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.Panel : Gtk.EventBox {
+public class Wingpanel.Widgets.Panel : Gtk.Box {
     private static Settings panel_settings = new Settings ("io.elementary.desktop.wingpanel");
 
     public Services.PopoverManager popover_manager { get; construct; }
@@ -29,7 +29,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
 
-    private Gtk.GestureMultiPress gesture_controller;
+    private Gtk.GestureClick gesture_controller;
     private Gtk.EventControllerScroll scroll_controller;
     private double current_scroll_delta = 0;
 
@@ -57,12 +57,14 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
             halign = END
         };
 
-        var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        box.pack_start (left_menubar);
+        var box = new Gtk.CenterBox () {
+            hexpand = true
+        };
+        box.set_start_widget (left_menubar);
         box.set_center_widget (center_menubar);
-        box.pack_end (right_menubar);
+        box.set_end_widget (right_menubar);
 
-        add (box);
+        append (box);
 
         unowned IndicatorManager indicator_manager = IndicatorManager.get_default ();
         indicator_manager.indicator_added.connect (add_indicator);
@@ -78,18 +80,20 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
 
-        gesture_controller = new Gtk.GestureMultiPress (this);
+        gesture_controller = new Gtk.GestureClick ();
+        add_controller (gesture_controller);
         gesture_controller.pressed.connect ((n_press, x, y) => {
             begin_drag (x, y);
             gesture_controller.set_state (CLAIMED);
             gesture_controller.reset ();
         });
 
-        scroll_controller = new Gtk.EventControllerScroll (this, BOTH_AXES);
+        scroll_controller = new Gtk.EventControllerScroll (BOTH_AXES);
+        add_controller (scroll_controller);
         scroll_controller.scroll_end.connect (() => current_scroll_delta = 0);
         scroll_controller.scroll.connect ((dx, dy) => {
             if (!panel_settings.get_boolean ("scroll-to-switch-workspaces")) {
-                return;
+                return Gdk.EVENT_PROPAGATE;
             }
 
             if (current_scroll_delta == 0) {
@@ -105,12 +109,12 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     }
 
     private void begin_drag (double x, double y) {
-        var window = get_window ();
+        var window = get_root ().get_surface ();
         if (window == null) {
             return;
         }
 
-        window.get_display ().get_default_seat ().ungrab ();
+        //  window.get_display ().get_default_seat ().ungrab ();
 
         popover_manager.close ();
 
@@ -137,111 +141,37 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     }
 
     private IndicatorEntry? get_next_sibling (IndicatorEntry current) {
-        IndicatorEntry? sibling = null;
+        Gtk.Widget? sibling = current.get_next_sibling ();
+
+        if (sibling != null) {
+            return (IndicatorEntry) sibling;
+        }
 
         switch (current.base_indicator.code_name) {
             case Indicator.APP_LAUNCHER:
-                var children = left_menubar.get_children ();
-                int index = children.index (current);
-                if (index == -1) {
-                    break;
-                } else if (index < children.length () - 1) { // Has more than one indicator in the left menubar
-                    sibling = children.nth_data (index + 1) as IndicatorEntry;
-                } else { // No more indicators on the left
-                    var center_children = center_menubar.get_children ();
-                    if (center_children.length () > 0) {
-                        sibling = center_children.first ().data as IndicatorEntry;
-                    }
-                }
-
-                break;
+                return (IndicatorEntry) center_menubar.get_last_child ();
             case Indicator.DATETIME:
-                var children = center_menubar.get_children ();
-                int index = children.index (current);
-                if (index == -1) {
-                    break;
-                } else if (index < children.length () - 1) { // Has more than one indicator in the center menubar
-                    sibling = children.nth_data (index + 1) as IndicatorEntry;
-                } else { // No more indicators on the center
-                    var right_children = right_menubar.get_children ();
-                    if (right_children.length () > 0) {
-                        sibling = right_children.first ().data as IndicatorEntry;
-                    }
-                }
-
-                break;
+                return (IndicatorEntry) right_menubar.get_last_child ();
             default:
-                var children = right_menubar.get_children ();
-                int index = children.index (current);
-                if (index == -1) {
-                    break;
-                } else if (index < children.length () - 1) { // Has more than one indicator in the right menubar
-                    sibling = children.nth_data (index + 1) as IndicatorEntry;
-                } else { // No more indicators on the right
-                    var left_children = left_menubar.get_children ();
-                    if (left_children.length () > 0) {
-                        sibling = left_children.first ().data as IndicatorEntry;
-                    }
-                }
-
-                break;
+                return (IndicatorEntry) left_menubar.get_last_child ();
         }
-
-        return sibling;
     }
 
     private IndicatorEntry? get_previous_sibling (IndicatorEntry current) {
-        IndicatorEntry? sibling = null;
+        Gtk.Widget? sibling = current.get_prev_sibling ();
+
+        if (sibling != null) {
+            return (IndicatorEntry) sibling;
+        }
 
         switch (current.base_indicator.code_name) {
             case Indicator.APP_LAUNCHER:
-                var children = left_menubar.get_children ();
-                int index = children.index (current);
-                if (index == -1) {
-                    break;
-                } else if (index != 0) { // Is not the first indicator in the left menubar
-                    sibling = children.nth_data (index - 1) as IndicatorEntry;
-                } else { // No more indicators on the left
-                    var right_children = right_menubar.get_children ();
-                    if (right_children.length () > 0) {
-                        sibling = right_children.last ().data as IndicatorEntry;
-                    }
-                }
-
-                break;
+                return (IndicatorEntry) right_menubar.get_last_child ();
             case Indicator.DATETIME:
-                var children = center_menubar.get_children ();
-                int index = children.index (current);
-                if (index == -1) {
-                    break;
-                } else if (index != 0) { // Is not the first indicator in the center menubar
-                    sibling = children.nth_data (index - 1) as IndicatorEntry;
-                } else { // No more indicators on the center
-                    var left_children = left_menubar.get_children ();
-                    if (left_children.length () > 0) {
-                        sibling = left_children.last ().data as IndicatorEntry;
-                    }
-                }
-
-                break;
+                return (IndicatorEntry) left_menubar.get_last_child ();
             default:
-                var children = right_menubar.get_children ();
-                int index = children.index (current);
-                if (index == -1) {
-                    break;
-                } else if (index != 0) { // Is not the first indicator in the right menubar
-                    sibling = children.nth_data (index - 1) as IndicatorEntry;
-                } else { // No more indicators on the right
-                    var center_children = center_menubar.get_children ();
-                    if (center_children.length () > 0) {
-                        sibling = center_children.last ().data as IndicatorEntry;
-                    }
-                }
-
-                break;
+                return (IndicatorEntry) center_menubar.get_last_child ();
         }
-
-        return sibling;
     }
 
     private void add_indicator (Indicator indicator) {
@@ -250,19 +180,17 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         switch (indicator.code_name) {
             case Indicator.APP_LAUNCHER:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_RIGHT);
-                left_menubar.add (indicator_entry);
+                left_menubar.insert_sorted (indicator_entry);
                 break;
             case Indicator.DATETIME:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_DOWN);
-                center_menubar.add (indicator_entry);
+                center_menubar.insert_sorted (indicator_entry);
                 break;
             default:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_LEFT);
                 right_menubar.insert_sorted (indicator_entry);
                 break;
         }
-
-        indicator_entry.show_all ();
     }
 
     private void remove_indicator (Indicator indicator) {
@@ -284,7 +212,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         """.printf (animation_duration);
 
         try {
-            style_provider.load_from_data (css, css.length);
+            style_provider.load_from_string (css);
         } catch (Error e) {
             warning ("Parsing own style configuration failed: %s", e.message);
         }

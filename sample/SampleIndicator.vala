@@ -57,8 +57,8 @@ public class Sample.Indicator : Wingpanel.Indicator {
         };
 
         var hide_button = new Gtk.Button.with_label (_("Hide me!"));
-        hide_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        hide_button.get_style_context ().add_class (Gtk.STYLE_CLASS_MENUITEM);
+        hide_button.get_style_context ().add_class (Granite.STYLE_CLASS_FLAT);
+        hide_button.get_style_context ().add_class (Granite.STYLE_CLASS_MENUITEM);
 
         var compositing_switch = new Granite.SwitchModelButton (_("Composited Icon"));
 

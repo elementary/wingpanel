@@ -34,21 +34,22 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     public PanelWindow (Gtk.Application application) {
         Object (
             application: application,
-            app_paintable: true,
+            //  app_paintable: true,
             decorated: false,
             resizable: false,
-            skip_pager_hint: true,
-            skip_taskbar_hint: true,
+            //  skip_pager_hint: true,
+            //  skip_taskbar_hint: true,
             vexpand: false
         );
 
         var app_provider = new Gtk.CssProvider ();
         app_provider.load_from_resource ("io/elementary/wingpanel/Application.css");
-        Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), app_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        Gtk.StyleContext.add_provider_for_display (Gdk.Display.get_default (), app_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        this.screen.size_changed.connect (update_panel_dimensions);
-        this.screen.monitors_changed.connect (update_panel_dimensions);
-        this.screen_changed.connect (update_visual);
+        //  var display = Gdk.Display.get_default ();
+        //  display.size_changed.connect (update_panel_dimensions);
+        //  display.monitors_changed.connect (update_panel_dimensions);
+        //  display.screen_changed.connect (update_visual);
 
         update_visual ();
 
@@ -76,10 +77,11 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         child = revealer;
 
-        key_controller = new Gtk.EventControllerKey (this);
+        key_controller = new Gtk.EventControllerKey ();
+        ((Gtk.Widget) this).add_controller (key_controller);
         key_controller.key_pressed.connect (on_key_pressed);
 
-        panel.size_allocate.connect (update_panel_dimensions);
+        //  panel.size_allocate.connect (update_panel_dimensions);
     }
 
     private void on_realize () {
@@ -88,7 +90,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         if (Gdk.Display.get_default () is Gdk.Wayland.Display) {
             // We have to wrap in Idle otherwise the Meta.Window of the WaylandSurface in Gala is still null
-            Idle.add_once (init_wl);
+            init_wl ();
         } else {
             init_x ();
         }
@@ -98,7 +100,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         panel_height = panel.get_allocated_height ();
 
         // We just use our monitor because Gala makes sure we are always on the primary one
-        var monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
+        var monitor_dimensions = get_display ().get_monitor_at_surface (get_surface ()).get_geometry ();
 
         if (!Services.DisplayConfig.is_logical_layout () && Gdk.Display.get_default () is Gdk.Wayland.Display) {
             monitor_dimensions.width /= get_scale_factor ();
@@ -114,13 +116,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     private void update_visual () {
-        var visual = this.screen.get_rgba_visual ();
+        //  var visual = this.screen.get_rgba_visual ();
 
-        if (visual == null) {
-            warning ("Compositing not available, things will Look Bad (TM)");
-        } else {
-            this.set_visual (visual);
-        }
+        //  if (visual == null) {
+        //      warning ("Compositing not available, things will Look Bad (TM)");
+        //  } else {
+        //      this.set_visual (visual);
+        //  }
     }
 
     private bool on_key_pressed (uint keyval, uint keycode, Gdk.ModifierType state) {
@@ -146,7 +148,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
             this.expanded = false;
             this.set_size_request (monitor_width, -1);
-            this.resize (monitor_width, 1);
+            this.set_default_size (monitor_width, 1);
         }
     }
 
@@ -171,7 +173,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         if (display is Gdk.X11.Display) {
             unowned var xdisplay = ((Gdk.X11.Display) display).get_xdisplay ();
 
-            var window = ((Gdk.X11.Window) get_window ()).get_xid ();
+            var window = ((Gdk.X11.Surface) get_surface ()).get_xid ();
 
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
@@ -184,9 +186,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
         if (@interface == "io_elementary_pantheon_shell_v1") {
             desktop_shell = wl_registry.bind<Pantheon.Desktop.Shell> (name, ref Pantheon.Desktop.Shell.iface, uint32.min (version, 1));
-            unowned var window = get_window ();
-            if (window is Gdk.Wayland.Window) {
-                unowned var wl_surface = ((Gdk.Wayland.Window) window).get_wl_surface ();
+            unowned var window = get_surface ();
+            if (window is Gdk.Wayland.Surface) {
+                unowned var wl_surface = ((Gdk.Wayland.Surface) window).get_wl_surface ();
                 desktop_panel = desktop_shell.get_panel (wl_surface);
                 desktop_panel.set_anchor (TOP);
                 desktop_panel.set_hide_mode (NEVER);

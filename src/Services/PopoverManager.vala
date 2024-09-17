@@ -20,7 +20,7 @@
 public class Wingpanel.Services.PopoverManager : Object {
     private unowned Wingpanel.PanelWindow? owner;
 
-    private Gtk.GestureMultiPress owner_gesture_controller;
+    private Gtk.GestureClick owner_gesture_controller;
 
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
     private Wingpanel.Widgets.IndicatorPopover popover;
@@ -49,17 +49,18 @@ public class Wingpanel.Services.PopoverManager : Object {
                 _current_indicator = value;
             }
 
+            popover.unparent ();
+
             if (_current_indicator != null) {
                 popover.set_content (_current_indicator.indicator_widget);
-                popover.relative_to = _current_indicator;
                 update_has_tooltip (_current_indicator.display_widget, false);
-                owner.set_expanded (true);
-                owner.present ();
+                //  owner.set_expanded (true);
+                //  owner.present ();
+                popover.set_parent (_current_indicator);
                 popover.popup ();
-                popover.show_all ();
                 _current_indicator.base_indicator.opened ();
             } else {
-                update_has_tooltip (((Wingpanel.Widgets.IndicatorEntry)popover.get_relative_to ()).display_widget);
+                update_has_tooltip (((Wingpanel.Widgets.IndicatorEntry)popover.parent).display_widget);
                 popover.popdown ();
             }
         }
@@ -85,13 +86,14 @@ public class Wingpanel.Services.PopoverManager : Object {
             });
         });
 
-        owner_gesture_controller = new Gtk.GestureMultiPress (owner) {
-            window = owner.get_window ()
+        owner_gesture_controller = new Gtk.GestureClick () {
+            propagation_limit = SAME_NATIVE
         };
+        ((Gtk.Widget) owner).add_controller (owner_gesture_controller);
         owner_gesture_controller.pressed.connect (() => current_indicator = null);
 
         //Replace with EventController propagation limit SAME_NATIVE in GTK 4
-        owner.realize.connect (() => owner_gesture_controller.window = owner.get_window ());
+        //  owner.realize.connect (() => owner_gesture_controller.window = owner.get_window ());
     }
 
     public void set_popover_visible (string code_name, bool visible) {

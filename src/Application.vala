@@ -113,7 +113,7 @@ public class Wingpanel.Application : Gtk.Application {
         base.startup ();
 
         panel_window = new PanelWindow (this);
-        panel_window.show_all ();
+        panel_window.present ();
 
         register_actions ();
     }
