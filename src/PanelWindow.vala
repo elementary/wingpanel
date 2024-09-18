@@ -55,6 +55,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
         child = panel;
+        remove_css_class (Granite.STYLE_CLASS_BACKGROUND);
 
         popover_manager.notify["indicator-open"].connect (() => {
             if (!popover_manager.indicator_open) {
