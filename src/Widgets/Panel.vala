@@ -135,9 +135,9 @@ public class Wingpanel.Widgets.Panel : Gtk.Widget {
 
         IndicatorEntry? sibling;
         if (forward) {
-            sibling = get_next_sibling (current);
+            sibling = get_next_indicator (current);
         } else {
-            sibling = get_previous_sibling (current);
+            sibling = get_previous_indicator (current);
         }
 
         if (sibling != null) {
@@ -145,7 +145,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Widget {
         }
     }
 
-    private IndicatorEntry? get_next_sibling (IndicatorEntry current) {
+    private IndicatorEntry? get_next_indicator (IndicatorEntry current) {
         Gtk.Widget? sibling = current.get_next_sibling ();
 
         if (sibling != null) {
@@ -162,7 +162,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Widget {
         }
     }
 
-    private IndicatorEntry? get_previous_sibling (IndicatorEntry current) {
+    private IndicatorEntry? get_previous_indicator (IndicatorEntry current) {
         Gtk.Widget? sibling = current.get_prev_sibling ();
 
         if (sibling != null) {
@@ -216,11 +216,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Widget {
             }
         """.printf (animation_duration);
 
-        try {
-            style_provider.load_from_string (css);
-        } catch (Error e) {
-            warning ("Parsing own style configuration failed: %s", e.message);
-        }
+        style_provider.load_from_string (css);
 
         switch (state) {
             case Services.BackgroundState.DARK :

@@ -92,9 +92,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Box {
             }
         });
 
-        //  add_events (Gdk.EventMask.SCROLL_MASK);
-        //  add_events (Gdk.EventMask.SMOOTH_SCROLL_MASK);
-
         //  scroll_event.connect ((e) => {
         //      return display_widget.scroll_event (e);
         //  });
