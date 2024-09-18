@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-14 03:53+0000\n"
+"POT-Creation-Date: 2024-09-17 18:00+0000\n"
 "PO-Revision-Date: 2024-08-07 00:16+0000\n"
 "Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Esperanto <https://l10n.elementary.io/projects/wingpanel/"
@@ -37,36 +37,36 @@ msgstr ""
 msgid "elementary, Inc."
 msgstr ""
 
-#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:56
-#: data/wingpanel.metainfo.xml.in:68 data/wingpanel.metainfo.xml.in:82
-#: data/wingpanel.metainfo.xml.in:93
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:54
+#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:83
+#: data/wingpanel.metainfo.xml.in:97
 msgid "Improvements:"
 msgstr ""
 
-#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:58
-#: data/wingpanel.metainfo.xml.in:72 data/wingpanel.metainfo.xml.in:86
-#: data/wingpanel.metainfo.xml.in:96
+#: data/wingpanel.metainfo.xml.in:43
+msgid "Fix incorrect scale factor in some sessions"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:44 data/wingpanel.metainfo.xml.in:56
+#: data/wingpanel.metainfo.xml.in:73 data/wingpanel.metainfo.xml.in:87
+#: data/wingpanel.metainfo.xml.in:101
 msgid "Updated translations"
 msgstr "Ĝisdatigitaj tradukoj"
 
-#: data/wingpanel.metainfo.xml.in:70
+#: data/wingpanel.metainfo.xml.in:85
 msgid "Always use elementary visual resources"
 msgstr ""
 
-#: data/wingpanel.metainfo.xml.in:71
+#: data/wingpanel.metainfo.xml.in:86
 msgid "Esc to close popovers"
 msgstr ""
 
-#: data/wingpanel.metainfo.xml.in:84
+#: data/wingpanel.metainfo.xml.in:99
 msgid "Fallback to maximized style if window manager is unavailable"
 msgstr ""
 
-#: data/wingpanel.metainfo.xml.in:85
+#: data/wingpanel.metainfo.xml.in:100
 msgid "Listen to smooth scroll events"
-msgstr ""
-
-#: data/wingpanel.metainfo.xml.in:95
-msgid "Fix startup delay on the greeter"
 msgstr ""
 
 #~ msgid "io.elementary.wingpanel"
