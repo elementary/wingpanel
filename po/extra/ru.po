@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-17 18:00+0000\n"
-"PO-Revision-Date: 2024-08-15 04:16+0000\n"
+"PO-Revision-Date: 2024-09-18 11:59+0000\n"
 "Last-Translator: кубик круглый <megarainbow29@gmail.com>\n"
 "Language-Team: Russian <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/ru/>\n"
@@ -48,7 +48,7 @@ msgstr "Улучшения:"
 
 #: data/wingpanel.metainfo.xml.in:43
 msgid "Fix incorrect scale factor in some sessions"
-msgstr ""
+msgstr "Исправлен неверный фактор масштабирования в некоторых сеансах"
 
 #: data/wingpanel.metainfo.xml.in:44 data/wingpanel.metainfo.xml.in:56
 #: data/wingpanel.metainfo.xml.in:73 data/wingpanel.metainfo.xml.in:87
