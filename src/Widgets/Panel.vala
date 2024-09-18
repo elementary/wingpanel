@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.Panel : Gtk.Box {
+public class Wingpanel.Widgets.Panel : Gtk.Widget {
     private static Settings panel_settings = new Settings ("io.elementary.desktop.wingpanel");
 
     public Services.PopoverManager popover_manager { get; construct; }
@@ -25,6 +25,8 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
     private IndicatorBar right_menubar;
     private IndicatorBar left_menubar;
     private IndicatorBar center_menubar;
+
+    private Gtk.CenterBox box;
 
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
@@ -39,6 +41,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
 
     class construct {
         set_css_name ("panel");
+        set_layout_manager_type (typeof (Gtk.BinLayout));
     }
 
     construct {
@@ -57,14 +60,12 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
             halign = END
         };
 
-        var box = new Gtk.CenterBox () {
-            hexpand = true
-        };
+        box = new Gtk.CenterBox ();
         box.set_start_widget (left_menubar);
         box.set_center_widget (center_menubar);
         box.set_end_widget (right_menubar);
 
-        append (box);
+        box.set_parent (this);
 
         unowned IndicatorManager indicator_manager = IndicatorManager.get_default ();
         indicator_manager.indicator_added.connect (add_indicator);
@@ -106,6 +107,10 @@ public class Wingpanel.Widgets.Panel : Gtk.Box {
                 current_scroll_delta = 0;
             }
         });
+    }
+
+    ~Panel () {
+        box.unparent ();
     }
 
     private void begin_drag (double x, double y) {

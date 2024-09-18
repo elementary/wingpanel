@@ -18,9 +18,7 @@
  */
 
 public class Wingpanel.Services.PopoverManager : Object {
-    private unowned Wingpanel.PanelWindow? owner;
-
-    private Gtk.GestureClick owner_gesture_controller;
+    public bool indicator_open { get; private set; default = false; }
 
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
     private Wingpanel.Widgets.IndicatorPopover popover;
@@ -36,8 +34,10 @@ public class Wingpanel.Services.PopoverManager : Object {
             }
 
             if (_current_indicator == null && value != null) { // First open
+                indicator_open = true;
                 _current_indicator = value;
             } else if (value == null && _current_indicator != null) { // Close requested
+                indicator_open = false;
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = null;
             } else if (_current_indicator.base_indicator.code_name == value.base_indicator.code_name) { // Close due to toggle
@@ -49,13 +49,9 @@ public class Wingpanel.Services.PopoverManager : Object {
                 _current_indicator = value;
             }
 
-            popover.unparent ();
-
             if (_current_indicator != null) {
                 popover.set_content (_current_indicator.indicator_widget);
                 update_has_tooltip (_current_indicator.display_widget, false);
-                owner.set_expanded (true);
-                owner.present ();
                 popover.set_parent (_current_indicator);
                 popover.popup ();
                 _current_indicator.base_indicator.opened ();
@@ -66,34 +62,15 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
     }
 
-    public PopoverManager (Wingpanel.PanelWindow? owner) {
+    public PopoverManager () {
         registered_indicators = new Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> ();
-
-        this.owner = owner;
 
         popover = new Wingpanel.Widgets.IndicatorPopover ();
 
         popover.closed.connect (() => {
             current_indicator = null;
-
-            // We have to wait for unmap otherwise the popover is confined to the panel space
-            // on X. But we also can't just connect to it because unmap gets emitted when repositioning
-            // for some reason.
-            ulong handler_id = 0;
-            handler_id = popover.unmap.connect (() => {
-                owner.set_expanded (false);
-                popover.disconnect (handler_id);
-            });
+            popover.unparent ();
         });
-
-        owner_gesture_controller = new Gtk.GestureClick () {
-            propagation_limit = SAME_NATIVE
-        };
-        ((Gtk.Widget) owner).add_controller (owner_gesture_controller);
-        owner_gesture_controller.pressed.connect (() => current_indicator = null);
-
-        //Replace with EventController propagation limit SAME_NATIVE in GTK 4
-        //  owner.realize.connect (() => owner_gesture_controller.window = owner.get_window ());
     }
 
     public void set_popover_visible (string code_name, bool visible) {

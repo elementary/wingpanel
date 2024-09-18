@@ -21,12 +21,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     public Services.PopoverManager popover_manager;
 
     private Widgets.Panel panel;
-    private Gtk.EventControllerKey key_controller; // For keeping in memory
-    private Gtk.Revealer revealer;
-    private int monitor_width;
-    private int monitor_height;
     private int panel_height;
-    private bool expanded = false;
 
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? desktop_panel;
@@ -43,7 +38,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         app_provider.load_from_resource ("io/elementary/wingpanel/Application.css");
         Gtk.StyleContext.add_provider_for_display (Gdk.Display.get_default (), app_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        popover_manager = new Services.PopoverManager (this);
+        popover_manager = new Services.PopoverManager ();
 
         panel = new Widgets.Panel (popover_manager);
         panel.realize.connect (on_realize);
@@ -59,19 +54,29 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         application.set_accels_for_action ("app.cycle", {"<Control>Tab"});
         application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
 
-        revealer = new Gtk.Revealer () {
-            child = panel,
-            reveal_child = true,
-            transition_type = NONE
-        };
+        child = panel;
 
-        child = revealer;
+        popover_manager.notify["indicator-open"].connect (() => {
+            if (!popover_manager.indicator_open) {
+                Services.BackgroundManager.get_default ().restore_window ();
+                return;
+            } else {
+                Services.BackgroundManager.get_default ().remember_window ();
+            }
 
-        key_controller = new Gtk.EventControllerKey ();
+            if (desktop_panel != null) {
+                desktop_panel.focus ();
+            } else if (Gdk.Display.get_default () is Gdk.X11.Display) {
+                var display = (Gdk.X11.Display) Gdk.Display.get_default ();
+                var surface = (Gdk.X11.Surface) get_surface ();
+
+                display.get_xdisplay ().set_input_focus (surface.get_xid (), 0, 0);
+            }
+        });
+
+        var key_controller = new Gtk.EventControllerKey ();
         ((Gtk.Widget) this).add_controller (key_controller);
         key_controller.key_pressed.connect (on_key_pressed);
-
-        panel.map.connect (update_panel_dimensions);
     }
 
     private void on_realize () {
@@ -98,10 +103,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             monitor_dimensions.y /= get_scale_factor ();
         }
 
-        monitor_width = monitor_dimensions.width;
-        monitor_height = monitor_dimensions.height;
-
-        this.set_size_request (monitor_width, (popover_manager.current_indicator != null ? monitor_height : -1));
+        this.set_size_request (monitor_dimensions.width, -1);
     }
 
     private bool on_key_pressed (uint keyval, uint keycode, Gdk.ModifierType state) {
@@ -112,43 +114,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         return Gdk.EVENT_PROPAGATE;
     }
 
-    public void set_expanded (bool expand) {
-        if (Gdk.Display.get_default () is Gdk.Wayland.Display) {
-            return;
-        }
-
-        if (expand && !this.expanded) {
-            Services.BackgroundManager.get_default ().remember_window ();
-
-            this.expanded = true;
-            this.set_size_request (monitor_width, monitor_height);
-
-            if (desktop_panel != null) {
-                desktop_panel.focus ();
-            }
-        } else if (!expand) {
-            Services.BackgroundManager.get_default ().restore_window ();
-
-            this.expanded = false;
-            this.set_size_request (monitor_width, -1);
-            this.set_default_size (monitor_width, 1);
-        }
-    }
-
     public void toggle_indicator (string name) {
         popover_manager.toggle_popover_visible (name);
-
-        if (desktop_panel != null) {
-            desktop_panel.focus ();
-        }
-    }
-
-    private int get_actual_height () {
-        if (!Services.DisplayConfig.is_logical_layout () && Gdk.Display.get_default () is Gdk.Wayland.Display) {
-            return get_allocated_height () * get_scale_factor ();
-        }
-
-        return get_allocated_height ();
     }
 
     private void init_x () {
@@ -160,9 +127,11 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
-            var value = "anchor=4:hide-mode=0:size=-1,%d".printf (get_actual_height ());
+            var value = "anchor=4:hide-mode=0";
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
+
+            Idle.add_once (update_panel_dimensions); // Update again since we now can be 100% sure that we are on the primary monitor
         }
     }
 
@@ -175,7 +144,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 desktop_panel = desktop_shell.get_panel (wl_surface);
                 desktop_panel.set_anchor (TOP);
                 desktop_panel.set_hide_mode (NEVER);
-                desktop_panel.set_size (-1, get_actual_height ());
 
                 Idle.add_once (update_panel_dimensions); // Update again since we now can be 100% sure that we are on the primary monitor
             }
