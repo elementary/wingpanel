@@ -92,12 +92,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Box {
             }
         });
 
-        //  scroll_event.connect ((e) => {
-        //      return display_widget.scroll_event (e);
-        //  });
-
-        //  button_press_event.connect ((e) => display_widget.button_press_event (e));
-
         gesture_controller = new Gtk.GestureClick ();
         add_controller (gesture_controller);
         gesture_controller.pressed.connect (() => {
