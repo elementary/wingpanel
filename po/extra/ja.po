@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-09-17 18:00+0000\n"
-"PO-Revision-Date: 2024-08-15 04:16+0000\n"
+"PO-Revision-Date: 2024-09-18 11:59+0000\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: Japanese <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/ja/>\n"
@@ -47,7 +47,7 @@ msgstr "改善点:"
 
 #: data/wingpanel.metainfo.xml.in:43
 msgid "Fix incorrect scale factor in some sessions"
-msgstr ""
+msgstr "一部のセッションでスケーリングファクターが間違っていた不具合を修正"
 
 #: data/wingpanel.metainfo.xml.in:44 data/wingpanel.metainfo.xml.in:56
 #: data/wingpanel.metainfo.xml.in:73 data/wingpanel.metainfo.xml.in:87
