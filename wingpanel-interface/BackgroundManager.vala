@@ -66,7 +66,8 @@ public class WingpanelInterface.BackgroundManager : Object {
         Object (panel_height: panel_height);
 
         connect_signals.begin ();
-        update_bk_color_info.begin ();
+
+        Bus.watch_name (SESSION, "io.elementary.desktop.background", NONE, () => connect_to_background.begin (), () => provider = null);
     }
 
     private async void connect_signals () {
@@ -74,10 +75,14 @@ public class WingpanelInterface.BackgroundManager : Object {
         manager.workspace_switched.connect (() => {
             update_current_workspace ();
         });
+    }
 
+    private async void connect_to_background () {
         try {
             provider = yield Bus.get_proxy (SESSION, "io.elementary.desktop.background", "/io/elementary/desktop/background");
-            provider.changed.connect (update_bk_color_info.begin);
+            provider.changed.connect (() => update_bk_color_info.begin ());
+
+            update_bk_color_info.begin ();
         } catch (Error e) {
             warning ("Failed to get background proxy: %s", e.message);
         }
@@ -136,7 +141,7 @@ public class WingpanelInterface.BackgroundManager : Object {
         check_for_state_change (SNAP_DURATION);
     }
 
-    public async void update_bk_color_info () {
+    public async void update_bk_color_info () requires (provider != null) {
         try {
             bk_color_info = yield provider.get_background_color_information (panel_height);
             update_current_workspace ();
