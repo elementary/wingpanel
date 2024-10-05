@@ -100,6 +100,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         // We just use our monitor because Gala makes sure we are always on the primary one
         var monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
 
+        if (!Services.DisplayConfig.is_logical_layout () && Gdk.Display.get_default () is Gdk.Wayland.Display) {
+            monitor_dimensions.width /= get_scale_factor ();
+            monitor_dimensions.height /= get_scale_factor ();
+            monitor_dimensions.x /= get_scale_factor ();
+            monitor_dimensions.y /= get_scale_factor ();
+        }
+
         monitor_width = monitor_dimensions.width;
         monitor_height = monitor_dimensions.height;
 
@@ -151,6 +158,14 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         }
     }
 
+    private int get_actual_height () {
+        if (!Services.DisplayConfig.is_logical_layout () && Gdk.Display.get_default () is Gdk.Wayland.Display) {
+            return get_allocated_height () * get_scale_factor ();
+        }
+
+        return get_allocated_height ();
+    }
+
     private void init_x () {
         var display = Gdk.Display.get_default ();
         if (display is Gdk.X11.Display) {
@@ -160,7 +175,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
             var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
 
-            var value = "anchor=4:hide-mode=0:size=-1,%d".printf (get_allocated_height ());
+            var value = "anchor=4:hide-mode=0:size=-1,%d".printf (get_actual_height ());
 
             xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
         }
@@ -175,7 +190,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 desktop_panel = desktop_shell.get_panel (wl_surface);
                 desktop_panel.set_anchor (TOP);
                 desktop_panel.set_hide_mode (NEVER);
-                desktop_panel.set_size (-1, get_allocated_height ());
+                desktop_panel.set_size (-1, get_actual_height ());
 
                 Idle.add_once (update_panel_dimensions); // Update again since we now can be 100% sure that we are on the primary monitor
             }

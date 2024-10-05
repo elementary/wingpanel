@@ -1,10 +1,11 @@
 panel {
     background-color: transparent;
     transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-    min-height: 16px;
 }
 
 panel > box {
+    /* Keep in sync with Panel.vala height request */
+    min-height: 30px;
     /*Don't transition shadow etc to avoid visual issues with struts*/
     transition: background 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }

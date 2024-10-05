@@ -18,6 +18,8 @@
  */
 
 public class Wingpanel.Widgets.Panel : Gtk.EventBox {
+    private static Settings panel_settings = new Settings ("io.elementary.desktop.wingpanel");
+
     public Services.PopoverManager popover_manager { get; construct; }
 
     private IndicatorBar right_menubar;
@@ -26,6 +28,10 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
+
+    private Gtk.GestureMultiPress gesture_controller;
+    private Gtk.EventControllerScroll scroll_controller;
+    private double current_scroll_delta = 0;
 
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
@@ -72,9 +78,29 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
 
-        button_press_event.connect ((event) => {
-            begin_drag (event.x_root, event.y_root);
-            return Gdk.EVENT_PROPAGATE;
+        gesture_controller = new Gtk.GestureMultiPress (this);
+        gesture_controller.pressed.connect ((n_press, x, y) => {
+            begin_drag (x, y);
+            gesture_controller.set_state (CLAIMED);
+            gesture_controller.reset ();
+        });
+
+        scroll_controller = new Gtk.EventControllerScroll (this, BOTH_AXES);
+        scroll_controller.scroll_end.connect (() => current_scroll_delta = 0);
+        scroll_controller.scroll.connect ((dx, dy) => {
+            if (!panel_settings.get_boolean ("scroll-to-switch-workspaces")) {
+                return;
+            }
+
+            if (current_scroll_delta == 0) {
+                Services.WMDBus.switch_workspace.begin (dx < 0 || dy < 0);
+            }
+
+            current_scroll_delta += dx + dy;
+
+            if (current_scroll_delta.abs () > 10) { //TODO: Check whether 10 is good here.
+                current_scroll_delta = 0;
+            }
         });
     }
 
