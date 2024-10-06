@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-14 03:53+0000\n"
-"PO-Revision-Date: 2024-09-05 21:13+0000\n"
+"POT-Creation-Date: 2024-09-17 18:00+0000\n"
+"PO-Revision-Date: 2024-09-19 08:57+0000\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Chinese (Traditional) <https://l10n.elementary.io/projects/"
 "wingpanel/wingpanel-extra/zh_Hant/>\n"
@@ -31,41 +31,45 @@ msgstr "用來顯示各指示器和應用程式選單的頂端面板"
 msgid ""
 "The extensible top panel for Pantheon. Wingpanel is an empty container that "
 "accepts indicators as extensions, including the applications menu."
-msgstr "Pantheon 用的可擴展頂端面板。Wingpanel "
-"本身是一個空白的容器，讓指示器與應用程式選單作為擴充元件置於其中。"
+msgstr ""
+"Pantheon 用的可擴展頂端面板。Wingpanel 本身是一個空白的容器，讓指示器與應用程"
+"式選單作為擴充元件置於其中。"
 
 #: data/wingpanel.metainfo.xml.in:33
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:56
-#: data/wingpanel.metainfo.xml.in:68 data/wingpanel.metainfo.xml.in:82
-#: data/wingpanel.metainfo.xml.in:93
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:54
+#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:83
+#: data/wingpanel.metainfo.xml.in:97
 msgid "Improvements:"
 msgstr "改善項目："
 
-#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:58
-#: data/wingpanel.metainfo.xml.in:72 data/wingpanel.metainfo.xml.in:86
-#: data/wingpanel.metainfo.xml.in:96
+#: data/wingpanel.metainfo.xml.in:43
+msgid "Fix incorrect scale factor in some sessions"
+msgstr "修正在某些工作階段的縮放係數不正確的問題"
+
+#: data/wingpanel.metainfo.xml.in:44 data/wingpanel.metainfo.xml.in:56
+#: data/wingpanel.metainfo.xml.in:73 data/wingpanel.metainfo.xml.in:87
+#: data/wingpanel.metainfo.xml.in:101
 msgid "Updated translations"
 msgstr "翻譯更新"
 
-#: data/wingpanel.metainfo.xml.in:70
+#: data/wingpanel.metainfo.xml.in:85
 msgid "Always use elementary visual resources"
 msgstr "總是使用 elementary 的視覺資源"
 
-#: data/wingpanel.metainfo.xml.in:71
+#: data/wingpanel.metainfo.xml.in:86
 msgid "Esc to close popovers"
 msgstr "用 Esc 來關閉 popover"
 
-#: data/wingpanel.metainfo.xml.in:84
+#: data/wingpanel.metainfo.xml.in:99
 msgid "Fallback to maximized style if window manager is unavailable"
 msgstr "視窗管理員無法使用時退回到使用最大化風格"
 
-#: data/wingpanel.metainfo.xml.in:85
+#: data/wingpanel.metainfo.xml.in:100
 msgid "Listen to smooth scroll events"
 msgstr "聆聽平滑捲動事件"
 
-#: data/wingpanel.metainfo.xml.in:95
-msgid "Fix startup delay on the greeter"
-msgstr "修正在登入畫面上的啟動延遲"
+#~ msgid "Fix startup delay on the greeter"
+#~ msgstr "修正在登入畫面上的啟動延遲"
