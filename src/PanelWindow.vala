@@ -80,6 +80,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         key_controller.key_pressed.connect (on_key_pressed);
 
         panel.size_allocate.connect (update_panel_dimensions);
+        panel.notify["scale-factor"].connect (update_panel_dimensions);
     }
 
     private void on_realize () {
@@ -98,17 +99,17 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         panel_height = panel.get_allocated_height ();
 
         // We just use our monitor because Gala makes sure we are always on the primary one
-        var monitor_dimensions = get_display ().get_monitor_at_window (get_window ()).get_geometry ();
+        var monitor = get_display ().get_monitor_at_window (get_window ());
+        var monitor_dimensions = monitor.get_geometry ();
 
-        if (!Services.DisplayConfig.is_logical_layout () && Gdk.Display.get_default () is Gdk.Wayland.Display) {
-            monitor_dimensions.width /= get_scale_factor ();
-            monitor_dimensions.height /= get_scale_factor ();
-            monitor_dimensions.x /= get_scale_factor ();
-            monitor_dimensions.y /= get_scale_factor ();
-        }
+        /* First convert into physical size of the monitor */
+        monitor_dimensions.width *= monitor.get_scale_factor ();
+        monitor_dimensions.height *= monitor.get_scale_factor ();
 
-        monitor_width = monitor_dimensions.width;
-        monitor_height = monitor_dimensions.height;
+        /* Then convert into logical size as per surface scale. We do this because
+         * for some reason surface scale doesn't have to equal monitor scale */
+        monitor_width = monitor_dimensions.width / get_scale_factor ();
+        monitor_height = monitor_dimensions.height / get_scale_factor ();
 
         this.set_size_request (monitor_width, (popover_manager.current_indicator != null ? monitor_height : -1));
     }
