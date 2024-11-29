@@ -24,7 +24,6 @@ public class Wingpanel.Widgets.IndicatorPopover : Gtk.Popover {
 
     construct {
         width_request = 256;
-        modal = false;
         name = name + "/popover";
         position = Gtk.PositionType.BOTTOM;
 
@@ -47,7 +46,7 @@ public class Wingpanel.Widgets.IndicatorPopover : Gtk.Popover {
         }
 
         if (content != null) {
-            container.add (content);
+            container.append (content);
             widget = content;
         }
     }
