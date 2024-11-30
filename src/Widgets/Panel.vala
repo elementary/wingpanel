@@ -98,7 +98,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
             current_scroll_delta += dx + dy;
 
-            if (current_scroll_delta.abs () > 10) { //TODO: Check whether 10 is good here.
+            if (current_scroll_delta.abs () > 1) { //TODO: Check whether 10 is good here.
                 current_scroll_delta = 0;
             }
         });
