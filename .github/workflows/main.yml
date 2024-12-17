@@ -42,12 +42,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Dependencies
         run: |
-          dnf install -y gala-devel libgee-devel glib2-devel granite-devel gtk3-devel meson valac
+          dnf install -y gala-devel libgee-devel gobject-introspection-devel glib2-devel granite-devel gtk3-devel meson valac
       - name: Build
         env:
           DESTDIR: out
         run: |
-          meson build
+          meson build -Dexample=true
+          ninja -C build
           ninja -C build install
 
   lint:
