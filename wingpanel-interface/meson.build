@@ -60,9 +60,9 @@ if mutter46_dep.found()
 	vala_flags = ['--define', 'HAS_MUTTER43', '--define', 'HAS_MUTTER44', '--define', 'HAS_MUTTER45', '--define', 'HAS_MUTTER46']
 endif
 
-mutter47_dep = dependency('libmutter-15', version: ['>=47','< 48'], required: false)
+mutter47_dep = dependency('libmutter-15', version: ['>= 47','< 48'], required: false)
 if mutter47_dep.found()
-	libmutter_dep = dependency('libmutter-15', version: '>=47')
+	libmutter_dep = dependency('libmutter-15', version: '>= 47')
 		mutter_dep = [
 		libmutter_dep,
 		dependency('mutter-mtk-15'), dependency('mutter-cogl-15'),
