@@ -32,6 +32,25 @@ jobs:
         ninja -C build
         ninja -C build install
 
+  fedora:
+    runs-on: ubuntu-latest
+
+    container:
+      image: fedora:latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: |
+          dnf install -y gala-devel libgee-devel glib2-devel granite-devel gtk3-devel meson valac
+      - name: Build
+        env:
+          DESTDIR: out
+        run: |
+          meson build
+          ninja -C build install
+
+
   lint:
 
     runs-on: ubuntu-latest
