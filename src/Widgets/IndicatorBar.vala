@@ -34,20 +34,19 @@ public class Wingpanel.Widgets.IndicatorBar : Gtk.Box {
         }
 
         if (item.base_indicator.visible) {
-            var index = 0;
+            Gtk.Widget? previous = null;
             foreach (var i in sorted_items) {
                 if (i == item) {
                     break;
                 }
 
                 if (i.base_indicator.visible) {
-                    index++;
+                    previous = i;
                 }
             }
 
             if (item.get_parent () != this) {
-                add (item);
-                reorder_child (item, index);
+                insert_child_after (item, previous);
             }
         }
     }
