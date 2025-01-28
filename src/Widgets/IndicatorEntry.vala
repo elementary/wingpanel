@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
+public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
-    public IndicatorMenuBar? menu_bar;
+    public IndicatorBar? indicator_bar;
     public Gtk.Widget display_widget { get; private set; }
 
     private Gtk.Widget _indicator_widget = null;
@@ -37,6 +37,9 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
     private Gtk.Revealer revealer;
 
+    private Gtk.GestureMultiPress gesture_controller;
+    private Gtk.EventControllerMotion motion_controller;
+
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
         Object (
             base_indicator: base_indicator,
@@ -49,14 +52,15 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         display_widget = base_indicator.get_display_widget ();
         halign = Gtk.Align.START;
         name = base_indicator.code_name + "/entry";
-        get_style_context ().add_class ("composited-indicator");
 
         if (display_widget == null) {
             return;
         }
 
-        revealer = new Gtk.Revealer ();
-        revealer.add (display_widget);
+        revealer = new Gtk.Revealer () {
+            child = display_widget
+        };
+        revealer.get_style_context ().add_class ("composited-indicator");
 
         add (revealer);
 
@@ -69,13 +73,13 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         });
 
         base_indicator.notify["visible"].connect (() => {
-            if (menu_bar != null) {
+            if (indicator_bar != null) {
                 /* order will be changed so close all open popovers */
                 popover_manager.close ();
 
                 if (base_indicator.visible) {
                     popover_manager.register_indicator (this);
-                    menu_bar.insert_sorted (this);
+                    indicator_bar.insert_sorted (this);
                     set_reveal (base_indicator.visible);
                 } else {
                     set_reveal (base_indicator.visible);
@@ -92,31 +96,26 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
         add_events (Gdk.EventMask.SMOOTH_SCROLL_MASK);
 
         scroll_event.connect ((e) => {
-            display_widget.scroll_event (e);
-
-            return Gdk.EVENT_PROPAGATE;
+            return display_widget.scroll_event (e);
         });
 
-        touch_event.connect ((e) => {
-            if (e.type == Gdk.EventType.TOUCH_BEGIN) {
-                popover_manager.current_indicator = this;
-                return Gdk.EVENT_STOP;
-            }
+        button_press_event.connect ((e) => display_widget.button_press_event (e));
 
-            return Gdk.EVENT_PROPAGATE;
+        gesture_controller = new Gtk.GestureMultiPress (this);
+        gesture_controller.pressed.connect (() => {
+            popover_manager.current_indicator = this;
+            gesture_controller.set_state (CLAIMED);
         });
 
-        button_press_event.connect ((e) => {
-            if ((e.button == Gdk.BUTTON_PRIMARY || e.button == Gdk.BUTTON_SECONDARY)
-                && e.type == Gdk.EventType.BUTTON_PRESS) {
+        motion_controller = new Gtk.EventControllerMotion (this) {
+            propagation_phase = CAPTURE
+        };
+
+        motion_controller.enter.connect (() => {
+            // If something is open and it's not us, open us. This implements the scrubbing behavior
+            if (popover_manager.current_indicator != null && !popover_manager.get_visible (this)) {
                 popover_manager.current_indicator = this;
-                return Gdk.EVENT_STOP;
             }
-
-            /* Call button press on the indicator display widget */
-            display_widget.button_press_event (e);
-
-            return Gdk.EVENT_STOP;
         });
 
         set_reveal (base_indicator.visible);
@@ -124,7 +123,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.MenuItem {
 
     private void indicator_unmapped () {
         base_indicator.get_display_widget ().unmap.disconnect (indicator_unmapped);
-        menu_bar.remove (this);
+        indicator_bar.remove (this);
     }
 
     public void set_transition_type (Gtk.RevealerTransitionType transition_type) {

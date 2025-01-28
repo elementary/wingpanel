@@ -147,9 +147,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
             error ("Wingpanel is not supported by this system!");
         }
 
-        if (!path.has_suffix (GLib.Module.SUFFIX)) {
-            return;
-        } else if (indicators.has_key (path)) {
+        if (indicators.has_key (path)) {
             return;
         } else if (check_forbidden_indicators (path)) {
             debug ("Indicator %s will not be loaded since it is explicitly forbidden", path);
@@ -161,7 +159,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
             return;
         }
 
-        Module module = Module.open (path, ModuleFlags.BIND_LAZY);
+        Module module = Module.open (path, ModuleFlags.LAZY);
 
         if (module == null) {
             critical (Module.error ());

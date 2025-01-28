@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 16:27+0000\n"
-"PO-Revision-Date: 2020-03-26 22:09+0000\n"
+"POT-Creation-Date: 2024-09-17 18:00+0000\n"
+"PO-Revision-Date: 2024-09-22 20:16+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/he/>\n"
@@ -17,15 +17,62 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 5.6.2\n"
 
-#: data/wingpanel.desktop.in:3
+#: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
 msgstr "Wingpanel"
 
-#: data/wingpanel.desktop.in:4
+#: data/wingpanel.desktop.in:4 data/wingpanel.metainfo.xml.in:9
 msgid "Top panel that holds indicators and the applications menu"
 msgstr "לוח עליון שמציג את ההתראות ואת תפריט היישומים"
+
+#: data/wingpanel.metainfo.xml.in:11
+msgid ""
+"The extensible top panel for Pantheon. Wingpanel is an empty container that "
+"accepts indicators as extensions, including the applications menu."
+msgstr ""
+"הלוח הגמיש העליון ל־Pantheon.‏ Wingpanel הוא מכל ריק שמקבל מחוונים כהרחבות, "
+"כולל תפריט היישומים."
+
+#: data/wingpanel.metainfo.xml.in:33
+msgid "elementary, Inc."
+msgstr "elementary בע״מ"
+
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:54
+#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:83
+#: data/wingpanel.metainfo.xml.in:97
+msgid "Improvements:"
+msgstr "שיפורים:"
+
+#: data/wingpanel.metainfo.xml.in:43
+msgid "Fix incorrect scale factor in some sessions"
+msgstr "תוקן מקדם קנה־מידה שגוי בחלק מההפעלות"
+
+#: data/wingpanel.metainfo.xml.in:44 data/wingpanel.metainfo.xml.in:56
+#: data/wingpanel.metainfo.xml.in:73 data/wingpanel.metainfo.xml.in:87
+#: data/wingpanel.metainfo.xml.in:101
+msgid "Updated translations"
+msgstr "תרגומים עודכנו"
+
+#: data/wingpanel.metainfo.xml.in:85
+msgid "Always use elementary visual resources"
+msgstr "לה"
+
+#: data/wingpanel.metainfo.xml.in:86
+msgid "Esc to close popovers"
+msgstr "Esc לסגירת החלוניות הצפות"
+
+#: data/wingpanel.metainfo.xml.in:99
+msgid "Fallback to maximized style if window manager is unavailable"
+msgstr "נסיגה למצב המוגדל אם אין מנהל חלונות"
+
+#: data/wingpanel.metainfo.xml.in:100
+msgid "Listen to smooth scroll events"
+msgstr "האזנה לאירועי גלילה חלקה"
+
+#~ msgid "Fix startup delay on the greeter"
+#~ msgstr "תוקן עיכוב בהתחלה עם קבלת הפנים"
 
 #~ msgid "io.elementary.wingpanel"
 #~ msgstr "io.elementary.wingpanel"

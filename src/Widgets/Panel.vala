@@ -18,14 +18,20 @@
  */
 
 public class Wingpanel.Widgets.Panel : Gtk.EventBox {
+    private static Settings panel_settings = new Settings ("io.elementary.desktop.wingpanel");
+
     public Services.PopoverManager popover_manager { get; construct; }
 
-    private IndicatorMenuBar right_menubar;
-    private Gtk.MenuBar left_menubar;
-    private Gtk.MenuBar center_menubar;
+    private IndicatorBar right_menubar;
+    private IndicatorBar left_menubar;
+    private IndicatorBar center_menubar;
 
     private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
+
+    private Gtk.GestureMultiPress gesture_controller;
+    private Gtk.EventControllerScroll scroll_controller;
+    private double current_scroll_delta = 0;
 
     public Panel (Services.PopoverManager popover_manager) {
         Object (popover_manager : popover_manager);
@@ -39,20 +45,16 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         height_request = 30;
         hexpand = true;
         vexpand = true;
-        valign = Gtk.Align.START;
+        valign = START;
 
-        left_menubar = new Gtk.MenuBar () {
-            can_focus = true,
-            halign = Gtk.Align.START
+        left_menubar = new IndicatorBar () {
+            halign = START
         };
 
-        center_menubar = new Gtk.MenuBar () {
-            can_focus = true
-        };
+        center_menubar = new IndicatorBar ();
 
-        right_menubar = new IndicatorMenuBar () {
-            can_focus = true,
-            halign = Gtk.Align.END
+        right_menubar = new IndicatorBar () {
+            halign = END
         };
 
         var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -75,38 +77,45 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         style_context = get_style_context ();
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
+
+        gesture_controller = new Gtk.GestureMultiPress (this);
+        gesture_controller.pressed.connect ((n_press, x, y) => {
+            begin_drag (x, y);
+            gesture_controller.set_state (CLAIMED);
+            gesture_controller.reset ();
+        });
+
+        scroll_controller = new Gtk.EventControllerScroll (this, BOTH_AXES);
+        scroll_controller.scroll_end.connect (() => current_scroll_delta = 0);
+        scroll_controller.scroll.connect ((dx, dy) => {
+            if (!panel_settings.get_boolean ("scroll-to-switch-workspaces")) {
+                return;
+            }
+
+            if (current_scroll_delta == 0) {
+                Services.WMDBus.switch_workspace.begin (dx < 0 || dy < 0);
+            }
+
+            current_scroll_delta += dx + dy;
+
+            if (current_scroll_delta.abs () > 10) { //TODO: Check whether 10 is good here.
+                current_scroll_delta = 0;
+            }
+        });
     }
 
-    public override bool button_press_event (Gdk.EventButton event) {
-        if (event.button != Gdk.BUTTON_PRIMARY) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
+    private void begin_drag (double x, double y) {
         var window = get_window ();
         if (window == null) {
-            return Gdk.EVENT_PROPAGATE;
+            return;
         }
-
-        // Grabbing with touchscreen on X does not work unfortunately
-        if (event.device.get_source () == Gdk.InputSource.TOUCHSCREEN) {
-            return Gdk.EVENT_PROPAGATE;
-        }
-
-        uint32 time = event.time;
 
         window.get_display ().get_default_seat ().ungrab ();
 
-        Gdk.ModifierType state;
-        event.get_state (out state);
-
         popover_manager.close ();
 
-        var scale_factor = this.get_scale_factor ();
-        var x = (int)event.x_root * scale_factor;
-        var y = (int)event.y_root * scale_factor;
-
         var background_manager = Services.BackgroundManager.get_default ();
-        return background_manager.begin_grab_focused_window (x, y, (int)event.button, time, state);
+        background_manager.begin_grab_focused_window ((int) x, (int) y);
     }
 
     public void cycle (bool forward) {
@@ -257,21 +266,9 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     }
 
     private void remove_indicator (Indicator indicator) {
-        remove_indicator_from_container (left_menubar, indicator);
-        remove_indicator_from_container (center_menubar, indicator);
-        remove_indicator_from_container (right_menubar, indicator);
-    }
-
-    private void remove_indicator_from_container (Gtk.Container container, Indicator indicator) {
-        foreach (unowned Gtk.Widget child in container.get_children ()) {
-            unowned IndicatorEntry? entry = (child as IndicatorEntry);
-
-            if (entry != null && entry.base_indicator == indicator) {
-                container.remove (child);
-
-                return;
-            }
-        }
+        left_menubar.remove_indicator (indicator);
+        center_menubar.remove_indicator (indicator);
+        right_menubar.remove_indicator (indicator);
     }
 
     private void update_background (Services.BackgroundState state, uint animation_duration) {

@@ -18,9 +18,9 @@
  */
 
 public class WingpanelInterface.FocusManager : Object {
-    private unowned Meta.Workspace? current_workspace = null;
-    private unowned Meta.Window? last_focused_window = null;
-    private unowned Meta.Window? last_focused_dialog_window = null;
+    private Meta.Workspace? current_workspace = null;
+    private Meta.Window? last_focused_window = null;
+    private Meta.Window? last_focused_dialog_window = null;
 
     public FocusManager () {
         unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
@@ -83,9 +83,13 @@ public class WingpanelInterface.FocusManager : Object {
     void window_unmanaged (Meta.Window window) {
         window.focused.disconnect (window_focused);
         window.unmanaged.disconnect (window_unmanaged);
+
+        if (last_focused_window == window) {
+            last_focused_window = null;
+        }
     }
 
-    public bool begin_grab_focused_window (int x, int y, int button, uint time, uint state) {
+    public bool begin_grab_focused_window (int x, int y) {
         unowned var display = Main.display;
         unowned var window = display.get_focus_window ();
         if (window == null || !get_can_grab_window (window, x, y)) {
@@ -110,11 +114,34 @@ public class WingpanelInterface.FocusManager : Object {
         }
 
         if (window != null) {
-#if HAS_MUTTER44
-            window.begin_grab_op (Meta.GrabOp.MOVING, null, null, time);
-#else
-            display.begin_grab_op (window, Meta.GrabOp.MOVING, false, true, button, state, time, x, y);
-#endif
+            unowned var wm = Main.wm;
+            unowned var stage = wm.stage;
+
+            var proxy = wm.push_modal (stage);
+
+            ulong handler = 0;
+            handler = stage.captured_event.connect ((event) => {
+                if (event.get_type () == LEAVE || event.get_type () == ENTER) { // We need to filter ENTER for X because reasons I don't understand :( (I think something with pushing modal)
+                    /* We get leave emitted when beginning a grab op, so we have
+                    to filter it in order to avoid disconnecting and popping twice */
+                    return Clutter.EVENT_PROPAGATE;
+                }
+
+                if (event.get_type () == MOTION || event.get_type () == TOUCH_UPDATE) {
+                    window.begin_grab_op (
+                        Meta.GrabOp.MOVING,
+                        event.get_device (),
+                        event.get_event_sequence (),
+                        event.get_time (),
+                        { x, y }
+                    );
+                }
+
+                wm.pop_modal (proxy);
+                stage.disconnect (handler);
+
+                return Clutter.EVENT_PROPAGATE;
+            });
             return true;
         }
 

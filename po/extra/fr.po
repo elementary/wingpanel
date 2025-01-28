@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 16:27+0000\n"
-"PO-Revision-Date: 2019-11-05 21:24+0000\n"
+"POT-Creation-Date: 2024-09-17 18:00+0000\n"
+"PO-Revision-Date: 2024-08-27 08:16+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/fr/>\n"
@@ -17,16 +17,66 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.7.1\n"
+"X-Generator: Weblate 5.6.2\n"
 
-#: data/wingpanel.desktop.in:3
+#: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
 msgstr "Wingpanel"
 
-#: data/wingpanel.desktop.in:4
+#: data/wingpanel.desktop.in:4 data/wingpanel.metainfo.xml.in:9
 msgid "Top panel that holds indicators and the applications menu"
 msgstr ""
 "Panneau supérieur qui contient les indicateurs et le menu des applications"
+
+#: data/wingpanel.metainfo.xml.in:11
+msgid ""
+"The extensible top panel for Pantheon. Wingpanel is an empty container that "
+"accepts indicators as extensions, including the applications menu."
+msgstr ""
+"Le panneau supérieur évolutif de Pantheon. Wingpanel est un conteneur vide "
+"qui accepte les indicateurs en tant qu'extensions, y compris le menu des "
+"applications."
+
+#: data/wingpanel.metainfo.xml.in:33
+msgid "elementary, Inc."
+msgstr "elementary, Inc."
+
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:54
+#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:83
+#: data/wingpanel.metainfo.xml.in:97
+msgid "Improvements:"
+msgstr "Améliorations :"
+
+#: data/wingpanel.metainfo.xml.in:43
+msgid "Fix incorrect scale factor in some sessions"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:44 data/wingpanel.metainfo.xml.in:56
+#: data/wingpanel.metainfo.xml.in:73 data/wingpanel.metainfo.xml.in:87
+#: data/wingpanel.metainfo.xml.in:101
+msgid "Updated translations"
+msgstr "Mise à jour des traductions"
+
+#: data/wingpanel.metainfo.xml.in:85
+msgid "Always use elementary visual resources"
+msgstr "Utilisation systématique des ressources visuelles d'elementary"
+
+#: data/wingpanel.metainfo.xml.in:86
+msgid "Esc to close popovers"
+msgstr "Échap pour fermer les éléments flottants"
+
+#: data/wingpanel.metainfo.xml.in:99
+msgid "Fallback to maximized style if window manager is unavailable"
+msgstr ""
+"Retour par défaut au style de fenêtre agrandie si le gestionnaire de "
+"fenêtres n'est pas disponible"
+
+#: data/wingpanel.metainfo.xml.in:100
+msgid "Listen to smooth scroll events"
+msgstr "Écoute des événements de défilement doux"
+
+#~ msgid "Fix startup delay on the greeter"
+#~ msgstr "Correction du délai de démarrage de la page d'accueil"
 
 #~ msgid "io.elementary.wingpanel"
 #~ msgstr "io.elementary.wingpanel"

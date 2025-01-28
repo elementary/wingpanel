@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-13 16:27+0000\n"
+"POT-Creation-Date: 2024-09-17 18:00+0000\n"
 "PO-Revision-Date: 2022-03-30 19:26+0000\n"
 "Last-Translator: Aga Ismael <agaesmaeel@gmail.com>\n"
 "Language-Team: Sorani <https://l10n.elementary.io/projects/wingpanel/"
@@ -19,10 +19,52 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.4.2\n"
 
-#: data/wingpanel.desktop.in:3
+#: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
 msgstr "وینگپانێڵ"
 
-#: data/wingpanel.desktop.in:4
+#: data/wingpanel.desktop.in:4 data/wingpanel.metainfo.xml.in:9
 msgid "Top panel that holds indicators and the applications menu"
 msgstr "پانێڵی سەرەوە کە پێکدێت لە لیستی نەرمەکاڵاکان و ئامرازە دەرخەرەکان"
+
+#: data/wingpanel.metainfo.xml.in:11
+msgid ""
+"The extensible top panel for Pantheon. Wingpanel is an empty container that "
+"accepts indicators as extensions, including the applications menu."
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:33
+msgid "elementary, Inc."
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:54
+#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:83
+#: data/wingpanel.metainfo.xml.in:97
+msgid "Improvements:"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:43
+msgid "Fix incorrect scale factor in some sessions"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:44 data/wingpanel.metainfo.xml.in:56
+#: data/wingpanel.metainfo.xml.in:73 data/wingpanel.metainfo.xml.in:87
+#: data/wingpanel.metainfo.xml.in:101
+msgid "Updated translations"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:85
+msgid "Always use elementary visual resources"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:86
+msgid "Esc to close popovers"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:99
+msgid "Fallback to maximized style if window manager is unavailable"
+msgstr ""
+
+#: data/wingpanel.metainfo.xml.in:100
+msgid "Listen to smooth scroll events"
+msgstr ""

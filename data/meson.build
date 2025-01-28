@@ -4,12 +4,6 @@ install_data(
     install_dir: join_paths(get_option('datadir'), 'icons', 'hicolor', 'scalable', 'apps')
 )
 
-install_data(
-    'autostart.desktop',
-    rename: meson.project_name() + '.desktop',
-    install_dir: join_paths(get_option('sysconfdir'), 'xdg', 'autostart')
-)
-
 i18n.merge_file(
     input: 'wingpanel.desktop.in',
     output: meson.project_name() + '.desktop',
@@ -20,12 +14,12 @@ i18n.merge_file(
 )
 
 i18n.merge_file(
-    input: 'wingpanel.appdata.xml.in',
-    output: meson.project_name() + '.appdata.xml',
-    po_dir: join_paths(meson.project_source_root(), 'po', 'extra'),
+    input: 'wingpanel.metainfo.xml.in',
+    output: meson.project_name() + '.metainfo.xml',
+    po_dir: meson.project_source_root() / 'po' / 'extra',
     type: 'xml',
     install: true,
-    install_dir: join_paths(get_option('datadir'), 'metainfo'),
+    install_dir: get_option('datadir') / 'metainfo',
 )
 
 # Use GResource
