@@ -36,6 +36,15 @@
   <update_contact>contact_AT_elementary.io</update_contact>
 
   <releases>
+    <release version="8.0.2" date="2025-02-07" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="8.0.1" date="2024-09-17" urgency="medium">
       <description>
         <p>Improvements:</p>
@@ -92,17 +101,7 @@
       </issues>
     </release>
 
-    <release version="3.0.3" date="2022-10-17" urgency="medium">
-      <description>
-        <p>Improvements:</p>
-        <ul>
-          <li>Fallback to maximized style if window manager is unavailable</li>
-          <li>Listen to smooth scroll events</li>
-          <li>Updated translations</li>
-        </ul>
-      </description>
-    </release>
-
+    <release version="3.0.3" date="2022-10-17" />
     <release version="3.0.2" date="2021-12-18" />
     <release version="3.0.1" date="2021-09-27" />
     <release version="3.0.0" date="2021-07-13" />
