@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-17 18:00+0000\n"
-"PO-Revision-Date: 2024-08-27 08:16+0000\n"
+"POT-Creation-Date: 2025-02-07 11:05+0000\n"
+"PO-Revision-Date: 2025-02-07 11:05+0000\n"
 "Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://l10n.elementary.io/projects/wingpanel/"
 "wingpanel-extra/fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.9.2\n"
 
 #: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
@@ -41,39 +41,37 @@ msgstr ""
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:54
-#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:83
-#: data/wingpanel.metainfo.xml.in:97
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:50
+#: data/wingpanel.metainfo.xml.in:63 data/wingpanel.metainfo.xml.in:80
+#: data/wingpanel.metainfo.xml.in:92
 msgid "Improvements:"
 msgstr "Améliorations :"
 
-#: data/wingpanel.metainfo.xml.in:43
-msgid "Fix incorrect scale factor in some sessions"
-msgstr ""
-
-#: data/wingpanel.metainfo.xml.in:44 data/wingpanel.metainfo.xml.in:56
-#: data/wingpanel.metainfo.xml.in:73 data/wingpanel.metainfo.xml.in:87
-#: data/wingpanel.metainfo.xml.in:101
+#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:53
+#: data/wingpanel.metainfo.xml.in:65 data/wingpanel.metainfo.xml.in:82
+#: data/wingpanel.metainfo.xml.in:96
 msgid "Updated translations"
 msgstr "Mise à jour des traductions"
 
-#: data/wingpanel.metainfo.xml.in:85
+#: data/wingpanel.metainfo.xml.in:52
+msgid "Fix incorrect scale factor in some sessions"
+msgstr "Correction d'un facteur d'échelle incorrect dans certaines sessions"
+
+#: data/wingpanel.metainfo.xml.in:94
 msgid "Always use elementary visual resources"
 msgstr "Utilisation systématique des ressources visuelles d'elementary"
 
-#: data/wingpanel.metainfo.xml.in:86
+#: data/wingpanel.metainfo.xml.in:95
 msgid "Esc to close popovers"
 msgstr "Échap pour fermer les éléments flottants"
 
-#: data/wingpanel.metainfo.xml.in:99
-msgid "Fallback to maximized style if window manager is unavailable"
-msgstr ""
-"Retour par défaut au style de fenêtre agrandie si le gestionnaire de "
-"fenêtres n'est pas disponible"
+#~ msgid "Fallback to maximized style if window manager is unavailable"
+#~ msgstr ""
+#~ "Retour par défaut au style de fenêtre agrandie si le gestionnaire de "
+#~ "fenêtres n'est pas disponible"
 
-#: data/wingpanel.metainfo.xml.in:100
-msgid "Listen to smooth scroll events"
-msgstr "Écoute des événements de défilement doux"
+#~ msgid "Listen to smooth scroll events"
+#~ msgstr "Écoute des événements de défilement doux"
 
 #~ msgid "Fix startup delay on the greeter"
 #~ msgstr "Correction du délai de démarrage de la page d'accueil"
