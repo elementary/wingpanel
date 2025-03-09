@@ -159,7 +159,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     private int get_actual_height () {
-        if (!Services.DisplayConfig.is_logical_layout () || Gdk.Display.get_default () is Gdk.Wayland.Display) {
+        if (!Services.DisplayConfig.is_logical_layout ()) {
             return get_allocated_height () * get_scale_factor ();
         }
 
