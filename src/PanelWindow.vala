@@ -80,6 +80,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         key_controller.key_pressed.connect (on_key_pressed);
 
         panel.size_allocate.connect (update_panel_dimensions);
+
+        notify["scale-factor"].connect (on_scale_changed);
     }
 
     private void on_realize () {
@@ -158,8 +160,18 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         }
     }
 
+    private void on_scale_changed () {
+        if (desktop_panel != null) {
+            desktop_panel.set_size (-1, get_actual_height ());
+        } else {
+            init_x ();
+        }
+
+        update_panel_dimensions ();
+    }
+
     private int get_actual_height () {
-        if (!Services.DisplayConfig.is_logical_layout () && Gdk.Display.get_default () is Gdk.Wayland.Display) {
+        if (!Services.DisplayConfig.is_logical_layout ()) {
             return get_allocated_height () * get_scale_factor ();
         }
 

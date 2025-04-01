@@ -36,6 +36,18 @@
   <update_contact>contact_AT_elementary.io</update_contact>
 
   <releases>
+    <release version="8.0.3" date="2025-03-10" urgency="medium">
+      <description>
+        <p>Improvements:</p>
+        <ul>
+          <li>Updated translations</li>
+        </ul>
+      </description>
+      <issues>
+        <issue url="https://github.com/elementary/wingpanel/issues/594">Half of the Wingpanel overlaps application windows</issue>
+      </issues>
+    </release>
+
     <release version="8.0.2" date="2025-02-07" urgency="medium">
       <description>
         <p>Improvements:</p>
