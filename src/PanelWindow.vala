@@ -65,19 +65,14 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 Services.BackgroundManager.get_default ().remember_window ();
             }
 
-            if (desktop_panel != null) {
-                desktop_panel.focus ();
-            } else if (Gdk.Display.get_default () is Gdk.X11.Display) {
+            //Check whether we need this still
+            if (Gdk.Display.get_default () is Gdk.X11.Display) {
                 var display = (Gdk.X11.Display) Gdk.Display.get_default ();
                 var surface = (Gdk.X11.Surface) get_surface ();
 
                 display.get_xdisplay ().set_input_focus (surface.get_xid (), 0, 0);
             }
         });
-
-        var key_controller = new Gtk.EventControllerKey ();
-        ((Gtk.Widget) this).add_controller (key_controller);
-        key_controller.key_pressed.connect (on_key_pressed);
     }
 
     private void on_realize () {
@@ -105,14 +100,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         }
 
         this.set_size_request (monitor_dimensions.width, -1);
-    }
-
-    private bool on_key_pressed (uint keyval, uint keycode, Gdk.ModifierType state) {
-        if (keyval == Gdk.Key.Escape) {
-            popover_manager.close ();
-        }
-
-        return Gdk.EVENT_PROPAGATE;
     }
 
     public void toggle_indicator (string name) {

@@ -48,7 +48,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     }
 
     construct {
-        can_focus = false;
         display_widget = base_indicator.get_display_widget ();
         halign = Gtk.Align.START;
         name = base_indicator.code_name + "/entry";

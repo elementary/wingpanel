@@ -41,7 +41,6 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
 
     class construct {
         set_css_name ("panel");
-        set_layout_manager_type (typeof (Gtk.BinLayout));
     }
 
     construct {
