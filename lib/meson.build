@@ -19,30 +19,31 @@ libwingpanel_deps = [
     gtk_dep,
 ]
 
-libwingpanel_lib = library('wingpanel',
+libwingpanel_lib = library(
+    'wingpanel-8',
     'Indicator.vala',
     'IndicatorManager.vala',
     config_header,
     dependencies: [libwingpanel_deps, config_vapi],
-    vala_header: 'wingpanel.h',
+    vala_header: 'wingpanel-8.h',
     version: meson.project_version(),
     install: true,
-    install_dir: [true, join_paths(get_option('includedir'), 'wingpanel'), true]
+    install_dir: [true, join_paths(get_option('includedir'), 'wingpanel-8'), true]
 )
 
 pkg.generate(
     libwingpanel_lib,
-    filebase: 'wingpanel',
-    name: 'Wingpanel',
+    filebase: 'wingpanel-8',
+    name: 'Wingpanel-8',
     description: 'Wingpanel Indicators API',
     version: meson.project_version(),
-    subdirs: 'wingpanel',
+    subdirs: 'wingpanel-8',
     variables: ['indicatorsdir=${libdir}/wingpanel-8'],
     requires: libwingpanel_deps
 )
 
 install_data(
-    'wingpanel.deps',
+    'wingpanel-8.deps',
     install_dir: join_paths(get_option('datadir'), 'vala', 'vapi')
 )
 
