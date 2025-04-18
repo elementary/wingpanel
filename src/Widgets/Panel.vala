@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.Panel : Gtk.Widget {
+public class Wingpanel.Widgets.Panel : Granite.Bin {
     private static Settings panel_settings = new Settings ("io.elementary.desktop.wingpanel");
 
     public Services.PopoverManager popover_manager { get; construct; }
@@ -65,7 +65,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Widget {
         box.set_center_widget (center_menubar);
         box.set_end_widget (right_menubar);
 
-        box.set_parent (this);
+        child = box;
 
         unowned IndicatorManager indicator_manager = IndicatorManager.get_default ();
         indicator_manager.indicator_added.connect (add_indicator);
@@ -109,18 +109,7 @@ public class Wingpanel.Widgets.Panel : Gtk.Widget {
         });
     }
 
-    ~Panel () {
-        box.unparent ();
-    }
-
     private void begin_drag (double x, double y) {
-        var window = get_root ().get_surface ();
-        if (window == null) {
-            return;
-        }
-
-        //  window.get_display ().get_default_seat ().ungrab ();
-
         popover_manager.close ();
 
         var background_manager = Services.BackgroundManager.get_default ();

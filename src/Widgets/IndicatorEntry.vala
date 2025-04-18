@@ -17,11 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
-    class construct {
-        set_layout_manager_type (typeof (Gtk.BinLayout));
-    }
-
+public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
@@ -66,7 +62,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
         };
         revealer.get_style_context ().add_class ("composited-indicator");
 
-        revealer.set_parent (this);
+        child = revealer;
 
         if (base_indicator.visible) {
             popover_manager.register_indicator (this);
@@ -116,10 +112,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.Widget {
         });
 
         set_reveal (base_indicator.visible);
-    }
-
-    ~IndicatorEntry () {
-        revealer.unparent ();
     }
 
     private void indicator_unmapped () {
