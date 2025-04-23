@@ -17,12 +17,14 @@ libwingpanel_deps = [
     gmodule_dep,
     gee_dep,
     gtk_dep,
+    granite_dep
 ]
 
 libwingpanel_lib = library(
     'wingpanel-8',
     'Indicator.vala',
     'IndicatorManager.vala',
+    'PopoverMenuItem.vala',
     config_header,
     dependencies: [libwingpanel_deps, config_vapi],
     vala_header: 'wingpanel-8.h',
