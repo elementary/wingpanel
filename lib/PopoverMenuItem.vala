@@ -32,6 +32,12 @@ public class Wingpanel.PopoverMenuItem : Gtk.Button {
         set_css_name ("modelbutton");
     }
 
+    public PopoverMenuItem () {}
+
+    public PopoverMenuItem.with_text (string text) {
+        Object (text: text);
+    }
+
     construct {
         accessible_role = MENU_ITEM;
 
