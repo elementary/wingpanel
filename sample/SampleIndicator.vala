@@ -26,7 +26,7 @@ public class Sample.Indicator : Wingpanel.Indicator {
     private Gtk.Overlay display_widget;
 
     /* The main widget that is displayed in the popover */
-    private Gtk.Grid main_widget;
+    private Gtk.Box main_widget;
 
     public Indicator () {
         /* Some information about the indicator */
@@ -62,10 +62,10 @@ public class Sample.Indicator : Wingpanel.Indicator {
 
         var compositing_switch = new Granite.SwitchModelButton (_("Composited Icon"));
 
-        main_widget = new Gtk.Grid ();
-        main_widget.attach (hide_button, 0, 0);
-        main_widget.attach (separator, 0, 1);
-        main_widget.attach (compositing_switch, 0, 2);
+        main_widget = new Gtk.Box (VERTICAL, 0);
+        main_widget.append (hide_button);
+        main_widget.append (separator);
+        main_widget.append (compositing_switch);
 
         /* Indicator should be visible at startup */
         this.visible = true;
