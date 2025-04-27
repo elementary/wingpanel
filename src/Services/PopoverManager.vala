@@ -47,6 +47,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                 update_has_tooltip (_current_indicator.display_widget);
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = value;
+                popover.unparent ();
             }
 
             if (_current_indicator != null) {
