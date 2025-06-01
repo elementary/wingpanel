@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 11:05+0000\n"
-"PO-Revision-Date: 2024-08-07 00:16+0000\n"
+"PO-Revision-Date: 2025-04-26 05:55+0000\n"
 "Last-Translator: anonymous <noreply@weblate.org>\n"
-"Language-Team: Norwegian Bokmål <https://l10n.elementary.io/projects/"
+"Language-Team: Norwegian Bokmål <https://l10n.elementaryos.org/projects/"
 "wingpanel/wingpanel-extra/nb/>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6.2\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
@@ -35,7 +35,7 @@ msgstr ""
 
 #: data/wingpanel.metainfo.xml.in:33
 msgid "elementary, Inc."
-msgstr ""
+msgstr "elementary, Inc."
 
 #: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:50
 #: data/wingpanel.metainfo.xml.in:63 data/wingpanel.metainfo.xml.in:80
