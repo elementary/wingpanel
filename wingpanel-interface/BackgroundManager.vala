@@ -121,6 +121,10 @@ public class WingpanelInterface.BackgroundManager : Object {
             check_for_state_change (MINIMIZE_DURATION);
         });
 
+        window.notify["fullscreen"].connect (() => {
+            check_for_state_change (SNAP_DURATION);
+        });
+
         window.workspace_changed.connect (() => {
             check_for_state_change (WORKSPACE_SWITCH_DURATION);
         });
@@ -156,7 +160,7 @@ public class WingpanelInterface.BackgroundManager : Object {
      * Check if Wingpanel's background state should change.
      *
      * The state is defined as follows:
-     *  - If there's a maximized window, the state should be MAXIMIZED;
+     *  - If there's a maximized or fullscreen window, the state should be MAXIMIZED;
      *  - If no information about the background could be gathered, it should be TRANSLUCENT;
      *  - If there's too much contrast or sharpness, it should be TRANSLUCENT;
      *  - If the background is too bright, it should be DARK;
@@ -165,12 +169,13 @@ public class WingpanelInterface.BackgroundManager : Object {
     private void check_for_state_change (uint animation_duration) {
         bool has_maximized_window = false;
 
-        foreach (unowned Meta.Window window in current_workspace.list_windows ()) {
-            if (window.is_on_primary_monitor ()) {
-                if (!window.minimized && window.maximized_vertically) {
-                    has_maximized_window = true;
-                    break;
-                }
+        foreach (unowned var window in current_workspace.list_windows ()) {
+            if (window.is_on_primary_monitor () &&
+                !window.minimized &&
+                (window.maximized_vertically || window.fullscreen)
+            ) {
+                has_maximized_window = true;
+                break;
             }
         }
 
