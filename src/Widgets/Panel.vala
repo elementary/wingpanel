@@ -98,7 +98,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
 
             current_scroll_delta += dx + dy;
 
-            if (current_scroll_delta.abs () > 10) { //TODO: Check whether 10 is good here.
+            if (current_scroll_delta.abs () > 1) { // Balance between reactive and ignoring misinput
                 current_scroll_delta = 0;
             }
         });
@@ -274,11 +274,15 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private void update_background (Services.BackgroundState state, uint animation_duration) {
         if (style_provider == null) {
             style_provider = new Gtk.CssProvider ();
-            style_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+            Gtk.StyleContext.add_provider_for_screen (
+                Gdk.Screen.get_default (),
+                style_provider,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            );
         }
 
         string css = """
-            .panel {
+            panel {
                 transition: all %ums cubic-bezier(0.4, 0, 0.2, 1);
             }
         """.printf (animation_duration);
