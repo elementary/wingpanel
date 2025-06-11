@@ -59,7 +59,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         revealer = new Gtk.Revealer () {
             child = display_widget
         };
-        revealer.get_style_context ().add_class ("composited-indicator");
+        revealer.add_css_class ("composited-indicator");
 
         child = revealer;
 

@@ -27,8 +27,6 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     private IndicatorBar center_menubar;
 
     private Gtk.CenterBox box;
-
-    private unowned Gtk.StyleContext style_context;
     private Gtk.CssProvider? style_provider = null;
 
     private Gtk.GestureClick gesture_controller;
@@ -75,8 +73,6 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
 
             return true;
         });
-
-        style_context = get_style_context ();
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
 
@@ -195,11 +191,15 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     private void update_background (Services.BackgroundState state, uint animation_duration) {
         if (style_provider == null) {
             style_provider = new Gtk.CssProvider ();
-            style_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+             Gtk.StyleContext.add_provider_for_display (
+                Gdk.Display.get_default (),
+                style_provider,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            );
         }
 
         string css = """
-            .panel {
+            panel {
                 transition: all %ums cubic-bezier(0.4, 0, 0.2, 1);
             }
         """.printf (animation_duration);
@@ -208,34 +208,25 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
 
         switch (state) {
             case Services.BackgroundState.DARK :
-                style_context.add_class ("color-light");
-                style_context.remove_class ("color-dark");
-                style_context.remove_class ("maximized");
-                style_context.remove_class ("translucent");
+                css_classes = {"color-light"};
                 break;
             case Services.BackgroundState.LIGHT:
-                style_context.add_class ("color-dark");
-                style_context.remove_class ("color-light");
-                style_context.remove_class ("maximized");
-                style_context.remove_class ("translucent");
+                css_classes = {"color-dark"};
                 break;
             case Services.BackgroundState.MAXIMIZED:
-                style_context.add_class ("maximized");
-                style_context.remove_class ("color-light");
-                style_context.remove_class ("color-dark");
-                style_context.remove_class ("translucent");
+                css_classes = {"maximized"};
                 break;
             case Services.BackgroundState.TRANSLUCENT_DARK:
-                style_context.add_class ("translucent");
-                style_context.add_class ("color-light");
-                style_context.remove_class ("color-dark");
-                style_context.remove_class ("maximized");
+                css_classes = {
+                    "color-light",
+                    "translucent"
+                };
                 break;
             case Services.BackgroundState.TRANSLUCENT_LIGHT:
-                style_context.add_class ("translucent");
-                style_context.add_class ("color-dark");
-                style_context.remove_class ("color-light");
-                style_context.remove_class ("maximized");
+                css_classes = {
+                    "color-dark",
+                    "translucent"
+                };
                 break;
         }
     }

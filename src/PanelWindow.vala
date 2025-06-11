@@ -87,7 +87,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     private void update_panel_dimensions () {
-        panel_height = panel.get_allocated_height ();
+        panel_height = panel.get_height ();
 
         // We just use our monitor because Gala makes sure we are always on the primary one
         var monitor_dimensions = get_display ().get_monitor_at_surface (get_surface ()).get_geometry ();
