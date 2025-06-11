@@ -185,7 +185,7 @@ public class WingpanelInterface.BackgroundManager : Object {
         BackgroundState new_state;
 
         if (has_fullscreen_window) {
-            new_state = BackgroundState.TRANSLUCENT_DARK;
+            new_state = BackgroundState.TRANSLUCENT_LIGHT;
         } else if (has_maximized_window) {
             new_state = BackgroundState.MAXIMIZED;
         } else if (bk_color_info == null) {
