@@ -274,11 +274,15 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private void update_background (Services.BackgroundState state, uint animation_duration) {
         if (style_provider == null) {
             style_provider = new Gtk.CssProvider ();
-            style_context.add_provider (style_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+            Gtk.StyleContext.add_provider_for_screen (
+                Gdk.Screen.get_default (),
+                style_provider,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            );
         }
 
         string css = """
-            .panel {
+            panel {
                 transition: all %ums cubic-bezier(0.4, 0, 0.2, 1);
             }
         """.printf (animation_duration);
