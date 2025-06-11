@@ -167,21 +167,26 @@ public class WingpanelInterface.BackgroundManager : Object {
      *  - Else it should be LIGHT.
      */
     private void check_for_state_change (uint animation_duration) {
+        bool has_fullscreen_window = false;
         bool has_maximized_window = false;
 
         foreach (unowned var window in current_workspace.list_windows ()) {
-            if (window.is_on_primary_monitor () &&
-                !window.minimized &&
-                (window.maximized_vertically || window.fullscreen)
-            ) {
+            if (!window.is_on_primary_monitor () || window.minimized) {
+                continue;
+            }
+            
+            if (window.fullscreen) {
+                has_fullscreen_window = true;
+            } else if (window.maximized_vertically) {
                 has_maximized_window = true;
-                break;
             }
         }
 
         BackgroundState new_state;
 
-        if (has_maximized_window) {
+        if (has_fullscreen_window) {
+            new_state = BackgroundState.TRANSLUCENT_DARK;
+        } else if (has_maximized_window) {
             new_state = BackgroundState.MAXIMIZED;
         } else if (bk_color_info == null) {
             new_state = BackgroundState.TRANSLUCENT_LIGHT;
