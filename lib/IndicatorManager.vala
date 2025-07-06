@@ -365,6 +365,13 @@ public class Wingpanel.IndicatorManager : GLib.Object {
         }
     }
 
+    public void deregister_indicators () {
+        indicators.@foreach ((entry) => {
+            deregister_indicator (entry.key, entry.value);
+            return true;
+        });
+    }
+
     /**
      * Checks if indicators are loaded.
      *
