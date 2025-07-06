@@ -23,20 +23,26 @@ public class Wingpanel.Application : Gtk.Application {
     private const string CLOSE_INDICATOR_ACTION_NAME = "close-indicator";
     private const string SERVER_TYPE_ACTION_NAME = "greeter";
     private const string TOGGLE_INDICATOR_ACTION_NAME = "toggle-indicator";
+    private const string REPLACE_ACTION_NAME = "replace";
 
     private const OptionEntry[] OPTIONS = {
         { OPEN_INDICATOR_ACTION_NAME, 'o', 0, OptionArg.STRING, null, "Open an indicator", "code_name" },
         { CLOSE_INDICATOR_ACTION_NAME, 'c', 0, OptionArg.STRING, null, "Close an indicator", "code_name" },
         { SERVER_TYPE_ACTION_NAME, 'g', 0, OptionArg.NONE, null, "Server is a greeter", null },
         { TOGGLE_INDICATOR_ACTION_NAME, 't', 0, OptionArg.STRING, null, "Toggle an indicator", "code_name" },
+        { REPLACE_ACTION_NAME, 'r', 0, OptionArg.NONE, null, "Replace existing instance", null },
         { null }
     };
 
+
     private PanelWindow? panel_window = null;
 
-    construct {
-        flags = ApplicationFlags.HANDLES_COMMAND_LINE;
-        application_id = "org.elementary.wingpanel";
+    public Application (ApplicationFlags flags) {
+        debug ("Application flags: %s", flags.to_string ());
+        Object (
+            application_id: "org.elementary.wingpanel",
+            flags: flags | ApplicationFlags.HANDLES_COMMAND_LINE | ApplicationFlags.ALLOW_REPLACEMENT
+        );
 
         add_main_option_entries (OPTIONS);
 
@@ -73,6 +79,15 @@ public class Wingpanel.Application : Gtk.Application {
         if (panel_window != null) {
             panel_window.destroy ();
         }
+    }
+
+    protected override void shutdown () {
+        if (panel_window != null) {
+            panel_window.destroy ();
+            panel_window = null;
+        }
+
+        base.shutdown ();
     }
 
     protected override int command_line (ApplicationCommandLine command_line) {
@@ -177,6 +192,16 @@ public class Wingpanel.Application : Gtk.Application {
     }
 
     public static int main (string[] args) {
-        return new Wingpanel.Application ().run (args);
+        // Parsing command line arguments here so they can affect the application flags
+        ApplicationFlags flags = ApplicationFlags.FLAGS_NONE;
+
+        foreach (var arg in args) {
+            if (arg == "--replace" || arg == "-r") {
+                flags |= ApplicationFlags.REPLACE;
+            }
+        }
+        debug ("Application flags: %s", flags.to_string ());
+
+        return new Wingpanel.Application (flags).run (args);
     }
 }
