@@ -77,7 +77,10 @@ public class Wingpanel.Application : Gtk.Application {
     }
 
     protected override void shutdown () {
-        // Deregister indicators before shutting down
+        var goodbye = File.new_for_path ("/tmp/wingpanel_shutdown.lock");
+        goodbye.create (FileCreateFlags.REPLACE_DESTINATION);
+
+        //  Deregister indicators before shutting down
         IndicatorManager.get_default ().deregister_indicators ();
 
         if (panel_window != null) {
@@ -85,6 +88,7 @@ public class Wingpanel.Application : Gtk.Application {
             panel_window = null;
         }
 
+        goodbye.delete ();
         base.shutdown ();
     }
 
@@ -190,6 +194,12 @@ public class Wingpanel.Application : Gtk.Application {
     }
 
     public static int main (string[] args) {
+        // Wait for old goodbye lock to vanish
+        while (File.new_for_path ("/tmp/wingpanel_shutdown.lock").query_exists ()) {
+            print ("Waiting for old Wingpanel to finish shutting down...\n");
+            Thread.usleep (100000); // 100ms
+        }
+
         return new Wingpanel.Application ().run (args);
     }
 }
