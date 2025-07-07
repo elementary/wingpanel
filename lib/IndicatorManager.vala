@@ -366,10 +366,15 @@ public class Wingpanel.IndicatorManager : GLib.Object {
     }
 
     public void deregister_indicators () {
-        indicators.@foreach ((entry) => {
-            deregister_indicator (entry.key, entry.value);
-            return true;
-        });
+        // Copy keys first to avoid modifying during iteration
+        var keys = indicators.keys.to_array ();
+
+        foreach (var key in keys) {
+            var indicator = indicators.get (key);
+            if (indicator != null) {
+                deregister_indicator (key, indicator);
+            }
+        }
     }
 
     /**

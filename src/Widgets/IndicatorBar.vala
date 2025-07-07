@@ -53,10 +53,20 @@ public class Wingpanel.Widgets.IndicatorBar : Gtk.Box {
     }
 
     public void remove_indicator (Indicator indicator) {
+        // Copy list to avoid modifying while iterating
+        var to_remove = new Gee.ArrayList<IndicatorEntry> ();
         foreach (var entry in sorted_items) {
             if (entry.base_indicator.code_name == indicator.code_name) {
+                to_remove.add (entry);
+            }
+        }
+
+        foreach (var entry in to_remove) {
+            if (sorted_items.contains (entry)) {
                 sorted_items.remove (entry);
-                remove (entry);
+                remove (entry);  // Remove widget
+            } else {
+                warning ("Tried to remove indicator that was already gone: %s", indicator.code_name);
             }
         }
     }
