@@ -36,7 +36,7 @@ public class Wingpanel.Application : Gtk.Application {
     private PanelWindow? panel_window = null;
 
     construct {
-        flags = ApplicationFlags.HANDLES_COMMAND_LINE;
+        flags = ApplicationFlags.HANDLES_COMMAND_LINE | ApplicationFlags.ALLOW_REPLACEMENT;
         application_id = "org.elementary.wingpanel";
 
         add_main_option_entries (OPTIONS);
