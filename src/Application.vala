@@ -77,12 +77,13 @@ public class Wingpanel.Application : Gtk.Application {
     }
 
     protected override void shutdown () {
+        // Deregister indicators before shutting down
+        IndicatorManager.get_default ().deregister_indicators ();
+
         if (panel_window != null) {
             panel_window.destroy ();
             panel_window = null;
         }
-        // Deregister indicators before shutting down
-        IndicatorManager.get_default ().deregister_indicators ();
 
         base.shutdown ();
     }
