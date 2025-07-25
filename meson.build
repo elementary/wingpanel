@@ -36,7 +36,7 @@ x11_dep = dependency('x11')
 gtk_dep = dependency('gtk+-3.0', version: '>=3.10')
 gee_dep = dependency('gee-0.8')
 granite_dep = dependency('granite', version: '>=5.4.0')
-posix_dep = meson.get_compiler('vala').find_library('posix')
+posix_dep = vala.find_library('posix')
 wl_client_dep = dependency('wayland-client')
 
 subdir('protocol')
