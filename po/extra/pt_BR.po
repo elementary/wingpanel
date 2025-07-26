@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 11:05+0000\n"
 "PO-Revision-Date: 2025-07-27 22:55+0000\n"
-"Last-Translator: Max2020 <alcizmaxpereira@gmail.com>\n"
+"Last-Translator: Guilherme Faura <guilhermefaura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://l10n.elementaryos.org/projects/"
 "wingpanel/wingpanel-extra/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -53,7 +53,7 @@ msgstr "Traduções atualizadas"
 
 #: data/wingpanel.metainfo.xml.in:52
 msgid "Fix incorrect scale factor in some sessions"
-msgstr ""
+msgstr "Correção do fator de escala incorreto em algumas sessões"
 
 #: data/wingpanel.metainfo.xml.in:94
 msgid "Always use elementary visual resources"
