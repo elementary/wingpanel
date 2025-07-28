@@ -39,11 +39,9 @@ public class WingpanelInterface.BackgroundManager : Object {
     public int panel_height { private get; construct; }
 
     private ulong wallpaper_hook_id;
-
+    private bool showing_desktop = false;
     private unowned Meta.Workspace? current_workspace = null;
-
     private BackgroundState current_state = BackgroundState.LIGHT;
-
     private Utils.ColorInformation? bk_color_info = null;
 
     public BackgroundManager (int panel_height) {
@@ -63,8 +61,10 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     private void connect_signals () {
         unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
-        manager.workspace_switched.connect (() => {
-            update_current_workspace ();
+        manager.workspace_switched.connect (() => update_current_workspace ());
+        manager.showing_desktop_changed.connect (() => {
+            showing_desktop  = !showing_desktop;
+            check_for_state_change (WALLPAPER_TRANSITION_DURATION);
         });
 
         var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
@@ -167,6 +167,11 @@ public class WingpanelInterface.BackgroundManager : Object {
      *  - Else it should be LIGHT.
      */
     private void check_for_state_change (uint animation_duration) {
+        if (showing_desktop && current_state != LIGHT) {
+            state_changed (current_state = LIGHT, animation_duration);
+            return;
+        }
+
         bool has_fullscreen_window = false;
         bool has_maximized_window = false;
 
