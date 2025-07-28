@@ -120,6 +120,8 @@ public class WingpanelInterface.FocusManager : Object {
             var proxy = wm.push_modal (stage);
 
             ulong handler = 0;
+            var started_drag = false;
+            float start_x = 0, start_y = 0;
             handler = stage.captured_event.connect ((event) => {
                 if (event.get_type () == LEAVE || event.get_type () == ENTER) { // We need to filter ENTER for X because reasons I don't understand :( (I think something with pushing modal)
                     /* We get leave emitted when beginning a grab op, so we have
@@ -128,6 +130,21 @@ public class WingpanelInterface.FocusManager : Object {
                 }
 
                 if (event.get_type () == MOTION || event.get_type () == TOUCH_UPDATE) {
+                    if (!started_drag) {
+                        started_drag = true;
+                        event.get_coords (out start_x, out start_y);
+
+                        return Clutter.EVENT_PROPAGATE;
+                    }
+
+                    float current_x, current_y;
+                    event.get_coords (out current_x, out current_y);
+
+                    var drag_threshold = Clutter.Settings.get_default ().dnd_drag_threshold;
+                    if ((start_x - current_x).abs () <= drag_threshold && (start_y - current_y).abs () <= drag_threshold) {
+                        return Clutter.EVENT_PROPAGATE;
+                    }
+
 #if HAS_MUTTER46
                     window.begin_grab_op (
                         Meta.GrabOp.MOVING,
