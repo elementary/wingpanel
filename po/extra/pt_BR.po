@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 11:05+0000\n"
-"PO-Revision-Date: 2025-04-26 05:55+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-07-27 22:55+0000\n"
+"Last-Translator: Guilherme Faura <guilhermefaura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://l10n.elementaryos.org/projects/"
 "wingpanel/wingpanel-extra/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
@@ -32,6 +32,8 @@ msgid ""
 "The extensible top panel for Pantheon. Wingpanel is an empty container that "
 "accepts indicators as extensions, including the applications menu."
 msgstr ""
+"O painel superior extensível para Pantheon. Wingpanel é um contêiner vazio "
+"que aceita indicadores como extensões, incluindo o menu de aplicativos."
 
 #: data/wingpanel.metainfo.xml.in:33
 msgid "elementary, Inc."
@@ -41,7 +43,7 @@ msgstr "elementary, Inc."
 #: data/wingpanel.metainfo.xml.in:63 data/wingpanel.metainfo.xml.in:80
 #: data/wingpanel.metainfo.xml.in:92
 msgid "Improvements:"
-msgstr ""
+msgstr "Melhorias:"
 
 #: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:53
 #: data/wingpanel.metainfo.xml.in:65 data/wingpanel.metainfo.xml.in:82
@@ -51,15 +53,15 @@ msgstr "Traduções atualizadas"
 
 #: data/wingpanel.metainfo.xml.in:52
 msgid "Fix incorrect scale factor in some sessions"
-msgstr ""
+msgstr "Correção do fator de escala incorreto em algumas sessões"
 
 #: data/wingpanel.metainfo.xml.in:94
 msgid "Always use elementary visual resources"
-msgstr ""
+msgstr "Utilize sempre recursos visuais elementary"
 
 #: data/wingpanel.metainfo.xml.in:95
 msgid "Esc to close popovers"
-msgstr ""
+msgstr "Esc para fechar popovers"
 
 #~ msgid "io.elementary.wingpanel"
 #~ msgstr "io.elementary.wingpanel"

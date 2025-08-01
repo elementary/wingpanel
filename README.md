@@ -13,7 +13,7 @@ You'll need the following dependencies:
 * libgranite-dev >= 5.4.0
 * libgtk-3-dev
 * meson
-* libmutter-2-dev
+* libmutter-10-dev >= 10
 * valac
 
 Run `meson` to configure the build environment and then `ninja` to build

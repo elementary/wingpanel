@@ -128,6 +128,7 @@ public class WingpanelInterface.FocusManager : Object {
                 }
 
                 if (event.get_type () == MOTION || event.get_type () == TOUCH_UPDATE) {
+#if HAS_MUTTER46
                     window.begin_grab_op (
                         Meta.GrabOp.MOVING,
                         event.get_device (),
@@ -135,6 +136,14 @@ public class WingpanelInterface.FocusManager : Object {
                         event.get_time (),
                         { x, y }
                     );
+#else
+                    window.begin_grab_op (
+                        Meta.GrabOp.MOVING,
+                        event.get_device (),
+                        event.get_event_sequence (),
+                        event.get_time ()
+                    );
+#endif
                 }
 
                 wm.pop_modal (proxy);
