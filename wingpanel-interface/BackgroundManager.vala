@@ -17,6 +17,22 @@
  * Boston, MA 02110-1301 USA.
  */
 
+[DBus (name = "io.elementary.desktop.BackgroundManager")]
+public interface WingpanelInterface.BackgroundProvider : Object {
+    public struct ColorInformation {
+        double average_red;
+        double average_green;
+        double average_blue;
+        double mean_luminance;
+        double luminance_variance;
+        double mean_acutance;
+    }
+
+    public signal void changed ();
+
+    public abstract async ColorInformation? get_background_color_information (int panel_height) throws DBusError, IOError;
+}
+
 public enum BackgroundState {
     LIGHT,
     DARK,
@@ -38,49 +54,38 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     public int panel_height { private get; construct; }
 
-    private ulong wallpaper_hook_id;
-
     private unowned Meta.Workspace? current_workspace = null;
 
     private BackgroundState current_state = BackgroundState.LIGHT;
 
-    private Utils.ColorInformation? bk_color_info = null;
+    private BackgroundProvider.ColorInformation? bk_color_info = null;
+
+    private BackgroundProvider? provider;
 
     public BackgroundManager (int panel_height) {
         Object (panel_height: panel_height);
 
-        connect_signals ();
-        update_bk_color_info.begin ((obj, res) => {
-            update_bk_color_info.end (res);
-            update_current_workspace ();
-        });
+        connect_signals.begin ();
+
+        Bus.watch_name (SESSION, "io.elementary.desktop.background", NONE, () => connect_to_background.begin (), () => provider = null);
     }
 
-    ~BackgroundManager () {
-        var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
-        GLib.Signal.remove_emission_hook (signal_id, wallpaper_hook_id);
-    }
-
-    private void connect_signals () {
+    private async void connect_signals () {
         unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
         manager.workspace_switched.connect (() => {
             update_current_workspace ();
         });
+    }
 
-        var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
+    private async void connect_to_background () {
+        try {
+            provider = yield Bus.get_proxy (SESSION, "io.elementary.desktop.background", "/io/elementary/desktop/background");
+            provider.changed.connect (() => update_bk_color_info.begin ());
 
-        wallpaper_hook_id = GLib.Signal.add_emission_hook (signal_id, 0, (ihint, param_values) => {
-            update_bk_color_info.begin ((obj, res) => {
-                update_bk_color_info.end (res);
-                check_for_state_change (WALLPAPER_TRANSITION_DURATION);
-            });
-
-            return true;
-#if VALA_0_42
-        });
-#else
-        }, null);
-#endif
+            update_bk_color_info.begin ();
+        } catch (Error e) {
+            warning ("Failed to get background proxy: %s", e.message);
+        }
     }
 
     private void update_current_workspace () {
@@ -140,20 +145,13 @@ public class WingpanelInterface.BackgroundManager : Object {
         check_for_state_change (SNAP_DURATION);
     }
 
-    public async void update_bk_color_info () {
-        SourceFunc callback = update_bk_color_info.callback;
-
-        Utils.get_background_color_information.begin (Main.wm, panel_height, (obj, res) => {
-            try {
-                bk_color_info = Utils.get_background_color_information.end (res);
-            } catch (Error e) {
-                warning (e.message);
-            } finally {
-                callback ();
-            }
-        });
-
-        yield;
+    public async void update_bk_color_info () requires (provider != null) {
+        try {
+            bk_color_info = yield provider.get_background_color_information (panel_height);
+            update_current_workspace ();
+        } catch (Error e) {
+            warning ("Failed to get background color info: %s", e.message);
+        }
     }
 
     /**
