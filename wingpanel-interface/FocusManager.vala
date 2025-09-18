@@ -104,7 +104,7 @@ public class WingpanelInterface.FocusManager : Object {
             unowned var wm = Main.wm;
             unowned var stage = wm.stage;
 
-            var proxy = wm.push_modal (stage);
+            var proxy = wm.push_modal (stage, true);
 
             ulong handler = 0;
             var started_drag = false;
