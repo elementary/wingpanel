@@ -127,8 +127,10 @@ public class WingpanelInterface.FocusManager : Object {
                     float current_x, current_y;
                     event.get_coords (out current_x, out current_y);
 
+                    var dx = start_x - current_x;
+                    var dy = start_y - current_y;
                     var drag_threshold = Clutter.Settings.get_default ().dnd_drag_threshold;
-                    if ((start_x - current_x).abs () <= drag_threshold && (start_y - current_y).abs () <= drag_threshold) {
+                    if (dx * dx + dy * dy < drag_threshold * drag_threshold) {
                         return Clutter.EVENT_PROPAGATE;
                     }
 
