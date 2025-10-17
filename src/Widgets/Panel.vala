@@ -139,8 +139,17 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private IndicatorEntry? get_next_sibling (IndicatorEntry current) {
         IndicatorEntry? sibling = null;
 
-        switch (current.base_indicator.code_name) {
-            case Indicator.APP_LAUNCHER:
+        // Workaround until both indicators get their own position prop
+        if (current.base_indicator.code_name == Indicator.APP_LAUNCHER) {
+            current.base_indicator.position = IndicatorPosition.LEFT;
+        };
+        
+        if (current.base_indicator.code_name == Indicator.APP_DATETIME) {
+            current.base_indicator.position = IndicatorPosition.CENTER;
+        };
+
+        switch (current.base_indicator.position) {
+            case IndicatorPosition.LEFT:
                 var children = left_menubar.get_children ();
                 int index = children.index (current);
                 if (index == -1) {
@@ -155,7 +164,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
                 }
 
                 break;
-            case Indicator.DATETIME:
+            case IndicatorPosition.CENTER:
                 var children = center_menubar.get_children ();
                 int index = children.index (current);
                 if (index == -1) {
