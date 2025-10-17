@@ -139,17 +139,8 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private IndicatorEntry? get_next_sibling (IndicatorEntry current) {
         IndicatorEntry? sibling = null;
 
-        // Workaround until both indicators get their own position prop
-        if (current.base_indicator.code_name == Indicator.APP_LAUNCHER) {
-            current.base_indicator.position = IndicatorPosition.LEFT;
-        };
-        
-        if (current.base_indicator.code_name == Indicator.APP_DATETIME) {
-            current.base_indicator.position = IndicatorPosition.CENTER;
-        };
-
-        switch (current.base_indicator.position) {
-            case IndicatorPosition.LEFT:
+        switch (current.base_indicator.code_name) {
+            case Indicator.APP_LAUNCHER:
                 var children = left_menubar.get_children ();
                 int index = children.index (current);
                 if (index == -1) {
@@ -164,7 +155,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
                 }
 
                 break;
-            case IndicatorPosition.CENTER:
+            case Indicator.DATETIME:
                 var children = center_menubar.get_children ();
                 int index = children.index (current);
                 if (index == -1) {
@@ -256,12 +247,21 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private void add_indicator (Indicator indicator) {
         var indicator_entry = new IndicatorEntry (indicator, popover_manager);
 
-        switch (indicator.code_name) {
-            case Indicator.APP_LAUNCHER:
+        // Workaround until both indicators get their own position prop
+        if (current.base_indicator.code_name == Indicator.APP_LAUNCHER) {
+            current.base_indicator.position = IndicatorPosition.LEFT;
+        };
+        
+        if (current.base_indicator.code_name == Indicator.APP_DATETIME) {
+            current.base_indicator.position = IndicatorPosition.CENTER;
+        };
+
+        switch (indicator.position) {
+            case IndicatorPosition.LEFT:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_RIGHT);
                 left_menubar.add (indicator_entry);
                 break;
-            case Indicator.DATETIME:
+            case IndicatorPosition.CENTER:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_DOWN);
                 center_menubar.add (indicator_entry);
                 break;
