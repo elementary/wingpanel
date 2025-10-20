@@ -43,7 +43,7 @@ public abstract class Wingpanel.Indicator : GLib.Object {
     /**
      * Set the indicator positioning on the panel
      */
-    public Enum position { get; set; default = IndicatorPosition.RIGHT;}
+    public enum position { get; set; default = IndicatorPosition.RIGHT;}
 
     /**
      * Defines if the indicator display widget should be shown or not.
