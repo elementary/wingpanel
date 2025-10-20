@@ -248,12 +248,12 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         var indicator_entry = new IndicatorEntry (indicator, popover_manager);
 
         // Workaround until both indicators get their own position prop
-        if (current.base_indicator.code_name == Indicator.APP_LAUNCHER) {
-            current.base_indicator.position = IndicatorPosition.LEFT;
+        if (indicator.code_name == Indicator.APP_LAUNCHER) {
+            indicator.position = IndicatorPosition.LEFT;
         };
-        
-        if (current.base_indicator.code_name == Indicator.APP_DATETIME) {
-            current.base_indicator.position = IndicatorPosition.CENTER;
+
+        if (indicator.code_name == Indicator.DATETIME) {
+            indicator.position = IndicatorPosition.CENTER;
         };
 
         switch (indicator.position) {
