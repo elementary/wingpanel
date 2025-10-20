@@ -32,6 +32,7 @@ public class Wingpanel.Services.IndicatorSorter : Object {
     private static Gee.HashMap<string, int> indicator_order = new Gee.HashMap<string,int> ();
     static construct {
         indicator_order[AYATANA_INDICATOR] = 0;
+        indicator_order[Indicator.APP_LAUNCHER] = 0;
         indicator_order[UNKNOWN_INDICATOR] = 1;
         indicator_order[Indicator.ACCESSIBILITY] = 2;
         indicator_order[Indicator.NIGHT_LIGHT] = 3;

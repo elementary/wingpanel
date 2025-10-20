@@ -259,7 +259,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
         switch (indicator.position) {
             case IndicatorPosition.LEFT:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_RIGHT);
-                left_menubar.add (indicator_entry);
+                left_menubar.insert_sorted (indicator_entry);
                 break;
             case IndicatorPosition.CENTER:
                 indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_DOWN);
