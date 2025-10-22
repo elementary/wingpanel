@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 11:05+0000\n"
-"PO-Revision-Date: 2025-10-22 05:31+0000\n"
+"PO-Revision-Date: 2025-10-22 09:59+0000\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <https://l10n.elementaryos.org/projects/wingpanel/"
 "wingpanel-extra/sv/>\n"
@@ -21,17 +21,19 @@ msgstr ""
 
 #: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
-msgstr ""
+msgstr "Wingpanel"
 
 #: data/wingpanel.desktop.in:4 data/wingpanel.metainfo.xml.in:9
 msgid "Top panel that holds indicators and the applications menu"
-msgstr ""
+msgstr "Den övre panelen innehåller indikatorer och applikationsmenyn"
 
 #: data/wingpanel.metainfo.xml.in:11
 msgid ""
 "The extensible top panel for Pantheon. Wingpanel is an empty container that "
 "accepts indicators as extensions, including the applications menu."
 msgstr ""
+"Den utbyggbara toppanelen för Pantheon. Wingpanel är en tom behållare som "
+"accepterar indikatorer som tillägg, inklusive applikationsmenyn."
 
 #: data/wingpanel.metainfo.xml.in:33
 msgid "elementary, Inc."
@@ -51,12 +53,12 @@ msgstr "Uppdaterade översättningar"
 
 #: data/wingpanel.metainfo.xml.in:52
 msgid "Fix incorrect scale factor in some sessions"
-msgstr ""
+msgstr "Fixar felaktig skalfaktor i vissa sessioner"
 
 #: data/wingpanel.metainfo.xml.in:94
 msgid "Always use elementary visual resources"
-msgstr ""
+msgstr "Använd alltid elementarys visuella resurser"
 
 #: data/wingpanel.metainfo.xml.in:95
 msgid "Esc to close popovers"
-msgstr ""
+msgstr "Esc för att stänga popovers"
