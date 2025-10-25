@@ -247,7 +247,7 @@ public class Wingpanel.Widgets.Panel : Gtk.EventBox {
     private void add_indicator (Indicator indicator) {
         var indicator_entry = new IndicatorEntry (indicator, popover_manager);
 
-        // Workaround until both indicators get their own position prop
+        // TODO Workaround until both indicators get their own position prop
         if (indicator.code_name == Indicator.APP_LAUNCHER) {
             indicator.position = IndicatorPosition.LEFT;
         };
