@@ -41,7 +41,7 @@ public abstract class Wingpanel.Indicator : GLib.Object {
     public string code_name { get; construct; }
 
     /**
-     * Set the indicator positioning on the panel
+     * Sets the indicator positioning on the panel.
      */
     public IndicatorPosition position { get; set; default = IndicatorPosition.RIGHT; }
 
