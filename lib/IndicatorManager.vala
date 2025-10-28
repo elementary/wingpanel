@@ -68,7 +68,7 @@ public class Wingpanel.IndicatorManager : GLib.Object {
     private FileMonitor? monitor = null;
     private ServerType server_type;
 
-    construct {
+    private IndicatorManager () {
         indicators = new Gee.HashMap<string, Wingpanel.Indicator> ();
     }
 
