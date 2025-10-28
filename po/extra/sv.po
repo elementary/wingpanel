@@ -8,53 +8,57 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 11:05+0000\n"
-"PO-Revision-Date: 2019-05-12 13:36-0700\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-10-23 12:55+0000\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Language-Team: Swedish <https://l10n.elementaryos.org/projects/wingpanel/"
+"wingpanel-extra/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11.4\n"
 
 #: data/wingpanel.desktop.in:3 data/wingpanel.metainfo.xml.in:8
 msgid "Wingpanel"
-msgstr ""
+msgstr "Wingpanel"
 
 #: data/wingpanel.desktop.in:4 data/wingpanel.metainfo.xml.in:9
 msgid "Top panel that holds indicators and the applications menu"
-msgstr ""
+msgstr "Den övre panelen innehåller indikatorer och programmenyn"
 
 #: data/wingpanel.metainfo.xml.in:11
 msgid ""
 "The extensible top panel for Pantheon. Wingpanel is an empty container that "
 "accepts indicators as extensions, including the applications menu."
 msgstr ""
+"Den utbyggbara toppanelen för Pantheon. Wingpanel är en tom behållare som "
+"accepterar indikatorer som tillägg, inklusive programmenyn."
 
 #: data/wingpanel.metainfo.xml.in:33
 msgid "elementary, Inc."
-msgstr ""
+msgstr "elementary, Inc."
 
 #: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:50
 #: data/wingpanel.metainfo.xml.in:63 data/wingpanel.metainfo.xml.in:80
 #: data/wingpanel.metainfo.xml.in:92
 msgid "Improvements:"
-msgstr ""
+msgstr "Förbättringar:"
 
 #: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:53
 #: data/wingpanel.metainfo.xml.in:65 data/wingpanel.metainfo.xml.in:82
 #: data/wingpanel.metainfo.xml.in:96
 msgid "Updated translations"
-msgstr ""
+msgstr "Uppdaterade översättningar"
 
 #: data/wingpanel.metainfo.xml.in:52
 msgid "Fix incorrect scale factor in some sessions"
-msgstr ""
+msgstr "Fixar felaktig skalfaktor i vissa sessioner"
 
 #: data/wingpanel.metainfo.xml.in:94
 msgid "Always use elementary visual resources"
-msgstr ""
+msgstr "Använd alltid elementarys visuella resurser"
 
 #: data/wingpanel.metainfo.xml.in:95
 msgid "Esc to close popovers"
-msgstr ""
+msgstr "Esc för att stänga popovers"

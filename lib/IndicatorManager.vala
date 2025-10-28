@@ -61,29 +61,15 @@ public class Wingpanel.IndicatorManager : GLib.Object {
      */
     public signal void indicator_removed (Wingpanel.Indicator indicator);
 
-    /**
-     * Place the files in /etc/wingpanel.d/ or ~/.config/wingpanel.d/
-     * default.forbidden, greeter.allowed or combinations of it.
-     */
-    private Gee.HashSet<string> forbidden_indicators;
-    private Gee.HashSet<string> allowed_indicators;
-
     [CCode (has_target = false)]
     private delegate Wingpanel.Indicator? RegisterPluginFunction (Module module, ServerType server_type);
 
     private Gee.HashMap<string, Wingpanel.Indicator> indicators;
-
     private FileMonitor? monitor = null;
-
-    private FileMonitor? root_restrictions_monitor = null;
-    private FileMonitor? user_restrictions_monitor = null;
-
     private ServerType server_type;
 
     private IndicatorManager () {
         indicators = new Gee.HashMap<string, Wingpanel.Indicator> ();
-        forbidden_indicators = new Gee.HashSet<string> ();
-        allowed_indicators = new Gee.HashSet<string> ();
     }
 
     /**
@@ -93,26 +79,6 @@ public class Wingpanel.IndicatorManager : GLib.Object {
      */
     public void initialize (ServerType server_type) {
         this.server_type = server_type;
-
-        /* load inclusion/exclusion lists */
-        var root_restrictions_folder = File.new_for_path ("/etc/wingpanel.d/");
-        var user_restrictions_folder = File.new_for_path (Path.build_filename (Environment.get_user_config_dir (), "wingpanel.d"));
-
-        try {
-            root_restrictions_monitor = root_restrictions_folder.monitor_directory (FileMonitorFlags.NONE, null);
-            root_restrictions_monitor.changed.connect ((file, trash, event) => {
-                reload_restrictions (root_restrictions_folder, user_restrictions_folder);
-            });
-            user_restrictions_monitor = user_restrictions_folder.monitor_directory (FileMonitorFlags.NONE, null);
-            user_restrictions_monitor.changed.connect ((file, trash, event) => {
-                reload_restrictions (root_restrictions_folder, user_restrictions_folder);
-            });
-
-            load_restrictions (root_restrictions_folder);
-            load_restrictions (user_restrictions_folder);
-        } catch (Error error) {
-            warning ("Error while reading restrictions files: %s\n", error.message);
-        }
 
         /* load indicators */
         var base_folder = File.new_for_path (Build.INDICATORS_DIR);
@@ -148,14 +114,6 @@ public class Wingpanel.IndicatorManager : GLib.Object {
         }
 
         if (indicators.has_key (path)) {
-            return;
-        } else if (check_forbidden_indicators (path)) {
-            debug ("Indicator %s will not be loaded since it is explicitly forbidden", path);
-
-            return;
-        } else if (!check_allowed_indicators (path)) {
-            debug ("Indicator %s will not be loaded since it is not enabled", path);
-
             return;
         }
 
@@ -210,112 +168,6 @@ public class Wingpanel.IndicatorManager : GLib.Object {
         } catch (Error error) {
             warning ("Unable to scan indicators folder %s: %s\n", base_folder.get_path (), error.message);
         }
-    }
-
-    private bool check_forbidden_indicators (string path) {
-        foreach (var indicator_file_name in forbidden_indicators) {
-            if (path.has_suffix (indicator_file_name)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private bool check_allowed_indicators (string path) {
-        if (allowed_indicators.size == 0) {
-            return true;
-        }
-
-        foreach (var indicator_file_name in allowed_indicators) {
-            if (path.has_suffix (indicator_file_name)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void reload_restrictions (File root_restrictions_folder, File user_restrictions_folder) {
-        forbidden_indicators.clear ();
-        allowed_indicators.clear ();
-        load_restrictions (root_restrictions_folder);
-        load_restrictions (user_restrictions_folder);
-
-        indicators.@foreach ((entry) => {
-            if (check_forbidden_indicators (entry.key)) {
-                deregister_indicator (entry.key, entry.value);
-            } else if (!check_allowed_indicators (entry.key)) {
-                deregister_indicator (entry.key, entry.value);
-            }
-
-            return true;
-        });
-        find_plugins (File.new_for_path (Build.INDICATORS_DIR));
-    }
-
-    private void load_restrictions (File restrictions_folder) {
-        if (!restrictions_folder.query_exists ()) {
-            return;
-        }
-
-        FileInfo file_info = null;
-
-        try {
-            var enumerator = restrictions_folder.enumerate_children (FileAttribute.STANDARD_NAME, 0);
-
-            while ((file_info = enumerator.next_file ()) != null) {
-                unowned string file_name = file_info.get_name ();
-                if (!file_name.contains (server_type.restrictions_file_name ())) {
-                    continue;
-                }
-
-                var file = restrictions_folder.get_child (file_name);
-
-                if (file_name.has_suffix (".allowed")) {
-                    foreach (var entry in get_restrictions_from_file (file)) {
-                        allowed_indicators.add (entry);
-                    }
-                } else if (file_name.has_suffix (".forbidden")) {
-                    foreach (var entry in get_restrictions_from_file (file)) {
-                        forbidden_indicators.add (entry);
-                    }
-                } else if (file_name.has_suffix (".whitelist")) {
-                    critical ("Using .whitelist files is deprecated and will be removed in next version, please use .allowed instead");
-                    foreach (var entry in get_restrictions_from_file (file)) {
-                        allowed_indicators.add (entry);
-                    }
-                } else if (file_name.has_suffix (".blacklist")) {
-                    critical ("Using .blacklist files is deprecated and will be removed in next version, please use .forbidden instead");
-                    foreach (var entry in get_restrictions_from_file (file)) {
-                        forbidden_indicators.add (entry);
-                    }
-                }
-            }
-        } catch (Error error) {
-            warning ("Unable to scan restrictions folder %s: %s\n", restrictions_folder.get_path (), error.message);
-        }
-    }
-
-    private string[] get_restrictions_from_file (File file) {
-        var restrictions = new string[] {};
-
-        if (file.query_exists ()) {
-            try {
-                var dis = new DataInputStream (file.read ());
-                string line = null;
-
-                while ((line = dis.read_line ()) != null) {
-                    if (line.strip () != "") {
-                        restrictions += line;
-                    }
-                }
-            } catch (Error error) {
-                warning ("Unable to load restrictions file %s: %s\n", file.get_basename (), error.message);
-            }
-        }
-
-        return restrictions;
     }
 
     /**
