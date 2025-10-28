@@ -22,6 +22,7 @@ libwingpanel_deps = [
 libwingpanel_lib = library('wingpanel',
     'Indicator.vala',
     'IndicatorManager.vala',
+    'IndicatorPosition.vala',
     'Widgets/Container.vala',
     'Widgets/OverlayIcon.vala',
     'Widgets/Separator.vala',
