@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-02-07 11:05+0000\n"
-"PO-Revision-Date: 2025-10-23 12:55+0000\n"
+"PO-Revision-Date: 2025-10-31 12:55+0000\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <https://l10n.elementaryos.org/projects/wingpanel/"
 "wingpanel-extra/sv/>\n"
@@ -25,7 +25,7 @@ msgstr "Wingpanel"
 
 #: data/wingpanel.desktop.in:4 data/wingpanel.metainfo.xml.in:9
 msgid "Top panel that holds indicators and the applications menu"
-msgstr "Den övre panelen innehåller indikatorer och programmenyn"
+msgstr "Den övre panelen som innehåller indikatorer och programmenyn"
 
 #: data/wingpanel.metainfo.xml.in:11
 msgid ""
@@ -53,7 +53,7 @@ msgstr "Uppdaterade översättningar"
 
 #: data/wingpanel.metainfo.xml.in:52
 msgid "Fix incorrect scale factor in some sessions"
-msgstr "Fixar felaktig skalfaktor i vissa sessioner"
+msgstr "Fixar felaktig skalningsfaktor i vissa sessioner"
 
 #: data/wingpanel.metainfo.xml.in:94
 msgid "Always use elementary visual resources"
