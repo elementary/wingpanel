@@ -59,7 +59,7 @@ endif
 
 mutter_typelib_dir = libmutter_dep.get_variable('typelibdir')
 
-gala_dep = dependency('gala')
+gala_dep = dependency('gala', version: '>= 8.3.0')
 m_dep = meson.get_compiler('c').find_library('m', required: false)
 
 shared_module(
