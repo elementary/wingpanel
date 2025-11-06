@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: elementary, Inc. <builds@elementary.io>
 Build-Depends: debhelper (>= 10.5.1),
                gettext,
-               libgala-dev,
+               libgala-dev (>= 8.3.0),
                libmutter-14-dev | libmutter-13-dev | libmutter-12-dev | libmutter-11-dev | libmutter-10-dev,
                libgee-0.8-dev,
                libgirepository1.0-dev,
@@ -18,7 +18,7 @@ Homepage: https://github.com/elementary/wingpanel
 
 Package: io.elementary.wingpanel
 Architecture: any
-Depends: gala (>= 8.0.0),
+Depends: gala (>= 8.3.0),
          libwingpanel3 (= ${binary:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
