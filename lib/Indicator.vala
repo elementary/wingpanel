@@ -41,6 +41,11 @@ public abstract class Wingpanel.Indicator : GLib.Object {
     public string code_name { get; construct; }
 
     /**
+     * Sets the indicator positioning on the panel.
+     */
+    public IndicatorPosition position { get; set; default = IndicatorPosition.RIGHT; }
+
+    /**
      * Defines if the indicator display widget should be shown or not.
      */
     public bool visible { get; set; default = false; }
