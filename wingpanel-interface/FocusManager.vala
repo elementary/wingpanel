@@ -1,20 +1,7 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301 USA.
+ * SPDX-License-Identifier: GPL-2-or-later
+ * SPDX-FileCopyrightText: 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ *                         2025 elementary, Inc. (https://elementary.io)
  */
 
 public class WingpanelInterface.FocusManager : Object {
@@ -120,6 +107,8 @@ public class WingpanelInterface.FocusManager : Object {
             var proxy = wm.push_modal (stage, true);
 
             ulong handler = 0;
+            var started_drag = false;
+            float start_x = 0, start_y = 0;
             handler = stage.captured_event.connect ((event) => {
                 if (event.get_type () == LEAVE || event.get_type () == ENTER) { // We need to filter ENTER for X because reasons I don't understand :( (I think something with pushing modal)
                     /* We get leave emitted when beginning a grab op, so we have
@@ -128,6 +117,23 @@ public class WingpanelInterface.FocusManager : Object {
                 }
 
                 if (event.get_type () == MOTION || event.get_type () == TOUCH_UPDATE) {
+                    if (!started_drag) {
+                        started_drag = true;
+                        event.get_coords (out start_x, out start_y);
+
+                        return Clutter.EVENT_PROPAGATE;
+                    }
+
+                    float current_x, current_y;
+                    event.get_coords (out current_x, out current_y);
+
+                    var dx = start_x - current_x;
+                    var dy = start_y - current_y;
+                    var drag_threshold = Clutter.Settings.get_default ().dnd_drag_threshold;
+                    if (dx * dx + dy * dy < drag_threshold * drag_threshold) {
+                        return Clutter.EVENT_PROPAGATE;
+                    }
+
 #if HAS_MUTTER46
                     window.begin_grab_op (
                         Meta.GrabOp.MOVING,

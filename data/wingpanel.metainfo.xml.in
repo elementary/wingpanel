@@ -44,7 +44,9 @@
         </ul>
       </description>
       <issues>
+        <issue url="https://github.com/elementary/wingpanel/issues/133">Don't initiate focus/drag on click/release</issue>
         <issue url="https://github.com/elementary/wingpanel/issues/238">Wingpanel stays black until hovering over dock after minimizing all windows using wmctrl</issue>
+        <issue url="https://github.com/elementary/wingpanel/issues/414">Window switch on wingpanel click</issue>
         <issue url="https://github.com/elementary/wingpanel/issues/588">Less heavy "scroll to change desktop"</issue>
         <issue url="https://github.com/elementary/wingpanel/issues/638">Whitelist/Blacklist: still relevant?</issue>
         <issue url="https://github.com/elementary/wingpanel/pull/611">Use dark style in greeter session</issue>
