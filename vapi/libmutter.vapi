@@ -132,6 +132,9 @@ namespace Meta {
 		public Meta.BackendCapabilities get_capabilities ();
 		public unowned Meta.Context get_context ();
 		public unowned Meta.IdleMonitor get_core_idle_monitor ();
+#if HAS_MUTTER49
+		public unowned Meta.LogicalMonitor? get_current_logical_monitor ();
+#endif
 #if HAS_MUTTER48
 		public unowned Meta.CursorTracker get_cursor_tracker ();
 #endif
@@ -150,7 +153,12 @@ namespace Meta {
 		public void renderdoc_capture ();
 #endif
 #if HAS_MUTTER46
+#if HAS_MUTTER49
+		public async bool set_keymap_async (string layouts, string variants, string options, string model, GLib.Cancellable? cancellable) throws GLib.Error;
+		public async bool set_keymap_layout_group_async (uint32 idx, GLib.Cancellable? cancellable) throws GLib.Error;
+#else
 		public void set_keymap (string layouts, string variants, string options, string model);
+#endif
 		public void unfreeze_keyboard (uint32 timestamp);
 		public void ungrab_keyboard (uint32 timestamp);
 #else
@@ -260,6 +268,25 @@ namespace Meta {
 		public Meta.BackgroundImage load (GLib.File file);
 		public void purge (GLib.File file);
 	}
+#if HAS_MUTTER49
+	[CCode (cheader_filename = "meta/main.h", type_id = "meta_backlight_get_type ()")]
+	public abstract class Backlight : GLib.Object {
+		[CCode (has_construct_function = false)]
+		protected Backlight ();
+		public int get_brightness ();
+		public void get_brightness_info (out int brightness_min_out, out int brightness_max_out);
+		public void set_brightness (int brightness);
+		[NoAccessorMethod]
+		public Meta.Backend backend { owned get; construct; }
+		public int brightness { get; set; }
+		[NoAccessorMethod]
+		public int brightness_max { get; construct; }
+		[NoAccessorMethod]
+		public int brightness_min { get; construct; }
+		[NoAccessorMethod]
+		public string name { owned get; construct; }
+	}
+#endif
 	[CCode (cheader_filename = "meta/barrier.h", type_id = "meta_barrier_get_type ()")]
 	public class Barrier : GLib.Object, GLib.Initable {
 		[CCode (has_construct_function = false)]
@@ -373,7 +400,12 @@ namespace Meta {
 		public bool get_pointer_visible ();
 		public float get_scale ();
 		public unowned Cogl.Texture? get_sprite ();
+#if HAS_MUTTER49
+		public void inhibit_cursor_visibility ();
+		public void uninhibit_cursor_visibility ();
+#else
 		public void set_pointer_visible (bool visible);
+#endif
 		[NoAccessorMethod]
 		public Meta.Backend backend { owned get; construct; }
 		public signal void cursor_changed ();
@@ -564,8 +596,10 @@ namespace Meta {
 		public uint add_user_active_watch (owned Meta.IdleMonitorWatchFunc? callback);
 		public int64 get_idletime ();
 		public void remove_watch (uint id);
+#if !HAS_MUTTER49
 		[NoAccessorMethod]
 		public Clutter.InputDevice device { owned get; construct; }
+#endif
 	}
 	[CCode (cheader_filename = "meta/keybindings.h", copy_function = "g_boxed_copy", free_function = "g_boxed_free", type_id = "meta_key_binding_get_type ()")]
 	[Compact]
@@ -598,6 +632,30 @@ namespace Meta {
 		[NoAccessorMethod]
 		public Meta.Workspace workspace { owned get; set; }
 	}
+#if HAS_MUTTER49
+	[CCode (cheader_filename = "meta/main.h", type_id = "meta_logical_monitor_get_type ()")]
+	public class LogicalMonitor : GLib.Object {
+		[CCode (has_construct_function = false)]
+		protected LogicalMonitor ();
+		public unowned GLib.List<Meta.Monitor> get_monitors ();
+		public int get_number ();
+	}
+	[CCode (cheader_filename = "meta/main.h", type_id = "meta_monitor_get_type ()")]
+	public class Monitor : GLib.Object {
+		[CCode (has_construct_function = false)]
+		protected Monitor ();
+		public unowned Meta.Backlight? get_backlight ();
+		public unowned string get_connector ();
+		public unowned string get_display_name ();
+		public unowned string get_product ();
+		public unowned string get_serial ();
+		public unowned string get_vendor ();
+		public bool is_active ();
+		public bool is_builtin ();
+		public bool is_primary ();
+		public bool is_virtual ();
+	}
+#endif
 	[CCode (cheader_filename = "meta/meta-monitor-manager.h", type_id = "meta_monitor_manager_get_type ()")]
 	public class MonitorManager : GLib.Object {
 		[CCode (has_construct_function = false)]
@@ -605,7 +663,13 @@ namespace Meta {
 		public bool can_switch_config ();
 		public int get_display_configuration_timeout ();
 		public bool get_is_builtin_display_on ();
+#if HAS_MUTTER49
+		public unowned GLib.List<Meta.LogicalMonitor>? get_logical_monitors ();
+#endif
 		public int get_monitor_for_connector (string connector);
+#if HAS_MUTTER49
+		public unowned GLib.List<Meta.Monitor>? get_monitors ();
+#endif
 		public bool get_panel_orientation_managed ();
 		public Meta.MonitorSwitchConfigType get_switch_config ();
 		public void switch_config (Meta.MonitorSwitchConfigType config_type);
@@ -623,12 +687,18 @@ namespace Meta {
 		public signal void confirm_display_change ();
 		public signal void monitors_changed ();
 		public signal void monitors_changed_internal ();
+#if HAS_MUTTER49
+		public signal void monitors_changing ();
+#endif
 		public signal void power_save_mode_changed (Meta.PowerSaveChangeReason object);
 	}
 	[CCode (cheader_filename = "meta/meta-multi-texture.h", type_id = "meta_multi_texture_get_type ()")]
 	public class MultiTexture : GLib.Object {
 		[CCode (has_construct_function = false)]
 		public MultiTexture (Meta.MultiTextureFormat format, owned Cogl.Texture planes, int n_planes);
+#if HAS_MUTTER49
+		public void add_pipeline_sampling (Meta.MultiTextureCoefficients coeffs, Meta.MultiTextureAlphaMode premult, Cogl.Pipeline pipeline);
+#endif
 		public Meta.MultiTextureFormat get_format ();
 		public int get_height ();
 		public int get_n_planes ();
@@ -645,9 +715,16 @@ namespace Meta {
 		[CCode (has_construct_function = false)]
 		protected OrientationManager ();
 		public Meta.Orientation get_orientation ();
+#if HAS_MUTTER49
+		public void inhibit_tracking ();
+		public void uninhibit_tracking ();
+#endif
 		[NoAccessorMethod]
 		public bool has_accelerometer { get; }
 		public signal void orientation_changed ();
+#if HAS_MUTTER49
+		public signal void sensor_active ();
+#endif
 	}
 #endif
 	[CCode (cheader_filename = "meta/meta-plugin.h", type_id = "meta_plugin_get_type ()")]
@@ -712,7 +789,10 @@ namespace Meta {
 		[NoWrapper]
 		public virtual bool xevent_filter ([CCode (type = "XEvent*")] ref X.Event event);
 #endif
-#if HAS_MUTTER48
+#if HAS_MUTTER49
+		[NoWrapper]
+		public virtual bool xevent_filter (Meta.XEvent event);
+#elif HAS_MUTTER48
 		[NoWrapper]
 		public virtual bool xevent_filter (X.Event event);
 #endif
@@ -864,16 +944,31 @@ namespace Meta {
 	[CCode (cheader_filename = "meta/meta-wayland-client.h", type_id = "meta_wayland_client_get_type ()")]
 	public sealed class WaylandClient : GLib.Object {
 		[CCode (has_construct_function = false)]
+#if HAS_MUTTER49
+		protected WaylandClient ();
+#if VALA_0_56_17
+		public pid_t get_pid ();
+#else
+		public int get_pid ();
+#endif
+		public unowned GLib.Subprocess get_subprocess ();
+#else
 		public WaylandClient (Meta.Context context, GLib.SubprocessLauncher launcher) throws GLib.Error;
 		public void hide_from_window_list (Meta.Window window);
 		public void make_desktop (Meta.Window window);
 #if HAS_MUTTER46
 		public void make_dock (Meta.Window window);
 #endif
+#endif
 		public bool owns_window (Meta.Window window);
+#if HAS_MUTTER49
+		[CCode (has_construct_function = false)]
+		public WaylandClient.subprocess (Meta.Context context, GLib.SubprocessLauncher launcher, [CCode (array_length = false, array_null_terminated = true)] string[] argv) throws GLib.Error;
+#else
 		public void show_in_window_list (Meta.Window window);
 		public GLib.Subprocess spawn (Meta.Display display, GLib.Error? error, string argv0, ...);
 		public GLib.Subprocess spawnv (Meta.Display display, [CCode (array_length = false, array_null_terminated = true)] string[] argv) throws GLib.Error;
+#endif
 		public signal void client_destroyed ();
 	}
 	[CCode (cheader_filename = "meta/meta-wayland-compositor.h", type_id = "meta_wayland_compositor_get_type ()")]
@@ -908,7 +1003,9 @@ namespace Meta {
 		public void activate_with_workspace (uint32 current_time, Meta.Workspace workspace);
 		public bool allows_move ();
 		public bool allows_resize ();
-#if HAS_MUTTER46
+#if HAS_MUTTER49
+		public bool begin_grab_op (Meta.GrabOp op, Clutter.Sprite? sprite, uint32 timestamp, Graphene.Point? pos_hint);
+#elif HAS_MUTTER46
 		public bool begin_grab_op (Meta.GrabOp op, Clutter.InputDevice? device, Clutter.EventSequence? sequence, uint32 timestamp, Graphene.Point? pos_hint);
 #else
 		public bool begin_grab_op (Meta.GrabOp op, Clutter.InputDevice? device, Clutter.EventSequence? sequence, uint32 timestamp);
@@ -965,7 +1062,11 @@ namespace Meta {
 		public bool get_icon_geometry (out Mtk.Rectangle rect);
 		public uint64 get_id ();
 		public Meta.StackLayer get_layer ();
+#if HAS_MUTTER49
+		public Meta.MaximizeFlags get_maximize_flags ();
+#else
 		public Meta.MaximizeFlags get_maximized ();
+#endif
 		public int get_monitor ();
 		public unowned string? get_mutter_hints ();
 #if VALA_0_56_17
@@ -977,6 +1078,9 @@ namespace Meta {
 		public unowned string? get_sandboxed_app_id ();
 		public uint get_stable_sequence ();
 		public unowned string? get_startup_id ();
+#if HAS_MUTTER49
+		public unowned string? get_tag ();
+#endif
 		public unowned Meta.Window? get_tile_match ();
 		public unowned string get_title ();
 		public unowned Meta.Window? get_transient_for ();
@@ -995,6 +1099,9 @@ namespace Meta {
 		public bool has_attached_dialogs ();
 		public bool has_focus ();
 		public bool has_pointer ();
+#if HAS_MUTTER49
+		public void hide_from_window_list ();
+#endif
 		public bool is_above ();
 		public bool is_always_on_all_workspaces ();
 		public bool is_ancestor_of_transient (Meta.Window transient);
@@ -1004,6 +1111,9 @@ namespace Meta {
 #endif
 		public bool is_fullscreen ();
 		public bool is_hidden ();
+#if HAS_MUTTER49
+		public bool is_maximized ();
+#endif
 		public bool is_monitor_sized ();
 		public bool is_on_all_workspaces ();
 		public bool is_on_primary_monitor ();
@@ -1017,7 +1127,11 @@ namespace Meta {
 		public void lower_with_transients (uint32 timestamp);
 		public void make_above ();
 		public void make_fullscreen ();
+#if HAS_MUTTER49
+		public void maximize ();
+#else
 		public void maximize (Meta.MaximizeFlags directions);
+#endif
 		public void minimize ();
 		public void move_frame (bool user_op, int root_x_nw, int root_y_nw);
 		public void move_resize_frame (bool user_op, int root_x_nw, int root_y_nw, int w, int h);
@@ -1034,6 +1148,12 @@ namespace Meta {
 		public void set_compositor_private (GLib.Object priv);
 		public void set_demands_attention ();
 		public void set_icon_geometry (Mtk.Rectangle? rect);
+#if HAS_MUTTER49
+		public void set_maximize_flags (Meta.MaximizeFlags directions);
+		public void set_type (Meta.WindowType type);
+		public void set_unmaximize_flags (Meta.MaximizeFlags directions);
+		public void show_in_window_list ();
+#endif
 #if !HAS_MUTTER47
 		public void shove_titlebar_onscreen ();
 #endif
@@ -1050,7 +1170,11 @@ namespace Meta {
 #endif
 		public void unmake_above ();
 		public void unmake_fullscreen ();
+#if HAS_MUTTER49
+		public void unmaximize ();
+#else
 		public void unmaximize (Meta.MaximizeFlags directions);
+#endif
 		public void unminimize ();
 		public void unset_demands_attention ();
 		public void unstick ();
@@ -1106,6 +1230,9 @@ namespace Meta {
 		public bool resizeable { get; }
 		[NoAccessorMethod]
 		public bool skip_taskbar { get; }
+#if HAS_MUTTER49
+		public string tag { get; }
+#endif
 		public string title { get; }
 		[NoAccessorMethod]
 		public bool urgent { get; }
@@ -1359,6 +1486,15 @@ namespace Meta {
 		public Mtk.Rectangle rect;
 		public Meta.Side side;
 	}
+#if HAS_MUTTER49
+	[CCode (cheader_filename = "meta/main.h")]
+	public struct XEvent {
+	}
+	[CCode (cheader_filename = "meta/main.h", cname = "_MetaMonitor", has_type_id = false)]
+	public struct _Monitor {
+		public weak GLib.Object parent_instance;
+	}
+#endif
 	[CCode (cheader_filename = "meta/main.h", cprefix = "META_BACKEND_CAPABILITY_", type_id = "meta_backend_capabilities_get_type ()")]
 	[Flags]
 	public enum BackendCapabilities {
@@ -1478,6 +1614,9 @@ namespace Meta {
 #if HAS_MUTTER47
 		SYNC_CURSOR_PRIMARY,
 		DISABLE_DIRECT_SCANOUT,
+#endif
+#if HAS_MUTTER49
+		IGNORE_COLOR_STATE_FOR_DIRECT_SCANOUT,
 #endif
 		OPAQUE_REGION
 	}
@@ -1797,14 +1936,73 @@ namespace Meta {
 		DOWN_LEFT,
 		DOWN_RIGHT
 	}
+#if HAS_MUTTER49
+	[CCode (cheader_filename = "meta/main.h", cprefix = "", type_id = "meta_multi_texture_alpha_mode_get_type ()")]
+	public enum MultiTextureAlphaMode {
+		META_MULTI_TEXTURE_ALPHA_MODE_NONE,
+		META_MULTI_TEXTURE_ALPHA_MODE_PREMULT_ELECTRICAL,
+		META_MULTI_TEXTURE_ALPHA_MODE_STRAIGHT,
+		N_META_MULTI_TEXTURE_ALPHA_MODES
+	}
+	[CCode (cheader_filename = "meta/main.h", cprefix = "META_MULTI_TEXTURE_CHROMA_LOC_", type_id = "meta_multi_texture_chroma_loc_get_type ()")]
+	public enum MultiTextureChromaLoc {
+		NONE,
+		DEFINED
+	}
+	[CCode (cheader_filename = "meta/main.h", cprefix = "", type_id = "meta_multi_texture_coefficients_get_type ()")]
+	public enum MultiTextureCoefficients {
+		META_MULTI_TEXTURE_COEFFICIENTS_NONE,
+		META_MULTI_TEXTURE_COEFFICIENTS_IDENTITY_FULL,
+		META_MULTI_TEXTURE_COEFFICIENTS_IDENTITY_LIMITED,
+		META_MULTI_TEXTURE_COEFFICIENTS_BT709_FULL,
+		META_MULTI_TEXTURE_COEFFICIENTS_BT709_LIMITED,
+		META_MULTI_TEXTURE_COEFFICIENTS_BT601_FULL,
+		META_MULTI_TEXTURE_COEFFICIENTS_BT601_LIMITED,
+		META_MULTI_TEXTURE_COEFFICIENTS_BT2020_FULL,
+		META_MULTI_TEXTURE_COEFFICIENTS_BT2020_LIMITED,
+		N_META_MULTI_TEXTURE_COEFFICIENTS
+	}
+#endif
 	[CCode (cheader_filename = "meta/meta-multi-texture-format.h", cprefix = "META_MULTI_TEXTURE_FORMAT_", type_id = "meta_multi_texture_format_get_type ()")]
 	public enum MultiTextureFormat {
 		INVALID,
 		SIMPLE,
 		YUYV,
+#if HAS_MUTTER49
+		YVYU,
+		UYVY,
+		VYUY,
+#endif
 		NV12,
+#if HAS_MUTTER49
+		NV21,
+		NV16,
+		NV61,
+		NV24,
+		NV42,
+#endif
 #if HAS_MUTTER46
 		P010,
+		#endif
+#if HAS_MUTTER49
+		P012,
+		P016,
+		YVU420,
+		YUV422,
+		YVU422,
+		YUV444,
+		YVU444,
+		S010,
+		S210,
+		S410,
+		S012,
+		S212,
+		S412,
+		S016,
+		S216,
+		S416,
+		[CCode (cname = "N_META_MULTI_TEXTURE_FORMATS")]
+		N_FORMATS,
 #endif
 		YUV420
 	}
@@ -1829,6 +2027,9 @@ namespace Meta {
 	[CCode (cheader_filename = "meta/display.h", cprefix = "META_PAD_FEATURE_", type_id = "meta_pad_feature_type_get_type ()")]
 	public enum PadFeatureType {
 		RING,
+#if HAS_MUTTER49
+        DIAL,
+#endif
 		STRIP
 	}
 	[CCode (cheader_filename = "meta/meta-monitor-manager.h", cprefix = "META_POWER_SAVE_CHANGE_REASON_", type_id = "meta_power_save_change_reason_get_type ()")]
@@ -1920,6 +2121,9 @@ namespace Meta {
 		NORMAL,
 		DOCKS,
 		GROUP,
+#if HAS_MUTTER49
+		NORMAL_ALL_MRU,
+#endif
 		NORMAL_ALL
 	}
 	[CCode (cheader_filename = "meta/display.h", cprefix = "META_TAB_SHOW_", type_id = "meta_tab_show_type_get_type ()")]
@@ -2037,4 +2241,3 @@ namespace Meta {
 	[CCode (cheader_filename = "meta/main.h")]
 	public static void restart (string? message, Meta.Context context);
 }
-

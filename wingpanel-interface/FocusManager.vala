@@ -133,8 +133,14 @@ public class WingpanelInterface.FocusManager : Object {
                     if (dx * dx + dy * dy < drag_threshold * drag_threshold) {
                         return Clutter.EVENT_PROPAGATE;
                     }
-
-#if HAS_MUTTER46
+#if HAS_MUTTER49
+                    window.begin_grab_op (
+                        Meta.GrabOp.MOVING,
+                        Clutter.get_default_backend ().get_sprite (Main.wm.stage, event),
+                        event.get_time (),
+                        { x, y }
+                    );
+#elif HAS_MUTTER46
                     window.begin_grab_op (
                         Meta.GrabOp.MOVING,
                         event.get_device (),
