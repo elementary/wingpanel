@@ -1,12 +1,12 @@
-Source: io.elementary.wingpanel-8
+Source: io.elementary.wingpanel
 Section: x11
 Priority: optional
 Maintainer: elementary, Inc. <builds@elementary.io>
 Build-Depends:
     debhelper (>= 10.5.1),
     gettext,
-    libgala-dev,
-    libmutter-14-dev | libmutter-13-dev | libmutter-12-dev | libmutter-11-dev | libmutter-10-dev,
+    libgala-dev (>= 8.3.0),
+    libmutter-17-dev | libmutter-16-dev | libmutter-15-dev | libmutter-14-dev | libmutter-13-dev,
     libgee-0.8-dev,
     libgirepository1.0-dev,
     libglib2.0-dev (>= 2.32),
@@ -19,18 +19,18 @@ Vcs-Git: https://github.com/elementary/wingpanel.git
 Vcs-Browser: https://github.com/elementary/wingpanel
 Homepage: https://github.com/elementary/wingpanel
 
-Package: io.elementary.wingpanel-8
+Package: io.elementary.wingpanel
 Architecture: any
 Depends:
-    gala (>= 8.0.0),
-    libwingpanel-8 (= ${binary:Version}),
+    gala (>= 8.3.0),
+    libwingpanel-9 (= ${binary:Version}),
     ${misc:Depends},
     ${shlibs:Depends}
 Provides: indicator-renderer
 Description: Top panel for Pantheon
     An extensible container for system indicators
 
-Package: libwingpanel-8
+Package: libwingpanel-9
 Architecture: any
 Multi-Arch: same
 Depends:
@@ -41,13 +41,13 @@ Description: A super sexy space-saving top panel
     .
     This package contains the shared library used for wingpanel.
 
-Package: libwingpanel-8-dev
+Package: libwingpanel-9-dev
 Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends:
     libglib2.0-dev (>= 2.32),
-    libwingpanel-8 (= ${binary:Version}),
+    libwingpanel-9 (= ${binary:Version}),
     ${misc:Depends}
 Description: Library to build plugins for WingPanel (development files)
     An extensible container for system indicators

@@ -1,4 +1,23 @@
-io.elementary.wingpanel-8 (8.0.1) noble; urgency=medium
+io.elementary.wingpanel (8.0.4) noble; urgency=medium
+
+  * Release 8.0.4 (#648)
+
+ -- elementary, Inc. <builds@elementary.io>  Wed, 03 Dec 2025 16:16:20 +0000
+
+io.elementary.wingpanel (8.0.3) noble; urgency=medium
+
+  * Release 8.0.3 (#604)
+
+ -- elementary, Inc. <builds@elementary.io>  Mon, 10 Mar 2025 20:09:19 +0000
+
+io.elementary.wingpanel (8.0.2) noble; urgency=medium
+
+  * Release 8.0.2 (#599)
+
+ -- elementary, Inc. <builds@elementary.io>  Fri, 07 Feb 2025 11:21:48 +0000
+
+io.elementary.wingpanel (8.0.1) noble; urgency=medium
+
 
   * Release 8.0.1 (#581)
 
