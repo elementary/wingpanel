@@ -38,6 +38,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         app_provider.load_from_resource ("io/elementary/wingpanel/Application.css");
         Gtk.StyleContext.add_provider_for_display (Gdk.Display.get_default (), app_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+
         popover_manager = new Services.PopoverManager ();
 
         panel = new Widgets.Panel (popover_manager);
@@ -64,15 +65,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             } else {
                 Services.BackgroundManager.get_default ().remember_window ();
             }
-
-            //Check whether we need this still
-            if (Gdk.Display.get_default () is Gdk.X11.Display) {
-                var display = (Gdk.X11.Display) Gdk.Display.get_default ();
-                var surface = (Gdk.X11.Surface) get_surface ();
-
-                display.get_xdisplay ().set_input_focus (surface.get_xid (), 0, 0);
-            }
         });
+
+        notify["scale-factor"].connect (on_scale_changed);
     }
 
     private void on_realize () {
@@ -104,6 +99,24 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     public void toggle_indicator (string name) {
         popover_manager.toggle_popover_visible (name);
+    }
+
+    private void on_scale_changed () {
+        if (desktop_panel != null) {
+            desktop_panel.set_size (-1, get_actual_height ());
+        } else {
+            init_x ();
+        }
+
+        update_panel_dimensions ();
+    }
+
+    private int get_actual_height () {
+        if (!Services.DisplayConfig.is_logical_layout ()) {
+            return get_allocated_height () * get_scale_factor ();
+        }
+
+        return get_allocated_height ();
     }
 
     private void init_x () {

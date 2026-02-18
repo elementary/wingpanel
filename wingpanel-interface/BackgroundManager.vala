@@ -1,20 +1,7 @@
 /*
- * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301 USA.
+ * SPDX-License-Identifier: GPL-2-or-later
+ * SPDX-FileCopyrightText: 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ *                         2025 elementary, Inc. (https://elementary.io)
  */
 
 public enum BackgroundState {
@@ -39,11 +26,9 @@ public class WingpanelInterface.BackgroundManager : Object {
     public int panel_height { private get; construct; }
 
     private ulong wallpaper_hook_id;
-
+    private bool showing_desktop = false;
     private unowned Meta.Workspace? current_workspace = null;
-
     private BackgroundState current_state = BackgroundState.LIGHT;
-
     private Utils.ColorInformation? bk_color_info = null;
 
     public BackgroundManager (int panel_height) {
@@ -63,8 +48,10 @@ public class WingpanelInterface.BackgroundManager : Object {
 
     private void connect_signals () {
         unowned Meta.WorkspaceManager manager = Main.display.get_workspace_manager ();
-        manager.workspace_switched.connect (() => {
-            update_current_workspace ();
+        manager.workspace_switched.connect (() => update_current_workspace ());
+        manager.showing_desktop_changed.connect (() => {
+            showing_desktop  = !showing_desktop;
+            check_for_state_change (WALLPAPER_TRANSITION_DURATION);
         });
 
         var signal_id = GLib.Signal.lookup ("changed", Main.wm.background_group.get_type ());
@@ -121,6 +108,10 @@ public class WingpanelInterface.BackgroundManager : Object {
             check_for_state_change (MINIMIZE_DURATION);
         });
 
+        window.notify["fullscreen"].connect (() => {
+            check_for_state_change (SNAP_DURATION);
+        });
+
         window.workspace_changed.connect (() => {
             check_for_state_change (WORKSPACE_SWITCH_DURATION);
         });
@@ -156,27 +147,38 @@ public class WingpanelInterface.BackgroundManager : Object {
      * Check if Wingpanel's background state should change.
      *
      * The state is defined as follows:
-     *  - If there's a maximized window, the state should be MAXIMIZED;
+     *  - If there's a maximized or fullscreen window, the state should be MAXIMIZED;
      *  - If no information about the background could be gathered, it should be TRANSLUCENT;
      *  - If there's too much contrast or sharpness, it should be TRANSLUCENT;
      *  - If the background is too bright, it should be DARK;
      *  - Else it should be LIGHT.
      */
     private void check_for_state_change (uint animation_duration) {
+        if (showing_desktop && current_state != LIGHT) {
+            state_changed (current_state = LIGHT, animation_duration);
+            return;
+        }
+
+        bool has_fullscreen_window = false;
         bool has_maximized_window = false;
 
-        foreach (unowned Meta.Window window in current_workspace.list_windows ()) {
-            if (window.is_on_primary_monitor ()) {
-                if (!window.minimized && window.maximized_vertically) {
-                    has_maximized_window = true;
-                    break;
-                }
+        foreach (unowned var window in current_workspace.list_windows ()) {
+            if (!window.is_on_primary_monitor () || window.minimized) {
+                continue;
+            }
+            
+            if (window.fullscreen) {
+                has_fullscreen_window = true;
+            } else if (window.maximized_vertically) {
+                has_maximized_window = true;
             }
         }
 
         BackgroundState new_state;
 
-        if (has_maximized_window) {
+        if (has_fullscreen_window) {
+            new_state = BackgroundState.TRANSLUCENT_LIGHT;
+        } else if (has_maximized_window) {
             new_state = BackgroundState.MAXIMIZED;
         } else if (bk_color_info == null) {
             new_state = BackgroundState.TRANSLUCENT_LIGHT;

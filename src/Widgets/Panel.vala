@@ -98,7 +98,7 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
 
             current_scroll_delta += dx + dy;
 
-            if (current_scroll_delta.abs () > 10) { //TODO: Check whether 10 is good here.
+            if (current_scroll_delta.abs () > 1) { // Balance between reactive and ignoring misinput
                 current_scroll_delta = 0;
             }
         });
@@ -191,7 +191,7 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     private void update_background (Services.BackgroundState state, uint animation_duration) {
         if (style_provider == null) {
             style_provider = new Gtk.CssProvider ();
-             Gtk.StyleContext.add_provider_for_display (
+            Gtk.StyleContext.add_provider_for_display (
                 Gdk.Display.get_default (),
                 style_provider,
                 Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION

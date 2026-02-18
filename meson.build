@@ -1,7 +1,7 @@
 project(
     'io.elementary.wingpanel',
     'c', 'vala',
-    version: '8.0.1',
+    version: '8.0.4',
     meson_version : '>= 0.58.0'
 )
 
@@ -35,8 +35,8 @@ gdk_x11_dep = dependency('gtk4-x11')
 x11_dep = dependency('x11')
 gtk_dep = dependency('gtk4')
 gee_dep = dependency('gee-0.8')
-granite_dep = dependency('granite-7')
-posix_dep = meson.get_compiler('vala').find_library('posix')
+granite_dep = dependency('granite-7', version: '>=7.0.0')
+posix_dep = vala.find_library('posix')
 wl_client_dep = dependency('wayland-client')
 
 subdir('protocol')

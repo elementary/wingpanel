@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-17 18:00+0000\n"
+"POT-Creation-Date: 2025-02-07 11:05+0000\n"
 "PO-Revision-Date: 2024-09-19 07:22+0000\n"
 "Last-Translator: Ihor Hordiichuk <igor_ck@outlook.com>\n"
 "Language-Team: Ukrainian <https://l10n.elementary.io/projects/wingpanel/"
@@ -40,37 +40,35 @@ msgstr ""
 msgid "elementary, Inc."
 msgstr "elementary, Inc."
 
-#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:54
-#: data/wingpanel.metainfo.xml.in:71 data/wingpanel.metainfo.xml.in:83
-#: data/wingpanel.metainfo.xml.in:97
+#: data/wingpanel.metainfo.xml.in:41 data/wingpanel.metainfo.xml.in:50
+#: data/wingpanel.metainfo.xml.in:63 data/wingpanel.metainfo.xml.in:80
+#: data/wingpanel.metainfo.xml.in:92
 msgid "Improvements:"
 msgstr "Удосконалення:"
 
-#: data/wingpanel.metainfo.xml.in:43
-msgid "Fix incorrect scale factor in some sessions"
-msgstr "Виправлено неправильний коефіцієнт масштабування в деяких сеансах"
-
-#: data/wingpanel.metainfo.xml.in:44 data/wingpanel.metainfo.xml.in:56
-#: data/wingpanel.metainfo.xml.in:73 data/wingpanel.metainfo.xml.in:87
-#: data/wingpanel.metainfo.xml.in:101
+#: data/wingpanel.metainfo.xml.in:43 data/wingpanel.metainfo.xml.in:53
+#: data/wingpanel.metainfo.xml.in:65 data/wingpanel.metainfo.xml.in:82
+#: data/wingpanel.metainfo.xml.in:96
 msgid "Updated translations"
 msgstr "Оновлено переклади"
 
-#: data/wingpanel.metainfo.xml.in:85
+#: data/wingpanel.metainfo.xml.in:52
+msgid "Fix incorrect scale factor in some sessions"
+msgstr "Виправлено неправильний коефіцієнт масштабування в деяких сеансах"
+
+#: data/wingpanel.metainfo.xml.in:94
 msgid "Always use elementary visual resources"
 msgstr "Завжди використовувати візуальні ресурси elementary"
 
-#: data/wingpanel.metainfo.xml.in:86
+#: data/wingpanel.metainfo.xml.in:95
 msgid "Esc to close popovers"
 msgstr "Закриття спливних вікон за натисканням клавіші Esc"
 
-#: data/wingpanel.metainfo.xml.in:99
-msgid "Fallback to maximized style if window manager is unavailable"
-msgstr "Перехід до розгорнутого стилю, якщо віконний менеджер недоступний"
+#~ msgid "Fallback to maximized style if window manager is unavailable"
+#~ msgstr "Перехід до розгорнутого стилю, якщо віконний менеджер недоступний"
 
-#: data/wingpanel.metainfo.xml.in:100
-msgid "Listen to smooth scroll events"
-msgstr "Відстежування плавних подій гортання"
+#~ msgid "Listen to smooth scroll events"
+#~ msgstr "Відстежування плавних подій гортання"
 
 #~ msgid "Fix startup delay on the greeter"
 #~ msgstr "Виправлено затримку запуску привітання"
