@@ -36,7 +36,7 @@ libwingpanel_lib = library(
 pkg.generate(
     libwingpanel_lib,
     filebase: 'wingpanel-9',
-    name: 'Wingpanel-8',
+    name: 'Wingpanel-9',
     description: 'Wingpanel Indicators API',
     version: meson.project_version(),
     subdirs: 'wingpanel-9',
