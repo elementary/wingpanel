@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
+public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
@@ -37,7 +37,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
 
     private Gtk.Revealer revealer;
 
-    private Gtk.GestureMultiPress gesture_controller;
+    private Gtk.GestureClick gesture_controller;
     private Gtk.EventControllerMotion motion_controller;
 
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
@@ -48,7 +48,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
     }
 
     construct {
-        can_focus = false;
         display_widget = base_indicator.get_display_widget ();
         halign = Gtk.Align.START;
         name = base_indicator.code_name + "/entry";
@@ -60,9 +59,9 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
         revealer = new Gtk.Revealer () {
             child = display_widget
         };
-        revealer.get_style_context ().add_class ("composited-indicator");
+        revealer.add_css_class ("composited-indicator");
 
-        add (revealer);
+        child = revealer;
 
         if (base_indicator.visible) {
             popover_manager.register_indicator (this);
@@ -92,24 +91,17 @@ public class Wingpanel.Widgets.IndicatorEntry : Gtk.EventBox {
             }
         });
 
-        add_events (Gdk.EventMask.SCROLL_MASK);
-        add_events (Gdk.EventMask.SMOOTH_SCROLL_MASK);
-
-        scroll_event.connect ((e) => {
-            return display_widget.scroll_event (e);
-        });
-
-        button_press_event.connect ((e) => display_widget.button_press_event (e));
-
-        gesture_controller = new Gtk.GestureMultiPress (this);
+        gesture_controller = new Gtk.GestureClick ();
+        add_controller (gesture_controller);
         gesture_controller.pressed.connect (() => {
             popover_manager.current_indicator = this;
             gesture_controller.set_state (CLAIMED);
         });
 
-        motion_controller = new Gtk.EventControllerMotion (this) {
+        motion_controller = new Gtk.EventControllerMotion () {
             propagation_phase = CAPTURE
         };
+        add_controller (motion_controller);
 
         motion_controller.enter.connect (() => {
             // If something is open and it's not us, open us. This implements the scrubbing behavior
