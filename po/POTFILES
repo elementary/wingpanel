@@ -1,9 +1,5 @@
 lib/IndicatorManager.vala
 lib/Indicator.vala
-lib/Widgets/Container.vala
-lib/Widgets/OverlayIcon.vala
-lib/Widgets/Separator.vala
-lib/Widgets/Switch.vala
 src/Application.vala
 src/PanelWindow.vala
 src/Services/BackgroundManager.vala
