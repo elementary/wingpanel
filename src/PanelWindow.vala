@@ -26,6 +26,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? desktop_panel;
 
+    private Gtk.CssProvider? style_provider = null;
+
     public PanelWindow (Gtk.Application application) {
         Object (
             application: application,
@@ -63,6 +65,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         });
 
         notify["scale-factor"].connect (on_scale_changed);
+    }
+
+    construct {
+        Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
     }
 
     private void on_realize () {
@@ -161,6 +167,66 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             if (wl_display.roundtrip () < 0) {
                 return;
             }
+        }
+    }
+
+    private void update_background (Services.BackgroundState state, uint animation_duration) {
+        if (style_provider == null) {
+            style_provider = new Gtk.CssProvider ();
+            Gtk.StyleContext.add_provider_for_display (
+                Gdk.Display.get_default (),
+                style_provider,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            );
+        }
+
+        string css = """
+            panel {
+                transition: all %ums cubic-bezier(0.4, 0, 0.2, 1);
+            }
+        """.printf (animation_duration);
+
+        style_provider.load_from_string (css);
+
+        switch (state) {
+            case Services.BackgroundState.DARK :
+                panel.css_classes = {"color-light"};
+                break;
+            case Services.BackgroundState.LIGHT:
+                panel.css_classes = {"color-dark"};
+                break;
+            case Services.BackgroundState.MAXIMIZED:
+                panel.css_classes = {"maximized"};
+                break;
+            case Services.BackgroundState.TRANSLUCENT_DARK:
+                panel.css_classes = {
+                    "color-light",
+                    "translucent"
+                };
+                break;
+            case Services.BackgroundState.TRANSLUCENT_LIGHT:
+                panel.css_classes = {
+                    "color-dark",
+                    "translucent"
+                };
+                break;
+        }
+
+
+        if (desktop_panel == null) {
+            return;
+        }
+
+        switch (state) {
+            case Services.BackgroundState.DARK :
+            case Services.BackgroundState.LIGHT:
+            case Services.BackgroundState.MAXIMIZED:
+                desktop_panel.remove_blur ();
+                break;
+            case Services.BackgroundState.TRANSLUCENT_DARK:
+            case Services.BackgroundState.TRANSLUCENT_LIGHT:
+                desktop_panel.add_blur (0, 0, 0, 4, 0);
+                break;
         }
     }
 }
