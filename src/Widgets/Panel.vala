@@ -27,7 +27,6 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     private IndicatorBar center_menubar;
 
     private Gtk.CenterBox box;
-    private Gtk.CssProvider? style_provider = null;
 
     private Gtk.GestureClick gesture_controller;
     private Gtk.EventControllerScroll scroll_controller;
@@ -73,8 +72,6 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
 
             return true;
         });
-
-        Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
 
         gesture_controller = new Gtk.GestureClick ();
         add_controller (gesture_controller);
@@ -186,48 +183,5 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
         left_menubar.remove_indicator (indicator);
         center_menubar.remove_indicator (indicator);
         right_menubar.remove_indicator (indicator);
-    }
-
-    private void update_background (Services.BackgroundState state, uint animation_duration) {
-        if (style_provider == null) {
-            style_provider = new Gtk.CssProvider ();
-            Gtk.StyleContext.add_provider_for_display (
-                Gdk.Display.get_default (),
-                style_provider,
-                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
-            );
-        }
-
-        string css = """
-            panel {
-                transition: all %ums cubic-bezier(0.4, 0, 0.2, 1);
-            }
-        """.printf (animation_duration);
-
-        style_provider.load_from_string (css);
-
-        switch (state) {
-            case Services.BackgroundState.DARK :
-                css_classes = {"color-light"};
-                break;
-            case Services.BackgroundState.LIGHT:
-                css_classes = {"color-dark"};
-                break;
-            case Services.BackgroundState.MAXIMIZED:
-                css_classes = {"maximized"};
-                break;
-            case Services.BackgroundState.TRANSLUCENT_DARK:
-                css_classes = {
-                    "color-light",
-                    "translucent"
-                };
-                break;
-            case Services.BackgroundState.TRANSLUCENT_LIGHT:
-                css_classes = {
-                    "color-dark",
-                    "translucent"
-                };
-                break;
-        }
     }
 }
