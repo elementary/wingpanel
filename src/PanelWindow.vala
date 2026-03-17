@@ -34,11 +34,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             vexpand: false
         );
 
-        var app_provider = new Gtk.CssProvider ();
-        app_provider.load_from_resource ("io/elementary/wingpanel/Application.css");
-        Gtk.StyleContext.add_provider_for_display (Gdk.Display.get_default (), app_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-
         popover_manager = new Services.PopoverManager ();
 
         panel = new Widgets.Panel (popover_manager);
