@@ -36,7 +36,7 @@ public class Wingpanel.Application : Gtk.Application {
 
     construct {
         flags = ApplicationFlags.HANDLES_COMMAND_LINE;
-        application_id = "org.elementary.wingpanel";
+        application_id = "io.elementary.wingpanel";
 
         add_main_option_entries (OPTIONS);
 
@@ -84,15 +84,8 @@ public class Wingpanel.Application : Gtk.Application {
             IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
         }
 
-        var granite_settings = Granite.Settings.get_default ();
         var gtk_settings = Gtk.Settings.get_default ();
         gtk_settings.gtk_icon_theme_name = "elementary";
-
-        gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == DARK;
-
-        granite_settings.notify["prefers-color-scheme"].connect (() => {
-            gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == DARK;
-        });
 
         if (options.contains (OPEN_INDICATOR_ACTION_NAME)) {
             activate_action (OPEN_INDICATOR_ACTION_NAME, options.lookup_value (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING));
