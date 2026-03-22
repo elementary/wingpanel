@@ -108,10 +108,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private int get_actual_height () {
         if (!Services.DisplayConfig.is_logical_layout ()) {
-            return get_allocated_height () * get_scale_factor ();
+            return get_height () * get_scale_factor ();
         }
 
-        return get_allocated_height ();
+        return get_height ();
     }
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
