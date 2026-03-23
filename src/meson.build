@@ -9,7 +9,6 @@ wingpanel_files = files(
     'Services/WMDBus.vala',
     'Widgets/IndicatorEntry.vala',
     'Widgets/IndicatorBar.vala',
-    'Widgets/IndicatorPopover.vala',
     'Widgets/Panel.vala'
 )
 
