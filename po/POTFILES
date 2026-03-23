@@ -7,5 +7,4 @@ src/Services/IndicatorSorter.vala
 src/Services/PopoverManager.vala
 src/Widgets/IndicatorBar.vala
 src/Widgets/IndicatorEntry.vala
-src/Widgets/IndicatorPopover.vala
 src/Widgets/Panel.vala
