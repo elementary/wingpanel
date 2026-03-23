@@ -110,17 +110,9 @@ public class Wingpanel.Application : Gtk.Application {
         panel_window = new PanelWindow (this);
         panel_window.present ();
 
-        register_actions ();
-    }
+        var list_indicators_action = new SimpleAction.stateful (LIST_INDICATORS_ACTION_NAME, null, new Variant.strv (list_indicators ()));
 
-    protected override void activate () {
-        /* Do nothing */
-    }
-
-    private void register_actions () {
-        SimpleAction list_indicators_action = new SimpleAction.stateful (LIST_INDICATORS_ACTION_NAME, null, new Variant.strv (list_indicators ()));
-
-        IndicatorManager indicator_manager = IndicatorManager.get_default ();
+        var indicator_manager = IndicatorManager.get_default ();
         indicator_manager.indicator_added.connect (() => {
             list_indicators_action.set_state (new Variant.strv (list_indicators ()));
         });
@@ -128,37 +120,29 @@ public class Wingpanel.Application : Gtk.Application {
             list_indicators_action.set_state (new Variant.strv (list_indicators ()));
         });
 
-        SimpleAction open_indicator_action = new SimpleAction (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING);
+        var open_indicator_action = new SimpleAction (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING);
         open_indicator_action.activate.connect ((parameter) => {
-            if (panel_window == null) {
-                return;
-            }
-
             panel_window.popover_manager.set_popover_visible (parameter.get_string (), true);
         });
 
-        SimpleAction close_indicator_action = new SimpleAction (CLOSE_INDICATOR_ACTION_NAME, VariantType.STRING);
+        var close_indicator_action = new SimpleAction (CLOSE_INDICATOR_ACTION_NAME, VariantType.STRING);
         close_indicator_action.activate.connect ((parameter) => {
-            if (panel_window == null) {
-                return;
-            }
-
             panel_window.popover_manager.set_popover_visible (parameter.get_string (), false);
         });
 
-        SimpleAction toggle_indicator_action = new SimpleAction (TOGGLE_INDICATOR_ACTION_NAME, VariantType.STRING);
+        var toggle_indicator_action = new SimpleAction (TOGGLE_INDICATOR_ACTION_NAME, VariantType.STRING);
         toggle_indicator_action.activate.connect ((parameter) => {
-            if (panel_window == null) {
-                return;
-            }
-
             panel_window.toggle_indicator (parameter.get_string ());
         });
 
-        this.add_action (list_indicators_action);
-        this.add_action (open_indicator_action);
-        this.add_action (close_indicator_action);
-        this.add_action (toggle_indicator_action);
+        add_action (list_indicators_action);
+        add_action (open_indicator_action);
+        add_action (close_indicator_action);
+        add_action (toggle_indicator_action);
+    }
+
+    protected override void activate () {
+        /* Do nothing */
     }
 
     private string[] list_indicators () {
