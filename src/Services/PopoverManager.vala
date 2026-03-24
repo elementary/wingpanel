@@ -63,7 +63,14 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
     }
 
-    public PopoverManager () {
+    private static GLib.Once<PopoverManager> instance;
+    public static unowned PopoverManager get_default () {
+        return instance.once (() => { return new PopoverManager (); });
+    }
+
+    private PopoverManager () {}
+
+    construct {
         registered_indicators = new Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> ();
 
         popover = new Gtk.Popover () {

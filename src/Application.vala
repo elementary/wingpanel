@@ -110,6 +110,8 @@ public class Wingpanel.Application : Gtk.Application {
         panel_window = new PanelWindow (this);
         panel_window.present ();
 
+        var popover_manager = Services.PopoverManager.get_default ();
+
         var list_indicators_action = new SimpleAction.stateful (LIST_INDICATORS_ACTION_NAME, null, new Variant.strv (list_indicators ()));
 
         var indicator_manager = IndicatorManager.get_default ();
@@ -122,17 +124,17 @@ public class Wingpanel.Application : Gtk.Application {
 
         var open_indicator_action = new SimpleAction (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING);
         open_indicator_action.activate.connect ((parameter) => {
-            panel_window.popover_manager.set_popover_visible (parameter.get_string (), true);
+            popover_manager.set_popover_visible (parameter.get_string (), true);
         });
 
         var close_indicator_action = new SimpleAction (CLOSE_INDICATOR_ACTION_NAME, VariantType.STRING);
         close_indicator_action.activate.connect ((parameter) => {
-            panel_window.popover_manager.set_popover_visible (parameter.get_string (), false);
+            popover_manager.set_popover_visible (parameter.get_string (), false);
         });
 
         var toggle_indicator_action = new SimpleAction (TOGGLE_INDICATOR_ACTION_NAME, VariantType.STRING);
         toggle_indicator_action.activate.connect ((parameter) => {
-            panel_window.toggle_indicator (parameter.get_string ());
+            popover_manager.toggle_popover_visible (parameter.get_string ());
         });
 
         add_action (list_indicators_action);

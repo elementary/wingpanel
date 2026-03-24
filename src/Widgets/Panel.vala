@@ -20,8 +20,6 @@
 public class Wingpanel.Widgets.Panel : Granite.Bin {
     private static Settings panel_settings = new Settings ("io.elementary.desktop.wingpanel");
 
-    public Services.PopoverManager popover_manager { get; construct; }
-
     private IndicatorBar right_menubar;
     private IndicatorBar left_menubar;
     private IndicatorBar center_menubar;
@@ -31,10 +29,6 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     private Gtk.GestureClick gesture_controller;
     private Gtk.EventControllerScroll scroll_controller;
     private double current_scroll_delta = 0;
-
-    public Panel (Services.PopoverManager popover_manager) {
-        Object (popover_manager : popover_manager);
-    }
 
     class construct {
         set_css_name ("panel");
@@ -102,13 +96,14 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     }
 
     private void begin_drag (double x, double y) {
-        popover_manager.close ();
+        Services.PopoverManager.get_default ().close ();
 
         var background_manager = Services.BackgroundManager.get_default ();
         background_manager.begin_grab_focused_window ((int) x, (int) y);
     }
 
     public void cycle (bool forward) {
+        var popover_manager = Services.PopoverManager.get_default ();
         var current = popover_manager.current_indicator;
         if (current == null) {
             return;
@@ -161,7 +156,7 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     }
 
     private void add_indicator (Indicator indicator) {
-        var indicator_entry = new IndicatorEntry (indicator, popover_manager);
+        var indicator_entry = new IndicatorEntry (indicator);
 
         switch (indicator.code_name) {
             case Indicator.APP_LAUNCHER:

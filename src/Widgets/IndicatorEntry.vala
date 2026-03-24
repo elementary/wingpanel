@@ -19,7 +19,6 @@
 
 public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     public Indicator base_indicator { get; construct; }
-    public Services.PopoverManager popover_manager { get; construct; }
 
     public IndicatorBar? indicator_bar;
     public Gtk.Widget display_widget { get; private set; }
@@ -40,11 +39,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     private Gtk.GestureClick gesture_controller;
     private Gtk.EventControllerMotion motion_controller;
 
-    public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
-        Object (
-            base_indicator: base_indicator,
-            popover_manager: popover_manager
-        );
+    public IndicatorEntry (Indicator base_indicator) {
+        Object (base_indicator: base_indicator);
     }
 
     construct {
@@ -62,6 +58,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         revealer.add_css_class ("composited-indicator");
 
         child = revealer;
+
+        var popover_manager = Services.PopoverManager.get_default ();
 
         if (base_indicator.visible) {
             popover_manager.register_indicator (this);
@@ -123,6 +121,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     }
 
     private void set_reveal (bool reveal) {
+        var popover_manager = Services.PopoverManager.get_default ();
         if (!reveal && popover_manager.get_visible (this)) {
             popover_manager.current_indicator = null;
         }

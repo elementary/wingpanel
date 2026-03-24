@@ -18,7 +18,6 @@
  */
 
 public class Wingpanel.PanelWindow : Gtk.Window {
-    public Services.PopoverManager popover_manager;
 
     private Widgets.Panel panel;
     private int panel_height;
@@ -36,9 +35,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             vexpand: false
         );
 
-        popover_manager = new Services.PopoverManager ();
-
-        panel = new Widgets.Panel (popover_manager);
+        panel = new Widgets.Panel ();
         panel.realize.connect (on_realize);
 
         var cycle_action = new SimpleAction ("cycle", null);
@@ -55,6 +52,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         child = panel;
         remove_css_class (Granite.STYLE_CLASS_BACKGROUND);
 
+        var popover_manager = Services.PopoverManager.get_default ();
         popover_manager.notify["indicator-open"].connect (() => {
             if (!popover_manager.indicator_open) {
                 Services.BackgroundManager.get_default ().restore_window ();
@@ -92,10 +90,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         }
 
         this.set_size_request (monitor_dimensions.width, -1);
-    }
-
-    public void toggle_indicator (string name) {
-        popover_manager.toggle_popover_visible (name);
     }
 
     private void on_scale_changed () {
