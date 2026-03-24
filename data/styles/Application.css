@@ -109,7 +109,6 @@ panel.translucent.color-light > box {
     -gtk-icon-shadow: none;
 }
 
-popover.indicator > contents {
+popover.menu > contents {
     min-width: 20rem;
-    padding: 0.25rem 0;
 }
