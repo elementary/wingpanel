@@ -9,7 +9,6 @@ wingpanel_files = files(
     'Services/WMDBus.vala',
     'Widgets/IndicatorEntry.vala',
     'Widgets/IndicatorBar.vala',
-    'Widgets/IndicatorPopover.vala',
     'Widgets/Panel.vala'
 )
 
@@ -17,8 +16,6 @@ wingpanel_deps = [
     libwingpanel_dep,
     granite_dep,
     gdk_wl_dep,
-    gdk_x11_dep,
-    x11_dep,
     posix_dep,
     wl_client_dep,
     pantheon_desktop_shell_dep

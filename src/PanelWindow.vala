@@ -26,6 +26,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? desktop_panel;
 
+    private Gtk.CssProvider? style_provider = null;
+
     public PanelWindow (Gtk.Application application) {
         Object (
             application: application,
@@ -65,15 +67,15 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         notify["scale-factor"].connect (on_scale_changed);
     }
 
+    construct {
+        Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
+    }
+
     private void on_realize () {
         update_panel_dimensions ();
         Services.BackgroundManager.initialize (panel_height);
 
-        if (Gdk.Display.get_default () is Gdk.Wayland.Display) {
-            init_wl ();
-        } else {
-            init_x ();
-        }
+        init_wl ();
     }
 
     private void update_panel_dimensions () {
@@ -82,7 +84,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         // We just use our monitor because Gala makes sure we are always on the primary one
         var monitor_dimensions = get_display ().get_monitor_at_surface (get_surface ()).get_geometry ();
 
-        if (!Services.DisplayConfig.is_logical_layout () && Gdk.Display.get_default () is Gdk.Wayland.Display) {
+        if (!Services.DisplayConfig.is_logical_layout ()) {
             monitor_dimensions.width /= get_scale_factor ();
             monitor_dimensions.height /= get_scale_factor ();
             monitor_dimensions.x /= get_scale_factor ();
@@ -99,8 +101,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private void on_scale_changed () {
         if (desktop_panel != null) {
             desktop_panel.set_size (-1, get_actual_height ());
-        } else {
-            init_x ();
         }
 
         update_panel_dimensions ();
@@ -108,27 +108,10 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private int get_actual_height () {
         if (!Services.DisplayConfig.is_logical_layout ()) {
-            return get_allocated_height () * get_scale_factor ();
+            return get_height () * get_scale_factor ();
         }
 
-        return get_allocated_height ();
-    }
-
-    private void init_x () {
-        var display = Gdk.Display.get_default ();
-        if (display is Gdk.X11.Display) {
-            unowned var xdisplay = ((Gdk.X11.Display) display).get_xdisplay ();
-
-            var window = ((Gdk.X11.Surface) get_surface ()).get_xid ();
-
-            var prop = xdisplay.intern_atom ("_MUTTER_HINTS", false);
-
-            var value = "anchor=4:hide-mode=0";
-
-            xdisplay.change_property (window, prop, X.XA_STRING, 8, 0, (uchar[]) value, value.length);
-
-            Idle.add_once (update_panel_dimensions); // Update again since we now can be 100% sure that we are on the primary monitor
-        }
+        return get_height ();
     }
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
@@ -150,17 +133,75 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private void init_wl () {
         registry_listener.global = registry_handle_global;
         unowned var display = Gdk.Display.get_default ();
-        if (display is Gdk.Wayland.Display) {
-            unowned var wl_display = ((Gdk.Wayland.Display) display).get_wl_display ();
-            var wl_registry = wl_display.get_registry ();
-            wl_registry.add_listener (
-                registry_listener,
-                this
-            );
+        unowned var wl_display = ((Gdk.Wayland.Display) display).get_wl_display ();
+        var wl_registry = wl_display.get_registry ();
+        wl_registry.add_listener (
+            registry_listener,
+            this
+        );
 
-            if (wl_display.roundtrip () < 0) {
-                return;
+        if (wl_display.roundtrip () < 0) {
+            return;
+        }
+    }
+
+    private void update_background (Services.BackgroundState state, uint animation_duration) {
+        if (style_provider == null) {
+            style_provider = new Gtk.CssProvider ();
+            Gtk.StyleContext.add_provider_for_display (
+                Gdk.Display.get_default (),
+                style_provider,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            );
+        }
+
+        string css = """
+            panel {
+                transition: all %ums cubic-bezier(0.4, 0, 0.2, 1);
             }
+        """.printf (animation_duration);
+
+        style_provider.load_from_string (css);
+
+        switch (state) {
+            case Services.BackgroundState.DARK :
+                panel.css_classes = {"color-light"};
+                break;
+            case Services.BackgroundState.LIGHT:
+                panel.css_classes = {"color-dark"};
+                break;
+            case Services.BackgroundState.MAXIMIZED:
+                panel.css_classes = {"maximized"};
+                break;
+            case Services.BackgroundState.TRANSLUCENT_DARK:
+                panel.css_classes = {
+                    "color-light",
+                    "translucent"
+                };
+                break;
+            case Services.BackgroundState.TRANSLUCENT_LIGHT:
+                panel.css_classes = {
+                    "color-dark",
+                    "translucent"
+                };
+                break;
+        }
+
+
+        if (desktop_panel == null) {
+            return;
+        }
+
+        switch (state) {
+            case Services.BackgroundState.DARK :
+            case Services.BackgroundState.LIGHT:
+            case Services.BackgroundState.MAXIMIZED:
+                desktop_panel.remove_blur ();
+                break;
+            case Services.BackgroundState.TRANSLUCENT_DARK:
+            case Services.BackgroundState.TRANSLUCENT_LIGHT:
+                desktop_panel.add_blur (0, 0, 0, 4, 0);
+                break;
         }
     }
 }

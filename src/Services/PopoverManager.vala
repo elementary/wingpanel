@@ -21,7 +21,7 @@ public class Wingpanel.Services.PopoverManager : Object {
     public bool indicator_open { get; private set; default = false; }
 
     private Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> registered_indicators;
-    private Wingpanel.Widgets.IndicatorPopover popover;
+    private Gtk.Popover popover;
     private Wingpanel.Widgets.IndicatorEntry? _current_indicator = null;
     public Wingpanel.Widgets.IndicatorEntry? current_indicator {
         get {
@@ -51,7 +51,7 @@ public class Wingpanel.Services.PopoverManager : Object {
             }
 
             if (_current_indicator != null) {
-                popover.set_content (_current_indicator.indicator_widget);
+                popover.child = _current_indicator.indicator_widget;
                 update_has_tooltip (_current_indicator.display_widget, false);
                 popover.set_parent (_current_indicator);
                 popover.popup ();
@@ -66,7 +66,10 @@ public class Wingpanel.Services.PopoverManager : Object {
     public PopoverManager () {
         registered_indicators = new Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> ();
 
-        popover = new Wingpanel.Widgets.IndicatorPopover ();
+        popover = new Gtk.Popover () {
+            position = BOTTOM
+        };
+        popover.add_css_class ("indicator");
 
         popover.closed.connect (() => {
             current_indicator = null;
