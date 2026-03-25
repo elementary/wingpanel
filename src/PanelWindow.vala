@@ -64,7 +64,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             }
         });
 
-        notify["scale-factor"].connect (on_scale_changed);
+        notify["scale-factor"].connect (update_panel_dimensions);
     }
 
     construct {
@@ -96,22 +96,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     public void toggle_indicator (string name) {
         popover_manager.toggle_popover_visible (name);
-    }
-
-    private void on_scale_changed () {
-        if (desktop_panel != null) {
-            desktop_panel.set_size (-1, get_actual_height ());
-        }
-
-        update_panel_dimensions ();
-    }
-
-    private int get_actual_height () {
-        if (!Services.DisplayConfig.is_logical_layout ()) {
-            return get_height () * get_scale_factor ();
-        }
-
-        return get_height ();
     }
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
