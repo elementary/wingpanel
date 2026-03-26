@@ -72,10 +72,18 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     private void on_realize () {
+        ((Gdk.Toplevel) get_surface ()).compute_size.connect (on_compute_size);
+
         update_panel_dimensions ();
         Services.BackgroundManager.initialize (panel_height);
 
         init_wl ();
+    }
+
+    private void on_compute_size (Gdk.ToplevelSize top_level_size) {
+        /* We do our own size calculation to make sure the box shadow in the translucent style isn't cut off */
+        top_level_size.set_size (width_request, panel.get_height () + 5);
+        top_level_size.set_shadow_width (0, 0, 0, 5);
     }
 
     private void update_panel_dimensions () {
