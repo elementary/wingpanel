@@ -1,17 +1,19 @@
 Source: io.elementary.wingpanel
 Section: x11
 Priority: optional
-Maintainer: elementary, Inc. <builds@elementary.io>
+Maintainer: elementary <builds@elementary.io>
 Build-Depends:
     debhelper (>= 10.5.1),
     gettext,
     libgala-dev (>= 8.3.0),
-    libmutter-17-dev | libmutter-16-dev | libmutter-15-dev | libmutter-14-dev | libmutter-13-dev,
+    libjson-glib-dev,
+    libmutter-18-dev | libmutter-17-dev | libmutter-16-dev | libmutter-15-dev | libmutter-14-dev | libmutter-13-dev,
     libgee-0.8-dev,
     libgirepository1.0-dev,
     libglib2.0-dev (>= 2.32),
     libgranite-7-dev,
     libgtk-4-dev,
+    libsoup-3.0-dev,
     meson,
     valac (>= 0.26)
 Standards-Version: 4.6.2
