@@ -69,7 +69,7 @@ public class Wingpanel.Services.PopoverManager : Object {
         popover = new Gtk.Popover () {
             position = BOTTOM
         };
-        popover.add_css_class ("indicator");
+        popover.add_css_class ("menu");
 
         popover.closed.connect (() => {
             current_indicator = null;
