@@ -16,7 +16,6 @@ panel.maximized {
 
 panel.translucent > box {
     border-radius: 5px 5px 0 0;
-    margin-bottom: 4px;
 }
 
 panel.translucent.color-dark > box {
