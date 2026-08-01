@@ -11,7 +11,7 @@ Build-Depends:
     libgee-0.8-dev,
     libgirepository1.0-dev,
     libglib2.0-dev (>= 2.32),
-    libgranite-7-dev,
+    libgranite-9-dev,
     libgtk-4-dev,
     libsoup-3.0-dev,
     meson,
