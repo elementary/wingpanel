@@ -165,8 +165,12 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
 
         int order = get_order (a) - get_order (b);
 
+        /*
+         * Whenever two different entries  are not part of the default order list,
+         * we sort them using their individual name hints.
+         */
         if (order == 0) {
-            order = compare_entries_by_name (a, b);
+            order = strcmp (a.base_indicator.code_name.down (), b.base_indicator.code_name.down ());
         }
 
         return order.clamp (-1, 1);
@@ -183,13 +187,5 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         }
 
         return indicator_order[UNKNOWN_INDICATOR];
-    }
-
-    /*
-     * Whenever two different entries  are not part of the default order list,
-     * we sort them using their individual name hints.
-     */
-    private static int compare_entries_by_name (Wingpanel.Widgets.IndicatorEntry a, Wingpanel.Widgets.IndicatorEntry b) {
-        return strcmp (a.base_indicator.code_name.down (), b.base_indicator.code_name.down ());
     }
 }
