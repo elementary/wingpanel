@@ -56,9 +56,6 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.set_parent (_current_indicator);
                 popover.popup ();
                 _current_indicator.base_indicator.opened ();
-            } else {
-                update_has_tooltip (((Wingpanel.Widgets.IndicatorEntry)popover.parent).display_widget);
-                popover.popdown ();
             }
         }
     }
@@ -123,5 +120,17 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
 
         registered_indicators.set (widg.base_indicator.code_name, widg);
+
+        widg.base_indicator.close.connect (close);
+
+        widg.base_indicator.notify["visible"].connect (() => {
+            /* order will be changed so close all open popovers */
+            popover.popdown ();
+
+            if (!widg.base_indicator.visible && get_visible (widg)) {
+                current_indicator = null;
+                widg.display_widget.has_tooltip = true;
+            }
+        });
     }
 }

@@ -21,7 +21,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
-    public IndicatorBar? indicator_bar;
+    public IndicatorBar? indicator_bar { get; set; }
     public Gtk.Widget display_widget { get; private set; }
 
     private Gtk.Widget _indicator_widget = null;
@@ -35,11 +35,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         }
     }
 
-    private Gtk.Revealer revealer;
-
-    private Gtk.GestureClick gesture_controller;
-    private Gtk.EventControllerMotion motion_controller;
-
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
         Object (
             base_indicator: base_indicator,
@@ -49,17 +44,28 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
 
     construct {
         display_widget = base_indicator.get_display_widget ();
-        halign = Gtk.Align.START;
         name = base_indicator.code_name + "/entry";
 
         if (display_widget == null) {
             return;
         }
 
-        revealer = new Gtk.Revealer () {
+        var revealer = new Gtk.Revealer () {
             child = display_widget
         };
         revealer.add_css_class ("composited-indicator");
+
+        switch (base_indicator.code_name) {
+            case Indicator.APP_LAUNCHER:
+                revealer.transition_type = SLIDE_RIGHT;
+                break;
+            case Indicator.DATETIME:
+                revealer.transition_type = SLIDE_DOWN;
+                break;
+            default:
+                revealer.transition_type = SLIDE_LEFT;
+                break;
+        }
 
         child = revealer;
 
@@ -67,42 +73,30 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             popover_manager.register_indicator (this);
         }
 
-        base_indicator.close.connect (() => {
-            popover_manager.close ();
-        });
-
         base_indicator.notify["visible"].connect (() => {
-            if (indicator_bar != null) {
-                /* order will be changed so close all open popovers */
-                popover_manager.close ();
+            if (indicator_bar == null) {
+                return;
+            }
 
-                if (base_indicator.visible) {
-                    popover_manager.register_indicator (this);
-                    indicator_bar.insert_sorted (this);
-                    set_reveal (base_indicator.visible);
-                } else {
-                    set_reveal (base_indicator.visible);
-                    popover_manager.unregister_indicator (this);
-                    // reorder indicators when indicator is invisible
-                    display_widget.unmap.connect (indicator_unmapped);
-                }
+            if (base_indicator.visible) {
+                popover_manager.register_indicator (this);
+                indicator_bar.insert_sorted (this);
             } else {
-                set_reveal (base_indicator.visible);
+                popover_manager.unregister_indicator (this);
+                // reorder indicators when indicator is invisible
+                display_widget.unmap.connect (indicator_unmapped);
             }
         });
 
-        gesture_controller = new Gtk.GestureClick ();
-        add_controller (gesture_controller);
+        var gesture_controller = new Gtk.GestureClick ();
         gesture_controller.pressed.connect (() => {
             popover_manager.current_indicator = this;
             gesture_controller.set_state (CLAIMED);
         });
 
-        motion_controller = new Gtk.EventControllerMotion () {
+        var motion_controller = new Gtk.EventControllerMotion () {
             propagation_phase = CAPTURE
         };
-        add_controller (motion_controller);
-
         motion_controller.enter.connect (() => {
             // If something is open and it's not us, open us. This implements the scrubbing behavior
             if (popover_manager.current_indicator != null && !popover_manager.get_visible (this)) {
@@ -110,23 +104,14 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             }
         });
 
-        set_reveal (base_indicator.visible);
+        add_controller (gesture_controller);
+        add_controller (motion_controller);
+
+        base_indicator.bind_property ("visible", revealer, "reveal-child", SYNC_CREATE);
     }
 
     private void indicator_unmapped () {
         base_indicator.get_display_widget ().unmap.disconnect (indicator_unmapped);
         indicator_bar.remove (this);
-    }
-
-    public void set_transition_type (Gtk.RevealerTransitionType transition_type) {
-        revealer.set_transition_type (transition_type);
-    }
-
-    private void set_reveal (bool reveal) {
-        if (!reveal && popover_manager.get_visible (this)) {
-            popover_manager.current_indicator = null;
-        }
-
-        revealer.set_reveal_child (reveal);
     }
 }
