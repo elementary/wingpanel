@@ -35,6 +35,12 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         }
     }
 
+    private const string UNKNOWN_INDICATOR = "xxx-unknown";
+    private const string AYATANA_INDICATOR = "xxx-ayatana";
+
+    /* The order in which the indicators are shown from left to right. */
+    private static Gee.HashMap<string, int> indicator_order = new Gee.HashMap<string,int> ();
+
     private Gtk.Revealer revealer;
 
     private Gtk.GestureClick gesture_controller;
@@ -45,6 +51,24 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             base_indicator: base_indicator,
             popover_manager: popover_manager
         );
+    }
+
+    static construct {
+        indicator_order[AYATANA_INDICATOR] = 0;
+        indicator_order[UNKNOWN_INDICATOR] = 1;
+        indicator_order[Indicator.ACCESSIBILITY] = 2;
+        indicator_order[Indicator.NIGHT_LIGHT] = 3;
+        indicator_order[Indicator.PRIVACY] = 4;
+        indicator_order[Indicator.KEYBOARD] = 5;
+        indicator_order[Indicator.SOUND] = 6;
+        indicator_order[Indicator.NETWORK] = 7;
+        indicator_order[Indicator.BLUETOOTH] = 8;
+        indicator_order[Indicator.PRINTER] = 9;
+        indicator_order[Indicator.SYNC] = 10;
+        indicator_order[Indicator.POWER] = 11;
+        indicator_order[Indicator.MESSAGES] = 12;
+        indicator_order[Indicator.QUICKSETTINGS] = 13;
+        indicator_order[Indicator.SESSION] = 14;
     }
 
     construct {
@@ -128,5 +152,44 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         }
 
         revealer.set_reveal_child (reveal);
+    }
+
+    public static int compare_func (Wingpanel.Widgets.IndicatorEntry? a, Wingpanel.Widgets.IndicatorEntry? b) {
+        if (a == null) {
+            return (b == null) ? 0 : -1;
+        }
+
+        if (b == null) {
+            return 1;
+        }
+
+        int order = get_order (a) - get_order (b);
+
+        if (order == 0) {
+            order = compare_entries_by_name (a, b);
+        }
+
+        return order.clamp (-1, 1);
+    }
+
+    private static int get_order (Wingpanel.Widgets.IndicatorEntry node) {
+        /* ayatana application indicators on the left of the native indicators */
+        if (node.base_indicator.code_name.has_prefix ("ayatana-")) {
+            return indicator_order[AYATANA_INDICATOR];
+        }
+
+        if (indicator_order.has_key (node.base_indicator.code_name)) {
+            return indicator_order[node.base_indicator.code_name];
+        }
+
+        return indicator_order[UNKNOWN_INDICATOR];
+    }
+
+    /*
+     * Whenever two different entries  are not part of the default order list,
+     * we sort them using their individual name hints.
+     */
+    private static int compare_entries_by_name (Wingpanel.Widgets.IndicatorEntry a, Wingpanel.Widgets.IndicatorEntry b) {
+        return strcmp (a.base_indicator.code_name.down (), b.base_indicator.code_name.down ());
     }
 }

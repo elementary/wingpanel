@@ -3,7 +3,6 @@ lib/Indicator.vala
 src/Application.vala
 src/PanelWindow.vala
 src/Services/BackgroundManager.vala
-src/Services/IndicatorSorter.vala
 src/Services/PopoverManager.vala
 src/Widgets/IndicatorBar.vala
 src/Widgets/IndicatorEntry.vala
