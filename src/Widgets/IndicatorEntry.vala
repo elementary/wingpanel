@@ -18,6 +18,9 @@
  */
 
 public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
+    private const string UNKNOWN_INDICATOR = "xxx-unknown";
+    private const string AYATANA_INDICATOR = "xxx-ayatana";
+
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
@@ -34,9 +37,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             return _indicator_widget;
         }
     }
-
-    private const string UNKNOWN_INDICATOR = "xxx-unknown";
-    private const string AYATANA_INDICATOR = "xxx-ayatana";
 
     /* The order in which the indicators are shown from left to right. */
     private static Gee.HashMap<string, int> indicator_order = new Gee.HashMap<string,int> ();
