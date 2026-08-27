@@ -46,7 +46,7 @@ public struct Accelerator {
 }
 
 [DBus (name = "org.gnome.Shell")]
-public interface ShellKeyGrabber : GLib.Object {
+public interface Wingpanel.ShellKeyGrabber : GLib.Object {
     public abstract signal void accelerator_activated (uint action, GLib.HashTable<string, GLib.Variant> parameters_dict);
 
     public abstract uint grab_accelerator (string accelerator, ActionMode mode_flags, Meta.KeyBindingFlags grab_flags) throws GLib.DBusError, GLib.IOError;
@@ -55,7 +55,7 @@ public interface ShellKeyGrabber : GLib.Object {
     public abstract bool ungrab_accelerators (uint[] actions) throws GLib.DBusError, GLib.IOError;
 
     [DBus (name = "ShowOSD")]
-    public abstract void show_osd (GLib.HashTaable<string, GLib.Variant> parameters_dict) throws GLib.DBusError, GLib.IOError;
+    public abstract void show_osd (GLib.HashTable<string, GLib.Variant> parameters_dict) throws GLib.DBusError, GLib.IOError;
 
     private static Settings settings;
     private static ShellKeyGrabber? instance;
@@ -110,7 +110,7 @@ public interface ShellKeyGrabber : GLib.Object {
             return;
         }
 
-        Application.get_default ().activate_action (
+        GLib.Application.get_default ().activate_action (
             Wingpanel.Application.TOGGLE_INDICATOR_ACTION_NAME,
             saved_action_ids[action]
         );
