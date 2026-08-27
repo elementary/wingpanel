@@ -22,7 +22,7 @@ public class Wingpanel.Application : Gtk.Application {
     private const string OPEN_INDICATOR_ACTION_NAME = "open-indicator";
     private const string CLOSE_INDICATOR_ACTION_NAME = "close-indicator";
     private const string SERVER_TYPE_ACTION_NAME = "greeter";
-    private const string TOGGLE_INDICATOR_ACTION_NAME = "toggle-indicator";
+    public const string TOGGLE_INDICATOR_ACTION_NAME = "toggle-indicator";
 
     private const OptionEntry[] OPTIONS = {
         { OPEN_INDICATOR_ACTION_NAME, 'o', 0, OptionArg.STRING, null, "Open an indicator", "code_name" },
@@ -72,6 +72,7 @@ public class Wingpanel.Application : Gtk.Application {
         base.startup ();
 
         Granite.init ();
+        ShellKeyGrabber.init ();
 
         panel_window = new PanelWindow (this);
         panel_window.present ();
