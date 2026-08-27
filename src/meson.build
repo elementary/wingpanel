@@ -1,6 +1,5 @@
 wingpanel_files = files(
     'PanelWindow.vala',
-    'SessionManager.vala',
     'Application.vala',
     'Services/BackgroundManager.vala',
     'Services/DisplayConfig.vala',
