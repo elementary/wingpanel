@@ -4,7 +4,6 @@ wingpanel_files = files(
     'DBus/ShellKeyGrabber.vala',
     'Services/BackgroundManager.vala',
     'Services/DisplayConfig.vala',
-    'Services/IndicatorSorter.vala',
     'Services/PopoverManager.vala',
     'Services/WMDBus.vala',
     'Widgets/IndicatorEntry.vala',
