@@ -43,6 +43,7 @@ namespace Wingpanel.Services {
         private static BackgroundManager? instance = null;
 
         private InterfaceBus? bus = null;
+
         // Latest state as sent from Gala
         private BackgroundState current_state = BackgroundState.LIGHT;
         private bool use_transparency = true;
