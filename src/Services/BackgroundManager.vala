@@ -132,20 +132,20 @@ namespace Wingpanel.Services {
 
             bus.state_changed.connect ((state, animation_duration) => {
                 current_state = state;
-                state_updated (state, animation_duration);
+                state_updated (animation_duration);
             });
 
             state_updated ();
             return true;
         }
 
-        private void state_updated (BackgroundState state = current_state, uint animation_duration = 0) {
+        private void state_updated (uint animation_duration = 0) {
             if (!use_transparency) {
                 background_state_changed (BackgroundState.MAXIMIZED, animation_duration);
                 return;
             }
 
-            switch (state) {
+            switch (current_state) {
                 case TRANSLUCENT_DARK:
                 case TRANSLUCENT_LIGHT:
                     // Prefer user preference: https://github.com/elementary/wingpanel/issues/657
@@ -159,7 +159,7 @@ namespace Wingpanel.Services {
                     break;
             }
 
-            background_state_changed (state, animation_duration);
+            background_state_changed (current_state, animation_duration);
         }
 
         public static BackgroundManager get_default () {
