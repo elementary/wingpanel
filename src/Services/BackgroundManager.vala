@@ -43,6 +43,8 @@ namespace Wingpanel.Services {
         private static BackgroundManager? instance = null;
 
         private InterfaceBus? bus = null;
+        // Latest state as sent from Gala
+        private BackgroundState current_state = BackgroundState.LIGHT;
         private bool use_transparency = true;
 
         private bool bus_available {
@@ -51,6 +53,7 @@ namespace Wingpanel.Services {
             }
         }
 
+        private Gtk.Settings style_manager;
         private int panel_height;
 
         public signal void background_state_changed (BackgroundState state, uint animation_duration);
@@ -63,7 +66,8 @@ namespace Wingpanel.Services {
         private BackgroundManager () {
             var panel_settings = new GLib.Settings ("io.elementary.desktop.wingpanel");
 
-            Granite.StyleManager.get_default ().notify["color-scheme"].connect (() => state_updated ());
+            style_manager = Gtk.Settings.get_default ();
+            style_manager.notify["gtk-application-prefer-dark-theme"].connect (() => state_updated ());
 
             panel_settings.changed["use-transparency"].connect (() => {
                 use_transparency = panel_settings.get_boolean ("use-transparency");
@@ -126,6 +130,7 @@ namespace Wingpanel.Services {
             }
 
             bus.state_changed.connect ((state, animation_duration) => {
+                current_state = state;
                 state_updated (state, animation_duration);
             });
 
@@ -133,7 +138,7 @@ namespace Wingpanel.Services {
             return true;
         }
 
-        private void state_updated (BackgroundState state = MAXIMIZED, uint animation_duration = 0) {
+        private void state_updated (BackgroundState state = current_state, uint animation_duration = 0) {
             if (!use_transparency) {
                 background_state_changed (BackgroundState.MAXIMIZED, animation_duration);
                 return;
@@ -143,14 +148,10 @@ namespace Wingpanel.Services {
                 case TRANSLUCENT_DARK:
                 case TRANSLUCENT_LIGHT:
                     // Prefer user preference: https://github.com/elementary/wingpanel/issues/657
-                    switch (Granite.StyleManager.get_default ().color_scheme) {
-                        case NO_PREFERENCE:
-                        case LIGHT:
-                            background_state_changed (TRANSLUCENT_LIGHT, animation_duration);
-                            break;
-                        case DARK:
-                            background_state_changed (TRANSLUCENT_DARK, animation_duration);
-                            break;
+                    if (style_manager.gtk_application_prefer_dark_theme) {
+                        background_state_changed (TRANSLUCENT_LIGHT, animation_duration);
+                    } else {
+                        background_state_changed (TRANSLUCENT_DARK, animation_duration);
                     }
                     return;
                 default:
