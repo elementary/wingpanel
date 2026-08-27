@@ -84,6 +84,7 @@ public interface Wingpanel.ShellKeyGrabber : GLib.Object {
     }
 
     private static void setup_grabs () requires (instance != null) {
+        // TODO: We should make an API for this: https://github.com/elementary/wingpanel/issues/700
         var keybindings = settings.get_strv ("open-menu-notifications");
         Accelerator[] accelerators = {};
         for (int j = 0; j < keybindings.length; j++) {
