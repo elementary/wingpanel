@@ -43,8 +43,6 @@ namespace Wingpanel.Services {
         private static BackgroundManager? instance = null;
 
         private InterfaceBus? bus = null;
-
-        private BackgroundState current_state = BackgroundState.LIGHT;
         private bool use_transparency = true;
 
         private bool bus_available {
@@ -64,6 +62,8 @@ namespace Wingpanel.Services {
 
         private BackgroundManager () {
             var panel_settings = new GLib.Settings ("io.elementary.desktop.wingpanel");
+
+            Granite.StyleManager.get_default ().notify["color-scheme"].connect (() => state_updated ());
 
             panel_settings.changed["use-transparency"].connect (() => {
                 use_transparency = panel_settings.get_boolean ("use-transparency");
@@ -126,16 +126,38 @@ namespace Wingpanel.Services {
             }
 
             bus.state_changed.connect ((state, animation_duration) => {
-                current_state = state;
-                state_updated (animation_duration);
+                state_updated (state, animation_duration);
             });
 
             state_updated ();
             return true;
         }
 
-        private void state_updated (uint animation_duration = 0) {
-            background_state_changed (use_transparency ? current_state : BackgroundState.MAXIMIZED, animation_duration);
+        private void state_updated (BackgroundState state = MAXIMIZED, uint animation_duration = 0) {
+            if (!use_transparency) {
+                background_state_changed (BackgroundState.MAXIMIZED, animation_duration);
+                return;
+            }
+
+            switch (state) {
+                case TRANSLUCENT_DARK:
+                case TRANSLUCENT_LIGHT:
+                    // Prefer user preference: https://github.com/elementary/wingpanel/issues/657
+                    switch (Granite.StyleManager.get_default ().color_scheme) {
+                        case NO_PREFERENCE:
+                        case LIGHT:
+                            background_state_changed (TRANSLUCENT_LIGHT, animation_duration);
+                            break;
+                        case DARK:
+                            background_state_changed (TRANSLUCENT_DARK, animation_duration);
+                            break;
+                    }
+                    return;
+                default:
+                    break;
+            }
+
+            background_state_changed (state, animation_duration);
         }
 
         public static BackgroundManager get_default () {
