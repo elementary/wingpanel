@@ -139,7 +139,7 @@ namespace Wingpanel.Services {
             return true;
         }
 
-        private void state_updated (uint animation_duration = 0) {
+        private void state_updated (uint animation_duration = Granite.TRANSITION_DURATION_IN_PLACE) {
             if (!use_transparency) {
                 background_state_changed (BackgroundState.MAXIMIZED, animation_duration);
                 return;
