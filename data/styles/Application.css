@@ -47,6 +47,10 @@ indicator:checked > revealer {
     background: alpha(@highlight_color, 0.6);
 }
 
+panel.maximized indicator:checked > revealer {
+    background: alpha(white, 0.3);
+}
+
 .composited-indicator {
     color: white;
     font-weight: bold;
