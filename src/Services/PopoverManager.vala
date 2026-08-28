@@ -39,11 +39,14 @@ public class Wingpanel.Services.PopoverManager : Object {
             } else if (value == null && _current_indicator != null) { // Close requested
                 indicator_open = false;
                 _current_indicator.base_indicator.closed ();
+                _current_indicator.set_state_flags (NORMAL, true);
                 _current_indicator = null;
             } else if (_current_indicator.base_indicator.code_name == value.base_indicator.code_name) { // Close due to toggle
+                _current_indicator.set_state_flags (NORMAL, true);
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = null;
             } else { // Switch
+                _current_indicator.set_state_flags (NORMAL, true);
                 update_has_tooltip (_current_indicator.display_widget);
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = value;
@@ -55,6 +58,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                 update_has_tooltip (_current_indicator.display_widget, false);
                 popover.set_parent (_current_indicator);
                 popover.popup ();
+                _current_indicator.set_state_flags (CHECKED, true);
                 _current_indicator.base_indicator.opened ();
             }
         }
@@ -64,11 +68,13 @@ public class Wingpanel.Services.PopoverManager : Object {
         registered_indicators = new Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> ();
 
         popover = new Gtk.Popover () {
+            has_arrow = false,
             position = BOTTOM
         };
         popover.add_css_class ("indicator");
 
         popover.closed.connect (() => {
+            _current_indicator.set_state_flags (NORMAL, true);
             current_indicator = null;
             popover.unparent ();
         });

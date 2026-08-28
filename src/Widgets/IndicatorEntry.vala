@@ -66,6 +66,10 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         indicator_order[Indicator.SESSION] = 14;
     }
 
+    class construct {
+        set_css_name ("indicator");
+    }
+
     construct {
         display_widget = base_indicator.get_display_widget ();
         name = base_indicator.code_name + "/entry";
