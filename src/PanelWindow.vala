@@ -21,7 +21,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     public Services.PopoverManager popover_manager;
 
     private Widgets.Panel panel;
-    private int panel_height;
 
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? desktop_panel;
@@ -75,7 +74,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         ((Gdk.Toplevel) get_surface ()).compute_size.connect (on_compute_size);
 
         update_panel_dimensions ();
-        Services.BackgroundManager.initialize (panel_height);
+        Services.BackgroundManager.initialize (panel.get_height ().clamp (16, 48));
 
         init_wl ();
     }
@@ -87,8 +86,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     private void update_panel_dimensions () {
-        panel_height = panel.get_height ();
-
         // We just use our monitor because Gala makes sure we are always on the primary one
         var monitor_dimensions = get_display ().get_monitor_at_surface (get_surface ()).get_geometry ();
 
