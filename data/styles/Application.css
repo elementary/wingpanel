@@ -111,7 +111,12 @@ panel.maximized indicator:checked > revealer {
     -gtk-icon-shadow: none;
 }
 
+popover.indicator {
+    margin: 0.5rem;
+}
+
 popover.indicator > contents {
+    border-radius: 0.75rem;
     min-width: 20rem;
     padding: 0.25rem 0;
 }

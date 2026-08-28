@@ -71,6 +71,7 @@ public class Wingpanel.Services.PopoverManager : Object {
         registered_indicators = new Gee.HashMap<string, Wingpanel.Widgets.IndicatorEntry> ();
 
         popover = new Gtk.Popover () {
+            has_arrow = false,
             position = BOTTOM
         };
         popover.add_css_class ("indicator");
