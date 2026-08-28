@@ -44,7 +44,7 @@ indicator > revealer {
 }
 
 indicator:checked > revealer {
-    background: alpha(@bg_color, 0.5);
+    background: alpha(@highlight_color, 0.6);
 }
 
 .composited-indicator {
