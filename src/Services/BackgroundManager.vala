@@ -54,7 +54,6 @@ namespace Wingpanel.Services {
             }
         }
 
-        private Gtk.Settings gtk_settings;
         private int panel_height;
 
         public signal void background_state_changed (BackgroundState state, uint animation_duration);
@@ -68,8 +67,7 @@ namespace Wingpanel.Services {
         private BackgroundManager () {
             var panel_settings = new GLib.Settings ("io.elementary.desktop.wingpanel");
 
-            gtk_settings = Gtk.Settings.get_default ();
-            gtk_settings.notify["gtk-application-prefer-dark-theme"].connect (() => state_updated ());
+            Gtk.Settings.get_default ().notify["gtk-application-prefer-dark-theme"].connect (() => state_updated ());
 
             panel_settings.changed["use-transparency"].connect (() => {
                 use_transparency = panel_settings.get_boolean ("use-transparency");
@@ -152,7 +150,7 @@ namespace Wingpanel.Services {
                 case TRANSLUCENT_DARK:
                 case TRANSLUCENT_LIGHT:
                     // Prefer user preference: https://github.com/elementary/wingpanel/issues/657
-                    if (gtk_settings.gtk_application_prefer_dark_theme) {
+                    if (Gtk.Settings.get_default ().gtk_application_prefer_dark_theme) {
                         background_state_changed (TRANSLUCENT_LIGHT, animation_duration);
                     } else {
                         background_state_changed (TRANSLUCENT_DARK, animation_duration);
