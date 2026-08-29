@@ -144,21 +144,7 @@ namespace Wingpanel.Services {
 
         private void state_updated (uint animation_duration = Granite.TRANSITION_DURATION_IN_PLACE) {
             if (!use_transparency) {
-                switch (current_state) {
-                    case DARK:
-                    case LIGHT:
-                        // Prefer user preference: https://github.com/elementary/wingpanel/issues/657
-                        if (gtk_settings.gtk_application_prefer_dark_theme) {
-                            background_state_changed (TRANSLUCENT_LIGHT, animation_duration);
-                        } else {
-                            background_state_changed (TRANSLUCENT_DARK, animation_duration);
-                        }
-                        return;
-                    default:
-                        background_state_changed (BackgroundState.MAXIMIZED, animation_duration);
-                        break;
-                }
-
+                background_state_changed (BackgroundState.MAXIMIZED, animation_duration);
                 return;
             }
 
