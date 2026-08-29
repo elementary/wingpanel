@@ -41,10 +41,8 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     }
 
     construct {
-        height_request = 30;
         hexpand = true;
         vexpand = true;
-        valign = START;
 
         left_menubar = new IndicatorBar () {
             halign = START
