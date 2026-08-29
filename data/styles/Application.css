@@ -44,7 +44,7 @@ indicator > revealer {
 }
 
 indicator:checked > revealer {
-    background: alpha(@highlight_color, 0.6);
+    background: alpha(var(--highlight_color), 0.6);
 }
 
 panel.maximized indicator:checked > revealer {
@@ -66,9 +66,9 @@ panel.maximized indicator:checked > revealer {
         0 0 2px alpha(black, 0.3),
         0 1px 2px alpha(black, 0.6);
     -gtk-icon-palette:
-        error @STRAWBERRY_300,
-        success @LIME_300,
-        warning mix(@BANANA_300, @BANANA_500, 0.5);
+        error var(--STRAWBERRY_300),
+        success var(--LIME_300),
+        warning var(--BANANA_400);
 }
 
 .color-light .composited-indicator {
@@ -84,9 +84,9 @@ panel.maximized indicator:checked > revealer {
         0 0 2px alpha(white, 0.3),
         0 1px 0 alpha(white, 0.25);
     -gtk-icon-palette:
-        error @STRAWBERRY_700,
-        success mix(@LIME_700, @LIME_900, 0.5),
-        warning mix(@BANANA_700, @BANANA_900, 0.5);
+        error var(--STRAWBERRY_700),
+        success var(--LIME_800),
+        warning var(--BANANA_800);
 }
 
 .translucent.color-dark .composited-indicator {
