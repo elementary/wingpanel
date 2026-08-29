@@ -50,9 +50,6 @@ public class Wingpanel.Application : Gtk.Application {
             IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
         }
 
-        var gtk_settings = Gtk.Settings.get_default ();
-        gtk_settings.gtk_icon_theme_name = "elementary";
-
         if (options.contains (OPEN_INDICATOR_ACTION_NAME)) {
             activate_action (OPEN_INDICATOR_ACTION_NAME, options.lookup_value (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING));
         }
