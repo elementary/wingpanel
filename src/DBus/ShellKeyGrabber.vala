@@ -47,7 +47,7 @@ public struct Accelerator {
 
 [DBus (name = "org.gnome.Shell")]
 public interface Wingpanel.ShellKeyGrabber : GLib.Object {
-    public abstract signal void accelerator_activated (uint action, GLib.HashTable<string, GLib.Variant> parameters_dict);
+    public signal void accelerator_activated (uint action, GLib.HashTable<string, GLib.Variant> parameters_dict);
 
     public abstract uint grab_accelerator (string accelerator, ActionMode mode_flags, Meta.KeyBindingFlags grab_flags) throws GLib.DBusError, GLib.IOError;
     public abstract uint[] grab_accelerators (Accelerator[] accelerators) throws GLib.DBusError, GLib.IOError;
