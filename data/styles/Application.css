@@ -44,7 +44,7 @@ indicator > revealer {
 }
 
 indicator:checked > revealer {
-    background: alpha(var(--highlight_color), 0.6);
+    background: alpha(var(--highlight-color), 0.6);
 }
 
 panel.maximized indicator:checked > revealer {
