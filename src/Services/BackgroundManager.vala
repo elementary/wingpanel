@@ -60,6 +60,7 @@ namespace Wingpanel.Services {
         public static void initialize (int panel_height) {
             var manager = BackgroundManager.get_default ();
             manager.panel_height = panel_height;
+            manager.start_watching_dbus ();
         }
 
         private BackgroundManager () {
@@ -71,15 +72,6 @@ namespace Wingpanel.Services {
             });
 
             use_transparency = panel_settings.get_boolean ("use-transparency");
-
-            Bus.watch_name (BusType.SESSION, DBUS_NAME, BusNameWatcherFlags.NONE,
-                () => connect_dbus (),
-                () => {
-                    bus = null;
-                    // If the Gala bus is unavailable or vanishes, fall back to maximized style,
-                    // as this is most visible on all backgrounds
-                    background_state_changed (BackgroundState.MAXIMIZED, 0);
-                });
         }
 
         public void remember_window () {
@@ -116,13 +108,25 @@ namespace Wingpanel.Services {
             return false;
         }
 
-        private bool connect_dbus () {
+        public void start_watching_dbus () {
+            Bus.watch_name (SESSION, DBUS_NAME, NONE,
+                () => connect_dbus (),
+                () => {
+                    bus = null;
+                    // If the Gala bus is unavailable or vanishes, fall back to maximized style,
+                    // as this is most visible on all backgrounds
+                    background_state_changed (BackgroundState.MAXIMIZED, 0);
+                });
+        }
+
+        private void connect_dbus () {
+            debug ("Connecting to %s with panel size %d", DBUS_NAME, panel_height);
+
             try {
                 bus = Bus.get_proxy_sync (BusType.SESSION, DBUS_NAME, DBUS_PATH);
                 bus.initialize (panel_height);
             } catch (Error e) {
                 warning ("Connecting to \"%s\" failed: %s", DBUS_NAME, e.message);
-                return false;
             }
 
             bus.state_changed.connect ((state, animation_duration) => {
@@ -131,7 +135,6 @@ namespace Wingpanel.Services {
             });
 
             state_updated ();
-            return true;
         }
 
         private void state_updated (uint animation_duration = 0) {
