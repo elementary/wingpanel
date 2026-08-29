@@ -44,6 +44,7 @@ namespace Wingpanel.Services {
 
         private InterfaceBus? bus = null;
 
+        // Latest state as sent from Gala
         private BackgroundState current_state = BackgroundState.LIGHT;
         private bool use_transparency = true;
 
@@ -65,6 +66,8 @@ namespace Wingpanel.Services {
 
         private BackgroundManager () {
             var panel_settings = new GLib.Settings ("io.elementary.desktop.wingpanel");
+
+            Gtk.Settings.get_default ().notify["gtk-application-prefer-dark-theme"].connect (() => state_updated ());
 
             panel_settings.changed["use-transparency"].connect (() => {
                 use_transparency = panel_settings.get_boolean ("use-transparency");
@@ -137,8 +140,27 @@ namespace Wingpanel.Services {
             state_updated ();
         }
 
-        private void state_updated (uint animation_duration = 0) {
-            background_state_changed (use_transparency ? current_state : BackgroundState.MAXIMIZED, animation_duration);
+        private void state_updated (uint animation_duration = Granite.TRANSITION_DURATION_IN_PLACE) {
+            if (!use_transparency) {
+                background_state_changed (BackgroundState.MAXIMIZED, animation_duration);
+                return;
+            }
+
+            switch (current_state) {
+                case TRANSLUCENT_DARK:
+                case TRANSLUCENT_LIGHT:
+                    // Prefer user preference: https://github.com/elementary/wingpanel/issues/657
+                    if (Gtk.Settings.get_default ().gtk_application_prefer_dark_theme) {
+                        background_state_changed (TRANSLUCENT_LIGHT, animation_duration);
+                    } else {
+                        background_state_changed (TRANSLUCENT_DARK, animation_duration);
+                    }
+                    return;
+                default:
+                    break;
+            }
+
+            background_state_changed (current_state, animation_duration);
         }
 
         public static BackgroundManager get_default () {
