@@ -19,7 +19,6 @@
 
 public class Wingpanel.Widgets.IndicatorBar : Gtk.Box {
     private Gee.List<IndicatorEntry> sorted_items;
-    private Services.IndicatorSorter sorter = new Services.IndicatorSorter ();
 
     construct {
         sorted_items = new Gee.ArrayList<IndicatorEntry> ();
@@ -30,7 +29,7 @@ public class Wingpanel.Widgets.IndicatorBar : Gtk.Box {
 
         if (!(item in sorted_items)) {
             sorted_items.add (item);
-            sorted_items.sort (sorter.compare_func);
+            sorted_items.sort (IndicatorEntry.compare_func);
         }
 
         if (item.base_indicator.visible) {
