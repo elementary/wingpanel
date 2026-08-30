@@ -55,17 +55,6 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         child = box;
         remove_css_class (Granite.STYLE_CLASS_BACKGROUND);
 
-        var cycle_action = new SimpleAction ("cycle", null);
-        cycle_action.activate.connect (() => panel.cycle (true));
-
-        var cycle_back_action = new SimpleAction ("cycle-back", null);
-        cycle_back_action.activate.connect (() => panel.cycle (false));
-
-        application.add_action (cycle_action);
-        application.add_action (cycle_back_action);
-        application.set_accels_for_action ("app.cycle", {"<Control>Tab"});
-        application.set_accels_for_action ("app.cycle-back", {"<Control><Shift>Tab"});
-
         popover_manager.notify["indicator-open"].connect (() => {
             if (!popover_manager.indicator_open) {
                 Services.BackgroundManager.get_default ().restore_window ();

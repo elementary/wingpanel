@@ -97,6 +97,36 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
                 current_scroll_delta = 0;
             }
         });
+
+        var cycle_action = new SimpleAction ("cycle", null);
+        cycle_action.activate.connect (() => cycle (true));
+
+        var cycle_back_action = new SimpleAction ("cycle-back", null);
+        cycle_back_action.activate.connect (() => cycle (false));
+
+        var action_group = new SimpleActionGroup ();
+        action_group.add_action (cycle_action);
+        action_group.add_action (cycle_back_action);
+
+        insert_action_group ("panel", action_group);
+
+        var cycle_shortcut = new Gtk.Shortcut (
+            new Gtk.KeyvalTrigger (Gdk.Key.Tab, CONTROL_MASK),
+            new Gtk.NamedAction ("panel.cycle")
+        );
+        var cycle_back_shortcut = new Gtk.Shortcut (
+            new Gtk.KeyvalTrigger (Gdk.Key.Tab, CONTROL_MASK | SHIFT_MASK),
+            new Gtk.NamedAction ("panel.cycle-back")
+        );
+
+        var shortcut_controller = new Gtk.ShortcutController () {
+            propagation_phase = CAPTURE,
+            propagation_limit = NONE // we need to listen to popover events
+        };
+        shortcut_controller.add_shortcut (cycle_shortcut);
+        shortcut_controller.add_shortcut (cycle_back_shortcut);
+
+        add_controller (shortcut_controller);
     }
 
     private void begin_drag (double x, double y) {
@@ -106,7 +136,7 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
         background_manager.begin_grab_focused_window ((int) x, (int) y);
     }
 
-    public void cycle (bool forward) {
+    private void cycle (bool forward) {
         var current = popover_manager.current_indicator;
         if (current == null) {
             return;
