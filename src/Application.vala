@@ -69,7 +69,6 @@ public class Wingpanel.Application : Gtk.Application {
         base.startup ();
 
         Granite.init ();
-        ShellKeyGrabber.init ();
 
         panel_window = new PanelWindow (this);
         panel_window.present ();
@@ -103,6 +102,15 @@ public class Wingpanel.Application : Gtk.Application {
         add_action (open_indicator_action);
         add_action (close_indicator_action);
         add_action (toggle_indicator_action);
+
+        var keybinding_settings = new Settings ("io.elementary.panel.keybindings");
+        var helper = KeybindingHelper.get_default ();
+
+        var open_notifications_action = new KeybindingHelper.NamedAction (
+            panel_window, "app." + TOGGLE_INDICATOR_ACTION_NAME, "messages"
+        );
+
+        helper.add_keybinding ("open-menu-notifications", keybinding_settings, open_notifications_action);
     }
 
     protected override void activate () {
