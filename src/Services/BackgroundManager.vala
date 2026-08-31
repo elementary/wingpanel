@@ -26,7 +26,7 @@ namespace Wingpanel.Services {
         TRANSLUCENT_LIGHT
     }
 
-    [DBus (name = "org.pantheon.gala.WingpanelInterface")]
+    [DBus (name = "io.elementary.gala.WingpanelInterface")]
     public interface InterfaceBus : Object {
         public signal void state_changed (BackgroundState state, uint animation_duration);
 
@@ -37,8 +37,8 @@ namespace Wingpanel.Services {
     }
 
     public class BackgroundManager : Object {
-        private const string DBUS_NAME = "org.pantheon.gala.WingpanelInterface";
-        private const string DBUS_PATH = "/org/pantheon/gala/WingpanelInterface";
+        private const string DBUS_NAME = "io.elementary.gala.WingpanelInterface";
+        private const string DBUS_PATH = "/io/elementary/gala/WingpanelInterface";
 
         private static BackgroundManager? instance = null;
 
