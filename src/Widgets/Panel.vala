@@ -99,10 +99,10 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
         });
 
         var cycle_action = new SimpleAction ("cycle", null);
-        cycle_action.activate.connect (() => cycle (true));
+        cycle_action.activate.connect (() => cycle (TAB_FORWARD));
 
         var cycle_back_action = new SimpleAction ("cycle-back", null);
-        cycle_back_action.activate.connect (() => cycle (false));
+        cycle_back_action.activate.connect (() => cycle (TAB_BACKWARD));
 
         var action_group = new SimpleActionGroup ();
         action_group.add_action (cycle_action);
@@ -136,14 +136,14 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
         background_manager.begin_grab_focused_window ((int) x, (int) y);
     }
 
-    private void cycle (bool forward) {
+    private void cycle (Gtk.DirectionType direction) {
         var current = popover_manager.current_indicator;
         if (current == null) {
             return;
         }
 
         IndicatorEntry? sibling;
-        if (forward) {
+        if (direction == TAB_FORWARD) {
             sibling = get_next_indicator (current);
         } else {
             sibling = get_previous_indicator (current);
