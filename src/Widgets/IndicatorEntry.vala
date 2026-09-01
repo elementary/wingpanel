@@ -24,8 +24,8 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
-    public IndicatorBar? indicator_bar;
     public Gtk.Widget display_widget { get; private set; }
+    public bool should_show_indicator { get; set; }
 
     private Gtk.Widget _indicator_widget = null;
     public unowned Gtk.Widget indicator_widget {
@@ -88,6 +88,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             child = display_widget
         };
         revealer.add_css_class ("composited-indicator");
+        revealer.bind_property ("child-revealed", this, "should-show-indicator", SYNC_CREATE);
 
         child = revealer;
 
@@ -100,21 +101,14 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         });
 
         base_indicator.notify["visible"].connect (() => {
-            if (indicator_bar != null) {
-                /* order will be changed so close all open popovers */
-                popover_manager.close ();
+            /* order will be changed so close all open popovers */
+            popover_manager.close ();
 
-                if (base_indicator.visible) {
-                    popover_manager.register_indicator (this);
-                    indicator_bar.insert_sorted (this);
-                    set_reveal (base_indicator.visible);
-                } else {
-                    set_reveal (base_indicator.visible);
-                    popover_manager.unregister_indicator (this);
-                    // reorder indicators when indicator is invisible
-                    display_widget.unmap.connect (indicator_unmapped);
-                }
+            if (base_indicator.visible) {
+                popover_manager.register_indicator (this);
+                set_reveal (base_indicator.visible);
             } else {
+                popover_manager.unregister_indicator (this);
                 set_reveal (base_indicator.visible);
             }
         });
@@ -139,11 +133,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         });
 
         set_reveal (base_indicator.visible);
-    }
-
-    private void indicator_unmapped () {
-        base_indicator.get_display_widget ().unmap.disconnect (indicator_unmapped);
-        indicator_bar.remove (this);
     }
 
     public void set_transition_type (Gtk.RevealerTransitionType transition_type) {
