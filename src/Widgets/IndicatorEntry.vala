@@ -90,6 +90,18 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         revealer.add_css_class ("composited-indicator");
         revealer.bind_property ("child-revealed", this, "should-show-indicator", SYNC_CREATE);
 
+        switch (base_indicator.code_name) {
+            case Indicator.APP_LAUNCHER:
+                revealer.transition_type = SLIDE_RIGHT;
+                break;
+            case Indicator.DATETIME:
+                revealer.transition_type = SLIDE_DOWN;
+                break;
+            default:
+                revealer.transition_type = SLIDE_LEFT;
+                break;
+        }
+
         child = revealer;
 
         if (base_indicator.visible) {
@@ -133,10 +145,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         });
 
         set_reveal (base_indicator.visible);
-    }
-
-    public void set_transition_type (Gtk.RevealerTransitionType transition_type) {
-        revealer.set_transition_type (transition_type);
     }
 
     private void set_reveal (bool reveal) {
