@@ -83,18 +83,6 @@ public class Wingpanel.Services.PopoverManager : Object {
         });
     }
 
-    public void set_popover_visible (string code_name, bool visible) {
-        if (registered_indicators.has_key (code_name)) {
-            var new_indicator = registered_indicators.get (code_name);
-
-            if (visible && (current_indicator == null || current_indicator.base_indicator.code_name != new_indicator.base_indicator.code_name)) {
-                current_indicator = new_indicator;
-            } else if (current_indicator.base_indicator.code_name == new_indicator.base_indicator.code_name && !visible) {
-                current_indicator = null;
-            }
-        }
-    }
-
     public void toggle_popover_visible (string code_name) {
         if (registered_indicators.has_key (code_name)) {
             current_indicator = registered_indicators.get (code_name);

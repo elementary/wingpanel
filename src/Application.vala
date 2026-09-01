@@ -18,21 +18,16 @@
  */
 
 public class Wingpanel.Application : Gtk.Application {
-    private const string LIST_INDICATORS_ACTION_NAME = "list-indicators";
-    private const string OPEN_INDICATOR_ACTION_NAME = "open-indicator";
-    private const string CLOSE_INDICATOR_ACTION_NAME = "close-indicator";
     private const string SERVER_TYPE_ACTION_NAME = "greeter";
-    public const string TOGGLE_INDICATOR_ACTION_NAME = "toggle-indicator";
+    private const string TOGGLE_INDICATOR_ACTION_NAME = "toggle-indicator";
 
     private const OptionEntry[] OPTIONS = {
-        { OPEN_INDICATOR_ACTION_NAME, 'o', 0, OptionArg.STRING, null, "Open an indicator", "code_name" },
-        { CLOSE_INDICATOR_ACTION_NAME, 'c', 0, OptionArg.STRING, null, "Close an indicator", "code_name" },
         { SERVER_TYPE_ACTION_NAME, 'g', 0, OptionArg.NONE, null, "Server is a greeter", null },
         { TOGGLE_INDICATOR_ACTION_NAME, 't', 0, OptionArg.STRING, null, "Toggle an indicator", "code_name" },
         { null }
     };
 
-    private PanelWindow? panel_window = null;
+    private PanelWindow panel_window;
 
     construct {
         flags = ApplicationFlags.HANDLES_COMMAND_LINE;
@@ -50,14 +45,6 @@ public class Wingpanel.Application : Gtk.Application {
             IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
         }
 
-        if (options.contains (OPEN_INDICATOR_ACTION_NAME)) {
-            activate_action (OPEN_INDICATOR_ACTION_NAME, options.lookup_value (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING));
-        }
-
-        if (options.contains (CLOSE_INDICATOR_ACTION_NAME)) {
-            activate_action (CLOSE_INDICATOR_ACTION_NAME, options.lookup_value (CLOSE_INDICATOR_ACTION_NAME, VariantType.STRING));
-        }
-
         if (options.contains (TOGGLE_INDICATOR_ACTION_NAME)) {
             activate_action (TOGGLE_INDICATOR_ACTION_NAME, options.lookup_value (TOGGLE_INDICATOR_ACTION_NAME, VariantType.STRING));
         }
@@ -73,34 +60,11 @@ public class Wingpanel.Application : Gtk.Application {
         panel_window = new PanelWindow (this);
         panel_window.present ();
 
-        var list_indicators_action = new SimpleAction.stateful (LIST_INDICATORS_ACTION_NAME, null, new Variant.strv (list_indicators ()));
-
-        var indicator_manager = IndicatorManager.get_default ();
-        indicator_manager.indicator_added.connect (() => {
-            list_indicators_action.set_state (new Variant.strv (list_indicators ()));
-        });
-        indicator_manager.indicator_removed.connect (() => {
-            list_indicators_action.set_state (new Variant.strv (list_indicators ()));
-        });
-
-        var open_indicator_action = new SimpleAction (OPEN_INDICATOR_ACTION_NAME, VariantType.STRING);
-        open_indicator_action.activate.connect ((parameter) => {
-            panel_window.popover_manager.set_popover_visible (parameter.get_string (), true);
-        });
-
-        var close_indicator_action = new SimpleAction (CLOSE_INDICATOR_ACTION_NAME, VariantType.STRING);
-        close_indicator_action.activate.connect ((parameter) => {
-            panel_window.popover_manager.set_popover_visible (parameter.get_string (), false);
-        });
-
         var toggle_indicator_action = new SimpleAction (TOGGLE_INDICATOR_ACTION_NAME, VariantType.STRING);
         toggle_indicator_action.activate.connect ((parameter) => {
             panel_window.toggle_indicator (parameter.get_string ());
         });
 
-        add_action (list_indicators_action);
-        add_action (open_indicator_action);
-        add_action (close_indicator_action);
         add_action (toggle_indicator_action);
 
         var keybinding_settings = new Settings ("io.elementary.panel.keybindings");
@@ -115,16 +79,6 @@ public class Wingpanel.Application : Gtk.Application {
 
     protected override void activate () {
         /* Do nothing */
-    }
-
-    private string[] list_indicators () {
-        string[] code_names = {};
-
-        foreach (Indicator indicator in IndicatorManager.get_default ().get_indicators ()) {
-            code_names += indicator.code_name;
-        }
-
-        return code_names;
     }
 
     public static int main (string[] args) {

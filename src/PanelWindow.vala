@@ -26,8 +26,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         }
     }
 
-    public Services.PopoverManager popover_manager;
-
+    private Services.PopoverManager popover_manager;
     private Widgets.Panel panel;
 
     private Pantheon.Desktop.Shell? desktop_shell;
