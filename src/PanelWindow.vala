@@ -98,7 +98,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     public void toggle_indicator (string name) {
-        popover_manager.toggle_popover_visible (name);
+        panel.toggle_indicator (name);
     }
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
