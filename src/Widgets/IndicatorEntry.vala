@@ -25,7 +25,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     public Services.PopoverManager popover_manager { get; construct; }
 
     public Gtk.Widget display_widget { get; private set; }
-    public bool should_show_indicator { get; set; }
 
     private Gtk.Widget _indicator_widget = null;
     public unowned Gtk.Widget indicator_widget {
@@ -35,6 +34,12 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             }
 
             return _indicator_widget;
+        }
+    }
+
+    public bool should_show_indicator {
+        get {
+            return revealer.reveal_child || revealer.child_revealed;
         }
     }
 
@@ -88,7 +93,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             child = display_widget
         };
         revealer.add_css_class ("composited-indicator");
-        revealer.bind_property ("child-revealed", this, "should-show-indicator", SYNC_CREATE);
 
         switch (base_indicator.code_name) {
             case Indicator.APP_LAUNCHER:
@@ -101,6 +105,9 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
                 revealer.transition_type = SLIDE_LEFT;
                 break;
         }
+
+        revealer.notify["child-revealed"].connect (() => notify_property ("should-show-indicator"));
+        revealer.notify["reveal-child"].connect (() => notify_property ("should-show-indicator"));
 
         child = revealer;
 
