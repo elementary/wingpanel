@@ -108,10 +108,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
 
         child = revealer;
 
-        if (base_indicator.visible) {
-            popover_manager.register_indicator (this);
-        }
-
         base_indicator.close.connect (() => {
             popover_manager.close ();
         });
@@ -120,13 +116,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             /* order will be changed so close all open popovers */
             popover_manager.close ();
 
-            if (base_indicator.visible) {
-                popover_manager.register_indicator (this);
-                set_reveal (base_indicator.visible);
-            } else {
-                popover_manager.unregister_indicator (this);
-                set_reveal (base_indicator.visible);
-            }
+            set_reveal (base_indicator.visible);
         });
 
         var gesture_controller = new Gtk.GestureClick ();
