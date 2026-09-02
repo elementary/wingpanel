@@ -149,7 +149,7 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     }
 
     private void begin_drag (double x, double y) {
-        popover_manager.close ();
+        popover_manager.current_indicator = null;
 
         var background_manager = Services.BackgroundManager.get_default ();
         background_manager.begin_grab_focused_window ((int) x, (int) y);

@@ -108,13 +108,10 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
 
         child = revealer;
 
-        base_indicator.close.connect (() => {
-            popover_manager.close ();
-        });
+        base_indicator.close.connect (() => popover_manager.current_indicator = null);
 
         base_indicator.notify["visible"].connect (() => {
-            /* order will be changed so close all open popovers */
-            popover_manager.close ();
+            popover_manager.current_indicator = null; // order will be changed so close open popover
 
             set_reveal (base_indicator.visible);
         });
@@ -134,7 +131,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
 
         motion_controller.enter.connect (() => {
             // If something is open and it's not us, open us. This implements the scrubbing behavior
-            if (popover_manager.current_indicator != null && !popover_manager.get_visible (this)) {
+            if (popover_manager.current_indicator != null && popover_manager.current_indicator != this) {
                 popover_manager.current_indicator = this;
             }
         });
@@ -143,7 +140,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     }
 
     private void set_reveal (bool reveal) {
-        if (!reveal && popover_manager.get_visible (this)) {
+        if (!reveal && popover_manager.current_indicator == this) {
             popover_manager.current_indicator = null;
         }
 
