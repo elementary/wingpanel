@@ -22,11 +22,6 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
 
     public Services.PopoverManager popover_manager { get; construct; }
 
-    private Gtk.CenterBox box;
-    private IndicatorBar right_menubar;
-    private IndicatorBar left_menubar;
-    private IndicatorBar center_menubar;
-
     private ListStore all_indicator_entries;
     private Gtk.CustomFilter visible_indicator_entries_filter;
     private Gtk.FilterListModel visible_indicator_entries;
@@ -72,24 +67,20 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
             new Gtk.CustomFilter (right_indicators_filter_func)
         );
 
-        left_menubar = new IndicatorBar (left_indicator_entries) {
-            halign = START
-        };
+        var left_menubar = new IndicatorBar (left_indicator_entries);
 
-        center_menubar = new IndicatorBar (center_indicator_entries);
+        var center_menubar = new IndicatorBar (center_indicator_entries);
 
-        right_menubar = new IndicatorBar (right_indicator_entries) {
-            halign = END
-        };
+        var right_menubar = new IndicatorBar (right_indicator_entries);
 
-        box = new Gtk.CenterBox ();
-        box.set_start_widget (left_menubar);
-        box.set_center_widget (center_menubar);
-        box.set_end_widget (right_menubar);
+        var center_box = new Gtk.CenterBox ();
+        center_box.set_start_widget (left_menubar);
+        center_box.set_center_widget (center_menubar);
+        center_box.set_end_widget (right_menubar);
 
-        child = box;
+        child = center_box;
 
-        unowned IndicatorManager indicator_manager = IndicatorManager.get_default ();
+        unowned var indicator_manager = IndicatorManager.get_default ();
         indicator_manager.indicator_added.connect (add_indicator);
         indicator_manager.indicator_removed.connect (remove_indicator);
 
