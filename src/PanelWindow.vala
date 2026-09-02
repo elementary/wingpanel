@@ -35,13 +35,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     private Gtk.CssProvider? style_provider = null;
 
-    public PanelWindow (Gtk.Application application) {
-        Object (
-            application: application,
-            decorated: false,
-            resizable: false
-        );
-
+    construct {
         popover_manager = new Services.PopoverManager ();
 
         panel = new Widgets.Panel (popover_manager);
@@ -53,6 +47,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         child = box;
         remove_css_class (Granite.STYLE_CLASS_BACKGROUND);
+        decorated = false;
+        resizable = false;
 
         popover_manager.notify["indicator-open"].connect (() => {
             if (!popover_manager.indicator_open) {
@@ -62,9 +58,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 Services.BackgroundManager.get_default ().remember_window ();
             }
         });
-    }
 
-    construct {
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
     }
 
