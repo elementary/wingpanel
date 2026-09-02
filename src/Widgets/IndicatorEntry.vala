@@ -47,6 +47,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     private static Gee.HashMap<string, int> indicator_order = new Gee.HashMap<string,int> ();
 
     private Gtk.Revealer revealer;
+    private Gtk.Popover popover;
 
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
         Object (
@@ -108,13 +109,18 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
 
         child = revealer;
 
-        base_indicator.close.connect (() => {
-            popover_manager.close ();
-        });
+        popover = new Gtk.Popover () {
+            has_arrow = false,
+            position = BOTTOM
+        };
+        popover.add_css_class ("indicator");
+        popover.set_parent (this);
+        popover.closed.connect (() => popover_manager.current_indicator = null);
+
+        base_indicator.close.connect (() => popover_manager.current_indicator = null);
 
         base_indicator.notify["visible"].connect (() => {
-            /* order will be changed so close all open popovers */
-            popover_manager.close ();
+            popover_manager.current_indicator = null; // order will be changed so close open popover
 
             set_reveal (base_indicator.visible);
         });
@@ -134,7 +140,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
 
         motion_controller.enter.connect (() => {
             // If something is open and it's not us, open us. This implements the scrubbing behavior
-            if (popover_manager.current_indicator != null && !popover_manager.get_visible (this)) {
+            if (popover_manager.current_indicator != null && popover_manager.current_indicator != this) {
                 popover_manager.current_indicator = this;
             }
         });
@@ -143,11 +149,30 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     }
 
     private void set_reveal (bool reveal) {
-        if (!reveal && popover_manager.get_visible (this)) {
+        if (!reveal && popover_manager.current_indicator == this) {
             popover_manager.current_indicator = null;
         }
 
         revealer.set_reveal_child (reveal);
+    }
+
+    public void open_popover () {
+        display_widget.has_tooltip = false;
+        set_state_flags (CHECKED, true);
+
+        popover.child = indicator_widget;
+        popover.popup ();
+
+        base_indicator.opened ();
+    }
+
+    public void close_popover () {
+        display_widget.has_tooltip = true;
+        set_state_flags (NORMAL, true);
+
+        popover.popdown ();
+
+        base_indicator.closed ();
     }
 
     public static int compare_func (Wingpanel.Widgets.IndicatorEntry? a, Wingpanel.Widgets.IndicatorEntry? b) {

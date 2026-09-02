@@ -20,7 +20,6 @@
 public class Wingpanel.Services.PopoverManager : Object {
     public bool indicator_open { get; private set; default = false; }
 
-    private Gtk.Popover popover;
     private Wingpanel.Widgets.IndicatorEntry? _current_indicator = null;
     public Wingpanel.Widgets.IndicatorEntry? current_indicator {
         get {
@@ -34,65 +33,23 @@ public class Wingpanel.Services.PopoverManager : Object {
 
             if (_current_indicator == null && value != null) { // First open
                 indicator_open = true;
+                value.open_popover ();
                 _current_indicator = value;
             } else if (value == null && _current_indicator != null) { // Close requested
                 indicator_open = false;
-                _current_indicator.base_indicator.closed ();
-                _current_indicator.set_state_flags (NORMAL, true);
+                _current_indicator.close_popover ();
                 _current_indicator = null;
-            } else if (_current_indicator.base_indicator.code_name == value.base_indicator.code_name) { // Close due to toggle
-                _current_indicator.set_state_flags (NORMAL, true);
-                _current_indicator.base_indicator.closed ();
+            } else if (_current_indicator == value) { // Close due to toggle
+                indicator_open = false;
+                _current_indicator.close_popover ();
                 _current_indicator = null;
             } else { // Switch
-                _current_indicator.set_state_flags (NORMAL, true);
-                update_has_tooltip (_current_indicator.display_widget);
-                _current_indicator.base_indicator.closed ();
+                indicator_open = true;
+                _current_indicator.close_popover ();
+
+                value.open_popover ();
                 _current_indicator = value;
-                popover.unparent ();
             }
-
-            if (_current_indicator != null) {
-                popover.child = _current_indicator.indicator_widget;
-                update_has_tooltip (_current_indicator.display_widget, false);
-                popover.set_parent (_current_indicator);
-                popover.popup ();
-                _current_indicator.set_state_flags (CHECKED, true);
-                _current_indicator.base_indicator.opened ();
-            } else {
-                update_has_tooltip (((Wingpanel.Widgets.IndicatorEntry)popover.parent).display_widget);
-                popover.popdown ();
-            }
-        }
-    }
-
-    construct {
-        popover = new Gtk.Popover () {
-            has_arrow = false,
-            position = BOTTOM
-        };
-        popover.add_css_class ("indicator");
-
-        popover.closed.connect (() => {
-            _current_indicator.set_state_flags (NORMAL, true);
-            current_indicator = null;
-            popover.unparent ();
-        });
-    }
-
-    public bool get_visible (Wingpanel.Widgets.IndicatorEntry entry) {
-        return current_indicator != null && current_indicator.base_indicator.code_name == entry.base_indicator.code_name;
-    }
-
-    private void update_has_tooltip (Gtk.Widget display_widget, bool enable = true) {
-        if (display_widget != null) {
-            display_widget.has_tooltip = enable;
-        }
-    }
-
-    public void close () {
-        if (current_indicator != null) {
-            current_indicator = null;
         }
     }
 }
