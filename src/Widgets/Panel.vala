@@ -22,6 +22,7 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
 
     public Services.PopoverManager popover_manager { get; construct; }
 
+    private Gtk.CenterBox box;
     private IndicatorBar right_menubar;
     private IndicatorBar left_menubar;
     private IndicatorBar center_menubar;
@@ -31,10 +32,6 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     private Gtk.FilterListModel visible_indicator_entries;
     private Gtk.SortListModel sorted_indicator_entries;
 
-    private Gtk.CenterBox box;
-
-    private Gtk.GestureClick gesture_controller;
-    private Gtk.EventControllerScroll scroll_controller;
     private double current_scroll_delta = 0;
 
     public Panel (Services.PopoverManager popover_manager) {
@@ -100,16 +97,18 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
             add_indicator (indicator);
         }
 
-        gesture_controller = new Gtk.GestureClick ();
+        var gesture_controller = new Gtk.GestureClick ();
         add_controller (gesture_controller);
-        gesture_controller.pressed.connect ((n_press, x, y) => {
+
+        gesture_controller.pressed.connect ((_gesture_controller, n_press, x, y) => {
             begin_drag (x, y);
-            gesture_controller.set_state (CLAIMED);
-            gesture_controller.reset ();
+            _gesture_controller.set_state (CLAIMED);
+            _gesture_controller.reset ();
         });
 
-        scroll_controller = new Gtk.EventControllerScroll (BOTH_AXES);
+        var scroll_controller = new Gtk.EventControllerScroll (BOTH_AXES);
         add_controller (scroll_controller);
+
         scroll_controller.scroll_end.connect (() => current_scroll_delta = 0);
         scroll_controller.scroll.connect ((dx, dy) => {
             if (!panel_settings.get_boolean ("scroll-to-switch-workspaces")) {

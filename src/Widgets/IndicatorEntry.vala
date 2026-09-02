@@ -48,9 +48,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
 
     private Gtk.Revealer revealer;
 
-    private Gtk.GestureClick gesture_controller;
-    private Gtk.EventControllerMotion motion_controller;
-
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
         Object (
             base_indicator: base_indicator,
@@ -132,14 +129,15 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             }
         });
 
-        gesture_controller = new Gtk.GestureClick ();
+        var gesture_controller = new Gtk.GestureClick ();
         add_controller (gesture_controller);
-        gesture_controller.pressed.connect (() => {
+
+        gesture_controller.pressed.connect ((_gesture_controller, n_press, x, y) => {
             popover_manager.current_indicator = this;
-            gesture_controller.set_state (CLAIMED);
+            _gesture_controller.set_state (CLAIMED);
         });
 
-        motion_controller = new Gtk.EventControllerMotion () {
+        var motion_controller = new Gtk.EventControllerMotion () {
             propagation_phase = CAPTURE
         };
         add_controller (motion_controller);
