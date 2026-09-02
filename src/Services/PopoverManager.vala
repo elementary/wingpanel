@@ -21,6 +21,7 @@ public class Wingpanel.Services.PopoverManager : Object {
     public bool indicator_open { get; private set; default = false; }
 
     private Gtk.Popover popover;
+
     private Wingpanel.Widgets.IndicatorEntry? _current_indicator = null;
     public Wingpanel.Widgets.IndicatorEntry? current_indicator {
         get {
@@ -46,7 +47,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                 _current_indicator = null;
             } else { // Switch
                 _current_indicator.set_state_flags (NORMAL, true);
-                update_has_tooltip (_current_indicator.display_widget);
+                _current_indicator.display_widget.has_tooltip = true;
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = value;
                 popover.unparent ();
@@ -54,13 +55,13 @@ public class Wingpanel.Services.PopoverManager : Object {
 
             if (_current_indicator != null) {
                 popover.child = _current_indicator.indicator_widget;
-                update_has_tooltip (_current_indicator.display_widget, false);
+                _current_indicator.display_widget.has_tooltip = false;
                 popover.set_parent (_current_indicator);
                 popover.popup ();
                 _current_indicator.set_state_flags (CHECKED, true);
                 _current_indicator.base_indicator.opened ();
             } else {
-                update_has_tooltip (((Wingpanel.Widgets.IndicatorEntry)popover.parent).display_widget);
+                ((Widgets.IndicatorEntry)popover.parent).display_widget.has_tooltip = true;
                 popover.popdown ();
             }
         }
@@ -78,21 +79,5 @@ public class Wingpanel.Services.PopoverManager : Object {
             current_indicator = null;
             popover.unparent ();
         });
-    }
-
-    public bool get_visible (Wingpanel.Widgets.IndicatorEntry entry) {
-        return current_indicator != null && current_indicator.base_indicator.code_name == entry.base_indicator.code_name;
-    }
-
-    private void update_has_tooltip (Gtk.Widget display_widget, bool enable = true) {
-        if (display_widget != null) {
-            display_widget.has_tooltip = enable;
-        }
-    }
-
-    public void close () {
-        if (current_indicator != null) {
-            current_indicator = null;
-        }
     }
 }
