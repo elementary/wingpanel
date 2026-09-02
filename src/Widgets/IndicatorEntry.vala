@@ -24,7 +24,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
-    public IndicatorBar? indicator_bar;
     public Gtk.Widget display_widget { get; private set; }
 
     private Gtk.Widget _indicator_widget = null;
@@ -35,6 +34,12 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             }
 
             return _indicator_widget;
+        }
+    }
+
+    public bool should_show_indicator {
+        get {
+            return revealer.reveal_child || revealer.child_revealed;
         }
     }
 
@@ -89,6 +94,21 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         };
         revealer.add_css_class ("composited-indicator");
 
+        switch (base_indicator.code_name) {
+            case Indicator.APP_LAUNCHER:
+                revealer.transition_type = SLIDE_RIGHT;
+                break;
+            case Indicator.DATETIME:
+                revealer.transition_type = SLIDE_DOWN;
+                break;
+            default:
+                revealer.transition_type = SLIDE_LEFT;
+                break;
+        }
+
+        revealer.notify["child-revealed"].connect (() => notify_property ("should-show-indicator"));
+        revealer.notify["reveal-child"].connect (() => notify_property ("should-show-indicator"));
+
         child = revealer;
 
         if (base_indicator.visible) {
@@ -100,21 +120,14 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         });
 
         base_indicator.notify["visible"].connect (() => {
-            if (indicator_bar != null) {
-                /* order will be changed so close all open popovers */
-                popover_manager.close ();
+            /* order will be changed so close all open popovers */
+            popover_manager.close ();
 
-                if (base_indicator.visible) {
-                    popover_manager.register_indicator (this);
-                    indicator_bar.insert_sorted (this);
-                    set_reveal (base_indicator.visible);
-                } else {
-                    set_reveal (base_indicator.visible);
-                    popover_manager.unregister_indicator (this);
-                    // reorder indicators when indicator is invisible
-                    display_widget.unmap.connect (indicator_unmapped);
-                }
+            if (base_indicator.visible) {
+                popover_manager.register_indicator (this);
+                set_reveal (base_indicator.visible);
             } else {
+                popover_manager.unregister_indicator (this);
                 set_reveal (base_indicator.visible);
             }
         });
@@ -139,15 +152,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         });
 
         set_reveal (base_indicator.visible);
-    }
-
-    private void indicator_unmapped () {
-        base_indicator.get_display_widget ().unmap.disconnect (indicator_unmapped);
-        indicator_bar.remove (this);
-    }
-
-    public void set_transition_type (Gtk.RevealerTransitionType transition_type) {
-        revealer.set_transition_type (transition_type);
     }
 
     private void set_reveal (bool reveal) {

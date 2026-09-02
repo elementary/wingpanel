@@ -26,6 +26,11 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     private IndicatorBar left_menubar;
     private IndicatorBar center_menubar;
 
+    private ListStore all_indicator_entries;
+    private Gtk.CustomFilter visible_indicator_entries_filter;
+    private Gtk.FilterListModel visible_indicator_entries;
+    private Gtk.SortListModel sorted_indicator_entries;
+
     private Gtk.CenterBox box;
 
     private Gtk.GestureClick gesture_controller;
@@ -44,13 +49,39 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
         hexpand = true;
         vexpand = true;
 
-        left_menubar = new IndicatorBar () {
+        all_indicator_entries = new ListStore (typeof (IndicatorEntry));
+
+        visible_indicator_entries_filter = new Gtk.CustomFilter (visible_indicators_filter_func);
+        visible_indicator_entries = new Gtk.FilterListModel (
+            all_indicator_entries,
+            visible_indicator_entries_filter
+        );
+
+        sorted_indicator_entries = new Gtk.SortListModel (
+            visible_indicator_entries,
+            new Gtk.CustomSorter (IndicatorEntry.compare_func)
+        );
+
+        var left_indicator_entries = new Gtk.FilterListModel (
+            sorted_indicator_entries,
+            new Gtk.CustomFilter (left_indicators_filter_func)
+        );
+        var center_indicator_entries = new Gtk.FilterListModel (
+            sorted_indicator_entries,
+            new Gtk.CustomFilter (center_indicators_filter_func)
+        );
+        var right_indicator_entries = new Gtk.FilterListModel (
+            sorted_indicator_entries,
+            new Gtk.CustomFilter (right_indicators_filter_func)
+        );
+
+        left_menubar = new IndicatorBar (left_indicator_entries) {
             halign = START
         };
 
-        center_menubar = new IndicatorBar ();
+        center_menubar = new IndicatorBar (center_indicator_entries);
 
-        right_menubar = new IndicatorBar () {
+        right_menubar = new IndicatorBar (right_indicator_entries) {
             halign = END
         };
 
@@ -65,11 +96,9 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
         indicator_manager.indicator_added.connect (add_indicator);
         indicator_manager.indicator_removed.connect (remove_indicator);
 
-        indicator_manager.get_indicators ().@foreach ((indicator) => {
+        foreach (var indicator in indicator_manager.get_indicators ()) {
             add_indicator (indicator);
-
-            return true;
-        });
+        }
 
         gesture_controller = new Gtk.GestureClick ();
         add_controller (gesture_controller);
@@ -154,62 +183,66 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
         }
     }
 
-    private IndicatorEntry? get_next_indicator (IndicatorEntry current) {
-        Gtk.Widget? sibling = current.get_next_sibling ();
-
-        if (sibling != null) {
-            return (IndicatorEntry) sibling;
+    private IndicatorEntry get_next_indicator (IndicatorEntry current) {
+        var current_entry_pos = 0u;
+        for (var i = 0; i < sorted_indicator_entries.get_n_items (); i++) {
+            var indicator_entry = (IndicatorEntry) sorted_indicator_entries.get_item (i);
+            if (indicator_entry == current) {
+                current_entry_pos = i;
+                break;
+            }
         }
 
-        switch (current.base_indicator.code_name) {
-            case Indicator.APP_LAUNCHER:
-                return (IndicatorEntry) center_menubar.get_last_child ();
-            case Indicator.DATETIME:
-                return (IndicatorEntry) right_menubar.get_last_child ();
-            default:
-                return (IndicatorEntry) left_menubar.get_last_child ();
-        }
+        var new_entry_pos = (current_entry_pos + 1).clamp (0, sorted_indicator_entries.get_n_items ());
+        return (IndicatorEntry) sorted_indicator_entries.get_item (new_entry_pos);
     }
 
     private IndicatorEntry? get_previous_indicator (IndicatorEntry current) {
-        Gtk.Widget? sibling = current.get_prev_sibling ();
-
-        if (sibling != null) {
-            return (IndicatorEntry) sibling;
+        var current_entry_pos = 0u;
+        for (var i = 0; i < sorted_indicator_entries.get_n_items (); i++) {
+            var indicator_entry = (IndicatorEntry) sorted_indicator_entries.get_item (i);
+            if (indicator_entry == current) {
+                current_entry_pos = i;
+                break;
+            }
         }
 
-        switch (current.base_indicator.code_name) {
-            case Indicator.APP_LAUNCHER:
-                return (IndicatorEntry) right_menubar.get_last_child ();
-            case Indicator.DATETIME:
-                return (IndicatorEntry) left_menubar.get_last_child ();
-            default:
-                return (IndicatorEntry) center_menubar.get_last_child ();
-        }
+        var new_entry_pos = (current_entry_pos - 1).clamp (0, sorted_indicator_entries.get_n_items ());
+        return (IndicatorEntry) sorted_indicator_entries.get_item (new_entry_pos);
     }
 
     private void add_indicator (Indicator indicator) {
         var indicator_entry = new IndicatorEntry (indicator, popover_manager);
 
-        switch (indicator.code_name) {
-            case Indicator.APP_LAUNCHER:
-                indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_RIGHT);
-                left_menubar.insert_sorted (indicator_entry);
-                break;
-            case Indicator.DATETIME:
-                indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_DOWN);
-                center_menubar.insert_sorted (indicator_entry);
-                break;
-            default:
-                indicator_entry.set_transition_type (Gtk.RevealerTransitionType.SLIDE_LEFT);
-                right_menubar.insert_sorted (indicator_entry);
-                break;
-        }
+        all_indicator_entries.append (indicator_entry);
+
+        indicator_entry.notify["should-show-indicator"].connect (() =>
+            visible_indicator_entries_filter.changed (DIFFERENT)
+        );
     }
 
     private void remove_indicator (Indicator indicator) {
-        left_menubar.remove_indicator (indicator);
-        center_menubar.remove_indicator (indicator);
-        right_menubar.remove_indicator (indicator);
+        for (var i = 0; i < all_indicator_entries.get_n_items (); i++) {
+            var indicator_entry = (IndicatorEntry) all_indicator_entries.get_item (i);
+            if (indicator_entry.base_indicator == indicator) {
+                all_indicator_entries.remove (i);
+            }
+        }
+    }
+
+    private static bool visible_indicators_filter_func (Object item) requires (item is IndicatorEntry) {
+        return ((IndicatorEntry) item).should_show_indicator;
+    }
+
+    private static bool left_indicators_filter_func (Object item) requires (item is IndicatorEntry) {
+        return ((IndicatorEntry) item).base_indicator.code_name == Indicator.APP_LAUNCHER;
+    }
+
+    private static bool center_indicators_filter_func (Object item) requires (item is IndicatorEntry) {
+        return ((IndicatorEntry) item).base_indicator.code_name == Indicator.DATETIME;
+    }
+
+    private static bool right_indicators_filter_func (Object item) requires (item is IndicatorEntry) {
+        return !left_indicators_filter_func (item) && !center_indicators_filter_func (item);
     }
 }

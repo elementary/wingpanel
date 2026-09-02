@@ -17,45 +17,28 @@
  * Boston, MA 02110-1301 USA.
  */
 
-public class Wingpanel.Widgets.IndicatorBar : Gtk.Box {
-    private Gee.List<IndicatorEntry> sorted_items;
+public class Wingpanel.Widgets.IndicatorBar : Granite.Bin {
+    public ListModel indicator_entries { private get; construct; }
+
+    private Gtk.FlowBox flow_box;
+
+    public IndicatorBar (ListModel indicator_entries) {
+        Object (indicator_entries: indicator_entries);
+    }
 
     construct {
-        sorted_items = new Gee.ArrayList<IndicatorEntry> ();
+        flow_box = new Gtk.FlowBox () {
+            orientation = HORIZONTAL,
+            selection_mode = NONE
+        };
+        flow_box.bind_model (indicator_entries, (indicator_entry) => (IndicatorEntry) indicator_entry);
+
+        indicator_entries.items_changed.connect (update_flow_box_max_children);
+
+        child = flow_box;
     }
 
-    public void insert_sorted (IndicatorEntry item) {
-        item.indicator_bar = this;
-
-        if (!(item in sorted_items)) {
-            sorted_items.add (item);
-            sorted_items.sort (IndicatorEntry.compare_func);
-        }
-
-        if (item.base_indicator.visible) {
-            Gtk.Widget? previous = null;
-            foreach (var i in sorted_items) {
-                if (i == item) {
-                    break;
-                }
-
-                if (i.base_indicator.visible) {
-                    previous = i;
-                }
-            }
-
-            if (item.get_parent () != this) {
-                insert_child_after (item, previous);
-            }
-        }
-    }
-
-    public void remove_indicator (Indicator indicator) {
-        foreach (var entry in sorted_items) {
-            if (entry.base_indicator.code_name == indicator.code_name) {
-                sorted_items.remove (entry);
-                remove (entry);
-            }
-        }
+    private void update_flow_box_max_children () {
+        flow_box.max_children_per_line = indicator_entries.get_n_items ();
     }
 }
