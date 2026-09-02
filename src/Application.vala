@@ -57,7 +57,8 @@ public class Wingpanel.Application : Gtk.Application {
 
         Granite.init ();
 
-        panel_window = new PanelWindow (this);
+        panel_window = new PanelWindow ();
+        add_window (panel_window);
         panel_window.present ();
 
         var toggle_indicator_action = new SimpleAction (TOGGLE_INDICATOR_ACTION_NAME, VariantType.STRING);
