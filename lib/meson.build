@@ -23,7 +23,6 @@ libwingpanel_deps = [
 libwingpanel_lib = library(
     'wingpanel-9',
     'Indicator.vala',
-    'IndicatorManager.vala',
     'KeybindingHelper.vala',
     'PopoverMenuItem.vala',
     config_header,

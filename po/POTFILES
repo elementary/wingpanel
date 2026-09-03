@@ -1,8 +1,8 @@
-lib/IndicatorManager.vala
 lib/Indicator.vala
 src/Application.vala
 src/PanelWindow.vala
 src/Services/BackgroundManager.vala
+src/Services/IndicatorManager.vala
 src/Services/PopoverManager.vala
 src/Widgets/IndicatorBar.vala
 src/Widgets/IndicatorEntry.vala
