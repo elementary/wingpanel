@@ -3,6 +3,7 @@ wingpanel_files = files(
     'Application.vala',
     'Services/BackgroundManager.vala',
     'Services/DisplayConfig.vala',
+    'Services/IndicatorManager.vala',
     'Services/PopoverManager.vala',
     'Services/WMDBus.vala',
     'Widgets/IndicatorEntry.vala',
