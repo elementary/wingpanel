@@ -56,14 +56,8 @@ public class Wingpanel.Services.PopoverManager : Object {
             }
 
             if (_current_indicator != null) {
-                popover.child = _current_indicator.indicator_widget;
-                _current_indicator.display_widget.has_tooltip = false;
-                popover.set_parent (_current_indicator);
                 set_revealed (true);
-                _current_indicator.set_state_flags (CHECKED, true);
-                _current_indicator.base_indicator.opened ();
             } else {
-                ((Widgets.IndicatorEntry)popover.parent).display_widget.has_tooltip = true;
                 set_revealed (false);
             }
         }
@@ -86,28 +80,23 @@ public class Wingpanel.Services.PopoverManager : Object {
         };
 
         var scale_target = new Adw.CallbackAnimationTarget ((val) => {
-            var height = _current_indicator.indicator_widget.get_height ();
-            var width = _current_indicator.indicator_widget.get_width ();
-
-            var center_x = (width - (val * width)) / 2.0;
-
-            _current_indicator.indicator_widget.allocate (
-                width, height, -1,
-                new Gsk.Transform ()
-                    .scale ((float) val, (float) val)
-            );
-
             var popover_height = popover.get_height ();
             var popover_width = popover.get_width ();
 
-            popover.present ();
             popover.size_allocate (
                 (int) (popover_width * val), (int) (popover_height * val), -1
+            );
+
+            _current_indicator.indicator_widget.allocate (
+                //FIXME: what sorcery is this?
+                int.max (0, popover_width - 14), int.max (0, popover_height - 20), -1,
+                new Gsk.Transform ()
+                    .scale ((float) val, (float) val)
             );
         });
 
         scale = new Adw.TimedAnimation (
-            popover, 0.5, 1,
+            popover, 0, 1,
             Granite.TRANSITION_DURATION_OPEN,
             scale_target
         ) {
@@ -131,11 +120,21 @@ public class Wingpanel.Services.PopoverManager : Object {
         fade.reverse = !revealed;
 
         if (revealed) {
+            _current_indicator.display_widget.has_tooltip = false;
+            _current_indicator.set_state_flags (CHECKED, true);
+            _current_indicator.base_indicator.opened ();
+
+            popover.set_parent (_current_indicator);
+            popover.child = _current_indicator.indicator_widget;
+            popover.present ();
             popover.popup ();
+
             fade.duration = Granite.TRANSITION_DURATION_OPEN;
             scale.duration = Granite.TRANSITION_DURATION_OPEN;
-            scale.easing = EASE_IN_OUT_QUAD;
+            scale.easing = EASE_OUT_ELASTIC;
         } else {
+            ((Widgets.IndicatorEntry)popover.parent).display_widget.has_tooltip = true;
+
             fade.duration = Granite.TRANSITION_DURATION_CLOSE;
             scale.duration = Granite.TRANSITION_DURATION_CLOSE;
             scale.easing = EASE_IN_OUT_QUAD;
