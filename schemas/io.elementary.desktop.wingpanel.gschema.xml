@@ -11,6 +11,11 @@
       <summary>Sets if scrolling on the panel switches workspaces.</summary>
       <description>Sets if scrolling on the panel switches workspaces.</description>
     </key>
+    <key type="i" name="height">
+      <default>-1</default>
+      <summary>The current allocated height of the wingpanel widget.</summary>
+      <description>The current allocated height of the wingpanel widget.</description>
+    </key>
   </schema>
 
   <schema path="/io/elementary/panel/keybindings/" id="io.elementary.panel.keybindings">

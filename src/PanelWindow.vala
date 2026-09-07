@@ -87,6 +87,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             Services.BackgroundManager.initialize (panel.get_height ());
             initialized_background_manager = true;
         }
+
+        Widgets.Panel.panel_settings.set_int ("height", get_height ());
     }
 
     private void on_enter_monitor (Gdk.Monitor new_monitor) {
