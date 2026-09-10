@@ -16,8 +16,11 @@ wingpanel_deps = [
     gdk_wl_dep,
     posix_dep,
     wl_client_dep,
-    pantheon_desktop_shell_dep
+    gtkls_dep
 ]
+if gala_dep.found()
+    wingpanel_deps += [pantheon_desktop_shell_dep]
+endif
 
 executable(meson.project_name(),
     css_gresource,

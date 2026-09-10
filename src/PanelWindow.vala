@@ -29,14 +29,16 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private Services.PopoverManager popover_manager;
     private Widgets.Panel panel;
 
+    #if USE_GALA
     private Pantheon.Desktop.Shell? desktop_shell;
     private Pantheon.Desktop.Panel? desktop_panel;
     private bool initialized_background_manager = false;
 
     private Gtk.CssProvider? style_provider = null;
+    #endif
 
     construct {
-        popover_manager = new Services.PopoverManager ();
+        popover_manager = new Services.PopoverManager (this);
 
         panel = new Widgets.Panel (popover_manager);
         panel.realize.connect (on_realize);
@@ -50,6 +52,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         decorated = false;
         resizable = false;
 
+        #if USE_GALA
         popover_manager.notify["indicator-open"].connect (() => {
             if (!popover_manager.indicator_open) {
                 Services.BackgroundManager.get_default ().restore_window ();
@@ -60,6 +63,14 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         });
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
+        #endif
+
+        GtkLayerShell.init_for_window (this);
+        GtkLayerShell.set_layer (this, GtkLayerShell.Layer.TOP);
+        GtkLayerShell.auto_exclusive_zone_enable (this);
+        GtkLayerShell.set_anchor (this, GtkLayerShell.Edge.TOP, true);
+        GtkLayerShell.set_anchor (this, GtkLayerShell.Edge.LEFT, true);
+        GtkLayerShell.set_anchor (this, GtkLayerShell.Edge.RIGHT, true);
     }
 
     private void on_realize () {
@@ -69,7 +80,9 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         surface.enter_monitor.connect (on_enter_monitor);
 
+        #if USE_GALA
         init_wl ();
+        #endif
     }
 
     private static void on_compute_size (Gdk.ToplevelSize top_level_size) {
@@ -83,10 +96,12 @@ public class Wingpanel.PanelWindow : Gtk.Window {
             })
         );
 
+        #if USE_GALA
         if (!initialized_background_manager) {
             Services.BackgroundManager.initialize (panel.get_height ());
             initialized_background_manager = true;
         }
+        #endif
     }
 
     private void on_enter_monitor (Gdk.Monitor new_monitor) {
@@ -101,6 +116,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         panel.toggle_indicator (name);
     }
 
+    #if USE_GALA
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
         if (@interface == "io_elementary_pantheon_shell_v1") {
             desktop_shell = wl_registry.bind<Pantheon.Desktop.Shell> (name, ref Pantheon.Desktop.Shell.iface, uint32.min (version, 1));
@@ -188,6 +204,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 break;
         }
     }
+    #endif
 
     public override void measure (
         Gtk.Orientation orientation,
