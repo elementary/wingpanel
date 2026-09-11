@@ -18,7 +18,7 @@
  */
 
 public class Wingpanel.Widgets.Panel : Granite.Bin {
-    private static Settings panel_settings = new Settings ("io.elementary.desktop.wingpanel");
+    public static Settings panel_settings { get; private set; }
 
     public Services.PopoverManager popover_manager { get; construct; }
 
@@ -35,6 +35,10 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
 
     class construct {
         set_css_name ("panel");
+    }
+
+    static construct {
+        panel_settings = new Settings ("io.elementary.desktop.wingpanel");
     }
 
     construct {
