@@ -29,29 +29,6 @@ public class Wingpanel.IndicatorManager : GLib.Object {
     }
 
     /**
-     * The type of the server displaying the indicator.
-     */
-    public enum ServerType {
-        SESSION,
-        GREETER;
-
-        public string restrictions_file_name () {
-            switch (this) {
-                case SESSION :
-
-                    return "default";
-
-                case GREETER:
-
-                    return "greeter";
-
-                default:
-                    assert_not_reached ();
-            }
-        }
-    }
-
-    /**
      * Called when a new indicator was added.
      */
     public signal void indicator_added (Wingpanel.Indicator indicator);
