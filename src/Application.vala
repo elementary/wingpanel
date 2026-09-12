@@ -40,9 +40,9 @@ public class Wingpanel.Application : Gtk.Application {
         VariantDict options = command_line.get_options_dict ();
 
         if (options.contains (SERVER_TYPE_ACTION_NAME)) {
-            IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.GREETER);
+            IndicatorManager.get_default ().initialize (ServerType.GREETER);
         } else {
-            IndicatorManager.get_default ().initialize (IndicatorManager.ServerType.SESSION);
+            IndicatorManager.get_default ().initialize (ServerType.SESSION);
         }
 
         if (options.contains (TOGGLE_INDICATOR_ACTION_NAME)) {
