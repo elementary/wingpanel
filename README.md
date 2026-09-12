@@ -7,6 +7,7 @@ The extensible top panel for Pantheon. Wingpanel is an empty container that acce
 
 You'll need the following dependencies:
 
+* libgtk4-layer-shell-dev >= 1.0.4
 * libgala-dev >= 8.3.0
 * libgee-0.8-dev
 * libglib2.0-dev

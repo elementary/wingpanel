@@ -19,6 +19,7 @@
 
 public class Wingpanel.Services.PopoverManager : Object {
     public bool indicator_open { get; private set; default = false; }
+    public unowned Wingpanel.PanelWindow owner { get; construct; }
 
     private Gtk.Popover popover;
 
@@ -57,14 +58,35 @@ public class Wingpanel.Services.PopoverManager : Object {
                 popover.child = _current_indicator.indicator_widget;
                 _current_indicator.display_widget.has_tooltip = false;
                 popover.set_parent (_current_indicator);
+                _current_indicator.base_indicator.opened ();
+#if USE_LAYER_SHELL
+                GtkLayerShell.set_keyboard_mode (owner, GtkLayerShell.KeyboardMode.ON_DEMAND);
+#endif
                 popover.popup ();
                 _current_indicator.set_state_flags (CHECKED, true);
-                _current_indicator.base_indicator.opened ();
+                if (owner.is_active) {
+                    _current_indicator.indicator_widget.child_focus (Gtk.DirectionType.TAB_FORWARD);
+                } else {
+                    ulong handler_id = 0;
+                    handler_id = owner.notify["is-active"].connect (() => {
+                        if (owner.is_active && _current_indicator != null) {
+                            _current_indicator.indicator_widget.child_focus (Gtk.DirectionType.TAB_FORWARD);
+                            SignalHandler.disconnect (owner, handler_id);
+                        }
+                    });
+                }
             } else {
                 ((Widgets.IndicatorEntry)popover.parent).display_widget.has_tooltip = true;
+#if USE_LAYER_SHELL
+                GtkLayerShell.set_keyboard_mode (owner, GtkLayerShell.KeyboardMode.NONE);
+#endif
                 popover.popdown ();
             }
         }
+    }
+
+    public PopoverManager (Wingpanel.PanelWindow owner) {
+        Object (owner: owner);
     }
 
     construct {
