@@ -59,7 +59,9 @@ public class Wingpanel.Services.PopoverManager : Object {
                 _current_indicator.display_widget.has_tooltip = false;
                 popover.set_parent (_current_indicator);
                 _current_indicator.base_indicator.opened ();
+#if USE_LAYER_SHELL
                 GtkLayerShell.set_keyboard_mode (owner, GtkLayerShell.KeyboardMode.ON_DEMAND);
+#endif
                 popover.popup ();
                 _current_indicator.set_state_flags (CHECKED, true);
                 if (owner.is_active) {
@@ -75,7 +77,9 @@ public class Wingpanel.Services.PopoverManager : Object {
                 }
             } else {
                 ((Widgets.IndicatorEntry)popover.parent).display_widget.has_tooltip = true;
+#if USE_LAYER_SHELL
                 GtkLayerShell.set_keyboard_mode (owner, GtkLayerShell.KeyboardMode.NONE);
+#endif
                 popover.popdown ();
             }
         }

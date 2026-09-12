@@ -65,12 +65,14 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
 #endif
 
+#if USE_LAYER_SHELL
         GtkLayerShell.init_for_window (this);
         GtkLayerShell.set_layer (this, GtkLayerShell.Layer.TOP);
         GtkLayerShell.auto_exclusive_zone_enable (this);
         GtkLayerShell.set_anchor (this, GtkLayerShell.Edge.TOP, true);
         GtkLayerShell.set_anchor (this, GtkLayerShell.Edge.LEFT, true);
         GtkLayerShell.set_anchor (this, GtkLayerShell.Edge.RIGHT, true);
+#endif
     }
 
     private void on_realize () {

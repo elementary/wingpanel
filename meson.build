@@ -24,8 +24,8 @@ i18n = import('i18n')
 gnome = import('gnome')
 pkg = import('pkgconfig')
 
-gtkls_dep = dependency('gtk4-layer-shell-0')
-gala_dep = dependency('gala', version: '>= 8.3.0', required: false)
+gtkls_dep = dependency('gtk4-layer-shell-0', required: get_option('layer_shell'))
+gala_dep = dependency('gala', version: '>= 8.3.0', required: not gtkls_dep.found())
 glib_dep = dependency('glib-2.0', version: '>=2.32')
 gio_dep = dependency('gio-2.0')
 gio_unix_dep = dependency('gio-unix-2.0')
@@ -51,6 +51,9 @@ if gala_dep.found()
     if vapigen.found()
     	subdir('vapi')
     endif
+endif
+if get_option('layer_shell').enabled()
+    add_project_arguments('-D', 'USE_LAYER_SHELL', language: 'vala')
 endif
 
 subdir('src')
