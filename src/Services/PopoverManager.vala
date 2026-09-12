@@ -19,8 +19,8 @@
 
 public class Wingpanel.Services.PopoverManager : Object {
     public bool indicator_open { get; private set; default = false; }
+    public unowned Wingpanel.PanelWindow owner { get; construct; }
 
-    private unowned Wingpanel.PanelWindow? owner;
     private Gtk.Popover popover;
 
     private Wingpanel.Widgets.IndicatorEntry? _current_indicator = null;
@@ -81,8 +81,11 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
     }
 
-    public PopoverManager (Wingpanel.PanelWindow? owner) {
-        this.owner = owner;
+    public PopoverManager (Wingpanel.PanelWindow owner) {
+        Object (owner: owner);
+    }
+
+    construct {
         popover = new Gtk.Popover () {
             has_arrow = false,
             position = BOTTOM
