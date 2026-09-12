@@ -24,6 +24,7 @@ i18n = import('i18n')
 gnome = import('gnome')
 pkg = import('pkgconfig')
 
+adw_dep = dependency('libadwaita-1')
 glib_dep = dependency('glib-2.0', version: '>=2.32')
 gio_dep = dependency('gio-2.0')
 gio_unix_dep = dependency('gio-unix-2.0')
