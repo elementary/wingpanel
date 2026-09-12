@@ -151,10 +151,10 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     private void begin_drag (double x, double y) {
         popover_manager.current_indicator = null;
 
-        #if USE_GALA
+#if USE_GALA
         var background_manager = Services.BackgroundManager.get_default ();
         background_manager.begin_grab_focused_window ((int) x, (int) y);
-        #endif
+#endif
     }
 
     private void cycle (Gtk.DirectionType direction) {
