@@ -24,8 +24,8 @@ i18n = import('i18n')
 gnome = import('gnome')
 pkg = import('pkgconfig')
 
-gtkls_dep = dependency('gtk4-layer-shell-0')
-gala_dep = dependency('gala', version: '>= 8.3.0', required: false)
+gtkls_dep = dependency('gtk4-layer-shell-0', required: get_option('layer_shell'))
+gala_dep = dependency('gala', version: '>= 8.3.0', required: not gtkls_dep.found())
 glib_dep = dependency('glib-2.0', version: '>=2.32')
 gio_dep = dependency('gio-2.0')
 gio_unix_dep = dependency('gio-unix-2.0')
@@ -37,13 +37,18 @@ granite_dep = dependency('granite-7', version: '>=7.6.0')
 posix_dep = vala.find_library('posix')
 wl_client_dep = dependency('wayland-client')
 
+if gala_dep.found()
+    add_project_arguments('-D', 'USE_GALA', language: 'vala')
+endif
+if gtkls_dep.found()
+    add_project_arguments('-D', 'USE_LAYER_SHELL', language: 'vala')
+endif
+
 subdir('data')
 subdir('lib')
 subdir('schemas')
 
 if gala_dep.found()
-    add_project_arguments('-D', 'USE_GALA', language: 'vala')
-
     subdir('protocol')
     subdir('wingpanel-interface')
 

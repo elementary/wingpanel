@@ -1,1 +1,2 @@
+option('layer_shell', type: 'feature', value: 'auto', description: 'Build with wlr-layer-shell-unstable-v1 support')
 option('example', type: 'boolean', value: false, description: 'Build an example that shows how it works')
