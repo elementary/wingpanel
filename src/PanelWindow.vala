@@ -36,7 +36,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     private Gtk.CssProvider? style_provider = null;
 
     construct {
-        popover_manager = new Services.PopoverManager ();
+        popover_manager = new Services.PopoverManager (this);
 
         panel = new Widgets.Panel (popover_manager);
         panel.realize.connect (on_realize);

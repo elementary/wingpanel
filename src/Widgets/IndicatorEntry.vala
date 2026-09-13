@@ -96,7 +96,7 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         add_controller (gesture_controller);
 
         gesture_controller.pressed.connect ((_gesture_controller, n_press, x, y) => {
-            popover_manager.current_indicator = this;
+            popover_manager.current_indicator = popover_manager.current_indicator == this ? null : this;
             _gesture_controller.set_state (CLAIMED);
         });
 
