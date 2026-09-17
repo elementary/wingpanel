@@ -23,8 +23,8 @@
  */
 
 public class WingpanelInterface.Main : Gala.Plugin {
-    private const string DBUS_NAME = "org.pantheon.gala.WingpanelInterface";
-    private const string DBUS_PATH = "/org/pantheon/gala/WingpanelInterface";
+    private const string DBUS_NAME = "io.elementary.gala.WingpanelInterface";
+    private const string DBUS_PATH = "/io/elementary/gala/WingpanelInterface";
 
     public static Gala.WindowManager wm;
     public static unowned Meta.Display display;
