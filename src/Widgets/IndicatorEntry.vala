@@ -18,8 +18,6 @@
  */
 
 public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
-    private const int UNKNOWN_INDICATOR_ORDER = 0;
-
     public Indicator base_indicator { get; construct; }
     public Services.PopoverManager popover_manager { get; construct; }
 
@@ -42,9 +40,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
         }
     }
 
-    /* The order in which the indicators are shown from left to right. */
-    private static Gee.HashMap<string, int> indicator_order = new Gee.HashMap<string,int> ();
-
     private Gtk.Revealer revealer;
 
     public IndicatorEntry (Indicator base_indicator, Services.PopoverManager popover_manager) {
@@ -52,18 +47,6 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
             base_indicator: base_indicator,
             popover_manager: popover_manager
         );
-    }
-
-    static construct {
-        // 0 is reserved for UNKNOWN_INDICATOR_ORDER
-        indicator_order[Indicator.NIGHT_LIGHT] = 1;
-        indicator_order[Indicator.KEYBOARD] = 2;
-        indicator_order[Indicator.SOUND] = 3;
-        indicator_order[Indicator.NETWORK] = 4;
-        indicator_order[Indicator.BLUETOOTH] = 5;
-        indicator_order[Indicator.POWER] = 6;
-        indicator_order[Indicator.MESSAGES] = 7;
-        indicator_order[Indicator.QUICKSETTINGS] = 8;
     }
 
     class construct {
@@ -163,10 +146,16 @@ public class Wingpanel.Widgets.IndicatorEntry : Granite.Bin {
     }
 
     private static int get_order (Wingpanel.Widgets.IndicatorEntry node) {
-        if (indicator_order.has_key (node.base_indicator.code_name)) {
-            return indicator_order[node.base_indicator.code_name];
+        switch (node.base_indicator.code_name) {
+            case Indicator.NIGHT_LIGHT: return 1;
+            case Indicator.KEYBOARD: return 2;
+            case Indicator.SOUND: return 3;
+            case Indicator.NETWORK: return 4;
+            case Indicator.BLUETOOTH: return 5;
+            case Indicator.POWER: return 6;
+            case Indicator.MESSAGES: return 7;
+            case Indicator.QUICKSETTINGS: return 8;
+            default: return 0;
         }
-
-        return UNKNOWN_INDICATOR_ORDER;
     }
 }
