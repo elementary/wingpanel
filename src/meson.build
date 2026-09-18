@@ -13,6 +13,7 @@ wingpanel_files = files(
 
 wingpanel_deps = [
     libwingpanel_dep,
+    adw_dep,
     granite_dep,
     gdk_wl_dep,
     posix_dep,
