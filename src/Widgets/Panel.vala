@@ -237,12 +237,19 @@ public class Wingpanel.Widgets.Panel : Granite.Bin {
     }
 
     public void toggle_indicator (string name) {
+        IndicatorEntry? indicator_entry_to_toggle = null;
         for (var i = 0; i < visible_indicator_entries.get_n_items (); i++) {
             var indicator_entry = (IndicatorEntry) visible_indicator_entries.get_item (i);
             if (indicator_entry.base_indicator.code_name == name) {
-                popover_manager.current_indicator = indicator_entry;
+                indicator_entry_to_toggle = indicator_entry;
                 break;
             }
         }
+
+        popover_manager.current_indicator = (
+            popover_manager.current_indicator == indicator_entry_to_toggle ?
+            null :
+            indicator_entry_to_toggle
+        );
     }
 }

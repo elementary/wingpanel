@@ -34,17 +34,15 @@ public class Wingpanel.Services.PopoverManager : Object {
             }
 
             if (_current_indicator == null && value != null) { // First open
-                indicator_open = true;
                 _current_indicator = value;
+                indicator_open = true;
             } else if (value == null && _current_indicator != null) { // Close requested
+                _current_indicator.set_state_flags (NORMAL, true);
+                _current_indicator.display_widget.has_tooltip = true;
+                _current_indicator.base_indicator.closed ();
+                _current_indicator = null;
+                popover.popdown ();
                 indicator_open = false;
-                _current_indicator.base_indicator.closed ();
-                _current_indicator.set_state_flags (NORMAL, true);
-                _current_indicator = null;
-            } else if (_current_indicator.base_indicator.code_name == value.base_indicator.code_name) { // Close due to toggle
-                _current_indicator.set_state_flags (NORMAL, true);
-                _current_indicator.base_indicator.closed ();
-                _current_indicator = null;
             } else { // Switch
                 _current_indicator.set_state_flags (NORMAL, true);
                 _current_indicator.display_widget.has_tooltip = true;
@@ -55,14 +53,12 @@ public class Wingpanel.Services.PopoverManager : Object {
 
             if (_current_indicator != null) {
                 popover.child = _current_indicator.indicator_widget;
-                _current_indicator.display_widget.has_tooltip = false;
                 popover.set_parent (_current_indicator);
                 popover.popup ();
+
                 _current_indicator.set_state_flags (CHECKED, true);
+                _current_indicator.display_widget.has_tooltip = false;
                 _current_indicator.base_indicator.opened ();
-            } else {
-                ((Widgets.IndicatorEntry)popover.parent).display_widget.has_tooltip = true;
-                popover.popdown ();
             }
         }
     }
@@ -75,7 +71,6 @@ public class Wingpanel.Services.PopoverManager : Object {
         popover.add_css_class ("indicator");
 
         popover.closed.connect (() => {
-            _current_indicator.set_state_flags (NORMAL, true);
             current_indicator = null;
             popover.unparent ();
         });
