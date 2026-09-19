@@ -63,9 +63,10 @@ public class Wingpanel.Services.PopoverManager : Object {
 
             popover.child = _current_indicator.indicator_widget;
             popover.set_parent (_current_indicator);
-            popover.popup ();
 
+            // Make sure we're parented beforehand
             _current_indicator.base_indicator.opened ();
+            popover.popup ();
         }
     }
 
