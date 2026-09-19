@@ -29,37 +29,43 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
 
         set {
+            // Double close. Shouldn't happen?
             if (value == null && _current_indicator == null) {
                 return;
             }
 
-            if (_current_indicator == null && value != null) { // First open
-                _current_indicator = value;
-                indicator_open = true;
-            } else if (value == null && _current_indicator != null) { // Close requested
-                _current_indicator.set_state_flags (NORMAL, true);
-                _current_indicator.display_widget.has_tooltip = true;
-                _current_indicator.base_indicator.closed ();
-                _current_indicator = null;
-                popover.popdown ();
-                indicator_open = false;
-            } else { // Switch
-                _current_indicator.set_state_flags (NORMAL, true);
-                _current_indicator.display_widget.has_tooltip = true;
-                _current_indicator.base_indicator.closed ();
-                _current_indicator = value;
-                popover.unparent ();
-            }
-
+            // Switch or Close
             if (_current_indicator != null) {
-                popover.child = _current_indicator.indicator_widget;
-                popover.set_parent (_current_indicator);
-                popover.popup ();
+                _current_indicator.set_state_flags (NORMAL, true);
+                _current_indicator.display_widget.has_tooltip = true;
+                _current_indicator.base_indicator.closed ();
 
-                _current_indicator.set_state_flags (CHECKED, true);
-                _current_indicator.display_widget.has_tooltip = false;
-                _current_indicator.base_indicator.opened ();
+                // Close
+                if (value == null) {
+                    popover.popdown ();
+                    popover.unparent ();
+                    _current_indicator = null;
+                    indicator_open = false;
+                    return;
+                } else {
+                    popover.unparent ();
+                }
             }
+
+            // First open
+            if (_current_indicator == null) {
+                indicator_open = true;
+            }
+
+            _current_indicator = value;
+            _current_indicator.set_state_flags (CHECKED, true);
+            _current_indicator.display_widget.has_tooltip = false;
+
+            popover.child = _current_indicator.indicator_widget;
+            popover.set_parent (_current_indicator);
+            popover.popup ();
+
+            _current_indicator.base_indicator.opened ();
         }
     }
 
@@ -72,7 +78,6 @@ public class Wingpanel.Services.PopoverManager : Object {
 
         popover.closed.connect (() => {
             current_indicator = null;
-            popover.unparent ();
         });
     }
 }
