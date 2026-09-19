@@ -5,8 +5,6 @@
  */
 
 public class Wingpanel.Services.PopoverManager : Object {
-    public bool indicator_open { get; private set; default = false; }
-
     private Gtk.Popover popover;
 
     private Wingpanel.Widgets.IndicatorEntry? _current_indicator = null;
@@ -32,7 +30,7 @@ public class Wingpanel.Services.PopoverManager : Object {
                     popover.popdown ();
                     popover.unparent ();
                     _current_indicator = null;
-                    indicator_open = false;
+                    Services.BackgroundManager.get_default ().restore_window ();
                     return;
                 } else {
                     popover.unparent ();
@@ -41,7 +39,7 @@ public class Wingpanel.Services.PopoverManager : Object {
 
             // First open
             if (_current_indicator == null) {
-                indicator_open = true;
+                Services.BackgroundManager.get_default ().remember_window ();
             }
 
             _current_indicator = value;
