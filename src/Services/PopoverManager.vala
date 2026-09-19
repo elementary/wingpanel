@@ -30,7 +30,6 @@ public class Wingpanel.Services.PopoverManager : Object {
                     popover.popdown ();
                     popover.unparent ();
                     _current_indicator = null;
-                    Services.BackgroundManager.get_default ().restore_window ();
                     return;
                 } else {
                     popover.unparent ();
@@ -39,7 +38,6 @@ public class Wingpanel.Services.PopoverManager : Object {
 
             // First open
             if (_current_indicator == null) {
-                Services.BackgroundManager.get_default ().remember_window ();
             }
 
             _current_indicator = value;
