@@ -56,18 +56,56 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 return;
             } else {
                 Services.BackgroundManager.get_default ().remember_window ();
+
+                // Panels are never granted keyboard focus automatically by the
+                // compositor; it must be requested explicitly. Without it a
+                // popover opened from a keybinding has no keyboard focus and
+                // typing (e.g. in the Applications Menu search field) does not
+                // reach it.
+                if (desktop_panel != null) {
+                    desktop_panel.focus ();
+                    // focus () is an asynchronous request. The popover is
+                    // popped up immediately after this returns, so without
+                    // waiting for the compositor to actually grant focus the
+                    // popover comes up unfocused and never gets mapped.
+                    unowned var display = Gdk.Display.get_default ();
+                    if (display is Gdk.Wayland.Display) {
+                        ((Gdk.Wayland.Display) display).get_wl_display ().roundtrip ();
+                    }
+                }
             }
         });
 
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
     }
 
+    private bool realize_handled = false;
     private void on_realize () {
+        // A widget can be realized more than once. Connecting the surface
+        // signals again would run them multiple times per frame, and init_wl ()
+        // would re-request our panel object and get us killed by the
+        // compositor, so only ever do this once.
+        if (realize_handled) {
+            return;
+        }
+
+        realize_handled = true;
+
         unowned var surface = (Gdk.Toplevel) get_surface ();
         surface.compute_size.connect (on_compute_size);
         surface.layout.connect (on_layout);
 
         surface.enter_monitor.connect (on_enter_monitor);
+
+        // The popover takes no Wayland grab (see PopoverManager) so it will not
+        // dismiss itself. Watch the toplevel's focus state instead and close it
+        // when the panel loses keyboard focus.
+        surface.notify["state"].connect (() => {
+            var focused = (surface.state & Gdk.ToplevelState.FOCUSED) != 0;
+            if (!focused && popover_manager.indicator_open) {
+                popover_manager.close ();
+            }
+        });
 
         init_wl ();
     }
@@ -103,6 +141,15 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
     public void registry_handle_global (Wl.Registry wl_registry, uint32 name, string @interface, uint32 version) {
         if (@interface == "io_elementary_pantheon_shell_v1") {
+            // get_panel () may only be requested once per wl_surface: asking
+            // twice makes the compositor kill us with a protocol error
+            // ("get_panel already requested"), which takes the whole panel
+            // down. realize can fire more than once, so bail out if we already
+            // have our panel object.
+            if (desktop_panel != null) {
+                return;
+            }
+
             desktop_shell = wl_registry.bind<Pantheon.Desktop.Shell> (name, ref Pantheon.Desktop.Shell.iface, uint32.min (version, 1));
             unowned var window = get_surface ();
             if (window is Gdk.Wayland.Surface) {
