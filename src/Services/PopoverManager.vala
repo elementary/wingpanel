@@ -48,12 +48,24 @@ public class Wingpanel.Services.PopoverManager : Object {
                 _current_indicator.display_widget.has_tooltip = true;
                 _current_indicator.base_indicator.closed ();
                 _current_indicator = value;
-                popover.unparent ();
             }
 
             if (_current_indicator != null) {
                 popover.child = _current_indicator.indicator_widget;
-                popover.set_parent (_current_indicator);
+                // Only reparent when the popover actually needs to move to a
+                // different indicator. Unparenting destroys the popover's
+                // surface and set_parent () builds a new one; doing that on
+                // every open/close cycle eventually leaves the popover
+                // unmapped (visible but never drawn) and ends in a Wayland
+                // protocol error.
+                if (popover.parent != _current_indicator) {
+                    if (popover.parent != null) {
+                        popover.unparent ();
+                    }
+
+                    popover.set_parent (_current_indicator);
+                }
+
                 popover.popup ();
 
                 _current_indicator.set_state_flags (CHECKED, true);
@@ -63,16 +75,33 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
     }
 
+    public void close () {
+        current_indicator = null;
+    }
+
     construct {
         popover = new Gtk.Popover () {
             has_arrow = false,
-            position = BOTTOM
+            position = BOTTOM,
+            // autohide makes GTK request an xdg_popup grab. Wayland only grants
+            // that grab against a recent input event serial, and a popover
+            // opened from a keybinding has received no input at all, so the
+            // compositor refuses the popup and it is never mapped. Dismissal
+            // is handled by PanelWindow watching the toplevel focus state.
+            autohide = false
         };
         popover.add_css_class ("indicator");
 
         popover.closed.connect (() => {
-            current_indicator = null;
-            popover.unparent ();
+            // Fires for closes the setter already handled (it nulls
+            // _current_indicator before the asynchronous popdown), so guard
+            // against dereferencing null. Deliberately does NOT unparent: the
+            // popover stays parented to its indicator and is only moved when a
+            // different indicator is opened.
+            if (_current_indicator != null) {
+                _current_indicator.set_state_flags (NORMAL, true);
+                current_indicator = null;
+            }
         });
     }
 }
