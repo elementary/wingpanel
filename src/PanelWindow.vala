@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ *               2026 elementary, Inc. (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -56,6 +57,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
                 return;
             } else {
                 Services.BackgroundManager.get_default ().remember_window ();
+
+                desktop_panel?.focus ();
             }
         });
 
@@ -68,6 +71,8 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         surface.layout.connect (on_layout);
 
         surface.enter_monitor.connect (on_enter_monitor);
+
+        surface.notify["state"].connect (on_toplevel_state_changed);
 
         init_wl ();
     }
@@ -95,6 +100,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         new_monitor.notify["scale-factor"].connect (queue_resize);
 
         queue_resize ();
+    }
+
+    private void on_toplevel_state_changed (Object obj, ParamSpec pspec) requires (obj is Gdk.Toplevel) {
+        unowned var toplevel = (Gdk.Toplevel) obj;
+        if (!(Gdk.ToplevelState.FOCUSED in toplevel.state)) {
+            popover_manager.current_indicator = null;
+        }
     }
 
     public void toggle_indicator (string name) {
