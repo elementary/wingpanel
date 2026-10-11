@@ -140,7 +140,11 @@ public class WingpanelInterface.FocusManager : Object {
 #if HAS_MUTTER49
                     window.begin_grab_op (
                         Meta.GrabOp.MOVING,
+#if HAS_MUTTER51
+                        Main.wm.stage.get_context ().get_backend ().get_sprite (Main.wm.stage, event),
+#else
                         Clutter.get_default_backend ().get_sprite (Main.wm.stage, event),
+#endif
                         event.get_time (),
                         { x, y }
                     );
