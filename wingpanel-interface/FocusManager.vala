@@ -129,7 +129,11 @@ public class WingpanelInterface.FocusManager : Object {
 
                     var dx = start_x - current_x;
                     var dy = start_y - current_y;
+#if HAS_MUTTER51
+                    var drag_threshold = Main.wm.stage.get_context ().get_settings ().dnd_drag_threshold;
+#else
                     var drag_threshold = Clutter.Settings.get_default ().dnd_drag_threshold;
+#endif
                     if (dx * dx + dy * dy < drag_threshold * drag_threshold) {
                         return Clutter.EVENT_PROPAGATE;
                     }
