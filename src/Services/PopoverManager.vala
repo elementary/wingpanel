@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2011-2015 Ikey Doherty <ikey@solus-project.com>
+ *               2026 elementary, Inc. (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -66,7 +67,8 @@ public class Wingpanel.Services.PopoverManager : Object {
     construct {
         popover = new Gtk.Popover () {
             has_arrow = false,
-            position = BOTTOM
+            position = BOTTOM,
+            autohide = false
         };
         popover.add_css_class ("indicator");
 
