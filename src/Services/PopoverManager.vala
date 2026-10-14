@@ -60,7 +60,8 @@ public class Wingpanel.Services.PopoverManager : Object {
     construct {
         popover = new Gtk.Popover () {
             has_arrow = false,
-            position = BOTTOM
+            position = BOTTOM,
+            autohide = false
         };
         popover.add_css_class ("indicator");
 

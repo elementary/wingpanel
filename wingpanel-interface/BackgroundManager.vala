@@ -100,21 +100,11 @@ public class WingpanelInterface.BackgroundManager : Object {
     }
 
     private void register_window (Meta.Window window) {
-        window.notify["maximized-vertically"].connect (() => {
-            check_for_state_change (SNAP_DURATION);
-        });
-
-        window.notify["minimized"].connect (() => {
-            check_for_state_change (MINIMIZE_DURATION);
-        });
-
-        window.notify["fullscreen"].connect (() => {
-            check_for_state_change (SNAP_DURATION);
-        });
-
-        window.workspace_changed.connect (() => {
-            check_for_state_change (WORKSPACE_SWITCH_DURATION);
-        });
+        window.notify["maximized-vertically"].connect (() => check_for_state_change (SNAP_DURATION));
+        window.notify["minimized"].connect (() => check_for_state_change (MINIMIZE_DURATION));
+        window.notify["fullscreen"].connect (() => check_for_state_change (SNAP_DURATION));
+        window.notify["window-type"].connect (() => check_for_state_change (SNAP_DURATION));
+        window.workspace_changed.connect (() => check_for_state_change (WORKSPACE_SWITCH_DURATION));
     }
 
     private void on_window_added (Meta.Window window) {
@@ -163,7 +153,7 @@ public class WingpanelInterface.BackgroundManager : Object {
         bool has_maximized_window = false;
 
         foreach (unowned var window in current_workspace.list_windows ()) {
-            if (!window.is_on_primary_monitor () || window.minimized) {
+            if (!window.is_on_primary_monitor () || window.minimized || !Gala.Utils.get_window_is_normal (window)) {
                 continue;
             }
             
