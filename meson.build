@@ -31,7 +31,7 @@ gmodule_dep = dependency('gmodule-2.0')
 gdk_wl_dep = dependency('gtk4-wayland')
 gtk_dep = dependency('gtk4')
 gee_dep = dependency('gee-0.8')
-granite_dep = dependency('granite-7', version: '>=7.6.0')
+granite_dep = dependency('granite-9', version: '>=9.0.0')
 posix_dep = vala.find_library('posix')
 wl_client_dep = dependency('wayland-client')
 

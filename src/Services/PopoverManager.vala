@@ -70,7 +70,7 @@ public class Wingpanel.Services.PopoverManager : Object {
             position = BOTTOM,
             autohide = false
         };
-        popover.add_css_class ("indicator");
+        popover.add_css_class ("menu");
 
         popover.closed.connect (() => {
             current_indicator = null;
