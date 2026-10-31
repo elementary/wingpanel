@@ -78,7 +78,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
     }
 
     private static void on_compute_size (Gdk.ToplevelSize top_level_size) {
-        top_level_size.set_shadow_width (0, 0, 0, BottomMargin.SIZE);
+        /* +1 to make sure that even with fractional scaling there are
+           no gaps between wingpanel and a maximized window. Currently with
+           certain scale factors and the current CSS we might end up with a gap
+           because we cover half a pixel. We can solve this properly in Gtk 4.24
+           with Gtk.Snapshot.set_snap (see https://blogs.gnome.org/gtk/2026/05/28/snapping/),
+           but for now lets work around it */
+        top_level_size.set_shadow_width (0, 0, 0, BottomMargin.SIZE + 1);
     }
 
     private void on_layout (Gdk.Surface surface, int width, int height) {
