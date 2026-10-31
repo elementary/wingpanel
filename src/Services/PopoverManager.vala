@@ -16,7 +16,6 @@ public class Wingpanel.Services.PopoverManager : Object {
         }
 
         set {
-            // Double close. Shouldn't happen?
             if (value == null && _current_indicator == null) {
                 return;
             }
