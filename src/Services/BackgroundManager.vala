@@ -31,8 +31,6 @@ namespace Wingpanel.Services {
         public signal void state_changed (BackgroundState state, uint animation_duration);
 
         public abstract void initialize (int panel_height) throws GLib.Error;
-        public abstract void remember_focused_window () throws GLib.Error;
-        public abstract void restore_focused_window () throws GLib.Error;
         public abstract bool begin_grab_focused_window (int x, int y) throws GLib.Error;
     }
 
@@ -75,30 +73,6 @@ namespace Wingpanel.Services {
             });
 
             use_transparency = panel_settings.get_boolean ("use-transparency");
-        }
-
-        public void remember_window () {
-            if (!bus_available) {
-                return;
-            }
-
-            try {
-                bus.remember_focused_window ();
-            } catch (Error e) {
-                warning ("Remembering focused window failed: %s", e.message);
-            }
-        }
-
-        public void restore_window () {
-            if (!bus_available) {
-                return;
-            }
-
-            try {
-                bus.restore_focused_window ();
-            } catch (Error e) {
-                warning ("Restoring last focused window failed: %s", e.message);
-            }
         }
 
         public bool begin_grab_focused_window (int x, int y) {

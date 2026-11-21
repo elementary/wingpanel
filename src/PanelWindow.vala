@@ -52,12 +52,7 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         resizable = false;
 
         popover_manager.notify["indicator-open"].connect (() => {
-            if (!popover_manager.indicator_open) {
-                Services.BackgroundManager.get_default ().restore_window ();
-                return;
-            } else {
-                Services.BackgroundManager.get_default ().remember_window ();
-
+            if (popover_manager.indicator_open) {
                 desktop_panel?.focus ();
             }
         });
