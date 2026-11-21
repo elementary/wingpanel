@@ -140,20 +140,13 @@ public class WingpanelInterface.FocusManager : Object {
                         event.get_time (),
                         { x, y }
                     );
-#elif HAS_MUTTER46
+#else
                     window.begin_grab_op (
                         Meta.GrabOp.MOVING,
                         event.get_device (),
                         event.get_event_sequence (),
                         event.get_time (),
                         { x, y }
-                    );
-#else
-                    window.begin_grab_op (
-                        Meta.GrabOp.MOVING,
-                        event.get_device (),
-                        event.get_event_sequence (),
-                        event.get_time ()
                     );
 #endif
                 }

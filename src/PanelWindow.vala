@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2011-2015 Wingpanel Developers (http://launchpad.net/wingpanel)
+ *               2026 elementary, Inc. (https://elementary.io)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -50,6 +51,12 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         decorated = false;
         resizable = false;
 
+        popover_manager.notify["indicator-open"].connect (() => {
+            if (popover_manager.indicator_open) {
+                desktop_panel?.focus ();
+            }
+        });
+
         Services.BackgroundManager.get_default ().background_state_changed.connect (update_background);
     }
 
@@ -60,11 +67,19 @@ public class Wingpanel.PanelWindow : Gtk.Window {
 
         surface.enter_monitor.connect (on_enter_monitor);
 
+        surface.notify["state"].connect (on_toplevel_state_changed);
+
         init_wl ();
     }
 
     private static void on_compute_size (Gdk.ToplevelSize top_level_size) {
-        top_level_size.set_shadow_width (0, 0, 0, BottomMargin.SIZE);
+        /* +1 to make sure that even with fractional scaling there are
+           no gaps between wingpanel and a maximized window. Currently with
+           certain scale factors and the current CSS we might end up with a gap
+           because we cover half a pixel. We can solve this properly in Gtk 4.24
+           with Gtk.Snapshot.set_snap (see https://blogs.gnome.org/gtk/2026/05/28/snapping/),
+           but for now lets work around it */
+        top_level_size.set_shadow_width (0, 0, 0, BottomMargin.SIZE + 1);
     }
 
     private void on_layout (Gdk.Surface surface, int width, int height) {
@@ -86,6 +101,13 @@ public class Wingpanel.PanelWindow : Gtk.Window {
         new_monitor.notify["scale-factor"].connect (queue_resize);
 
         queue_resize ();
+    }
+
+    private void on_toplevel_state_changed (Object obj, ParamSpec pspec) requires (obj is Gdk.Toplevel) {
+        unowned var toplevel = (Gdk.Toplevel) obj;
+        if (!(Gdk.ToplevelState.FOCUSED in toplevel.state)) {
+            popover_manager.current_indicator = null;
+        }
     }
 
     public void toggle_indicator (string name) {

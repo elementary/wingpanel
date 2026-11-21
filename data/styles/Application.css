@@ -93,6 +93,16 @@ panel.maximized indicator:checked > revealer {
         0 1px 2px alpha(black, 0.3);
 }
 
+.translucent.color-dark .composited-indicator .warning {
+    /*FIXME: replace with var(--BANANA-900) in Granite 9*/
+    color: #ad5f00;
+}
+
+.translucent.color-dark .composited-indicator .error {
+    /*FIXME: replace with var(--STRAWBERRY-500) in Granite 9*/
+    color: #c6262e;
+}
+
 .translucent.color-dark .composited-indicator image,
 .translucent.color-dark .composited-indicator spinner {
     -gtk-icon-shadow:
@@ -102,6 +112,18 @@ panel.maximized indicator:checked > revealer {
 
 .translucent.color-light .composited-indicator {
     text-shadow: none;
+}
+
+.maximized .composited-indicator .warning,
+.translucent.color-dark .composited-indicator .warning {
+    /*FIXME: replace with var(--BANANA-100) in Granite 9*/
+    color: #fff394;
+}
+
+.maximized .composited-indicator .error,
+.translucent.color-dark .composited-indicator .error {
+    /*FIXME: replace with var(--STRAWBERRY-300) in Granite 9*/
+    color: #ed5353;
 }
 
 .translucent.color-light .composited-indicator image,
