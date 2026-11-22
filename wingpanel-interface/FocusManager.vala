@@ -129,14 +129,22 @@ public class WingpanelInterface.FocusManager : Object {
 
                     var dx = start_x - current_x;
                     var dy = start_y - current_y;
+#if HAS_MUTTER51
+                    var drag_threshold = Main.wm.stage.get_context ().get_settings ().dnd_drag_threshold;
+#else
                     var drag_threshold = Clutter.Settings.get_default ().dnd_drag_threshold;
+#endif
                     if (dx * dx + dy * dy < drag_threshold * drag_threshold) {
                         return Clutter.EVENT_PROPAGATE;
                     }
 #if HAS_MUTTER49
                     window.begin_grab_op (
                         Meta.GrabOp.MOVING,
+#if HAS_MUTTER51
+                        Main.wm.stage.get_context ().get_backend ().get_sprite (Main.wm.stage, event),
+#else
                         Clutter.get_default_backend ().get_sprite (Main.wm.stage, event),
+#endif
                         event.get_time (),
                         { x, y }
                     );
