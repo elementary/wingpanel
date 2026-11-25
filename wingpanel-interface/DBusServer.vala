@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301 USA.
  */
 
-[DBus (name = "org.pantheon.gala.WingpanelInterface")]
+[DBus (name = "io.pantheon.gala.WingpanelInterface")]
 public class WingpanelInterface.DBusServer : Object {
     private BackgroundManager background_manager;
     private FocusManager focus_manager;
